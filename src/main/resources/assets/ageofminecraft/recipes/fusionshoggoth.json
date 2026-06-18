@@ -1,0 +1,25 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+        {
+			"item": "abyssalcraft:shoggothflesh",
+            "data": 0
+        },
+        {
+			"item": "abyssalcraft:shoggothflesh",
+            "data": 0
+        },
+        {
+			"item": "abyssalcraft:shoggothflesh",
+            "data": 0
+        },
+        {
+        "item": "minecraft:egg"
+        }
+    ],
+	"result": {
+		"item": "ageofminecraft:fusionshoggoth",
+        "count": 1,
+        "data": 0
+	}
+}

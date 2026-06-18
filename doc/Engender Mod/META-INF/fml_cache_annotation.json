@@ -1,0 +1,2350 @@
+{
+  "net/minecraft/AgeOfMinecraft/CommonProxy": {
+    "name": "net/minecraft/AgeOfMinecraft/CommonProxy",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/IGuiHandler"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/EngenderConfig": {
+    "name": "net/minecraft/AgeOfMinecraft/EngenderConfig",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/common/config/Config;",
+        "target": "net/minecraft/AgeOfMinecraft/EngenderConfig",
+        "values": {
+          "modid": {
+            "value": "ageofminecraft"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Name;",
+        "target": "debugMode",
+        "value": {
+          "value": "Enable Debug Mode"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "debugMode",
+        "value": {
+          "values": [
+            "Enable debug mode",
+            "Warning: Will break balance!"
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Name;",
+        "target": "loreFriendlyMode",
+        "value": {
+          "value": "Enable Lore Friendly Mode"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "loreFriendlyMode",
+        "value": {
+          "values": [
+            "If enabled, engendered mobs will be balanced based on the lore of Engender (Umbrella_Ghast\u0027s Balance)",
+            "If disabled, engender mobs will be balanced for a fair experience (Mrbt0907\u0027s Balance)",
+            "Warning: Will change the game dramatically!"
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Name;",
+        "target": "nightmareMode",
+        "value": {
+          "value": "Enable Nightmare Mode"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "nightmareMode",
+        "value": {
+          "values": [
+            "If enabled, the Engender Mod will become much harder to complete, and the mobs will be extremely difficult to combat"
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Name;",
+        "target": "general",
+        "value": {
+          "value": "General Settings"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "general",
+        "value": {
+          "values": [
+            "Settings that deal with general Engender functionality"
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Name;",
+        "target": "mobs",
+        "value": {
+          "value": "Mob Settings"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "mobs",
+        "value": {
+          "values": [
+            "Settings that deal with Engender Mobs"
+          ]
+        }
+      }
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/EngenderConfig$General": {
+    "name": "net/minecraft/AgeOfMinecraft/EngenderConfig$General",
+    "annotations": [
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Name;",
+        "target": "useMessage",
+        "value": {
+          "value": "Enable Engender Death Messages"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "useMessage",
+        "value": {
+          "values": [
+            "If enabled, engendered mob death messages will display in chat."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Name;",
+        "target": "useMusic",
+        "value": {
+          "value": "Enable Music"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "useMusic",
+        "value": {
+          "values": [
+            "If enabled, boss themes and general music from Engender can play ingame"
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Name;",
+        "target": "useMiniMusic",
+        "value": {
+          "value": "Enable Miniboss Music"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "useMiniMusic",
+        "value": {
+          "values": [
+            "If enabled, minibosses can play music themes"
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Name;",
+        "target": "dragonEgg",
+        "value": {
+          "value": "Enable Renewable Dragon Eggs"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "dragonEgg",
+        "value": {
+          "values": [
+            "If enabled, killing an Ender Dragon will always spawn a Dragon Egg."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Name;",
+        "target": "mana",
+        "value": {
+          "value": "Enable Mana Orbs"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "mana",
+        "value": {
+          "values": [
+            "If enabled, Mana Orbs can spawn."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Name;",
+        "target": "manaDistance",
+        "value": {
+          "value": "Mana Spawn Distance"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$RangeDouble;",
+        "target": "manaDistance",
+        "values": {
+          "min": {
+            "type": "DOUBLE",
+            "value": "8.0"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "manaDistance",
+        "value": {
+          "values": [
+            "If \"Enable Mana Orbs\" is enabled, This will determine how far Mana Orbs can be from a player to spawn on mob deaths."
+          ]
+        }
+      }
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/EngenderConfig$Mobs": {
+    "name": "net/minecraft/AgeOfMinecraft/EngenderConfig$Mobs",
+    "annotations": [
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Name;",
+        "target": "naturalSpawns",
+        "value": {
+          "value": "Enable Natural Engender Mob Spawns"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "naturalSpawns",
+        "value": {
+          "values": [
+            "If enabled, some mobs will be converted into wild engendered mobs."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Name;",
+        "target": "grief",
+        "value": {
+          "value": "Enable Mob Griefing"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "grief",
+        "value": {
+          "values": [
+            "If enabled, engendered mobs can grief the world"
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Name;",
+        "target": "regeneration",
+        "value": {
+          "value": "Enable Regeneration"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "regeneration",
+        "value": {
+          "values": [
+            "If enabled, engendered mobs will have engender regeneration along side natural regeneration"
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Name;",
+        "target": "hunger",
+        "value": {
+          "value": "Enable Hunger"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "hunger",
+        "value": {
+          "values": [
+            "If enabled, most ally engendered mobs must eat to survive.",
+            "If disabled, all ally mobs can eat to regain health"
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Name;",
+        "target": "useHeros",
+        "value": {
+          "value": "Enable Heros"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "useHeros",
+        "value": {
+          "values": [
+            "If enabled, all engendered mobs can turn into heros"
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Name;",
+        "target": "useMobTalkerModels",
+        "value": {
+          "value": "Enable Mob Girls"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "useMobTalkerModels",
+        "value": {
+          "values": [
+            "If enabled, converts most mobs into mob girls."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Name;",
+        "target": "breeding",
+        "value": {
+          "value": "Enable Mob Girl Breeding"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "breeding",
+        "value": {
+          "values": [
+            "If enabled, players can breed with mob girls."
+          ]
+        }
+      }
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/EngenderMod": {
+    "name": "net/minecraft/AgeOfMinecraft/EngenderMod",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod;",
+        "target": "net/minecraft/AgeOfMinecraft/EngenderMod",
+        "values": {
+          "acceptedMinecraftVersions": {
+            "value": "[1.12.2]"
+          },
+          "modid": {
+            "value": "ageofminecraft"
+          },
+          "name": {
+            "value": "Engender - The Age of Minecraft"
+          },
+          "version": {
+            "value": "0.7 Pre Release 2"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/fml/common/SidedProxy;",
+        "target": "proxy",
+        "values": {
+          "clientSide": {
+            "value": "net.minecraft.AgeOfMinecraft.ClientProxy"
+          },
+          "serverSide": {
+            "value": "net.minecraft.AgeOfMinecraft.CommonProxy"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$Instance;",
+        "target": "instance"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventHandler;",
+        "target": "preInit(Lnet/minecraftforge/fml/common/event/FMLPreInitializationEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventHandler;",
+        "target": "init(Lnet/minecraftforge/fml/common/event/FMLInitializationEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventHandler;",
+        "target": "postInit(Lnet/minecraftforge/fml/common/event/FMLPostInitializationEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onConfigChanged(Lnet/minecraftforge/fml/client/event/ConfigChangedEvent$OnConfigChangedEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventHandler;",
+        "target": "onServerStart(Lnet/minecraftforge/fml/common/event/FMLServerStartingEvent;)V"
+      }
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/AbyssalcraftEngenderAddon": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/AbyssalcraftEngenderAddon",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod;",
+        "target": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/AbyssalcraftEngenderAddon",
+        "values": {
+          "acceptedMinecraftVersions": {
+            "value": "[1.12.2]"
+          },
+          "dependencies": {
+            "value": "before:abyssalcraft;"
+          },
+          "modid": {
+            "value": "ageofabyssalcraft"
+          },
+          "name": {
+            "value": "Engender - Abyssalcraft Addon"
+          },
+          "version": {
+            "value": "0.7 Pre Release 2"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/fml/common/SidedProxy;",
+        "target": "proxy",
+        "values": {
+          "clientSide": {
+            "value": "net.minecraft.AgeOfMinecraft.addons.abyssalcraft.ClientProxy"
+          },
+          "serverSide": {
+            "value": "net.minecraft.AgeOfMinecraft.addons.abyssalcraft.CommonProxy"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$Instance;",
+        "target": "instance"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventHandler;",
+        "target": "preInit(Lnet/minecraftforge/fml/common/event/FMLPreInitializationEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventHandler;",
+        "target": "init(Lnet/minecraftforge/fml/common/event/FMLInitializationEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventHandler;",
+        "target": "postInit(Lnet/minecraftforge/fml/common/event/FMLPostInitializationEvent;)V"
+      }
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityAbygolem": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityAbygolem",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityAbyssalPortal": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityAbyssalPortal",
+    "interfaces": [
+      "net/minecraft/entity/IEntityMultiPart",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Structure"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityAbyssalZombie": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityAbyssalZombie",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityAbyssalZombie$GroupData": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityAbyssalZombie$GroupData",
+    "interfaces": [
+      "net/minecraft/entity/IEntityLivingData"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityChagaroth": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityChagaroth",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Structure"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityChagarothFist": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityChagarothFist",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityChagarothSpawn": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityChagarothSpawn",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityCoraliumSquid": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityCoraliumSquid",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityDepthsGhoul": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityDepthsGhoul",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityDragonBoss": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityDragonBoss",
+    "interfaces": [
+      "net/minecraft/entity/IEntityMultiPart",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Flying",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityDragonMinion": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityDragonMinion",
+    "interfaces": [
+      "net/minecraft/entity/IEntityMultiPart",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Flying",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityDreadSpawn": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityDreadSpawn",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityDreadgolem": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityDreadgolem",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityDreadguard": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityDreadguard",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityDreadling": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityDreadling",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityGatekeeperMinion": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityGatekeeperMinion",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityGreaterDreadSpawn": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityGreaterDreadSpawn",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityJzahar": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityJzahar",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityLesserDreadbeast": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityLesserDreadbeast",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityLesserShoggoth": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityLesserShoggoth",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityLesserShoggoth$GroupData": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityLesserShoggoth$GroupData",
+    "interfaces": [
+      "net/minecraft/entity/IEntityLivingData"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityOmotholGhoul": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityOmotholGhoul",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityRemnant": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityRemnant",
+    "interfaces": [
+      "net/minecraft/entity/IMerchant",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntitySacthoth": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntitySacthoth",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityShadowBeast": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityShadowBeast",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityShadowCreature": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityShadowCreature",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityShadowMonster": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntityShadowMonster",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntitySkeletonGoliath": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/EntitySkeletonGoliath",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/asorahphases/PhaseBaseFriendly": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/asorahphases/PhaseBaseFriendly",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/entity/asorahphases/IPhaseAsorah"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/items/ItemPEGun": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/items/ItemPEGun",
+    "interfaces": [
+      "com/shinoow/abyssalcraft/api/energy/IEnergyContainerItem"
+    ],
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Optional$Interface;",
+        "target": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/items/ItemPEGun",
+        "values": {
+          "iface": {
+            "value": "com.shinoow.abyssalcraft.api.energy.IEnergyContainerItem"
+          },
+          "modid": {
+            "value": "abyssalcraft"
+          }
+        }
+      }
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/render/entity/LayerAbyssalPortalGlow": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/render/entity/LayerAbyssalPortalGlow",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/render/entity/LayerAbyssalPortalOverlay": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/render/entity/LayerAbyssalPortalOverlay",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/render/entity/RenderDepthsGhoul$LayerGhoulHeldItem": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/render/entity/RenderDepthsGhoul$LayerGhoulHeldItem",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/render/entity/RenderOmotholGhoul$LayerGhoulHeldItem": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/render/entity/RenderOmotholGhoul$LayerGhoulHeldItem",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/render/entity/RenderSacthoth$LayerHeldItemSacthoth": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/render/entity/RenderSacthoth$LayerHeldItemSacthoth",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/render/entity/layer/LayerAsorahDeath": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/render/entity/layer/LayerAsorahDeath",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/render/entity/layer/LayerAsorahEyes": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/render/entity/layer/LayerAsorahEyes",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/render/entity/layer/LayerJzaharDeath": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/render/entity/layer/LayerJzaharDeath",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/render/entity/layer/LayerSpectralDragonEyes": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/abyssalcraft/render/entity/layer/LayerSpectralDragonEyes",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/draconicevolution/DraconicEvolutionAddon": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/draconicevolution/DraconicEvolutionAddon",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod;",
+        "target": "net/minecraft/AgeOfMinecraft/addons/draconicevolution/DraconicEvolutionAddon",
+        "values": {
+          "acceptedMinecraftVersions": {
+            "value": "[1.12.2]"
+          },
+          "dependencies": {
+            "value": "before:draconicevolution;"
+          },
+          "modid": {
+            "value": "ageofchaos"
+          },
+          "name": {
+            "value": "Engender - Draconic Evolution Addon"
+          },
+          "version": {
+            "value": "0.7 Pre Release 2"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/fml/common/SidedProxy;",
+        "target": "proxy",
+        "values": {
+          "clientSide": {
+            "value": "net.minecraft.AgeOfMinecraft.addons.draconicevolution.ClientProxy"
+          },
+          "serverSide": {
+            "value": "net.minecraft.AgeOfMinecraft.addons.draconicevolution.CommonProxy"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$Instance;",
+        "target": "instance"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventHandler;",
+        "target": "preInit(Lnet/minecraftforge/fml/common/event/FMLPreInitializationEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventHandler;",
+        "target": "init(Lnet/minecraftforge/fml/common/event/FMLInitializationEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventHandler;",
+        "target": "postInit(Lnet/minecraftforge/fml/common/event/FMLPostInitializationEvent;)V"
+      }
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/draconicevolution/EntityDraconicPortal": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/draconicevolution/EntityDraconicPortal",
+    "interfaces": [
+      "net/minecraft/entity/IEntityMultiPart",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Structure"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/draconicevolution/LayerDraconicPortalGlow": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/draconicevolution/LayerDraconicPortalGlow",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/draconicevolution/LayerDraconicPortalOverlay": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/draconicevolution/LayerDraconicPortalOverlay",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/draconicevolution/RenderChaosGuardian$LayerChaosGuardianDeath": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/draconicevolution/RenderChaosGuardian$LayerChaosGuardianDeath",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/draconicevolution/RenderChaosGuardian$LayerChaosGuardianEyes": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/draconicevolution/RenderChaosGuardian$LayerChaosGuardianEyes",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/MutantBeastsAddon": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/MutantBeastsAddon",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod;",
+        "target": "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/MutantBeastsAddon",
+        "values": {
+          "acceptedMinecraftVersions": {
+            "value": "[1.12.2]"
+          },
+          "modid": {
+            "value": "ageofmutants"
+          },
+          "name": {
+            "value": "Engender - Mutant Beasts (Creatures) Addon"
+          },
+          "version": {
+            "value": "0.7 Pre Release 2"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/fml/common/SidedProxy;",
+        "target": "proxy",
+        "values": {
+          "clientSide": {
+            "value": "net.minecraft.AgeOfMinecraft.addons.mutantbeasts.ClientProxy"
+          },
+          "serverSide": {
+            "value": "net.minecraft.AgeOfMinecraft.addons.mutantbeasts.CommonProxy"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$Instance;",
+        "target": "instance"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventHandler;",
+        "target": "preInit(Lnet/minecraftforge/fml/common/event/FMLPreInitializationEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventHandler;",
+        "target": "init(Lnet/minecraftforge/fml/common/event/FMLInitializationEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventHandler;",
+        "target": "postInit(Lnet/minecraftforge/fml/common/event/FMLPostInitializationEvent;)V"
+      }
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/entity/EntityMutantCreeper": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/entity/EntityMutantCreeper",
+    "interfaces": [
+      "net/minecraft/entity/IJumpingMount",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/entity/EntityMutantEnderman": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/entity/EntityMutantEnderman",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraft/entity/IJumpingMount",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Ender"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/entity/EntityMutantSkeleton": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/entity/EntityMutantSkeleton",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraft/entity/IJumpingMount",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "chumbanotz/mutantbeasts/client/animationapi/IAnimatedEntity"
+    ],
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Optional$Interface;",
+        "target": "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/entity/EntityMutantSkeleton",
+        "values": {
+          "iface": {
+            "value": "chumbanotz.mutantbeasts.client.animationapi.IAnimatedEntity"
+          },
+          "modid": {
+            "value": "mutantbeasts"
+          }
+        }
+      }
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/entity/EntityMutantSnowGolem": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/entity/EntityMutantSnowGolem",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraftforge/common/IShearable",
+      "net/minecraft/entity/IJumpingMount",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/entity/EntityMutantZombie": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/entity/EntityMutantZombie",
+    "interfaces": [
+      "net/minecraft/entity/IJumpingMount",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/entity/EntitySpiderPig": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/entity/EntitySpiderPig",
+    "interfaces": [
+      "net/minecraft/entity/IJumpingMount"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/render/RenderMutantCreeper$LayerCreeperCharge": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/render/RenderMutantCreeper$LayerCreeperCharge",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/render/RenderMutantEnderman$EyesLayer": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/render/RenderMutantEnderman$EyesLayer",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/render/RenderMutantEnderman$GlowLayer": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/render/RenderMutantEnderman$GlowLayer",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/render/RenderMutantSnowGolem$GlowLayer": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/render/RenderMutantSnowGolem$GlowLayer",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/render/RenderMutantSnowGolem$ThrownBlockLayer": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/render/RenderMutantSnowGolem$ThrownBlockLayer",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/render/RenderSpiderPig$SaddleLayer": {
+    "name": "net/minecraft/AgeOfMinecraft/addons/mutantbeasts/render/RenderSpiderPig$SaddleLayer",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/blocks/BlockBeaconSPC$1": {
+    "name": "net/minecraft/AgeOfMinecraft/blocks/BlockBeaconSPC$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/blocks/BlockBeaconSPC$1$1": {
+    "name": "net/minecraft/AgeOfMinecraft/blocks/BlockBeaconSPC$1$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/blocks/TileEntityBeaconSPC": {
+    "name": "net/minecraft/AgeOfMinecraft/blocks/TileEntityBeaconSPC",
+    "interfaces": [
+      "net/minecraft/util/ITickable",
+      "net/minecraft/inventory/ISidedInventory"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/blocks/TileEntityMonsterSpawnerSPC": {
+    "name": "net/minecraft/AgeOfMinecraft/blocks/TileEntityMonsterSpawnerSPC",
+    "interfaces": [
+      "net/minecraft/util/ITickable",
+      "net/minecraft/inventory/IInventory"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/EntitySpellcasterIllager": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/EntitySpellcasterIllager",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/EntityTameBase": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/EntityTameBase",
+    "interfaces": [
+      "net/minecraft/entity/IEntityOwnable",
+      "net/minecraft/AgeOfMinecraft/entity/tame/ITeamedMobs",
+      "com/github/alexthe666/iceandfire/entity/IBlacklistedFromStatues"
+    ],
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Optional$Interface;",
+        "target": "net/minecraft/AgeOfMinecraft/entity/tame/EntityTameBase",
+        "values": {
+          "iface": {
+            "value": "com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues"
+          },
+          "modid": {
+            "value": "iceandfire"
+          }
+        }
+      }
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/EntityTameBase$1": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/EntityTameBase$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/EntityTameBase$3": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/EntityTameBase$3",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/ai/EntityAIAvoidEntitySPC$1": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/ai/EntityAIAvoidEntitySPC$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/ai/EntityAIFindNearestUnalliedTarget$1": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/ai/EntityAIFindNearestUnalliedTarget$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/ai/EntityAIFindNearestUnalliedTarget$Sorter": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/ai/EntityAIFindNearestUnalliedTarget$Sorter",
+    "interfaces": [
+      "java/util/Comparator"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/ai/EntityAINearestAttackableTargetBox$1": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/ai/EntityAINearestAttackableTargetBox$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/ai/EntityAINearestAttackableTargetBox$2": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/ai/EntityAINearestAttackableTargetBox$2",
+    "interfaces": [
+      "com/google/common/base/Function"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/ai/EntityAINearestAttackableTargetBox$Sorter": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/ai/EntityAINearestAttackableTargetBox$Sorter",
+    "interfaces": [
+      "java/util/Comparator"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/cameos/EntitySans": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/cameos/EntitySans",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/other/EntityPortal": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/other/EntityPortal",
+    "interfaces": [
+      "net/minecraft/entity/IEntityMultiPart",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Structure"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityBat": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityBat",
+    "interfaces": [
+      "net/minecraft/entity/passive/EntityFlying",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Flying",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Tiny",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Animal"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityChicken": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityChicken",
+    "interfaces": [
+      "net/minecraft/entity/IJumpingMount",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Tiny",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Animal"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityCow": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityCow",
+    "interfaces": [
+      "net/minecraft/entity/IJumpingMount",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Animal"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityMooshroom": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityMooshroom",
+    "interfaces": [
+      "net/minecraftforge/common/IShearable"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityOcelot": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityOcelot",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Animal"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityParrot": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityParrot",
+    "interfaces": [
+      "net/minecraft/entity/passive/EntityFlying",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Animal",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Flying"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityParrot$1": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityParrot$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityPig": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityPig",
+    "interfaces": [
+      "net/minecraft/entity/IJumpingMount",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Animal"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityRabbit": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityRabbit",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Tiny",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Animal"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityRabbit$RabbitTypeData": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntityRabbit$RabbitTypeData",
+    "interfaces": [
+      "net/minecraft/entity/IEntityLivingData"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntitySheep": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier1/EntitySheep",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Animal",
+      "net/minecraftforge/common/IShearable",
+      "net/minecraft/entity/IJumpingMount"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityEndermite": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityEndermite",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Tiny",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Ender"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityLlama": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityLlama",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Animal"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityLlama$GroupData": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityLlama$GroupData",
+    "interfaces": [
+      "net/minecraft/entity/IEntityLivingData"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntitySilverfish": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntitySilverfish",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Tiny"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntitySnowman": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntitySnowman",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Elemental"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntitySquid": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntitySquid",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Animal"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager",
+    "interfaces": [
+      "net/minecraft/entity/IMerchant",
+      "net/minecraft/entity/INpc",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$EmeraldForItems": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$EmeraldForItems",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$ITradeList"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$EmeraldsForItem": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$EmeraldsForItem",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$ITradeList"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$ItemAndEmeraldToItem": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$ItemAndEmeraldToItem",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$ITradeList"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$ListEnchantedBookForEmeralds": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$ListEnchantedBookForEmeralds",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$ITradeList"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$ListEnchantedItemForEmeralds": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$ListEnchantedItemForEmeralds",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$ITradeList"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$ListItemForEmeralds": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$ListItemForEmeralds",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$ITradeList"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$TreasureMapForEmeralds": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$TreasureMapForEmeralds",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityVillager$ITradeList"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityWolf": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier2/EntityWolf",
+    "interfaces": [
+      "net/minecraft/entity/IJumpingMount",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Animal"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntityCreeper": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntityCreeper",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntityCreeper$1": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntityCreeper$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntityCreeper$2": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntityCreeper$2",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntityPolarBear": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntityPolarBear",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Animal"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntityPolarBear$GroupData": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntityPolarBear$GroupData",
+    "interfaces": [
+      "net/minecraft/entity/IEntityLivingData"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntitySkeleton": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntitySkeleton",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntitySlime": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntitySlime",
+    "interfaces": [
+      "net/minecraft/entity/IJumpingMount"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntitySpider": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntitySpider",
+    "interfaces": [
+      "net/minecraft/entity/IJumpingMount",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntitySpider$GroupData": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntitySpider$GroupData",
+    "interfaces": [
+      "net/minecraft/entity/IEntityLivingData"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntityVex": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntityVex",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Flying",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Elemental"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntityZombie": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntityZombie",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntityZombie$GroupData": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier3/EntityZombie$GroupData",
+    "interfaces": [
+      "net/minecraft/entity/IEntityLivingData"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityBlaze": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityBlaze",
+    "interfaces": [
+      "net/minecraft/entity/IJumpingMount",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Flying",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Elemental"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityCreeder": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityCreeder",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityCreeder$1": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityCreeder$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityCreeder$2": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityCreeder$2",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityEnderman": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityEnderman",
+    "interfaces": [
+      "net/minecraft/entity/IJumpingMount",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Ender"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityGhast": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityGhast",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Flying",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityGuardian": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityGuardian",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityIcyEnderCreeper": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityIcyEnderCreeper",
+    "interfaces": [
+      "net/minecraft/entity/IJumpingMount",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Ender"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityPigZombie": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityPigZombie",
+    "interfaces": [
+      "net/minecraft/entity/IJumpingMount"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityShulker": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityShulker",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Structure",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Ender"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityWitch": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier4/EntityWitch",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityAbomniableSnowman": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityAbomniableSnowman",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Elemental"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityElderGuardian": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityElderGuardian",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityElderGuardian$1": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityElderGuardian$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityElderGuardian$2": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityElderGuardian$2",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityEnderDragon": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityEnderDragon",
+    "interfaces": [
+      "net/minecraft/entity/IEntityMultiPart",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Flying",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Ender"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityEversource": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityEversource",
+    "interfaces": [
+      "net/minecraft/entity/IJumpingMount",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Light"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityEvoker": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityEvoker",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityEvoker$AIConvertingSpell$1": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityEvoker$AIConvertingSpell$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityEvoker$AIReinforcingSpell$1": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityEvoker$AIReinforcingSpell$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityEvoker$AIWololoSpell$1": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityEvoker$AIWololoSpell$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityGhasther": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityGhasther",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Flying",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityGiant": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityGiant",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityIceGolem": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityIceGolem",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Elemental"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityIllusioner": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityIllusioner",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityIllusioner$AIIllusionFormSpell$1": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityIllusioner$AIIllusionFormSpell$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityIllusioner$AIReinforcingSpell$1": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityIllusioner$AIReinforcingSpell$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityIronGolem": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityIronGolem",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityMagmaGolem": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityMagmaGolem",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Elemental"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityPrisonGolem": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityPrisonGolem",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityWither": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/EntityWither",
+    "interfaces": [
+      "net/minecraft/entity/IEntityMultiPart",
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraft/entity/IJumpingMount",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Flying",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier5/dragonphases/PhaseBaseFriendly": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier5/dragonphases/PhaseBaseFriendly",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/tier5/dragonphases/IPhase"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier6/EntityCommandBlockWither": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier6/EntityCommandBlockWither",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Flying",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier6/EntityWitherStorm": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier6/EntityWitherStorm",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Flying",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier6/EntityWitherStormHead": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier6/EntityWitherStormHead",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Flying",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier6/EntityWitherStormTentacle": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier6/EntityWitherStormTentacle",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Flying",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/tame/tier6/EntityWitherStormTentacleDevourer": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/tame/tier6/EntityWitherStormTentacleDevourer",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/entity/tame/Massive",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Armored",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Flying",
+      "net/minecraft/AgeOfMinecraft/entity/tame/Undead"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/entity/untame/tier5/EntityDarkness": {
+    "name": "net/minecraft/AgeOfMinecraft/entity/untame/tier5/EntityDarkness",
+    "interfaces": [
+      "net/minecraft/entity/IEntityMultiPart",
+      "net/minecraft/entity/monster/IMob"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/events/ChunkLoadingEvent": {
+    "name": "net/minecraft/AgeOfMinecraft/events/ChunkLoadingEvent",
+    "interfaces": [
+      "net/minecraftforge/common/ForgeChunkManager$LoadingCallback"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/events/EngenderGeneralEvent": {
+    "name": "net/minecraft/AgeOfMinecraft/events/EngenderGeneralEvent",
+    "annotations": [
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onClientTick(Lnet/minecraftforge/fml/common/gameevent/TickEvent$ClientTickEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "renderTick(Lnet/minecraftforge/fml/common/gameevent/TickEvent$RenderTickEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "healTicker(Lnet/minecraftforge/event/entity/living/LivingHealEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "lootLoad(Lnet/minecraftforge/event/LootTableLoadEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onPotionAdded(Lnet/minecraftforge/event/entity/living/PotionEvent$PotionAddedEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onLivingEvent(Lnet/minecraftforge/event/entity/living/LivingEvent$LivingUpdateEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onMobHitEvent(Lnet/minecraftforge/event/entity/living/LivingHurtEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onMobDeathEvent(Lnet/minecraftforge/event/entity/living/LivingDeathEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onMobSpawnEvent(Lnet/minecraftforge/event/entity/EntityJoinWorldEvent;)V"
+      }
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/events/EngenderGeneralEvent$1": {
+    "name": "net/minecraft/AgeOfMinecraft/events/EngenderGeneralEvent$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/events/EngenderGeneralEvent$2": {
+    "name": "net/minecraft/AgeOfMinecraft/events/EngenderGeneralEvent$2",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/events/EngenderGeneralEvent$3": {
+    "name": "net/minecraft/AgeOfMinecraft/events/EngenderGeneralEvent$3",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/events/EngenderGeneralEvent$4": {
+    "name": "net/minecraft/AgeOfMinecraft/events/EngenderGeneralEvent$4",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/items/ItemBandage": {
+    "name": "net/minecraft/AgeOfMinecraft/items/ItemBandage",
+    "interfaces": [
+      "baubles/api/IBauble"
+    ],
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Optional$Interface;",
+        "target": "net/minecraft/AgeOfMinecraft/items/ItemBandage",
+        "values": {
+          "iface": {
+            "value": "baubles.api.IBauble"
+          },
+          "modid": {
+            "value": "baubles"
+          }
+        }
+      }
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/items/ItemCarrier$1": {
+    "name": "net/minecraft/AgeOfMinecraft/items/ItemCarrier$1",
+    "interfaces": [
+      "net/minecraft/item/IItemPropertyGetter"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/items/ItemManaCollector": {
+    "name": "net/minecraft/AgeOfMinecraft/items/ItemManaCollector",
+    "interfaces": [
+      "baubles/api/IBauble"
+    ],
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Optional$Interface;",
+        "target": "net/minecraft/AgeOfMinecraft/items/ItemManaCollector",
+        "values": {
+          "iface": {
+            "value": "baubles.api.IBauble"
+          },
+          "modid": {
+            "value": "baubles"
+          }
+        }
+      }
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/items/ItemManaCollector$1": {
+    "name": "net/minecraft/AgeOfMinecraft/items/ItemManaCollector$1",
+    "interfaces": [
+      "net/minecraft/item/IItemPropertyGetter"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/items/ItemWeddingRing": {
+    "name": "net/minecraft/AgeOfMinecraft/items/ItemWeddingRing",
+    "interfaces": [
+      "baubles/api/IBauble"
+    ],
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Optional$Interface;",
+        "target": "net/minecraft/AgeOfMinecraft/items/ItemWeddingRing",
+        "values": {
+          "iface": {
+            "value": "baubles.api.IBauble"
+          },
+          "modid": {
+            "value": "baubles"
+          }
+        }
+      }
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelBlaze": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelBlaze",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMBlaze": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMBlaze",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMCaveSpider": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMCaveSpider",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMCreeper": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMCreeper",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMEnderman": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMEnderman",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMEvoker": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMEvoker",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMGhast": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMGhast",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMGiant": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMGiant",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMGuardian": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMGuardian",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMIcyEnderCreeper": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMIcyEnderCreeper",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMIronGolem": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMIronGolem",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMMagmaCube": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMMagmaCube",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMPigZombie": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMPigZombie",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMSilverfish": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMSilverfish",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMSkeleton": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMSkeleton",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMSlime": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMSlime",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMSnowGolem": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMSnowGolem",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMSpider": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMSpider",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMVillager": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMVillager",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMVindicator": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMVindicator",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMWitch": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMWitch",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCMMZombie": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCMMZombie",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCreeder": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCreeder",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelCreeper": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelCreeper",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelEnderman": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelEnderman",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelGiant": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelGiant",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelIceGolem": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelIceGolem",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelIronGolem": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelIronGolem",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelSkeleton": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelSkeleton",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelSnowMan": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelSnowMan",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelVindicator": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelVindicator",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelWitch": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelWitch",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelWither": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelWither",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelZombie": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelZombie",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/models/ModelZombieVillager": {
+    "name": "net/minecraft/AgeOfMinecraft/models/ModelZombieVillager",
+    "interfaces": [
+      "net/minecraft/AgeOfMinecraft/models/ICappedModel"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/particles/ParticleMobAppearanceEngender$Factory": {
+    "name": "net/minecraft/AgeOfMinecraft/particles/ParticleMobAppearanceEngender$Factory",
+    "interfaces": [
+      "net/minecraft/client/particle/IParticleFactory"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerArrowCustomSized": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerArrowCustomSized",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerCreederCharge": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerCreederCharge",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerCreederEyes": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerCreederEyes",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerCreeperCharge": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerCreeperCharge",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerCreeperGlow": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerCreeperGlow",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerCustomElytra": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerCustomElytra",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerCustomHeadEngender": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerCustomHeadEngender",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerEnderDragonDeath": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerEnderDragonDeath",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerEnderDragonEyes": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerEnderDragonEyes",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerEndermanEyes": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerEndermanEyes",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerEversource": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerEversource",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerGhastEyes": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerGhastEyes",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerHeldBlock": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerHeldBlock",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerHeldItemCMM": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerHeldItemCMM",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerHeldItemWitch": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerHeldItemWitch",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerIceSpiderEyes": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerIceSpiderEyes",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerIronGolemFlower": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerIronGolemFlower",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerLearningBook": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerLearningBook",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerMobCape": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerMobCape",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerMooshroomMushroom": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerMooshroomMushroom",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerPortalGlow": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerPortalGlow",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerPortalOverlay": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerPortalOverlay",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerSaddle": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerSaddle",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerSheepWool": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerSheepWool",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerSkeletonType": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerSkeletonType",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerSlimeGel": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerSlimeGel",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerSnowmanHead": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerSnowmanHead",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerSpiderEyes": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerSpiderEyes",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerWitherAura": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerWitherAura",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerWitherBody": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerWitherBody",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerWitherStormBody": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerWitherStormBody",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerWitherStormEyes": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerWitherStormEyes",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerWitherStormTDOverlay": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerWitherStormTDOverlay",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerWitherStormTractorBeam": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerWitherStormTractorBeam",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/LayerWitherTractorBeam": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/LayerWitherTractorBeam",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/RenderAbomniableSnowman$LayerSnowmanHead": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/RenderAbomniableSnowman$LayerSnowmanHead",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/RenderBlaze$LayerHead": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/RenderBlaze$LayerHead",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/RenderCommandBlockWither$LayerCommandBlock": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/RenderCommandBlockWither$LayerCommandBlock",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/RenderIceGolem$LayerSnowmanHead": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/RenderIceGolem$LayerSnowmanHead",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/RenderPrisonSlime$LayerSlimeGel": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/RenderPrisonSlime$LayerSlimeGel",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/RenderShulker$HeadLayer": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/RenderShulker$HeadLayer",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/darkness/LayerDarknessExplosion": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/darkness/LayerDarknessExplosion",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/renders/darkness/LayerStaringIntoYou": {
+    "name": "net/minecraft/AgeOfMinecraft/renders/darkness/LayerStaringIntoYou",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/triggers/BreedWithMobTrigger": {
+    "name": "net/minecraft/AgeOfMinecraft/triggers/BreedWithMobTrigger",
+    "interfaces": [
+      "net/minecraft/advancements/ICriterionTrigger"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/triggers/ConvertMobTrigger": {
+    "name": "net/minecraft/AgeOfMinecraft/triggers/ConvertMobTrigger",
+    "interfaces": [
+      "net/minecraft/advancements/ICriterionTrigger"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/triggers/MarryMobTrigger": {
+    "name": "net/minecraft/AgeOfMinecraft/triggers/MarryMobTrigger",
+    "interfaces": [
+      "net/minecraft/advancements/ICriterionTrigger"
+    ]
+  },
+  "net/minecraft/AgeOfMinecraft/triggers/SpawnMobTrigger": {
+    "name": "net/minecraft/AgeOfMinecraft/triggers/SpawnMobTrigger",
+    "interfaces": [
+      "net/minecraft/advancements/ICriterionTrigger"
+    ]
+  }
+}

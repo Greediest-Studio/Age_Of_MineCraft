@@ -1,0 +1,48 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "dhd",
+        "bac",
+        "dld"
+    ],
+    "key":
+    {
+        "d":
+		{
+            "item": "abyssalcraft:ingotblock",
+            "data": 2
+		},
+        "h":
+		{
+            "item": "abyssalcraft:dhelmet",
+            "data": 0
+		},
+        "b":
+		{
+            "item": "abyssalcraft:dboots",
+            "data": 0
+		},
+        "a":
+		{
+            "item": "abyssalcraft:dreadshard",
+            "data": 0
+		},
+        "c":
+		{
+            "item": "abyssalcraft:dplate",
+            "data": 0
+		},
+        "l":
+		{
+            "item": "abyssalcraft:dlegs",
+            "data": 0
+		}
+    },
+    "result":
+    {
+        "item": "ageofminecraft:fusiondreadguard",
+        "count": 1,
+        "data": 0
+    }
+}

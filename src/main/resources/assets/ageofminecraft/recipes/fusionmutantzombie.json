@@ -1,0 +1,30 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "beb",
+        "ece",
+        "beb"
+    ],
+    "key":
+    {
+        "b":
+		{
+            "item": "ageofminecraft:fusionzombie"
+		},
+        "e":
+		{
+            "item": "mutantbeasts:chemical_x"
+		},
+        "c":
+		{
+            "item": "mutantbeasts:hulk_hammer"
+		}
+    },
+    "result":
+    {
+        "item": "ageofminecraft:fusionmutantzombie",
+        "count": 1,
+        "data": 0
+    }
+}

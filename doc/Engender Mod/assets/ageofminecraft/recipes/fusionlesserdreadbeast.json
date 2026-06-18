@@ -1,0 +1,33 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "gdg",
+        "dbd",
+        "gdg"
+    ],
+    "key":
+    {
+        "g":
+		{
+            "item": "ageofminecraft:fusiondreadspawn",
+            "data": 0
+		},
+        "d":
+		{
+            "item": "ageofminecraft:fusiongreaterdreadspawn",
+            "data": 0
+		},
+        "b":
+		{
+            "item": "abyssalcraft:ingotblock",
+            "data": 2
+		}
+    },
+    "result":
+    {
+        "item": "ageofminecraft:fusionlesserdreadbeast",
+        "count": 1,
+        "data": 0
+    }
+}

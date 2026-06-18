@@ -1,0 +1,22 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+        {
+        "item": "abyssalcraft:dreadshard"
+        },
+        {
+        "item": "abyssalcraft:dreadcloth"
+        },
+        {
+        "item": "abyssalcraft:dreadfragment"
+        },
+        {
+        "item": "minecraft:egg"
+        }
+    ],
+	"result": {
+		"item": "ageofminecraft:fusiongreaterdreadspawn",
+        "count": 1,
+        "data": 0
+	}
+}

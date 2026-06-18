@@ -1,0 +1,64 @@
+package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
+
+import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDreadguard;
+import net.minecraft.AgeOfMinecraft.models.ModelZombie;
+import net.minecraft.AgeOfMinecraft.renders.LayerLearningBook;
+import net.minecraft.AgeOfMinecraft.renders.LayerMobCape;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.RenderBiped;
+import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.client.renderer.entity.RenderLivingBase;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+@SideOnly(Side.CLIENT)
+public class RenderDreadguard extends RenderBiped<EntityDreadguard> {
+  private float scale = 1.5F;
+  
+  private static final ResourceLocation texture = new ResourceLocation("abyssalcraft:textures/model/elite/dread_guard.png");
+  
+  public RenderDreadguard(RenderManager manager) {
+    super(manager, (ModelBiped)new ModelZombie(), 0.75F);
+    LayerBipedArmor layerbipedarmor = new LayerBipedArmor((RenderLivingBase)this) {
+        protected void func_177177_a() {
+          this.field_177189_c = (ModelBase)new ModelZombie(0.5F, true);
+          this.field_177186_d = (ModelBase)new ModelZombie(1.0F, true);
+        }
+      };
+    func_177094_a((LayerRenderer)layerbipedarmor);
+    func_177094_a((LayerRenderer)new LayerLearningBook((RenderLiving)this));
+    func_177094_a((LayerRenderer)new LayerMobCape((RenderLivingBase)this));
+  }
+  
+  protected ResourceLocation getEntityTexture(EntityDreadguard par1Entitydreadguard) {
+    return texture;
+  }
+  
+  protected void preRenderCallback(EntityDreadguard entitylivingbaseIn, float partialTickTime) {
+    GlStateManager.func_179152_a(this.scale, this.scale, this.scale);
+    float fit = entitylivingbaseIn.getFittness();
+    GlStateManager.func_179152_a(fit, fit, fit);
+    if (entitylivingbaseIn.isHero())
+      GlStateManager.func_179152_a(1.05F, 1.05F, 1.05F); 
+    if (!entitylivingbaseIn.field_70122_E)
+      GlStateManager.func_179114_b(entitylivingbaseIn.prevRotationPitchFalling + (entitylivingbaseIn.rotationPitchFalling - entitylivingbaseIn.prevRotationPitchFalling) * 2.0F - 1.0F, 1.0F, 0.0F, 0.0F); 
+    if (entitylivingbaseIn.field_70173_aa <= 21 && entitylivingbaseIn.field_70173_aa > 0) {
+      float f5 = (entitylivingbaseIn.field_70173_aa + partialTickTime - 1.0F) / 20.0F * 1.6F;
+      f5 = MathHelper.func_76129_c(f5);
+      if (f5 > 1.0F)
+        f5 = 1.0F; 
+      GlStateManager.func_179152_a(f5, f5, f5);
+      GlStateManager.func_179114_b(f5 * 90.0F - 90.0F, f5, f5, f5);
+    } 
+  }
+}

@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+        {
+            "item": "ageofminecraft:fusionpig"
+        },
+        {
+            "item": "ageofminecraft:fusionspider"
+        },
+        {
+            "item": "mutantbeasts:chemical_x"
+        }
+    ],
+	"result": {
+		"item": "ageofminecraft:fusionspiderpig",
+        "count": 1,
+        "data": 0
+	}
+}

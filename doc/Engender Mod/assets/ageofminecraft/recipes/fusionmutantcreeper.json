@@ -1,0 +1,30 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "beb",
+        "ece",
+        "beb"
+    ],
+    "key":
+    {
+        "b":
+		{
+            "item": "ageofminecraft:fusioncreeper"
+		},
+        "e":
+		{
+            "item": "mutantbeasts:chemical_x"
+		},
+        "c":
+		{
+            "item": "mutantbeasts:creeper_shard"
+		}
+    },
+    "result":
+    {
+        "item": "ageofminecraft:fusionmutantcreeper",
+        "count": 1,
+        "data": 0
+    }
+}

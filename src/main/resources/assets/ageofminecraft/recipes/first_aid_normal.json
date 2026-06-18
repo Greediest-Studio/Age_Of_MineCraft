@@ -1,0 +1,31 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "bib",
+        "imi",
+        "bib"
+    ],
+    "key":
+    {
+        "b":
+        {
+            "item": "ageofminecraft:bandage_poor"
+        },
+        "i":
+        {
+            "type": "forge:ore_dict",
+            "ore": "ingotIron"
+        },
+        "m":
+        {
+            "item": "ageofminecraft:bandage_good"
+        }
+    },
+    "result":
+    {
+        "item": "ageofminecraft:bandage_box",
+        "count": 1,
+        "data": 0
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "beb",
+        "ece",
+        "beb"
+    ],
+    "key":
+    {
+        "b":
+		{
+            "item": "ageofminecraft:fusionskeleton"
+		},
+        "e":
+		{
+            "item": "mutantbeasts:chemical_x"
+		},
+        "c":
+		{
+            "item": "mutantbeasts:mutant_skeleton_skull"
+		}
+    },
+    "result":
+    {
+        "item": "ageofminecraft:fusionmutantskeleton",
+        "count": 1,
+        "data": 0
+    }
+}

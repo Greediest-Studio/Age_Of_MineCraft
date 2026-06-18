@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "scs"
+    ],
+    "key":
+    {
+        "s":
+        {
+            "item": "minecraft:string",
+            "data": 0
+        },
+        "c":
+        {
+            "item": "minecraft:carpet",
+            "data": 0
+        }
+    },
+    "result":
+    {
+        "item": "ageofminecraft:bandage_poor",
+        "count": 1,
+        "data": 0
+    }
+}

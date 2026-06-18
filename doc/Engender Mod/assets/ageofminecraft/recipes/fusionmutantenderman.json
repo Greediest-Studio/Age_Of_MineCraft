@@ -1,0 +1,30 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "beb",
+        "ece",
+        "beb"
+    ],
+    "key":
+    {
+        "b":
+		{
+            "item": "ageofminecraft:fusionenderman"
+		},
+        "e":
+		{
+            "item": "mutantbeasts:chemical_x"
+		},
+        "c":
+		{
+            "item": "mutantbeasts:endersoul_hand"
+		}
+    },
+    "result":
+    {
+        "item": "ageofminecraft:fusionmutantenderman",
+        "count": 1,
+        "data": 0
+    }
+}

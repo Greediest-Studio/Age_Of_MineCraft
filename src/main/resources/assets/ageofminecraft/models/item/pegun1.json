@@ -1,0 +1,6 @@
+{
+    "parent":"ageofminecraft:item/gun",
+        "textures": {
+        "layer0": "ageofminecraft:items/abyssalcraft/pegun1"
+    }
+}

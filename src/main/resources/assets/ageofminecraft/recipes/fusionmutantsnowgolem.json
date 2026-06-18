@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+        {
+            "item": "ageofminecraft:fusionsnowman"
+        },
+        {
+            "item": "minecraft:lit_pumpkin"
+        },
+        {
+            "item": "mutantbeasts:chemical_x"
+        }
+    ],
+	"result": {
+		"item": "ageofminecraft:fusionmutantsnowgolem",
+        "count": 1,
+        "data": 0
+	}
+}

@@ -1,0 +1,33 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "beb",
+        "ece",
+        "beb"
+    ],
+    "key":
+    {
+        "b":
+		{
+            "type": "forge:ore_dict",
+            "ore": "blockEmerald"
+		},
+        "e":
+		{
+            "item": "minecraft:bone_block",
+            "data": 0
+		},
+        "c":
+		{
+            "item": "abyssalcraft:cudgel",
+            "data": 0
+		}
+    },
+    "result":
+    {
+        "item": "ageofminecraft:fusiongskeleton",
+        "count": 1,
+        "data": 0
+    }
+}

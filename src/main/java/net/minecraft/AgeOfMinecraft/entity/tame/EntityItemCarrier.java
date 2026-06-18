@@ -1,0 +1,53 @@
+package net.minecraft.AgeOfMinecraft.entity.tame;
+
+import com.shinoow.abyssalcraft.lib.util.SpecialTextUtil;
+import net.minecraft.AgeOfMinecraft.registry.EItem;
+import net.minecraft.AgeOfMinecraft.registry.ESound;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.World;
+
+public class EntityItemCarrier extends EntityItem {
+  public EntityItemCarrier(World worldIn) {
+    super(worldIn);
+  }
+  
+  public void setDead() {
+    playSound(SoundEvents.ENTITY_ITEM_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+    ItemStack stack = getItem();
+    if (!stack.hasTagCompound())
+      stack.setTagCompound(new NBTTagCompound()); 
+    if (stack.getItem() == EItem.carrier)
+      if (stack.getTagCompound().hasKey("Entity")) {
+        Entity entity = EntityList.createEntityFromNBT(stack.getTagCompound().getCompoundTag("Entity"), this.world);
+        if (entity instanceof EntityTameBase) {
+          EntityTameBase entityliving = (EntityTameBase)entity;
+          if (!this.world.isRemote && entityliving instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityJzahar)
+            SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzahar.scold") }); 
+          entityliving.writeToNBT(stack.getTagCompound().getCompoundTag("Entity"));
+          entityliving.playLivingSound();
+          if (!entityliving.isWild() && (entityliving instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEnderDragon || entityliving instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDragonBoss)) {
+            entityliving.setLocationAndAngles((entityliving.getOwner()).posX, (entityliving.getOwner()).posY + 4.0D, (entityliving.getOwner()).posZ, entityliving.rotationYaw, entityliving.rotationPitch);
+          } else {
+            entityliving.setLocationAndAngles(this.posX, this.posY, this.posZ, entityliving.rotationYaw, entityliving.rotationPitch);
+          } 
+          entity.copyLocationAndAnglesFrom((Entity)this);
+          entity.world.setEntityState(entity, (byte)20);
+          entity.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0F, 2.0F);
+          entity.playSound(SoundEvents.BLOCK_GLASS_BREAK, 1.0F, 2.0F);
+          entity.playSound(ESound.createMob, 1.0F, 1.0F);
+          entity.world.setEntityState(entity, (byte)35);
+          stack.getTagCompound().removeTag("Entity");
+          stack.getTagCompound().removeTag("EntityName");
+          if (!this.world.isRemote)
+            this.world.spawnEntity(entity); 
+        } 
+      }  
+    super.setDead();
+  }
+}

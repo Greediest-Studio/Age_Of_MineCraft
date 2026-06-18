@@ -1,0 +1,38 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "epe",
+        "ini",
+        "eie"
+    ],
+    "key":
+    {
+        "e":
+		{
+            "type": "forge:ore_dict",
+            "ore": "blockEmerald"
+		},
+        "p":
+		{
+            "item": "minecraft:pumpkin",
+            "data": 0
+		},
+        "i":
+		{
+            "item": "minecraft:packed_ice",
+            "data": 0
+		},
+        "n":
+		{
+            "item": "minecraft:nether_star",
+            "data": 0
+		}
+    },
+    "result":
+    {
+        "item": "ageofminecraft:fusionabomniablesnowman",
+        "count": 1,
+        "data": 0
+    }
+}

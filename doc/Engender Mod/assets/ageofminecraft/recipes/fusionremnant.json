@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+        {
+        "item": "abyssalcraft:eldritchscale"
+        },
+        {
+        "item": "abyssalcraft:necronomicon"
+        },
+        {
+        "item": "minecraft:egg"
+        }
+    ],
+	"result": {
+		"item": "ageofminecraft:fusionremnant",
+        "count": 1,
+        "data": 0
+	}
+}

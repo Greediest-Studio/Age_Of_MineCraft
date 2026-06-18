@@ -1,0 +1,33 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "xw ",
+        "ox ",
+        " xx"
+    ],
+    "key":
+    {
+        "x":
+		{
+            "type": "forge:ore_dict",
+            "ore": "ingotIron"
+		},
+        "w":
+		{
+            "type": "forge:ore_dict",
+            "ore": "gemDiamond"
+		},
+        "o":
+		{
+            "item": "abyssalcraft:shadowfragment",
+            "data": 0
+		}
+    },
+    "result":
+    {
+        "item": "ageofminecraft:pegun",
+        "count": 1,
+        "data": 0
+    }
+}

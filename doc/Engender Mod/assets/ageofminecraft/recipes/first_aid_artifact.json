@@ -1,0 +1,33 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "gmg",
+        "mwm",
+        "gmg"
+    ],
+    "key":
+    {
+        "w":
+        {
+            "item": "ageofminecraft:withered_nether_star",
+            "data": 0
+        },
+        "g":
+        {
+            "type": "forge:ore_dict",
+            "ore": "blockDiamond"
+        },
+        "m":
+        {
+            "item": "ageofminecraft:bandage_box",
+            "data": 0
+        }
+    },
+    "result":
+    {
+        "item": "ageofminecraft:bandage_artifact",
+        "count": 1,
+        "data": 0
+    }
+}

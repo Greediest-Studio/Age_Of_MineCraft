@@ -1,0 +1,33 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "xex",
+        "ebe",
+        "xex"
+    ],
+    "key":
+    {
+        "x":
+		{
+            "item": "abyssalcraft:eldritchscale",
+            "data": 0
+		},
+        "e":
+		{
+            "type": "forge:ore_dict",
+            "ore": "ingotEthaxium"
+		},
+        "b":
+		{
+            "item": "abyssalcraft:ingotblock",
+            "data": 3
+		}
+    },
+    "result":
+    {
+        "item": "ageofminecraft:fusiongatekeeperminion",
+        "count": 1,
+        "data": 0
+    }
+}

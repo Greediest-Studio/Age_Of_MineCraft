@@ -1,0 +1,16 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+        {
+        "item": "abyssalcraft:dreadfragment"
+        },
+        {
+        "item": "minecraft:egg"
+        }
+    ],
+	"result": {
+		"item": "ageofminecraft:fusionchagarothspawn",
+        "count": 1,
+        "data": 0
+	}
+}

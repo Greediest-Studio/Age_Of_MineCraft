@@ -1,0 +1,165 @@
+{
+    "display": {
+        "icon": {
+            "item": "minecraft:golden_apple",
+            "data": 1
+        },
+        "title": {
+            "translate": "advancements.engender.vanilla.breed_mobs.title"
+        },
+        "description": {
+            "translate": "advancements.engender.vanilla.breed_mobs.desc"
+        },
+        "frame": "challenge"
+    },
+    "parent": "ageofminecraft:breed_with_mob",
+    "rewards": {
+        "experience": 24000
+    },
+    "criteria": {
+        "villager": {
+            "trigger": "breed_with_mob",
+            "conditions": {
+                "entity": {
+                    "type": "ageofminecraft:VillagerHelpful"
+                }
+            }
+        },
+        "snow_golem": {
+            "trigger": "breed_with_mob",
+            "conditions": {
+                "entity": {
+                    "type": "ageofminecraft:SnowmanHelpful"
+                }
+            }
+        },
+        "spider": {
+            "trigger": "breed_with_mob",
+            "conditions": {
+                "entity": {
+                    "type": "ageofminecraft:SpiderHelpful"
+                }
+            }
+        },
+        "skeleton": {
+            "trigger": "breed_with_mob",
+            "conditions": {
+                "entity": {
+                    "type": "ageofminecraft:SkeletonHelpful"
+                }
+            }
+        },
+        "creeper": {
+            "trigger": "breed_with_mob",
+            "conditions": {
+                "entity": {
+                    "type": "ageofminecraft:CreeperHelpful"
+                }
+            }
+        },
+        "slime": {
+            "trigger": "breed_with_mob",
+            "conditions": {
+                "entity": {
+                    "type": "ageofminecraft:SlimeHelpful"
+                }
+            }
+        },
+        "magma_cube": {
+            "trigger": "breed_with_mob",
+            "conditions": {
+                "entity": {
+                    "type": "ageofminecraft:LavaSlimeHelpful"
+                }
+            }
+        },
+        "blaze": {
+            "trigger": "breed_with_mob",
+            "conditions": {
+                "entity": {
+                    "type": "ageofminecraft:BlazeHelpful"
+                }
+            }
+        },
+        "cave_spider": {
+            "trigger": "breed_with_mob",
+            "conditions": {
+                "entity": {
+                    "type": "ageofminecraft:CaveSpiderHelpful"
+                }
+            }
+        },
+        "enderman": {
+            "trigger": "breed_with_mob",
+            "conditions": {
+                "entity": {
+                    "type": "ageofminecraft:EndermanHelpful"
+                }
+            }
+        },
+        "ghast": {
+            "trigger": "breed_with_mob",
+            "conditions": {
+                "entity": {
+                    "type": "ageofminecraft:GhastHelpful"
+                }
+            }
+        },
+        "guardian": {
+            "trigger": "breed_with_mob",
+            "conditions": {
+                "entity": {
+                    "type": "ageofminecraft:GuardianHelpful"
+                }
+            }
+        },
+        "zombie_pigman": {
+            "trigger": "breed_with_mob",
+            "conditions": {
+                "entity": {
+                    "type": "ageofminecraft:PigZombieHelpful"
+                }
+            }
+        },
+        "vindicator": {
+            "trigger": "breed_with_mob",
+            "conditions": {
+                "entity": {
+                    "type": "ageofminecraft:VindicatorHelpful"
+                }
+            }
+        },
+        "witch": {
+            "trigger": "breed_with_mob",
+            "conditions": {
+                "entity": {
+                    "type": "ageofminecraft:WitchHelpful"
+                }
+            }
+        },
+        "evoker": {
+            "trigger": "breed_with_mob",
+            "conditions": {
+                "entity": {
+                    "type": "ageofminecraft:EvokerHelpful"
+                }
+            }
+        },
+        "iron_golem": {
+            "trigger": "breed_with_mob",
+            "conditions": {
+                "entity": {
+                    "type": "ageofminecraft:VillagerGolemHelpful"
+                }
+            }
+        },
+        "elder_guardian": {
+            "trigger": "breed_with_mob",
+            "conditions": {
+                "entity": {
+                    "type": "ageofminecraft:ElderGuardianHelpful"
+                }
+            }
+        }
+    }
+}

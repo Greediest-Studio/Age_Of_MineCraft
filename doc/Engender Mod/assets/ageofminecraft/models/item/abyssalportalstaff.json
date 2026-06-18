@@ -1,0 +1,6 @@
+{
+    "parent":"item/handheld",
+        "textures": {
+        "layer0": "ageofminecraft:items/abyssalcraft/abyssal_portal_staff"
+    }
+}

@@ -1,0 +1,16 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+        {
+        "item": "abyssalcraft:omotholflesh"
+        },
+        {
+        "item": "minecraft:egg"
+        }
+    ],
+	"result": {
+		"item": "ageofminecraft:fusionomotholghoul",
+        "count": 1,
+        "data": 0
+	}
+}
