@@ -1,12 +1,8 @@
 package net.minecraft.AgeOfMinecraft;
 
-import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.shinoow.abyssalcraft.api.AbyssalCraftAPI;
 import java.util.List;
 
-import com.shinoow.abyssalcraft.common.entity.EntityAbygolem;
-import com.shinoow.abyssalcraft.common.entity.EntitySkeletonGoliath;
-import net.daveyx0.primitivemobs.entity.monster.EntityTrollager;
 import net.minecraft.AgeOfMinecraft.ageofminecraft.Tags;
 import net.minecraft.AgeOfMinecraft.commands.CommandKillEngenderMobs;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
@@ -108,31 +104,7 @@ public class EngenderMod {
     } 
     return false;
   }
-  
-  public static boolean isWoodLikeMob(Entity entity) {
-    return (entity instanceof net.minecraft.entity.boss.EntityWither || entity instanceof net.minecraft.entity.monster.AbstractSkeleton || entity instanceof net.minecraft.entity.monster.EntityShulker || entity instanceof net.minecraft.entity.passive.EntityMooshroom || (entity instanceof EntityTameBase && ((EntityTameBase)entity)
-      
-      .isWoodLike()) || (
-      Loader.isModLoaded("primitivemobs") && (entity instanceof net.daveyx0.primitivemobs.entity.monster.EntityHauntedTool || entity instanceof net.daveyx0.primitivemobs.entity.monster.EntityMimic || entity instanceof net.daveyx0.primitivemobs.entity.monster.EntityEnchantedBook || entity instanceof net.daveyx0.primitivemobs.entity.monster.EntityBlazingJuggernaut || (entity instanceof EntityTrollager && ((EntityTrollager)entity)
-      
-      .isStone()))) || (
-      Loader.isModLoaded("abyssalcraft") && (entity instanceof EntitySkeletonGoliath || entity instanceof EntityAbygolem || entity instanceof com.shinoow.abyssalcraft.common.entity.EntityDragonBoss || entity instanceof com.shinoow.abyssalcraft.common.entity.EntityDragonMinion || entity instanceof com.shinoow.abyssalcraft.common.entity.EntityDreadgolem || entity instanceof com.shinoow.abyssalcraft.common.entity.anti.EntityAntiSkeleton || entity instanceof com.shinoow.abyssalcraft.common.entity.EntityCoraliumSquid)) || (
-      
-      Loader.isModLoaded("twilightforest") && (entity instanceof twilightforest.entity.boss.EntityTFLich || entity instanceof twilightforest.entity.boss.EntityTFMinoshroom || entity instanceof twilightforest.entity.boss.EntityTFSnowQueen || entity instanceof twilightforest.entity.boss.EntityTFIceCrystal || entity instanceof twilightforest.entity.EntityTFSkeletonDruid || entity instanceof twilightforest.entity.EntityTFSnowGuardian || entity instanceof twilightforest.entity.EntityTFIceExploder || entity instanceof twilightforest.entity.EntityTFIceShooter || entity instanceof twilightforest.entity.EntityTFTowerGolem || entity instanceof twilightforest.entity.EntityTFMazeSlime)) || (
-      
-      Loader.isModLoaded("mutantbeasts") && (entity instanceof chumbanotz.mutantbeasts.entity.mutant.MutantSkeletonEntity || entity instanceof chumbanotz.mutantbeasts.entity.mutant.MutantSnowGolemEntity)) || (
-      
-      Loader.isModLoaded("iceandfire") && entity instanceof EntityLivingBase && 
-      EntityGorgon.isStoneMob((EntityLivingBase)entity)) || (
-      Loader.isModLoaded("draconicevolution") && entity instanceof com.brandon3055.draconicevolution.entity.EntityGuardianCrystal));
-  }
-  
-  public static boolean isMetalLikeMob(Entity entity) {
-    return (entity instanceof net.minecraft.entity.monster.EntityBlaze || entity instanceof net.minecraft.entity.monster.EntityIronGolem || (entity instanceof EntityTameBase && ((EntityTameBase)entity).isMetalLike()) || (Loader.isModLoaded("abyssalcraft") && (entity instanceof com.shinoow.abyssalcraft.common.entity.EntityDreadguard || entity instanceof com.shinoow.abyssalcraft.common.entity.EntitySacthoth)) || (
-      
-      Loader.isModLoaded("twilightforest") && (entity instanceof twilightforest.entity.EntityTFArmoredGiant || entity instanceof twilightforest.entity.EntityTFBlockGoblin || entity instanceof twilightforest.entity.EntityTFHelmetCrab || entity instanceof twilightforest.entity.EntityTFGoblinKnightLower || entity instanceof twilightforest.entity.EntityTFGoblinKnightUpper)));
-  }
-  
+
   public static boolean canBeTurned(Entity entity) {
     return (entity instanceof net.minecraft.entity.player.EntityPlayer || entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntityZombie || entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier2.EntitySquid || entity instanceof net.minecraft.entity.monster.EntityZombie || entity instanceof net.minecraft.entity.passive.EntitySquid || entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntitySkeleton || entity instanceof net.minecraft.entity.monster.AbstractSkeleton || entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntityCreeper || entity instanceof net.minecraft.entity.monster.EntityCreeper || entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier2.EntityVillager || entity instanceof net.minecraft.entity.passive.EntityVillager || entity instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDreadling || entity instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityAbyssalZombie || entity instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityCoraliumSquid || (
       

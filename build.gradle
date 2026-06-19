@@ -314,8 +314,6 @@ dependencies {
     implementation 'curse.maven:llibrary-243298:3116493'
     runtimeOnly files('libs/llibrary-core-1.0.11-1.12.2.jar')
     implementation 'curse.maven:multi-mob-core-309136:2666556'
-    implementation 'curse.maven:primitive-mobs-282415:2658551'
-    implementation 'curse.maven:the-twilight-forest-227639:3051450'
     implementation 'curse.maven:baubles-227083:2518667'
     runtimeOnly 'curse.maven:avaritia-1-10-261348:3143349'
 }

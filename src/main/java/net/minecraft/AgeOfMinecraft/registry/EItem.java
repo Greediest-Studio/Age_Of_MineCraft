@@ -109,7 +109,6 @@ import net.minecraft.AgeOfMinecraft.items.ItemTrainingStick;
 import net.minecraft.AgeOfMinecraft.items.ItemVexItem;
 import net.minecraft.AgeOfMinecraft.items.ItemVillagerItem;
 import net.minecraft.AgeOfMinecraft.items.ItemVindicatorItem;
-import net.minecraft.AgeOfMinecraft.items.ItemWeddingRing;
 import net.minecraft.AgeOfMinecraft.items.ItemWitchItem;
 import net.minecraft.AgeOfMinecraft.items.ItemWitherItem;
 import net.minecraft.AgeOfMinecraft.items.ItemWitherSkeletonItem;
@@ -144,9 +143,7 @@ public class EItem {
   public static Item statChecker;
   
   public static Item carrier;
-  
-  public static ItemWeddingRing weddingring;
-  
+
   public static Item heromaker;
   
   public static Item lastchance;
@@ -701,7 +698,6 @@ public class EItem {
     witheredNetherStar = (Item)(new ItemSimpleFoiled()).setCreativeTab(ETab.engender).setTranslationKey("withered_nether_star").setRegistryName("withered_nether_star");
     statChecker = (Item)new ItemEngenderStatChecker();
     carrier = (Item)new ItemCarrier();
-    weddingring = new ItemWeddingRing();
     heromaker = (Item)new ItemHeroMaker();
     lastchance = (Item)new ItemLastChance();
     trainingstick = (Item)new ItemTrainingStick();
@@ -984,7 +980,6 @@ public class EItem {
     GameData.register_impl((IForgeRegistryEntry)witheredNetherStar);
     GameData.register_impl((IForgeRegistryEntry)statChecker);
     GameData.register_impl((IForgeRegistryEntry)carrier);
-    GameData.register_impl((IForgeRegistryEntry)weddingring);
     GameData.register_impl((IForgeRegistryEntry)heromaker);
     GameData.register_impl((IForgeRegistryEntry)lastchance);
     GameData.register_impl((IForgeRegistryEntry)trainingstick);
@@ -1271,7 +1266,6 @@ public class EItem {
     registerItem(renderItem, witheredNetherStar);
     registerItem(renderItem, statChecker);
     registerItem(renderItem, carrier);
-    registerItem(renderItem, weddingring);
     registerItem(renderItem, heromaker);
     registerItem(renderItem, lastchance);
     registerItem(renderItem, trainingstick);

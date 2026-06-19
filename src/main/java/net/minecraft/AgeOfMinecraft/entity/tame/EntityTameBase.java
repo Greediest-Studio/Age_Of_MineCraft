@@ -1585,7 +1585,6 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       amount = Math.max(amount - getAbsorptionAmount(), 0.0F);
       setAbsorptionAmount(getAbsorptionAmount() - f - amount);
       if (amount != 0.0F) {
-        EngenderGeneralEvent.playOnHitSound(source, entity, f);
         this.limbSwingAmount++;
         float f1 = getFakeHealth();
         setFakeHealth(f1 - amount);
@@ -1881,11 +1880,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         ((EntityLivingBase)entity).setHealth(((EntityLivingBase)entity).getHealth() - (isHero() ? 0.03F : 0.01F)); 
       if (entity.isEntityInvulnerable(DamageSource.causeMobDamage((EntityLivingBase)this)) && f >= 6.0F) {
         ((EntityLivingBase)entity).setHealth(((EntityLivingBase)entity).getHealth() - f);
-        if (EngenderMod.isWoodLikeMob(entity)) {
-          entity.playSound(ESound.woodHitCrush, 2.0F, 1.0F);
-        } else if (EngenderMod.isMetalLikeMob(entity)) {
-          entity.playSound(ESound.metalHitCrush, 2.0F, 1.0F);
-        } else if (entity.height >= 5.0F) {
+      if (entity.height >= 5.0F) {
           entity.playSound(ESound.fleshHitCrushHeavy, 2.0F, 1.0F);
         } else {
           entity.playSound(ESound.fleshHitCrush, 2.0F, 1.0F);
@@ -2077,11 +2072,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       } 
       if (!(entity instanceof EntityTameBase) && entity.isEntityInvulnerable(attacktype) && (damage >= 6.0F || attacktype.isExplosion() || attacktype.isDamageAbsolute() || attacktype.isUnblockable() || attacktype == DamageSource.ANVIL || attacktype.canHarmInCreative() || attacktype.isMagicDamage() || attacktype == DamageSource.LAVA)) {
         entity.setHealth(entity.getHealth() - damage);
-        if (EngenderMod.isWoodLikeMob((Entity)entity)) {
-          entity.playSound(ESound.woodHitCrush, 2.0F, 1.0F);
-        } else if (EngenderMod.isMetalLikeMob((Entity)entity)) {
-          entity.playSound(ESound.metalHitCrush, 2.0F, 1.0F);
-        } else if (entity.height >= 5.0F) {
+      if (entity.height >= 5.0F) {
           entity.playSound(ESound.fleshHitCrushHeavy, 2.0F, 1.0F);
         } else {
           entity.playSound(ESound.fleshHitCrush, 2.0F, 1.0F);
@@ -2227,8 +2218,6 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       } 
     } 
     setGrowingAge(getGrowingAge() + 1);
-    if (!isWild() && canBeMarried() && !getOwner().getHeldItemMainhand().isEmpty() && getOwner().getHeldItemMainhand().getItem() == EItem.weddingring)
-      getLookHelper().setLookPositionWithEntity((Entity)getOwner(), getHorizontalFaceSpeed(), getVerticalFaceSpeed()); 
     if (getGrowingAge() < 0)
       this.inLove = 0; 
     if (getGrowingAge() < 0 && !isChild()) {
@@ -2246,36 +2235,6 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     } 
     this.timeUntilPortal--;
     if (this.ticksExisted > 400 && this.rand.nextInt(60) == 0 && !isWild() && (getOwner()).ticksExisted > 400 && getAttackTarget() == null && !isRiding() && !isBeingRidden()) {
-      if (Loader.isModLoaded("twilightforest"))
-        if (!isWild() && getAttackTarget() == null && !isRiding() && !isBeingRidden()) {
-          int i11 = MathHelper.floor((getOwner()).posY);
-          int l1 = MathHelper.floor((getOwner()).posX);
-          int i2 = MathHelper.floor((getOwner()).posZ);
-          for (int k2 = -2; k2 <= 2; k2++) {
-            for (int l2 = -2; l2 <= 2; l2++) {
-              for (int j = -2; j <= 2; j++) {
-                int i3 = l1 + k2;
-                int k = i11 + j;
-                int l = i2 + l2;
-                BlockPos blockpos = new BlockPos(i3 + 0.5D, k, l + 0.5D);
-                IBlockState iblockstate = this.world.getBlockState(blockpos);
-                Block block = iblockstate.getBlock();
-                if (block instanceof twilightforest.block.BlockTFPortal && this.world.getBlockState(blockpos.down()).getBlock() != Blocks.AIR && this.world.getBlockState(blockpos.down()).getBlock() != Blocks.PORTAL) {
-                  if (this instanceof EntityVex || this instanceof EntityGhast) {
-                    getMoveHelper().setMoveTo(i3, k, l, 1.0D);
-                  } else {
-                    getNavigator().tryMoveToXYZ(i3, k, l, 1.0D);
-                  } 
-                  if (this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityGuardian || this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityShulker || this instanceof EntityGhast || getDistanceSqToCenter(blockpos) < 4.0D) {
-                    setPositionAndUpdate(i3 + 0.5D, k, l + 0.5D);
-                    if (this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityShulker)
-                      playSound(SoundEvents.ENTITY_SHULKER_TELEPORT, getSoundVolume(), 0.95F); 
-                  } 
-                } 
-              } 
-            } 
-          } 
-        }  
       if (!isWild() && getAttackTarget() == null && !isRiding() && !isBeingRidden()) {
         int i11 = MathHelper.floor((getOwner()).posY);
         int l1 = MathHelper.floor((getOwner()).posX);
@@ -2588,18 +2547,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         entityDropItem(new ItemStack(books[getBookID()], 1, getBookDurability()), 1.0F); 
       setBookID(0);
       setBookDurability(0);
-    } 
-    if (isMarried() && !this.world.isRemote) {
-      ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("Your wife is unconcious!", new Object[0]));
-      ItemStack stack = new ItemStack((Item)EItem.weddingring);
-      stack.setTagCompound(new NBTTagCompound());
-      NBTTagCompound tag = serializeNBT();
-      stack.getTagCompound().setTag("Entity", (NBTBase)tag);
-      stack.getTagCompound().setString("EntityName", getName());
-      EntityItem entityitem = new EntityItem(this.world, (getOwner()).posX, (getOwner()).posY, (getOwner()).posZ, stack);
-      entityitem.setDefaultPickupDelay();
-      this.world.spawnEntity((Entity)entityitem);
-    } 
+    }
   }
   
   public int getVerticalFaceSpeed() {

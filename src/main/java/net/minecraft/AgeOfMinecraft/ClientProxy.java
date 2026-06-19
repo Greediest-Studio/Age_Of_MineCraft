@@ -71,7 +71,6 @@ import net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStormTentacle;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStormTentacleDevourer;
 import net.minecraft.AgeOfMinecraft.events.EngenderGeneralEvent;
 import net.minecraft.AgeOfMinecraft.events.EngenderMusicEvent;
-import net.minecraft.AgeOfMinecraft.registry.EBlock;
 import net.minecraft.AgeOfMinecraft.registry.EItem;
 import net.minecraft.AgeOfMinecraft.renders.RenderAbomniableSnowman;
 import net.minecraft.AgeOfMinecraft.renders.RenderBat;
@@ -159,7 +158,6 @@ public class ClientProxy extends CommonProxy {
   public void postInit(FMLPostInitializationEvent e) {
     super.postInit(e);
     EItem.registerRenders();
-    EBlock.registerRenders();
     if (Loader.isModLoaded("abyssalcraft"))
       EItem.registerAbyRenders(); 
     if (Loader.isModLoaded("draconicevolution"))

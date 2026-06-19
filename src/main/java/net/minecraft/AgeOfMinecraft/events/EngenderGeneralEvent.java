@@ -2,13 +2,10 @@ package net.minecraft.AgeOfMinecraft.events;
 
 import com.google.common.base.Predicate;
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
-import net.minecraft.AgeOfMinecraft.EngenderMod;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityCreeder;
 import net.minecraft.AgeOfMinecraft.registry.EItem;
-import net.minecraft.AgeOfMinecraft.registry.ESound;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -179,38 +176,7 @@ public class EngenderGeneralEvent {
       event.getEntity().isWet())
       event.getEntity().attackEntityFrom((new DamageSource("cooler")).setDamageBypassesArmor().setDamageIsAbsolute().setDifficultyScaled(), 1.0F); 
   }
-  
-  public static void playOnHitSound(DamageSource attacktype, Entity entity, float damage) {
-    if (attacktype.getDamageType() != "yell")
-      if (EngenderMod.isWoodLikeMob(entity)) {
-        if (attacktype.isProjectile() && attacktype.getDamageType() != "fireball") {
-          entity.playSound(ESound.woodHitPierce, 2.0F, 1.0F);
-        } else if (damage >= 6.0F || attacktype.isExplosion() || attacktype.isDamageAbsolute() || attacktype.isUnblockable() || attacktype == DamageSource.ANVIL || attacktype.canHarmInCreative() || attacktype.isMagicDamage() || attacktype == DamageSource.LAVA) {
-          entity.playSound(ESound.woodHitCrush, 2.0F, 1.0F);
-        } else {
-          entity.playSound(ESound.woodHit, 2.0F, 1.0F);
-        } 
-      } else if (EngenderMod.isMetalLikeMob(entity)) {
-        if (attacktype.isProjectile() && attacktype.getDamageType() != "fireball") {
-          entity.playSound(ESound.metalHitPierce, 2.0F, 1.0F);
-        } else if (damage >= 6.0F || attacktype.isExplosion() || attacktype.isDamageAbsolute() || attacktype.isUnblockable() || attacktype == DamageSource.ANVIL || attacktype.canHarmInCreative() || attacktype.isMagicDamage() || attacktype == DamageSource.LAVA) {
-          entity.playSound(ESound.metalHitCrush, 2.0F, 1.0F);
-        } else {
-          entity.playSound(ESound.metalHit, 2.0F, 1.0F);
-        } 
-      } else if (attacktype.isProjectile() && attacktype.getDamageType() != "fireball") {
-        entity.playSound(ESound.fleshHitPierce, 2.0F, 1.0F);
-      } else if (damage >= 6.0F || attacktype.isExplosion() || attacktype.isDamageAbsolute() || attacktype.isUnblockable() || attacktype == DamageSource.ANVIL || attacktype.canHarmInCreative() || attacktype.isMagicDamage() || attacktype == DamageSource.LAVA) {
-        if (entity.height >= 5.0F) {
-          entity.playSound(ESound.fleshHitCrushHeavy, 2.0F, 1.0F);
-        } else {
-          entity.playSound(ESound.fleshHitCrush, 2.0F, 1.0F);
-        } 
-      } else {
-        entity.playSound(ESound.fleshHit, 2.0F, 1.0F);
-      }  
-  }
-  
+
   @SubscribeEvent
   public void onMobDeathEvent(LivingDeathEvent event) {
       if (event.getEntity() instanceof EntityPlayer) {

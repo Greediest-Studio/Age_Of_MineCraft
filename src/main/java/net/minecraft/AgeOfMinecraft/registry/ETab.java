@@ -19,10 +19,8 @@ public class ETab {
   public static CreativeTabs draconic;
   
   public static CreativeTabs mutant;
-  
-  public static CreativeTabs twilight;
-  
-  public static void init() {
+
+    public static void init() {
     engender = new CreativeTabs("ageofminecraft") {
         public ItemStack createIcon() {
           return new ItemStack((Item)EItem.artifact1);
