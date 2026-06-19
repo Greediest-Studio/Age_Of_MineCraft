@@ -104,17 +104,16 @@ public class EntityPig extends EntityTameBase implements IJumpingMount, Light, A
   public void performSpecialAttack() {
     setSpecialAttackTimer(400);
     playSound(ESound.pigSpecial, 5.0F, getSoundPitch());
-    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(32.0D, 32.0D, 32.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(32.0D, 32.0D, 32.0D), Predicates.and(EntitySelectors.IS_ALIVE));
     if (list != null && !list.isEmpty())
-      for (int i1 = 0; i1 < list.size(); i1++) {
-        EntityLivingBase entity = list.get(i1);
-        if (entity != null)
-          if (!false) {
-            entity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 200, 0));
-            entity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 200, 0));
-            entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 200, 0));
-          }  
-      }  
+        for (EntityLivingBase entity : list) {
+            if (entity != null)
+                if (!false) {
+                    entity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 200, 0));
+                    entity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 200, 0));
+                    entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 200, 0));
+                }
+        }
   }
   
   public void onLivingUpdate() {
@@ -125,7 +124,7 @@ public class EntityPig extends EntityTameBase implements IJumpingMount, Light, A
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(SADDLED, Boolean.valueOf(false));
+    this.dataManager.register(SADDLED, Boolean.FALSE);
   }
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
@@ -185,14 +184,14 @@ public class EntityPig extends EntityTameBase implements IJumpingMount, Light, A
   }
   
   public boolean getSaddled() {
-    return ((Boolean)this.dataManager.get(SADDLED)).booleanValue();
+    return (Boolean) this.dataManager.get(SADDLED);
   }
   
   public void setSaddled(boolean saddled) {
     if (saddled) {
-      this.dataManager.set(SADDLED, Boolean.valueOf(true));
+      this.dataManager.set(SADDLED, Boolean.TRUE);
     } else {
-      this.dataManager.set(SADDLED, Boolean.valueOf(false));
+      this.dataManager.set(SADDLED, Boolean.FALSE);
     } 
   }
   

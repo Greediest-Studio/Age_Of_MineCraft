@@ -62,7 +62,7 @@ public class EntityGasterBlaster extends EntityLiving {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(STATUS, Byte.valueOf((byte)0));
+    this.dataManager.register(STATUS, (byte) 0);
   }
   
   protected void hitEntities() {
@@ -72,7 +72,7 @@ public class EntityGasterBlaster extends EntityLiving {
       double y = this.posY + (isSmall() ? 1.0D : 0.5D) + vec3.y * i;
       double z = this.posZ + vec3.z * i;
       AxisAlignedBB box = (new AxisAlignedBB(x, y, z, x, y, z)).grow(isSmall() ? 0.5D : 1.0D);
-      List<Entity> list = this.world.getEntitiesInAABBexcluding((Entity)this, box, Entity::canBeCollidedWith);
+      List<Entity> list = this.world.getEntitiesInAABBexcluding(this, box, Entity::canBeCollidedWith);
       if (!list.isEmpty())
         for (Entity entity1 : list) {
           if (entity1 instanceof EntityLivingBase && this.shootingEntity != null && entity1 != null && entity1.isEntityAlive() && !false) {
@@ -116,7 +116,7 @@ public class EntityGasterBlaster extends EntityLiving {
   
   private void playParticles() {
     if (this.world instanceof WorldServer)
-      ((WorldServer)this.world).spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX, this.posY + this.height / 1.5D, this.posZ, 10, (this.width / 4.0F), (this.height / 4.0F), (this.width / 4.0F), 0.05D, new int[] { Block.getStateId(Blocks.PLANKS.getDefaultState()) }); 
+      ((WorldServer)this.world).spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX, this.posY + this.height / 1.5D, this.posZ, 10, (this.width / 4.0F), (this.height / 4.0F), (this.width / 4.0F), 0.05D, Block.getStateId(Blocks.PLANKS.getDefaultState()));
   }
   
   protected float updateDistance(float p_110146_1_, float p_110146_2_) {
@@ -182,15 +182,15 @@ public class EntityGasterBlaster extends EntityLiving {
   }
   
   public void setSmall(boolean small) {
-    this.dataManager.set(STATUS, Byte.valueOf(setBit(((Byte)this.dataManager.get(STATUS)).byteValue(), 1, small)));
+    this.dataManager.set(STATUS, setBit(this.dataManager.get(STATUS), 1, small));
   }
   
   public boolean isSmall() {
-    return ((((Byte)this.dataManager.get(STATUS)).byteValue() & 0x1) != 0);
+    return ((this.dataManager.get(STATUS) & 0x1) != 0);
   }
   
   private void setMarker(boolean marker) {
-    this.dataManager.set(STATUS, Byte.valueOf(setBit(((Byte)this.dataManager.get(STATUS)).byteValue(), 16, marker)));
+    this.dataManager.set(STATUS, setBit(this.dataManager.get(STATUS), 16, marker));
     setSize(0.5F, 1.975F);
   }
   
@@ -198,7 +198,7 @@ public class EntityGasterBlaster extends EntityLiving {
     if (p_184797_3_) {
       p_184797_1_ = (byte)(p_184797_1_ | p_184797_2_);
     } else {
-      p_184797_1_ = (byte)(p_184797_1_ & (p_184797_2_ ^ 0xFFFFFFFF));
+      p_184797_1_ = (byte)(p_184797_1_ & (~p_184797_2_));
     } 
     return p_184797_1_;
   }

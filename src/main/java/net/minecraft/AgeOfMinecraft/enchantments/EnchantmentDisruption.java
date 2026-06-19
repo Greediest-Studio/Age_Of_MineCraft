@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 
 public class EnchantmentDisruption extends EnchantmentDamage {
   public EnchantmentDisruption() {
-    super(Enchantment.Rarity.UNCOMMON, 4, new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND });
+    super(Enchantment.Rarity.UNCOMMON, 4, EntityEquipmentSlot.MAINHAND);
   }
   
   public int getMinEnchantability(int par1) {

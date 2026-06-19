@@ -217,10 +217,10 @@ public class EEntity {
     createEntity((Class)EntityGasterBlaster.class, "GasterBlaster", 512);
     EntitySpawnPlacementRegistry.setPlacementType(EntitySquid.class, EntityLiving.SpawnPlacementType.IN_WATER);
     EntitySpawnPlacementRegistry.setPlacementType(EntityGuardian.class, EntityLiving.SpawnPlacementType.IN_WATER);
-    EntityRegistry.addSpawn(net.minecraft.entity.monster.EntityEndermite.class, 20, 1, 4, EnumCreatureType.MONSTER, new Biome[] { Biomes.SKY });
-    EntityRegistry.addSpawn(net.minecraft.entity.monster.EntityShulker.class, 1, 1, 1, EnumCreatureType.MONSTER, new Biome[] { Biomes.SKY });
-    EntityRegistry.addSpawn(net.minecraft.entity.monster.EntityBlaze.class, 20, 1, 4, EnumCreatureType.MONSTER, new Biome[] { Biomes.HELL });
-    EntityRegistry.addSpawn(EntityWitherSkeleton.class, 10, 1, 4, EnumCreatureType.MONSTER, new Biome[] { Biomes.HELL });
+    EntityRegistry.addSpawn(net.minecraft.entity.monster.EntityEndermite.class, 20, 1, 4, EnumCreatureType.MONSTER, Biomes.SKY);
+    EntityRegistry.addSpawn(net.minecraft.entity.monster.EntityShulker.class, 1, 1, 1, EnumCreatureType.MONSTER, Biomes.SKY);
+    EntityRegistry.addSpawn(net.minecraft.entity.monster.EntityBlaze.class, 20, 1, 4, EnumCreatureType.MONSTER, Biomes.HELL);
+    EntityRegistry.addSpawn(EntityWitherSkeleton.class, 10, 1, 4, EnumCreatureType.MONSTER, Biomes.HELL);
   }
   
   public static void registerAbyEntity() {

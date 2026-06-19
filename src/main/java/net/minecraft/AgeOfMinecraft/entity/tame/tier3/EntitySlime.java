@@ -111,7 +111,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(SLIME_SIZE, Integer.valueOf(1));
+    this.dataManager.register(SLIME_SIZE, 1);
   }
   
   public int timesToConvert() {
@@ -119,7 +119,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
   }
   
   public void setSlimeSize(int size) {
-    this.dataManager.set(SLIME_SIZE, Integer.valueOf(size));
+    this.dataManager.set(SLIME_SIZE, size);
     if (EngenderConfig.mobs.useMobTalkerModels) {
       setSize(size * 0.125F, size * 0.5F - 0.05F);
       if (size <= 1)
@@ -141,7 +141,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
   }
   
   public int getSlimeSize() {
-    return ((Integer)this.dataManager.get(SLIME_SIZE)).intValue();
+    return (Integer) this.dataManager.get(SLIME_SIZE);
   }
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
@@ -208,7 +208,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
         EnumParticleTypes enumparticletypes = getParticleType();
         double d0 = this.posX + f2;
         double d1 = this.posZ + f3;
-        world.spawnParticle(enumparticletypes, d0, (getEntityBoundingBox()).minY, d1, 0.0D, 0.0D, 0.0D, new int[0]);
+        world.spawnParticle(enumparticletypes, d0, (getEntityBoundingBox()).minY, d1, 0.0D, 0.0D, 0.0D);
       } 
       playSound(getSquishSound(), getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) / (EngenderConfig.mobs.useMobTalkerModels ? 1.05F : 0.8F));
       this.squishAmount = -0.5F;
@@ -298,16 +298,15 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
         if (dou <= 16.0D)
           attackEntityAsMob((Entity)getAttackTarget()); 
       } 
-      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(16.0D * getSlimeSize()), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(16.0D * getSlimeSize()), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityLivingBase entity = list.get(i1);
-          if (entity != null)
-            if (!false) {
-              entity.motionY += 0.75D;
-              attackEntityAsMob((Entity)entity);
-            }  
-        }  
+          for (EntityLivingBase entity : list) {
+              if (entity != null)
+                  if (!false) {
+                      entity.motionY += 0.75D;
+                      attackEntityAsMob((Entity) entity);
+                  }
+          }
     } 
   }
   
@@ -451,7 +450,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
         EnumParticleTypes enumparticletypes = getParticleType();
         double d0 = this.posX + f2;
         double d1 = this.posZ + f3;
-        world.spawnParticle(enumparticletypes, d0, (getEntityBoundingBox()).minY, d1, 0.0D, 0.0D, 0.0D, new int[0]);
+        world.spawnParticle(enumparticletypes, d0, (getEntityBoundingBox()).minY, d1, 0.0D, 0.0D, 0.0D);
       } 
       return true;
     } 

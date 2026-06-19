@@ -93,11 +93,11 @@ public class ModelGuardian extends ModelBase {
       (this.guardianSpines[i]).rotationPointZ = afloat5[i] * (1.0F + MathHelper.cos((entityguardian.isAIDisabled() ? 0.0F : p_78087_3_) * 1.5F + i) * 0.01F - f7);
     } 
     this.guardianEye.rotationPointZ = -8.25F;
-    Object object = Minecraft.getMinecraft().getRenderViewEntity();
+    Entity object = Minecraft.getMinecraft().getRenderViewEntity();
     if (entityguardian.hasTargetedEntity())
       object = entityguardian.getTargetedEntity(); 
     if (object != null) {
-      Vec3d vec3 = ((Entity)object).getPositionEyes(0.0F);
+      Vec3d vec3 = object.getPositionEyes(0.0F);
       Vec3d vec31 = p_78087_7_.getPositionEyes(0.0F);
       double d0 = vec3.y - vec31.y;
       if (d0 <= 0.0D || !entityguardian.getCurrentBook().isEmpty() || entityguardian.isAIDisabled()) {

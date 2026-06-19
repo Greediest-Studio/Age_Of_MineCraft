@@ -222,20 +222,19 @@ public class EntityGiant extends EntityTameBase implements Massive, Armored {
         this.motionZ = 0.0D;
       } 
       List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(2.0D, 0.0D, 2.0D));
-      for (int i = 0; i < list.size(); i++) {
-        Entity entity = list.get(i);
-        if (entity instanceof EntityLivingBase && !false && !this.world.isRemote && this.ticksExisted % 10 == 0) {
-          attackEntityAsMob(entity);
-          double d01 = ((getEntityBoundingBox()).minX + (getEntityBoundingBox()).maxX) / 2.0D;
-          double d11 = ((getEntityBoundingBox()).minZ + (getEntityBoundingBox()).maxZ) / 2.0D;
-          double d2 = entity.posX - d01;
-          double d3 = entity.posZ - d11;
-          double d4 = d2 * d2 + d3 * d3;
-          entity.addVelocity(d2 / d4 * 6.0D, 0.25D, d3 / d4 * 6.0D);
-          if (entity.height >= 1.0F)
-            addVelocity(-(d2 / d4 * 1.25D), 0.25D, -(d3 / d4 * 1.25D)); 
-        } 
-      } 
+        for (Entity entity : list) {
+            if (entity instanceof EntityLivingBase && !false && !this.world.isRemote && this.ticksExisted % 10 == 0) {
+                attackEntityAsMob(entity);
+                double d01 = ((getEntityBoundingBox()).minX + (getEntityBoundingBox()).maxX) / 2.0D;
+                double d11 = ((getEntityBoundingBox()).minZ + (getEntityBoundingBox()).maxZ) / 2.0D;
+                double d2 = entity.posX - d01;
+                double d3 = entity.posZ - d11;
+                double d4 = d2 * d2 + d3 * d3;
+                entity.addVelocity(d2 / d4 * 6.0D, 0.25D, d3 / d4 * 6.0D);
+                if (entity.height >= 1.0F)
+                    addVelocity(-(d2 / d4 * 1.25D), 0.25D, -(d3 / d4 * 1.25D));
+            }
+        }
       this.prevLimbSwingAmount = this.limbSwingAmount;
       double d5 = this.posX - this.prevPosX;
       double d7 = this.posZ - this.prevPosZ;
@@ -257,7 +256,7 @@ public class EntityGiant extends EntityTameBase implements Massive, Armored {
         double d1 = this.rand.nextGaussian() * 0.02D;
         double d2 = this.rand.nextGaussian() * 0.02D;
         double d3 = 10.0D;
-        this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.posX + (this.rand.nextFloat() * 3.0F * 2.0F) - 3.0D - d0 * d3, this.posY + (this.rand.nextFloat() * 12.0F) - d1 * d3, this.posZ + (this.rand.nextFloat() * 3.0F * 2.0F) - 3.0D - d2 * d3, d0, 0.10000000149011612D, d2, new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.posX + (this.rand.nextFloat() * 3.0F * 2.0F) - 3.0D - d0 * d3, this.posY + (this.rand.nextFloat() * 12.0F) - d1 * d3, this.posZ + (this.rand.nextFloat() * 3.0F * 2.0F) - 3.0D - d2 * d3, d0, 0.10000000149011612D, d2);
       }  
     if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 128.0D && getSpecialAttackTimer() <= 0 && this.onGround && isHero())
       performSpecialAttack(); 
@@ -270,7 +269,7 @@ public class EntityGiant extends EntityTameBase implements Massive, Armored {
         int k = MathHelper.floor(this.posZ);
         IBlockState iblockstate = this.world.getBlockState(new BlockPos(i, j, k));
         if (iblockstate.getMaterial() != Material.AIR)
-          this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (this.rand.nextFloat() - 0.5D) * this.width, (getEntityBoundingBox()).minY + 0.1D, this.posZ + (this.rand.nextFloat() - 0.5D) * this.width, 4.0D * (this.rand.nextFloat() - 0.5D), 0.5D, (this.rand.nextFloat() - 0.5D) * 4.0D, new int[] { Block.getStateId(iblockstate) }); 
+          this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (this.rand.nextFloat() - 0.5D) * this.width, (getEntityBoundingBox()).minY + 0.1D, this.posZ + (this.rand.nextFloat() - 0.5D) * this.width, 4.0D * (this.rand.nextFloat() - 0.5D), 0.5D, (this.rand.nextFloat() - 0.5D) * 4.0D, Block.getStateId(iblockstate));
       } 
     } 
   }
@@ -289,21 +288,20 @@ public class EntityGiant extends EntityTameBase implements Massive, Armored {
       setSpecialAttackTimer(400);
       playSound(ESound.golemSmash, 10.0F, 0.9F);
       createEngenderModExplosionFireless((Entity)this, this.posX, this.posY - 2.0D, this.posZ, 3.0F, false);
-      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(48.0D, 3.0D, 48.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(48.0D, 3.0D, 48.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityLivingBase entity = list.get(i1);
-          if (entity != null && !false) {
-            inflictEngenderMobDamage(entity, " was smashed by ", DamageSource.causeExplosionDamage((EntityLivingBase)this), 50.0F);
-            entity.isAirBorne = true;
-            float f = MathHelper.sqrt(MathHelper.sin(this.rotationYaw * 0.017453292F) * MathHelper.sin(this.rotationYaw * 0.017453292F) + -MathHelper.cos(this.rotationYaw * 0.017453292F) * -MathHelper.cos(this.rotationYaw * 0.017453292F));
-            entity.motionX /= 2.0D;
-            entity.motionZ /= 2.0D;
-            entity.motionX -= (MathHelper.sin(this.rotationYaw * 0.017453292F) / f) * 1.0D;
-            entity.motionZ -= (-MathHelper.cos(this.rotationYaw * 0.017453292F) / f) * 1.0D;
-            entity.motionY += (this.rand.nextInt(30) == 0) ? 30.0D : 3.0D;
-          } 
-        }  
+          for (EntityLivingBase entity : list) {
+              if (entity != null && !false) {
+                  inflictEngenderMobDamage(entity, " was smashed by ", DamageSource.causeExplosionDamage((EntityLivingBase) this), 50.0F);
+                  entity.isAirBorne = true;
+                  float f = MathHelper.sqrt(MathHelper.sin(this.rotationYaw * 0.017453292F) * MathHelper.sin(this.rotationYaw * 0.017453292F) + -MathHelper.cos(this.rotationYaw * 0.017453292F) * -MathHelper.cos(this.rotationYaw * 0.017453292F));
+                  entity.motionX /= 2.0D;
+                  entity.motionZ /= 2.0D;
+                  entity.motionX -= (MathHelper.sin(this.rotationYaw * 0.017453292F) / f) * 1.0D;
+                  entity.motionZ -= (-MathHelper.cos(this.rotationYaw * 0.017453292F) / f) * 1.0D;
+                  entity.motionY += (this.rand.nextInt(30) == 0) ? 30.0D : 3.0D;
+              }
+          }
     } 
     super.fall(distance, damageMultiplier);
   }

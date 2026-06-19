@@ -42,13 +42,11 @@ public class ModelBlaze extends ModelBase implements ICappedModel {
       GlStateManager.pushMatrix();
       GlStateManager.scale(0.5F, 0.5F, 0.5F);
       GlStateManager.translate(0.0F, 24.0F * scale, 0.0F);
-      for (int i = 0; i < this.blazeSticks.length; i++)
-        this.blazeSticks[i].render(scale); 
+        for (ModelRenderer blazeStick : this.blazeSticks) blazeStick.render(scale);
       GlStateManager.popMatrix();
     } else {
       this.blazeHead.render(scale);
-      for (int i = 0; i < this.blazeSticks.length; i++)
-        this.blazeSticks[i].render(scale); 
+        for (ModelRenderer blazeStick : this.blazeSticks) blazeStick.render(scale);
     } 
   }
   

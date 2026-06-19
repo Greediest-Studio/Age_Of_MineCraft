@@ -42,14 +42,14 @@ public class ItemBandage extends ItemBEItem implements IBauble {
         if (this == EItem.bandage || this == EItem.bandageMedical)
           stack.damageItem(1, (EntityLivingBase)playerIn); 
       } 
-      return new ActionResult(EnumActionResult.SUCCESS, stack);
+      return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     } 
     if (this == EItem.artifact2) {
       for (PotionEffect effect : playerIn.getActivePotionEffects()) {
         if (effect.getPotion().isBadEffect() || effect.getPotion() == MobEffects.GLOWING || effect.getPotion() == EEffect.BLEEDING)
           playerIn.removeActivePotionEffect(effect.getPotion()); 
       } 
-      return new ActionResult(EnumActionResult.SUCCESS, stack);
+      return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     } 
     return super.onItemRightClick(worldIn, playerIn, handIn);
   }

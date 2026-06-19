@@ -6,7 +6,6 @@ import javax.annotation.Nullable;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
@@ -35,33 +34,33 @@ public class CommandKillEngenderMobs extends CommandBase {
           for (Entity entity : pkill.world.loadedEntityList) {
             if (entity instanceof EntityTameBase && ((EntityTameBase)entity).isWild()) {
               entity.setDead();
-              notifyCommandListener(sender, (ICommand)this, "commands.destroyteam.successful", new Object[] { entity.getDisplayName() });
+              notifyCommandListener(sender, this, "commands.destroyteam.successful", entity.getDisplayName());
             } 
           } 
         } else if (args.length == 1 && args[0].equals("all")) {
           for (Entity entity : pkill.world.loadedEntityList) {
             if (entity instanceof EntityTameBase) {
               entity.setDead();
-              notifyCommandListener(sender, (ICommand)this, "commands.destroyteam.successful", new Object[] { entity.getDisplayName() });
+              notifyCommandListener(sender, this, "commands.destroyteam.successful", entity.getDisplayName());
             } 
           } 
         } else if (args.length == 1 && args[0].equals("not")) {
           for (Entity entity : pkill.world.loadedEntityList) {
             if (entity instanceof EntityTameBase && ((EntityTameBase)entity).getOwnerId() != pkill.getUniqueID()) {
               entity.setDead();
-              notifyCommandListener(sender, (ICommand)this, "commands.destroyteam.successful", new Object[] { entity.getDisplayName() });
+              notifyCommandListener(sender, this, "commands.destroyteam.successful", entity.getDisplayName());
             } 
           } 
         } else if (args.length == 1 && args[0].equals("only")) {
           for (Entity entity : pkill.world.loadedEntityList) {
             if (entity instanceof EntityTameBase && ((EntityTameBase)entity).getOwnerId() == pkill.getUniqueID()) {
               entity.setDead();
-              notifyCommandListener(sender, (ICommand)this, "commands.destroyteam.successful", new Object[] { entity.getDisplayName() });
+              notifyCommandListener(sender, this, "commands.destroyteam.successful", entity.getDisplayName());
             } 
           } 
         }  
     } else {
-      throw new WrongUsageException("command.destroyteam.fail", new Object[0]);
+      throw new WrongUsageException("command.destroyteam.fail");
     } 
   }
   
@@ -70,8 +69,8 @@ public class CommandKillEngenderMobs extends CommandBase {
   }
   
   public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
-    if (args.length > 0 && args.length == 1)
-      return getListOfStringsMatchingLastWord(args, new String[] { "wild", "all", "not", "only" }); 
+    if (args.length == 1)
+      return getListOfStringsMatchingLastWord(args, "wild", "all", "not", "only");
     return Collections.emptyList();
   }
 }

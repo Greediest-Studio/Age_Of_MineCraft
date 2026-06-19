@@ -1,10 +1,8 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
-import net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntitySpider;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityIceSpider;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

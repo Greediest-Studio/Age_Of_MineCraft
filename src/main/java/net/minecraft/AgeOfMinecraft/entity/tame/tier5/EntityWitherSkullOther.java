@@ -49,7 +49,7 @@ public class EntityWitherSkullOther extends EntityWitherSkull {
     if (!this.world.isRemote && movingObject.entityHit != this.shootingEntity && movingObject.entityHit != null)
       if ((movingObject.entityHit instanceof EntityLivingBase && this.shootingEntity instanceof EntityTameBase && !false) || (movingObject.entityHit instanceof EntityTameBase && false && ((EntityTameBase)this.shootingEntity).getFakeHealth() > 0.0F)) {
         copyLocationAndAnglesFrom(movingObject.entityHit);
-        List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+        List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
         if (!list1.isEmpty())
           for (EntityLivingBase entitylivingbase : list1) {
             if (!false)
@@ -71,7 +71,7 @@ public class EntityWitherSkullOther extends EntityWitherSkull {
         setDead();
       }  
     if (!this.world.isRemote && movingObject.entityHit == null) {
-      List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+      List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
       if (!list1.isEmpty())
         for (EntityLivingBase entitylivingbase : list1) {
           if (!false)
@@ -92,7 +92,7 @@ public class EntityWitherSkullOther extends EntityWitherSkull {
   
   public void onUpdate() {
     super.onUpdate();
-    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (this.shootingEntity != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive() && !false)

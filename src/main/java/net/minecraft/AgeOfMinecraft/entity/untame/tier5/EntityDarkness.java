@@ -146,13 +146,13 @@ public class EntityDarkness extends EntityUntameBase implements IEntityMultiPart
   
   protected void entityInit() {
     super.entityInit();
-    getDataManager().register(maxEnergy, Float.valueOf(20.0F));
-    getDataManager().register(energy, Float.valueOf(20.0F));
-    getDataManager().register(isHardmode, Boolean.valueOf(false));
-    getDataManager().register(phase, Integer.valueOf(0));
-    getDataManager().register(attack, Integer.valueOf(0));
-    getDataManager().register(attackTicks, Integer.valueOf(0));
-    getDataManager().register(cooldown, Integer.valueOf(0));
+    getDataManager().register(maxEnergy, 20.0F);
+    getDataManager().register(energy, 20.0F);
+    getDataManager().register(isHardmode, Boolean.FALSE);
+    getDataManager().register(phase, 0);
+    getDataManager().register(attack, 0);
+    getDataManager().register(attackTicks, 0);
+    getDataManager().register(cooldown, 0);
   }
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
@@ -407,12 +407,12 @@ public class EntityDarkness extends EntityUntameBase implements IEntityMultiPart
         double d1 = (this.rand.nextFloat() * (this.dragonPartArray[k]).width - (this.dragonPartArray[k]).width / 2.0F);
         double d2 = (this.rand.nextFloat() * (this.dragonPartArray[k]).height - (this.dragonPartArray[k]).height / 2.0F);
         double d3 = (this.rand.nextFloat() * (this.dragonPartArray[k]).width - (this.dragonPartArray[k]).width / 2.0F);
-        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, (this.dragonPartArray[k]).posX + d1, (this.dragonPartArray[k]).posY + d2, (this.dragonPartArray[k]).posZ + d3, 0.0D, 0.10000000149011612D, 0.0D, new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, (this.dragonPartArray[k]).posX + d1, (this.dragonPartArray[k]).posY + d2, (this.dragonPartArray[k]).posZ + d3, 0.0D, 0.10000000149011612D, 0.0D);
       } 
       float f13 = (this.rand.nextFloat() - 0.5F) * 8.0F;
       float f15 = (this.rand.nextFloat() - 0.5F) * 4.0F;
       float f17 = (this.rand.nextFloat() - 0.5F) * 8.0F;
-      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX + f13, this.posY + f15, this.posZ + f17, 0.0D, 0.0D, 0.0D, new int[0]);
+      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX + f13, this.posY + f15, this.posZ + f17, 0.0D, 0.0D, 0.0D);
     } else {
       if (getPhase() > 2) {
         damageEntities(this.dragonPartHead, (getAttackID() == 4) ? 0.5F : 1.0F, "darkness.bite", (getAttackID() == 3) ? 8.0D : 0.0D);
@@ -470,7 +470,7 @@ public class EntityDarkness extends EntityUntameBase implements IEntityMultiPart
       float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
       float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
       float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
-      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + f, this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D, new int[0]);
+      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + f, this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
     } 
     if (!this.world.isRemote) {
       if (this.deathTicks > 150 && this.deathTicks % 5 == 0 && this.world.getGameRules().getBoolean("doMobLoot")) {
@@ -971,7 +971,7 @@ public class EntityDarkness extends EntityUntameBase implements IEntityMultiPart
   }
   
   public int getPhase() {
-    return ((Integer)this.dataManager.get(phase)).intValue();
+    return (Integer) this.dataManager.get(phase);
   }
   
   public void setPhase(int newPhase) {
@@ -1054,7 +1054,7 @@ public class EntityDarkness extends EntityUntameBase implements IEntityMultiPart
       }  
     this.forceNewTarget = true;
     setAttack(1, 80, 100.0F);
-    getDataManager().set(phase, Integer.valueOf(newPhase));
+    getDataManager().set(phase, newPhase);
   }
   
   public boolean isAttackID(int id) {
@@ -1062,27 +1062,27 @@ public class EntityDarkness extends EntityUntameBase implements IEntityMultiPart
   }
   
   public int getAttackID() {
-    return ((Integer)this.dataManager.get(attack)).intValue();
+    return (Integer) this.dataManager.get(attack);
   }
   
   public void setAttackID(int newAttack) {
-    getDataManager().set(attack, Integer.valueOf(newAttack));
+    getDataManager().set(attack, newAttack);
   }
   
   public int getAttackTime() {
-    return ((Integer)this.dataManager.get(attackTicks)).intValue();
+    return (Integer) this.dataManager.get(attackTicks);
   }
   
   public void setAttackTime(int ticks) {
-    getDataManager().set(attackTicks, Integer.valueOf(ticks));
+    getDataManager().set(attackTicks, ticks);
   }
   
   public int getCooldown() {
-    return ((Integer)this.dataManager.get(cooldown)).intValue();
+    return (Integer) this.dataManager.get(cooldown);
   }
   
   public void setCooldown(int newCooldown) {
-    getDataManager().set(cooldown, Integer.valueOf(newCooldown));
+    getDataManager().set(cooldown, newCooldown);
   }
   
   public boolean setAttack(int id, int length, float chance) {
@@ -1096,11 +1096,11 @@ public class EntityDarkness extends EntityUntameBase implements IEntityMultiPart
   }
   
   public boolean getHardmode() {
-    return ((Boolean)this.dataManager.get(isHardmode)).booleanValue();
+    return (Boolean) this.dataManager.get(isHardmode);
   }
   
   public void setHardmode(boolean hardmode) {
-    getDataManager().set(isHardmode, Boolean.valueOf(hardmode));
+    getDataManager().set(isHardmode, hardmode);
   }
   
   protected void change(float energy) {
@@ -1109,19 +1109,19 @@ public class EntityDarkness extends EntityUntameBase implements IEntityMultiPart
   }
   
   protected float getEnergy() {
-    return ((Float)this.dataManager.get(energy)).floatValue();
+    return (Float) this.dataManager.get(energy);
   }
   
   protected void setEnergy(float newEnergy) {
-    getDataManager().set(energy, Float.valueOf(newEnergy));
+    getDataManager().set(energy, newEnergy);
   }
   
   protected float getMaxEnergy() {
-    return ((Float)this.dataManager.get(maxEnergy)).floatValue();
+    return (Float) this.dataManager.get(maxEnergy);
   }
   
   protected void setMaxEnergy(float newEnergy) {
-    getDataManager().set(maxEnergy, Float.valueOf(newEnergy));
+    getDataManager().set(maxEnergy, newEnergy);
   }
   
   public boolean isNonBoss() {

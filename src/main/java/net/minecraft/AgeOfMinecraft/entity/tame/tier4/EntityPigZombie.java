@@ -63,15 +63,15 @@ public class EntityPigZombie extends EntityZombie implements IJumpingMount {
   
   protected void entityInit() {
     super.entityInit();
-    getDataManager().register(OLDPEPIGMAN, Boolean.valueOf(false));
+    getDataManager().register(OLDPEPIGMAN, Boolean.FALSE);
   }
   
   public boolean isOldPEPigman() {
-    return ((Boolean)getDataManager().get(OLDPEPIGMAN)).booleanValue();
+    return (Boolean) getDataManager().get(OLDPEPIGMAN);
   }
   
   public void setOldPEPigman(boolean childZombie) {
-    getDataManager().set(OLDPEPIGMAN, Boolean.valueOf(childZombie));
+    getDataManager().set(OLDPEPIGMAN, childZombie);
   }
   
   public EntityTameBase spawnBaby(EntityTameBase par1idleTimeable) {

@@ -87,13 +87,12 @@ public class EntityInvisibleFangsProjectile extends EntitySmallFireball {
       this.world.spawnEntity((Entity)entityevokerfangs);
     } 
     if (this.shootingEntity != null) {
-      List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox(), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+      List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox(), Predicates.and(EntitySelectors.NOT_SPECTATING));
       if (list1 != null && !list1.isEmpty())
-        for (int i1 = 0; i1 < list1.size(); i1++) {
-          EntityLivingBase entity1 = list1.get(i1);
-          if (getDistanceSq((Entity)entity1) < 0.1D && entity1 != null && entity1.isEntityAlive() && entity1 == this.targetEntity)
-            setDead(); 
-        }  
+          for (EntityLivingBase entity1 : list1) {
+              if (getDistanceSq((Entity) entity1) < 0.1D && entity1 != null && entity1.isEntityAlive() && entity1 == this.targetEntity)
+                  setDead();
+          }
     } 
     if (this.targetEntity != null && !this.targetEntity.isEntityAlive())
       this.targetEntity = null; 

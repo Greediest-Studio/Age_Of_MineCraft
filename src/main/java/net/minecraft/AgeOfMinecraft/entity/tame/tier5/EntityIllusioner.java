@@ -3,7 +3,6 @@ package net.minecraft.AgeOfMinecraft.entity.tame.tier5;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
-import java.util.Random;
 import javax.annotation.Nullable;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityPEGunPellet;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.items.ItemPEGun;
@@ -112,24 +111,24 @@ public class EntityIllusioner extends EntitySpellcasterIllager implements IRange
   
   protected void entityInit() {
     super.entityInit();
-    getDataManager().register(DISGUISE_ID, Integer.valueOf(0));
-    getDataManager().register(DISGUSE_TIMER, Integer.valueOf(0));
+    getDataManager().register(DISGUISE_ID, 0);
+    getDataManager().register(DISGUSE_TIMER, 0);
   }
   
   public int getDisguiseTime() {
-    return ((Integer)this.dataManager.get(DISGUSE_TIMER)).intValue();
+    return (Integer) this.dataManager.get(DISGUSE_TIMER);
   }
   
   public void setDisguiseTime(int age) {
-    this.dataManager.set(DISGUSE_TIMER, Integer.valueOf(age));
+    this.dataManager.set(DISGUSE_TIMER, age);
   }
   
   public int getDisguiseID() {
-    return ((Integer)this.dataManager.get(DISGUISE_ID)).intValue();
+    return (Integer) this.dataManager.get(DISGUISE_ID);
   }
   
   public void setDisguiseID(int age) {
-    this.dataManager.set(DISGUISE_ID, Integer.valueOf(age));
+    this.dataManager.set(DISGUISE_ID, age);
   }
   
   public EnumTier getTier() {
@@ -374,7 +373,7 @@ public class EntityIllusioner extends EntitySpellcasterIllager implements IRange
     }
     
     protected void castSpell() {
-      List<EntityCreature> list = EntityIllusioner.this.world.getEntitiesWithinAABB(EntityCreature.class, EntityIllusioner.this.getAttackTarget().getEntityBoundingBox().grow(8.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityCreature> list = EntityIllusioner.this.world.getEntitiesWithinAABB(EntityCreature.class, EntityIllusioner.this.getAttackTarget().getEntityBoundingBox().grow(8.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       EntityIllusioner.this.world.playBroadcastSound(1023, new BlockPos((Entity)EntityIllusioner.this.getAttackTarget()), 0);
       ((EntityCreature)EntityIllusioner.this.getAttackTarget()).playSound(SoundEvents.ENTITY_WITHER_AMBIENT, 2.0F, 1.0F);
       for (EntityCreature entity : list) {
@@ -530,11 +529,7 @@ public class EntityIllusioner extends EntitySpellcasterIllager implements IRange
   }
   
   public class AIReinforcingSpell extends EntitySpellcasterIllager.AIUseSpell {
-    final Predicate<EntityTameBase> wololoSelector = new Predicate<EntityTameBase>() {
-        public boolean apply(EntityTameBase p_apply_1_) {
-          return !p_apply_1_.isWild();
-        }
-      };
+    final Predicate<EntityTameBase> wololoSelector = p_apply_1_ -> !p_apply_1_.isWild();
     
     public AIReinforcingSpell() {
       super();
@@ -597,11 +592,7 @@ public class EntityIllusioner extends EntitySpellcasterIllager implements IRange
   }
   
   public class AIIllusionFormSpell extends EntitySpellcasterIllager.AIUseSpell {
-    final Predicate<EntityTameBase> wololoSelector = new Predicate<EntityTameBase>() {
-        public boolean apply(EntityTameBase p_apply_1_) {
-          return !p_apply_1_.isWild();
-        }
-      };
+    final Predicate<EntityTameBase> wololoSelector = p_apply_1_ -> !p_apply_1_.isWild();
     
     public AIIllusionFormSpell() {
       super();

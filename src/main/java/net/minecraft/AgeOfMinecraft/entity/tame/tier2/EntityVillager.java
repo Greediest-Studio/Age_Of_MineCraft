@@ -232,11 +232,9 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
       this.timeUntilReset--;
       if (this.timeUntilReset <= 0) {
         if (this.needsInitilization) {
-          Iterator<MerchantRecipe> iterator = this.buyingList.iterator();
-          while (iterator.hasNext()) {
-            MerchantRecipe merchantrecipe = iterator.next();
-            merchantrecipe.increaseMaxTradeUses(2048);
-          } 
+            for (MerchantRecipe merchantrecipe : this.buyingList) {
+                merchantrecipe.increaseMaxTradeUses(2048);
+            }
           populateBuyingList();
           this.needsInitilization = false;
           if (this.villageObj != null && this.lastBuyingPlayer != null)
@@ -271,8 +269,8 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(PROFESSION, Integer.valueOf(0));
-    this.dataManager.register(CAREER, Integer.valueOf(0));
+    this.dataManager.register(PROFESSION, 0);
+    this.dataManager.register(CAREER, 0);
   }
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
@@ -356,19 +354,19 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
   }
   
   public void setProfession(int professionId) {
-    this.dataManager.set(PROFESSION, Integer.valueOf(professionId));
+    this.dataManager.set(PROFESSION, professionId);
   }
   
   public int getProfession() {
-    return Math.max(((Integer)this.dataManager.get(PROFESSION)).intValue() % 5, 0);
+    return Math.max((Integer) this.dataManager.get(PROFESSION) % 5, 0);
   }
   
   public void setCareer(int professionId) {
-    this.dataManager.set(CAREER, Integer.valueOf(professionId));
+    this.dataManager.set(CAREER, professionId);
   }
   
   public int getCareer() {
-    return Math.max(((Integer)this.dataManager.get(CAREER)).intValue() % 5, 0);
+    return Math.max((Integer) this.dataManager.get(CAREER) % 5, 0);
   }
   
   public boolean isMating() {
@@ -555,7 +553,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
         s1 = "nitwit";
         break;
     } 
-    TextComponentTranslation textComponentTranslation = new TextComponentTranslation("entity.Villager." + s1, new Object[0]);
+    TextComponentTranslation textComponentTranslation = new TextComponentTranslation("entity.Villager." + s1);
     textComponentTranslation.getStyle().setHoverEvent(getHoverEvent());
     textComponentTranslation.getStyle().setInsertion(getCachedUniqueIdString());
     if (team != null)
@@ -586,7 +584,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
       double d0 = this.rand.nextGaussian() * 0.02D;
       double d1 = this.rand.nextGaussian() * 0.02D;
       double d2 = this.rand.nextGaussian() * 0.02D;
-      this.world.spawnParticle(particleType, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + 1.0D + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d0, d1, d2, new int[0]);
+      this.world.spawnParticle(particleType, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + 1.0D + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d0, d1, d2);
     } 
   }
   
@@ -860,11 +858,11 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
   
   public static class PriceInfo extends Tuple {
     public PriceInfo(int p_i45810_1_, int p_i45810_2_) {
-      super(Integer.valueOf(p_i45810_1_), Integer.valueOf(p_i45810_2_));
+      super(p_i45810_1_, p_i45810_2_);
     }
     
     public int getPrice(Random p_179412_1_) {
-      return (((Integer)getFirst()).intValue() >= ((Integer)getSecond()).intValue()) ? ((Integer)getFirst()).intValue() : (((Integer)getFirst()).intValue() + p_179412_1_.nextInt(((Integer)getSecond()).intValue() - ((Integer)getFirst()).intValue() + 1));
+      return ((Integer) getFirst() >= (Integer) getSecond()) ? (Integer) getFirst() : ((Integer) getFirst() + p_179412_1_.nextInt((Integer) getSecond() - (Integer) getFirst() + 1));
     }
   }
   

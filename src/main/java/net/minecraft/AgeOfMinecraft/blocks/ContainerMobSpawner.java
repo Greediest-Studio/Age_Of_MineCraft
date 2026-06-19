@@ -45,15 +45,14 @@ public class ContainerMobSpawner extends Container {
   
   public void detectAndSendChanges() {
     super.detectAndSendChanges();
-    for (int i = 0; i < this.listeners.size(); i++) {
-      IContainerListener icontainerlistener = this.listeners.get(i);
-      if (this.currentItemBurnTime != this.tileFuser.getField(0))
-        icontainerlistener.sendWindowProperty(this, 0, this.tileFuser.getField(0)); 
-      if (this.fuseTime != this.tileFuser.getField(1))
-        icontainerlistener.sendWindowProperty(this, 1, this.tileFuser.getField(1)); 
-      if (this.totalSpawnMobTime != this.tileFuser.getField(2))
-        icontainerlistener.sendWindowProperty(this, 2, this.tileFuser.getField(2)); 
-    } 
+      for (IContainerListener icontainerlistener : this.listeners) {
+          if (this.currentItemBurnTime != this.tileFuser.getField(0))
+              icontainerlistener.sendWindowProperty(this, 0, this.tileFuser.getField(0));
+          if (this.fuseTime != this.tileFuser.getField(1))
+              icontainerlistener.sendWindowProperty(this, 1, this.tileFuser.getField(1));
+          if (this.totalSpawnMobTime != this.tileFuser.getField(2))
+              icontainerlistener.sendWindowProperty(this, 2, this.tileFuser.getField(2));
+      }
     this.currentItemBurnTime = this.tileFuser.getField(0);
     this.fuseTime = this.tileFuser.getField(1);
     this.totalSpawnMobTime = this.tileFuser.getField(2);

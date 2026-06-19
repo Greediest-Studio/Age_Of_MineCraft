@@ -146,12 +146,12 @@ public class EntityEndermite extends EntityTameBase implements Light, Tiny, Ende
       float f19 = MathHelper.sin(f2);
       float f3 = MathHelper.cos(f2);
       for (int i = 0; i < 32; i++) {
-        this.world.spawnParticle(EnumParticleTypes.END_ROD, true, this.posX, this.posY + this.rand.nextDouble() * this.height * 2.0D, this.posZ, (f3 * 0.15F), 0.01D, (f19 * 0.15F), new int[0]);
-        this.world.spawnParticle(EnumParticleTypes.END_ROD, true, this.posX, this.posY + this.rand.nextDouble() * this.height * 2.0D, this.posZ, (f3 * -0.15F), 0.01D, (f19 * -0.15F), new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.END_ROD, true, this.posX, this.posY + this.rand.nextDouble() * this.height * 2.0D, this.posZ, (f3 * 0.15F), 0.01D, (f19 * 0.15F));
+        this.world.spawnParticle(EnumParticleTypes.END_ROD, true, this.posX, this.posY + this.rand.nextDouble() * this.height * 2.0D, this.posZ, (f3 * -0.15F), 0.01D, (f19 * -0.15F));
       } 
     } 
     if (this.world.isRemote)
-      this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D, new int[0]); 
+      this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
   }
   
   public EnumCreatureAttribute getCreatureAttribute() {

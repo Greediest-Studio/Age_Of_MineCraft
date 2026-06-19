@@ -134,7 +134,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(ON_FIRE, Byte.valueOf((byte)0));
+    this.dataManager.register(ON_FIRE, (byte) 0);
   }
   
   protected SoundEvent getAmbientSound() {
@@ -209,17 +209,16 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
     if (isHero() && getSpecialAttackTimer() > 790) {
       this.motionX = 0.0D;
       this.motionZ = 0.0D;
-      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityLivingBase entity = list.get(i1);
-          if (entity != null)
-            if (!false) {
-              entity.setFire(60);
-              entity.hurtResistantTime = 0;
-              inflictEngenderMobDamage(entity, " was scorched to death by ", (new DamageSource("burn")).setDamageBypassesArmor().setFireDamage(), 1.0F);
-            }  
-        }  
+          for (EntityLivingBase entity : list) {
+              if (entity != null)
+                  if (!false) {
+                      entity.setFire(60);
+                      entity.hurtResistantTime = 0;
+                      inflictEngenderMobDamage(entity, " was scorched to death by ", (new DamageSource("burn")).setDamageBypassesArmor().setFireDamage(), 1.0F);
+                  }
+          }
     } 
     if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 256.0D && getSpecialAttackTimer() <= 0 && isHero())
       performSpecialAttack(); 
@@ -228,17 +227,17 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
     if (this.world.isRemote) {
       if (isHero() && getSpecialAttackTimer() > 790)
         for (int i = 0; i < 3000; i++) {
-          this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY + 1.0D, this.posZ, this.rand.nextDouble() - 0.5D, this.rand.nextDouble() - 0.5D, this.rand.nextDouble() - 0.5D, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX, this.posY + 1.0D, this.posZ, this.rand.nextDouble() - 0.5D, this.rand.nextDouble() - 0.5D, this.rand.nextDouble() - 0.5D, new int[0]);
+          this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY + 1.0D, this.posZ, this.rand.nextDouble() - 0.5D, this.rand.nextDouble() - 0.5D, this.rand.nextDouble() - 0.5D);
+          this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX, this.posY + 1.0D, this.posZ, this.rand.nextDouble() - 0.5D, this.rand.nextDouble() - 0.5D, this.rand.nextDouble() - 0.5D);
         }  
       if (!isWet() && isEntityAlive() && getIllusionFormTime() <= 0) {
         if (this.rand.nextInt(24) == 0 && !isSilent())
           this.world.playSound(this.posX + 0.5D, this.posY + 0.5D, this.posZ + 0.5D, SoundEvents.ENTITY_BLAZE_BURN, getSoundCategory(), getSoundVolume(), this.rand.nextFloat() * 0.7F + 0.3F, false); 
         for (int i = 0; i < 2; i++) {
           if (isSneaking() || isChild()) {
-            this.world.spawnParticle(isAntiMob() ? EnumParticleTypes.EXPLOSION_NORMAL : EnumParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D, new int[0]);
+            this.world.spawnParticle(isAntiMob() ? EnumParticleTypes.EXPLOSION_NORMAL : EnumParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
           } else {
-            this.world.spawnParticle(isAntiMob() ? EnumParticleTypes.EXPLOSION_NORMAL : EnumParticleTypes.SMOKE_LARGE, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D, new int[0]);
+            this.world.spawnParticle(isAntiMob() ? EnumParticleTypes.EXPLOSION_NORMAL : EnumParticleTypes.SMOKE_LARGE, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
           } 
         } 
       } 
@@ -278,7 +277,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
   }
   
   public boolean isCharged() {
-    return ((((Byte)this.dataManager.get(ON_FIRE)).byteValue() & 0x1) != 0);
+    return (((Byte) this.dataManager.get(ON_FIRE) & 0x1) != 0);
   }
   
   public boolean interact(EntityPlayer player, EnumHand hand) {
@@ -445,13 +444,13 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
   }
   
   public void setOnFire(boolean onFire) {
-    byte b0 = ((Byte)this.dataManager.get(ON_FIRE)).byteValue();
+    byte b0 = (Byte) this.dataManager.get(ON_FIRE);
     if (onFire && !isWet()) {
       b0 = (byte)(b0 | 0x1);
     } else {
       b0 = (byte)(b0 & 0xFFFFFFFE);
     } 
-    this.dataManager.set(ON_FIRE, Byte.valueOf(b0));
+    this.dataManager.set(ON_FIRE, b0);
   }
   
   public boolean attackEntityFrom(DamageSource source, float amount) {

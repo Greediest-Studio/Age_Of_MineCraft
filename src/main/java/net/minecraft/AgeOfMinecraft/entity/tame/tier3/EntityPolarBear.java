@@ -124,7 +124,7 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(IS_STANDING, Boolean.valueOf(false));
+    this.dataManager.register(IS_STANDING, Boolean.FALSE);
   }
   
   public void onUpdate() {
@@ -228,11 +228,11 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
   }
   
   public boolean isStanding() {
-    return (((Boolean)this.dataManager.get(IS_STANDING)).booleanValue() || !isEntityAlive());
+    return ((Boolean) this.dataManager.get(IS_STANDING) || !isEntityAlive());
   }
   
   public void setStanding(boolean standing) {
-    this.dataManager.set(IS_STANDING, Boolean.valueOf(standing));
+    this.dataManager.set(IS_STANDING, standing);
   }
   
   @SideOnly(Side.CLIENT)
@@ -246,7 +246,7 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
   
   class AIHurtByTarget extends EntityAIHurtByTarget {
     public AIHurtByTarget() {
-      super((EntityCreature)EntityPolarBear.this, false, new Class[0]);
+      super((EntityCreature)EntityPolarBear.this, false);
     }
     
     public void startExecuting() {
@@ -274,13 +274,12 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
         this.attackTick = 20.0D;
         EntityPolarBear.this.attackEntityAsMob((Entity)p_190102_1_);
         EntityPolarBear.this.setStanding(false);
-        List<EntityLivingBase> list1 = EntityPolarBear.this.world.getEntitiesWithinAABB(EntityLivingBase.class, p_190102_1_.getEntityBoundingBox().grow(2.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+        List<EntityLivingBase> list1 = EntityPolarBear.this.world.getEntitiesWithinAABB(EntityLivingBase.class, p_190102_1_.getEntityBoundingBox().grow(2.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
         if (list1 != null && !list1.isEmpty())
-          for (int i1 = 0; i1 < list1.size(); i1++) {
-            EntityLivingBase entity1 = list1.get(i1);
-            if (!false)
-              EntityPolarBear.this.attackEntityAsMob((Entity)entity1); 
-          }  
+            for (EntityLivingBase entity1 : list1) {
+                if (!false)
+                    EntityPolarBear.this.attackEntityAsMob((Entity) entity1);
+            }
       } else if (p_190102_2_ <= d0 * 2.0D) {
         if (this.attackTick <= 0.0D) {
           EntityPolarBear.this.setStanding(false);

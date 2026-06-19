@@ -114,7 +114,7 @@ public class EntityCoraliumChargeOther extends EntityFireball {
   
   public void onUpdate() {
     super.onUpdate();
-    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive())

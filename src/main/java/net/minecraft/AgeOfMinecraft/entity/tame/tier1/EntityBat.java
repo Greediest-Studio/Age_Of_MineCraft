@@ -49,7 +49,7 @@ public class EntityBat extends EntityTameBase implements EntityFlying, Light, Fl
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(HANGING, Byte.valueOf((byte)0));
+    this.dataManager.register(HANGING, (byte) 0);
   }
   
   public String getDescName() {
@@ -139,15 +139,15 @@ public class EntityBat extends EntityTameBase implements EntityFlying, Light, Fl
   }
   
   public boolean getIsBatHanging() {
-    return ((((Byte)this.dataManager.get(HANGING)).byteValue() & 0x1) != 0);
+    return (((Byte) this.dataManager.get(HANGING) & 0x1) != 0);
   }
   
   public void setIsBatHanging(boolean isHanging) {
-    byte b0 = ((Byte)this.dataManager.get(HANGING)).byteValue();
+    byte b0 = (Byte) this.dataManager.get(HANGING);
     if (isHanging) {
-      this.dataManager.set(HANGING, Byte.valueOf((byte)(b0 | 0x1)));
+      this.dataManager.set(HANGING, (byte) (b0 | 0x1));
     } else {
-      this.dataManager.set(HANGING, Byte.valueOf((byte)(b0 & 0xFFFFFFFE)));
+      this.dataManager.set(HANGING, (byte) (b0 & 0xFFFFFFFE));
     } 
   }
   
@@ -158,9 +158,9 @@ public class EntityBat extends EntityTameBase implements EntityFlying, Light, Fl
         this.world.playSound(this.posX + 0.5D, this.posY + 0.5D, this.posZ + 0.5D, SoundEvents.ENTITY_BLAZE_BURN, getSoundCategory(), getSoundVolume(), this.rand.nextFloat() * 0.7F + 0.3F, false); 
       for (int i = 0; i < 2; i++) {
         if (isSneaking() || isChild()) {
-          this.world.spawnParticle(isAntiMob() ? EnumParticleTypes.EXPLOSION_NORMAL : EnumParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextDouble() - 0.5D) * 0.6000000238418579D, this.posY + this.rand.nextDouble() * 1.7999999523162842D, this.posZ + (this.rand.nextDouble() - 0.5D) * 0.6000000238418579D, 0.0D, 0.0D, 0.0D, new int[0]);
+          this.world.spawnParticle(isAntiMob() ? EnumParticleTypes.EXPLOSION_NORMAL : EnumParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextDouble() - 0.5D) * 0.6000000238418579D, this.posY + this.rand.nextDouble() * 1.7999999523162842D, this.posZ + (this.rand.nextDouble() - 0.5D) * 0.6000000238418579D, 0.0D, 0.0D, 0.0D);
         } else {
-          this.world.spawnParticle(isAntiMob() ? EnumParticleTypes.EXPLOSION_NORMAL : EnumParticleTypes.SMOKE_LARGE, this.posX + (this.rand.nextDouble() - 0.5D) * 0.6000000238418579D, this.posY + this.rand.nextDouble() * 1.7999999523162842D, this.posZ + (this.rand.nextDouble() - 0.5D) * 0.6000000238418579D, 0.0D, 0.0D, 0.0D, new int[0]);
+          this.world.spawnParticle(isAntiMob() ? EnumParticleTypes.EXPLOSION_NORMAL : EnumParticleTypes.SMOKE_LARGE, this.posX + (this.rand.nextDouble() - 0.5D) * 0.6000000238418579D, this.posY + this.rand.nextDouble() * 1.7999999523162842D, this.posZ + (this.rand.nextDouble() - 0.5D) * 0.6000000238418579D, 0.0D, 0.0D, 0.0D);
         } 
       } 
     } 
@@ -268,12 +268,12 @@ public class EntityBat extends EntityTameBase implements EntityFlying, Light, Fl
   
   public void readEntityFromNBT(NBTTagCompound tagCompund) {
     super.readEntityFromNBT(tagCompund);
-    this.dataManager.set(HANGING, Byte.valueOf(tagCompund.getByte("BatFlags")));
+    this.dataManager.set(HANGING, tagCompund.getByte("BatFlags"));
   }
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
     super.writeEntityToNBT(tagCompound);
-    tagCompound.setByte("BatFlags", ((Byte)this.dataManager.get(HANGING)).byteValue());
+    tagCompound.setByte("BatFlags", (Byte) this.dataManager.get(HANGING));
   }
   
   public float getEyeHeight() {

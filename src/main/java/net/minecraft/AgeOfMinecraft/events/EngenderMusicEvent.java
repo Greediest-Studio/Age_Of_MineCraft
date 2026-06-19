@@ -48,9 +48,9 @@ public class EngenderMusicEvent extends MusicTicker {
   
   private int findMob(Entity entity, int musicID) {
     if (entity instanceof EntityBase)
-      return (((EntityBase)entity).playMusic() > musicID) ? ((EntityBase)entity).playMusic() : musicID; 
+      return Math.max(((EntityBase) entity).playMusic(), musicID);
     if (!entity.isNonBoss())
-      return (2 > musicID) ? 2 : musicID; 
+      return Math.max(2, musicID);
     return (0 == musicID) ? 0 : musicID;
   }
   
@@ -174,8 +174,10 @@ public class EngenderMusicEvent extends MusicTicker {
     if (this.musicID != this.newMusicID) {
       this.shouldPlay = true;
       for (int i = 1; i <= this.musicList.size(); i++) {
-        if (((EngenderMusic)this.musicList.get(i - 1)).musicID == this.newMusicID)
-          this.shouldPlay = false; 
+          if (this.musicList.get(i - 1).musicID == this.newMusicID) {
+              this.shouldPlay = false;
+              break;
+          }
       } 
       if (this.shouldPlay) {
         this.currentMusic = new EngenderMusic(this.mc.player, type, this.newMusicID);

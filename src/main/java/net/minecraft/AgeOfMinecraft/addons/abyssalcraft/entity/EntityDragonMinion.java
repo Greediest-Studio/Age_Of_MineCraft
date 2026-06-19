@@ -198,7 +198,7 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
       float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
       float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
       if (ACConfig.particleEntity)
-        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX + f, this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D, new int[0]); 
+        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX + f, this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
     } else if (!isAIDisabled()) {
       if (!isWild() && getDistanceSq((Entity)getOwner()) > 4069.0D) {
         this.target = (Entity)getOwner();
@@ -442,15 +442,14 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
       List<?> list = this.world.getEntitiesWithinAABB(EntityDragonBoss.class, getEntityBoundingBox().grow(f, f, f));
       EntityDragonBoss entitydragonboss = null;
       double d0 = Double.MAX_VALUE;
-      Iterator<?> iterator = list.iterator();
-      while (iterator.hasNext()) {
-        EntityDragonBoss entitydragonboss1 = (EntityDragonBoss)iterator.next();
-        double d1 = entitydragonboss1.getDistanceSq((Entity)this);
-        if (d1 < d0) {
-          d0 = d1;
-          entitydragonboss = entitydragonboss1;
-        } 
-      } 
+        for (Object o : list) {
+            EntityDragonBoss entitydragonboss1 = (EntityDragonBoss) o;
+            double d1 = entitydragonboss1.getDistanceSq((Entity) this);
+            if (d1 < d0) {
+                d0 = d1;
+                entitydragonboss = entitydragonboss1;
+            }
+        }
       this.healingcircle = entitydragonboss;
     } 
   }
@@ -458,33 +457,32 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
   private void collideWithEntities(List<?> par1List) {
     double d0 = ((this.dragonPartBody.getEntityBoundingBox()).minX + (this.dragonPartBody.getEntityBoundingBox()).maxX) / 2.0D;
     double d1 = ((this.dragonPartBody.getEntityBoundingBox()).minZ + (this.dragonPartBody.getEntityBoundingBox()).maxZ) / 2.0D;
-    Iterator<?> iterator = par1List.iterator();
-    while (iterator.hasNext()) {
-      Entity entity = (Entity)iterator.next();
-      if (entity instanceof EntityLivingBase && !false) {
-        double d2 = entity.posX - d0;
-        double d3 = entity.posZ - d1;
-        double d4 = d2 * d2 + d3 * d3;
-        entity.addVelocity(d2 / d4 * 1.25D, 0.1D, d3 / d4 * 1.25D);
-        entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this), 1.0F);
-        if (entity instanceof EntityLivingBase && !EntityUtil.isEntityCoralium((EntityLivingBase)entity))
-          ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(AbyssalCraftAPI.coralium_plague, 100)); 
-      } 
-    } 
+      for (Object o : par1List) {
+          Entity entity = (Entity) o;
+          if (entity instanceof EntityLivingBase && !false) {
+              double d2 = entity.posX - d0;
+              double d3 = entity.posZ - d1;
+              double d4 = d2 * d2 + d3 * d3;
+              entity.addVelocity(d2 / d4 * 1.25D, 0.1D, d3 / d4 * 1.25D);
+              entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase) this), 1.0F);
+              if (entity instanceof EntityLivingBase && !EntityUtil.isEntityCoralium((EntityLivingBase) entity))
+                  ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(AbyssalCraftAPI.coralium_plague, 100));
+          }
+      }
   }
   
   private void attackEntitiesInList(List<?> par1List) {
-    for (int i = 0; i < par1List.size(); i++) {
-      Entity entity = (Entity)par1List.get(i);
-      if (entity.ticksExisted + entity.getEntityId() % 10 == 0 && !this.world.isRemote && entity instanceof EntityLivingBase && !false) {
-        attackEntityAsMob(entity);
-        playSound(SoundEvents.BLOCK_NOTE_HAT, 5.0F, 0.75F);
-        if (entity instanceof EntityLivingBase && !EntityUtil.isEntityCoralium((EntityLivingBase)entity))
-          ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(AbyssalCraftAPI.coralium_plague, 400)); 
-        if (ACConfig.hardcoreMode && entity instanceof EntityPlayer)
-          entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.0F); 
-      } 
-    } 
+      for (Object o : par1List) {
+          Entity entity = (Entity) o;
+          if (entity.ticksExisted + entity.getEntityId() % 10 == 0 && !this.world.isRemote && entity instanceof EntityLivingBase && !false) {
+              attackEntityAsMob(entity);
+              playSound(SoundEvents.BLOCK_NOTE_HAT, 5.0F, 0.75F);
+              if (entity instanceof EntityLivingBase && !EntityUtil.isEntityCoralium((EntityLivingBase) entity))
+                  ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(AbyssalCraftAPI.coralium_plague, 400));
+              if (ACConfig.hardcoreMode && entity instanceof EntityPlayer)
+                  entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase) this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.0F);
+          }
+      }
   }
   
   private void setNewTarget() {

@@ -76,7 +76,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
   
   private static final DataParameter<Boolean> ATTACKING = EntityDataManager.createKey(EntitySkeleton.class, DataSerializers.BOOLEAN);
   
-  private final EntityAIAttackRangedBowAlly<EntitySkeleton> aiArrowAttack = new EntityAIAttackRangedBowAlly(this, 1.0D, 5, 15.0F);
+  private final EntityAIAttackRangedBowAlly<EntitySkeleton> aiArrowAttack = new EntityAIAttackRangedBowAlly<>(this, 1.0D, 5, 15.0F);
   
   private final EntityAIAttackRangedAlly aiRangedAttack = new EntityAIAttackRangedAlly(this, 1.0D, 30, 15.0F);
   
@@ -177,8 +177,8 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(SKELETON_VARIANT, Integer.valueOf(0));
-    this.dataManager.register(ATTACKING, Boolean.valueOf(false));
+    this.dataManager.register(SKELETON_VARIANT, 0);
+    this.dataManager.register(ATTACKING, Boolean.FALSE);
   }
   
   public void createChild() {
@@ -382,7 +382,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
     if (getSkeletonType() == 1 && getRidingEntity() == null)
       getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(10.0D); 
     if (this.world.isRemote && getSkeletonType() == 1)
-      this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D, new int[0]); 
+      this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
     if (this.helmetCount < 0)
       this.helmetCount = 0; 
     if ((getSkeletonType() == 1 || isAntiMob() || isChild() || isHero()) && this.helmetCount != 0)
@@ -666,11 +666,11 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
   }
   
   public int getSkeletonType() {
-    return ((Integer)this.dataManager.get(SKELETON_VARIANT)).intValue();
+    return (Integer) this.dataManager.get(SKELETON_VARIANT);
   }
   
   public void setSkeletonType(int p_82201_1_) {
-    this.dataManager.set(SKELETON_VARIANT, Integer.valueOf(p_82201_1_));
+    this.dataManager.set(SKELETON_VARIANT, p_82201_1_);
     this.isImmuneToFire = (p_82201_1_ == 1);
     if (p_82201_1_ == 1)
       getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(10.0D); 
@@ -716,19 +716,18 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
     ItemStack stack = player.getHeldItem(hand);
     ItemStack heldItem = new ItemStack(stack.getItem());
     if (false && stack.isEmpty() && player.isSneaking() && getRidingEntity() == null) {
-      List<EntitySkeletonHorse> list = this.world.getEntitiesWithinAABB(EntitySkeletonHorse.class, getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntitySkeletonHorse> list = this.world.getEntitiesWithinAABB(EntitySkeletonHorse.class, getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty() && !isBeingRidden())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntitySkeletonHorse entity = list.get(i1);
-          if (entity != null && !entity.isBeingRidden() && !this.world.isRemote) {
-            entity.setHorseTamed(true);
-            entity.setRearing(true);
-            entity.ticksExisted = 0;
-            startRiding((Entity)entity);
-            playSound(SoundEvents.ENTITY_HORSE_ARMOR, 1.0F, 1.0F);
-            break;
-          } 
-        }  
+          for (EntitySkeletonHorse entity : list) {
+              if (entity != null && !entity.isBeingRidden() && !this.world.isRemote) {
+                  entity.setHorseTamed(true);
+                  entity.setRearing(true);
+                  entity.ticksExisted = 0;
+                  startRiding((Entity) entity);
+                  playSound(SoundEvents.ENTITY_HORSE_ARMOR, 1.0F, 1.0F);
+                  break;
+              }
+          }
       return true;
     } 
     if (!stack.isEmpty() && stack.getItem() == Items.LEATHER_HELMET) {

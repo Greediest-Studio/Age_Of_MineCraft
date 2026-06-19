@@ -4,7 +4,6 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 import javax.annotation.Nullable;
 import net.minecraft.AgeOfMinecraft.entity.tame.Armored;
@@ -191,8 +190,8 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
     super.entityInit();
     this.dataManager.register(ATTACHED_FACE, EnumFacing.DOWN);
     this.dataManager.register(ATTACHED_BLOCK_POS, Optional.absent());
-    this.dataManager.register(PEEK_TICK, Byte.valueOf((byte)0));
-    this.dataManager.register(COLOR, Byte.valueOf((byte)DEFAULT_COLOR.getMetadata()));
+    this.dataManager.register(PEEK_TICK, (byte) 0);
+    this.dataManager.register(COLOR, (byte) DEFAULT_COLOR.getMetadata());
   }
   
   protected void applyEntityAttributes() {
@@ -208,8 +207,8 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
   public void readEntityFromNBT(NBTTagCompound compound) {
     super.readEntityFromNBT(compound);
     this.dataManager.set(ATTACHED_FACE, EnumFacing.byIndex(compound.getByte("AttachFace")));
-    this.dataManager.set(PEEK_TICK, Byte.valueOf(compound.getByte("Peek")));
-    this.dataManager.set(COLOR, Byte.valueOf(compound.getByte("Color")));
+    this.dataManager.set(PEEK_TICK, compound.getByte("Peek"));
+    this.dataManager.set(COLOR, compound.getByte("Color"));
     if (compound.hasKey("APX")) {
       int i = compound.getInteger("APX");
       int j = compound.getInteger("APY");
@@ -223,8 +222,8 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
   public void writeEntityToNBT(NBTTagCompound compound) {
     super.writeEntityToNBT(compound);
     compound.setByte("AttachFace", (byte)((EnumFacing)this.dataManager.get(ATTACHED_FACE)).getIndex());
-    compound.setByte("Peek", ((Byte)this.dataManager.get(PEEK_TICK)).byteValue());
-    compound.setByte("Color", ((Byte)this.dataManager.get(COLOR)).byteValue());
+    compound.setByte("Peek", (Byte) this.dataManager.get(PEEK_TICK));
+    compound.setByte("Color", (Byte) this.dataManager.get(COLOR));
     BlockPos blockpos = getAttachmentPos();
     if (blockpos != null) {
       compound.setInteger("APX", blockpos.getX());
@@ -234,12 +233,12 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
   }
   
   public EnumDyeColor getColor() {
-    return EnumDyeColor.byMetadata(((Byte)this.dataManager.get(COLOR)).byteValue());
+    return EnumDyeColor.byMetadata((Byte) this.dataManager.get(COLOR));
   }
   
   public void setColor(EnumDyeColor color) {
-    byte b0 = ((Byte)this.dataManager.get(COLOR)).byteValue();
-    this.dataManager.set(COLOR, Byte.valueOf((byte)(b0 & 0xF0 | color.getMetadata() & 0xF)));
+    byte b0 = (Byte) this.dataManager.get(COLOR);
+    this.dataManager.set(COLOR, (byte) (b0 & 0xF0 | color.getMetadata() & 0xF));
   }
   
   public boolean interact(EntityPlayer player, EnumHand hand) {
@@ -287,12 +286,12 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
         double d2 = this.rand.nextGaussian() * 0.1D;
         double d0 = this.rand.nextGaussian() * 0.1D;
         double d1 = this.rand.nextGaussian() * 0.1D;
-        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height * 2.0F), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, -0.25D, d1, new int[0]);
-        this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height * 2.0F), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, -0.25D, d1, new int[0]);
-        this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height * 2.0F), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, 0.25D, d1, new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height * 2.0F), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, -0.25D, d1);
+        this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height * 2.0F), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, -0.25D, d1);
+        this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height * 2.0F), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, 0.25D, d1);
       } 
     } 
-    BlockPos blockpos = (BlockPos)((Optional)this.dataManager.get(ATTACHED_BLOCK_POS)).orNull();
+    BlockPos blockpos = (BlockPos)((Optional<?>)this.dataManager.get(ATTACHED_BLOCK_POS)).orNull();
     if (blockpos == null && !this.world.isRemote) {
       blockpos = new BlockPos((Entity)this);
       this.dataManager.set(ATTACHED_BLOCK_POS, Optional.of(blockpos));
@@ -455,7 +454,7 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
       Optional<BlockPos> optional1 = Optional.of(new BlockPos(x, y, z));
       if (!optional1.equals(optional)) {
         this.dataManager.set(ATTACHED_BLOCK_POS, optional1);
-        this.dataManager.set(PEEK_TICK, Byte.valueOf((byte)0));
+        this.dataManager.set(PEEK_TICK, (byte) 0);
         this.isAirBorne = true;
       } 
     } 
@@ -485,7 +484,7 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
           if (flag) {
             playSound(SoundEvents.ENTITY_SHULKER_TELEPORT, getSoundVolume(), 0.95F);
             this.dataManager.set(ATTACHED_BLOCK_POS, Optional.of(blockpos1));
-            this.dataManager.set(PEEK_TICK, Byte.valueOf((byte)0));
+            this.dataManager.set(PEEK_TICK, (byte) 0);
             setAttackTarget((EntityLivingBase)null);
             return true;
           } 
@@ -497,17 +496,16 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
   }
   
   public void performSpecialAttack() {
-    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(48.0D, 48.0D, 48.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(48.0D, 48.0D, 48.0D), Predicates.and(EntitySelectors.IS_ALIVE));
     if (list != null && !list.isEmpty())
-      for (int i1 = 0; i1 < list.size(); i1++) {
-        EntityLivingBase entity = list.get(i1);
-        if (entity != null)
-          if (!false) {
-            EntityShulkerBulletFriendly entityshulkerbullet = new EntityShulkerBulletFriendly(this.world, this, (Entity)entity, getAttachmentFacing().getAxis());
-            this.world.spawnEntity((Entity)entityshulkerbullet);
-            playSound(SoundEvents.ENTITY_SHULKER_SHOOT, getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 0.7F);
-          }  
-      }  
+        for (EntityLivingBase entity : list) {
+            if (entity != null)
+                if (!false) {
+                    EntityShulkerBulletFriendly entityshulkerbullet = new EntityShulkerBulletFriendly(this.world, this, (Entity) entity, getAttachmentFacing().getAxis());
+                    this.world.spawnEntity((Entity) entityshulkerbullet);
+                    playSound(SoundEvents.ENTITY_SHULKER_SHOOT, getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 0.7F);
+                }
+        }
     setSpecialAttackTimer(800);
   }
   
@@ -541,17 +539,16 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
     setSprinting(false);
     if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 512.0D && getSpecialAttackTimer() <= 0 && isHero())
       performSpecialAttack(); 
-    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(32.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(32.0D), Predicates.and(EntitySelectors.IS_ALIVE));
     if (list != null && !list.isEmpty() && this.ticksExisted % 60 == 0 && isPositiveShulker() && !isAIDisabled())
-      for (int i1 = 0; i1 < list.size(); i1++) {
-        EntityLivingBase entity = list.get(i1);
-        if (!this.world.isRemote && entity != null && false && this.rand.nextInt(60) == 0 && !(entity instanceof net.minecraft.entity.monster.IMob)) {
-          EntityShulkerBulletFriendly entityshulkerbullet = new EntityShulkerBulletFriendly(this.world, this, (Entity)entity, getAttachmentFacing().getAxis());
-          this.world.spawnEntity((Entity)entityshulkerbullet);
-          playSound(SoundEvents.ENTITY_SHULKER_SHOOT, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-          break;
-        } 
-      }  
+        for (EntityLivingBase entity : list) {
+            if (!this.world.isRemote && entity != null && false && this.rand.nextInt(60) == 0 && !(entity instanceof net.minecraft.entity.monster.IMob)) {
+                EntityShulkerBulletFriendly entityshulkerbullet = new EntityShulkerBulletFriendly(this.world, this, (Entity) entity, getAttachmentFacing().getAxis());
+                this.world.spawnEntity((Entity) entityshulkerbullet);
+                playSound(SoundEvents.ENTITY_SHULKER_SHOOT, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+                break;
+            }
+        }
   }
   
   public void notifyDataManagerChange(DataParameter<?> key) {
@@ -608,7 +605,7 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
   
   @Nullable
   public BlockPos getAttachmentPos() {
-    return (BlockPos)((Optional)this.dataManager.get(ATTACHED_BLOCK_POS)).orNull();
+    return (BlockPos)((Optional<?>)this.dataManager.get(ATTACHED_BLOCK_POS)).orNull();
   }
   
   public void setAttachmentPos(@Nullable BlockPos pos) {
@@ -616,7 +613,7 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
   }
   
   public int getPeekTick() {
-    return ((Byte)this.dataManager.get(PEEK_TICK)).byteValue();
+    return (Byte) this.dataManager.get(PEEK_TICK);
   }
   
   public void updateArmorModifier(int p_184691_1_) {
@@ -630,7 +627,7 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
         playSound(SoundEvents.ENTITY_SHULKER_OPEN, 1.0F, 1.0F);
       } 
     } 
-    this.dataManager.set(PEEK_TICK, Byte.valueOf((byte)p_184691_1_));
+    this.dataManager.set(PEEK_TICK, (byte) p_184691_1_);
   }
   
   @SideOnly(Side.CLIENT)

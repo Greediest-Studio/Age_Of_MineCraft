@@ -44,8 +44,8 @@ public class EntityBoneAttack extends Entity {
   }
   
   protected void entityInit() {
-    getDataManager().register(ISBLUE, Boolean.valueOf(false));
-    getDataManager().register(BONETYPE, Integer.valueOf(0));
+    getDataManager().register(ISBLUE, Boolean.FALSE);
+    getDataManager().register(BONETYPE, 0);
   }
   
   @SideOnly(Side.CLIENT)
@@ -108,7 +108,7 @@ public class EntityBoneAttack extends Entity {
           hitbox = new AxisAlignedBB(-0.1625D, 0.0D, -0.1625D, 0.1625D, 2.0D, 0.1625D);
           break;
       } 
-      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(0.25D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(0.25D), Predicates.and(EntitySelectors.NOT_SPECTATING));
       if (!list.isEmpty())
         for (EntityLivingBase entity1 : list) {
           if (this.shootingEntity != null && entity1 != null && entity1.isEntityAlive() && !false)
@@ -162,19 +162,19 @@ public class EntityBoneAttack extends Entity {
   }
   
   public boolean isBlue() {
-    return ((Boolean)this.dataManager.get(ISBLUE)).booleanValue();
+    return (Boolean) this.dataManager.get(ISBLUE);
   }
   
   public void setBlue(boolean blue) {
-    this.dataManager.set(ISBLUE, Boolean.valueOf(blue));
+    this.dataManager.set(ISBLUE, blue);
   }
   
   public int getBoneType() {
-    return ((Integer)this.dataManager.get(BONETYPE)).intValue();
+    return (Integer) this.dataManager.get(BONETYPE);
   }
   
   public void setBoneType(int age) {
-    this.dataManager.set(BONETYPE, Integer.valueOf(age));
+    this.dataManager.set(BONETYPE, age);
   }
   
   public void writeEntityToNBT(NBTTagCompound compound) {

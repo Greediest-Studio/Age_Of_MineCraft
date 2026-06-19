@@ -51,13 +51,13 @@ public class EngenderRituals {
     gun42.setTagCompound(new NBTTagCompound());
     gun42.getTagCompound().setFloat("PotEnergy", 2000.0F);
     Object[] pegunlevel2 = { ACItems.shadow_shard, new ItemStack(ACBlocks.stone, 1, 1), ACItems.coralium_gem, new ItemStack(ACBlocks.stone, 1, 1), ACItems.coralium_gem, new ItemStack(ACBlocks.stone, 1, 1), ACItems.coralium_gem, new ItemStack(ACBlocks.stone, 1, 1) };
-    RitualRegistry.instance().registerRitual((new NecronomiconInfusionRitual("gunUpgrade1", 1, ACLib.abyssal_wasteland_id, 2500.0F, gun12, gun1, pegunlevel2)).setTags(new String[] { "PotEnergy" }));
+    RitualRegistry.instance().registerRitual((new NecronomiconInfusionRitual("gunUpgrade1", 1, ACLib.abyssal_wasteland_id, 2500.0F, gun12, gun1, pegunlevel2)).setTags("PotEnergy"));
     Object[] pegunlevel3 = { ACItems.shadow_gem, new ItemStack(ACBlocks.stone, 1, 3), ACItems.dread_cloth, new ItemStack(ACBlocks.stone, 1, 2), ACItems.dreaded_shard_of_abyssalnite, new ItemStack(ACBlocks.stone, 1, 3), ACItems.dread_cloth, new ItemStack(ACBlocks.stone, 1, 2) };
-    RitualRegistry.instance().registerRitual((new NecronomiconInfusionRitual("gunUpgrade2", 2, ACLib.dreadlands_id, 5000.0F, gun22, gun2, pegunlevel3)).setTags(new String[] { "PotEnergy" }));
+    RitualRegistry.instance().registerRitual((new NecronomiconInfusionRitual("gunUpgrade2", 2, ACLib.dreadlands_id, 5000.0F, gun22, gun2, pegunlevel3)).setTags("PotEnergy"));
     Object[] pegunlevel4 = { ACItems.shard_of_oblivion, new ItemStack(ACBlocks.stone, 1, 6), ACItems.omothol_flesh, new ItemStack(ACBlocks.stone, 1, 6), ACItems.ethaxium_brick, new ItemStack(ACBlocks.stone, 1, 6), ACItems.omothol_flesh, new ItemStack(ACBlocks.stone, 1, 6) };
-    RitualRegistry.instance().registerRitual((new NecronomiconInfusionRitual("gunUpgrade3", 3, ACLib.omothol_id, 7500.0F, gun32, gun3, pegunlevel4)).setTags(new String[] { "PotEnergy" }));
+    RitualRegistry.instance().registerRitual((new NecronomiconInfusionRitual("gunUpgrade3", 3, ACLib.omothol_id, 7500.0F, gun32, gun3, pegunlevel4)).setTags("PotEnergy"));
     Object[] pegunlevel5 = { ACItems.oblivion_catalyst, ACBlocks.ethaxium_brick, ACItems.eldritch_scale, ACBlocks.dark_ethaxium_brick, ACItems.liquid_antimatter_bucket_stack, ACBlocks.dark_ethaxium_brick, ACItems.eldritch_scale, ACBlocks.ethaxium_brick };
-    RitualRegistry.instance().registerRitual((new NecronomiconInfusionRitual("gunUpgrade4", 4, ACLib.omothol_id, 10000.0F, gun42, gun4, pegunlevel5)).setTags(new String[] { "PotEnergy" }));
+    RitualRegistry.instance().registerRitual((new NecronomiconInfusionRitual("gunUpgrade4", 4, ACLib.omothol_id, 10000.0F, gun42, gun4, pegunlevel5)).setTags("PotEnergy"));
     RitualRegistry.instance().registerRitual((new NecronomiconChangeRitual("changeRitual", 0, 5000.0F, offerings)).setNBTSensitive());
     Object[] staff = { ACItems.essence_of_the_gatekeeper, new ItemStack(ACBlocks.ingot_block, 1, 3), ACItems.essence_of_the_gatekeeper, new ItemStack(ACBlocks.ingot_block, 1, 3), ACItems.essence_of_the_gatekeeper, new ItemStack(ACBlocks.ingot_block, 1, 3), ACItems.essence_of_the_gatekeeper, new ItemStack(ACBlocks.ingot_block, 1, 3) };
     RitualRegistry.instance().registerRitual((new NecronomiconInfusionRitual("abyportalStaffLevel1", 4, ACLib.omothol_id, 100000.0F, false, new ItemStack(EItem.abyssalPortalStaff), new ItemStack(EItem.portalStaff, 1, 4), staff)).setNBTSensitiveSacrifice());

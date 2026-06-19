@@ -33,27 +33,25 @@ public class EntityAIFindNearestUnalliedTarget extends EntityAIBase {
   public EntityAIFindNearestUnalliedTarget(EntityTameBase mobIn, Class<? extends EntityLivingBase> p_i45884_2_) {
     this.mob = mobIn;
     this.classToCheck = p_i45884_2_;
-    this.predicate = new Predicate<EntityLivingBase>() {
-        public boolean apply(@Nullable EntityLivingBase p_apply_1_) {
-          double d0 = EntityAIFindNearestUnalliedTarget.this.getFollowRange();
-          if (p_apply_1_.isSneaking())
-            d0 *= 0.75D; 
-          if (p_apply_1_.isInvisible())
-            return false; 
-          if (!EntityAIFindNearestUnalliedTarget.this.mob.attackable())
-            return false; 
-          if (EntityAIFindNearestUnalliedTarget.this.mob.getAttackTarget() != null)
-            return false; 
-          return (p_apply_1_.getDistance((Entity)EntityAIFindNearestUnalliedTarget.this.mob) > d0 || EntityAIFindNearestUnalliedTarget.this.mob instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStorm) ? false : EntityAITarget.isSuitableTarget((EntityLiving)EntityAIFindNearestUnalliedTarget.this.mob, p_apply_1_, false, true);
-        }
-      };
+    this.predicate = p_apply_1_ -> {
+      double d0 = EntityAIFindNearestUnalliedTarget.this.getFollowRange();
+      if (p_apply_1_.isSneaking())
+        d0 *= 0.75D;
+      if (p_apply_1_.isInvisible())
+        return false;
+      if (!EntityAIFindNearestUnalliedTarget.this.mob.attackable())
+        return false;
+      if (EntityAIFindNearestUnalliedTarget.this.mob.getAttackTarget() != null)
+        return false;
+      return (p_apply_1_.getDistance((Entity)EntityAIFindNearestUnalliedTarget.this.mob) > d0 || EntityAIFindNearestUnalliedTarget.this.mob instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStorm) ? false : EntityAITarget.isSuitableTarget((EntityLiving)EntityAIFindNearestUnalliedTarget.this.mob, p_apply_1_, false, true);
+    };
     this.sorter = new Sorter((Entity)mobIn);
   }
   
   public boolean shouldExecute() {
     double d0 = getFollowRange();
     List<EntityLivingBase> list = this.mob.world.getEntitiesWithinAABB(this.classToCheck, this.mob.getEntityBoundingBox().grow(d0), this.predicate);
-    Collections.sort(list, this.sorter);
+    list.sort(this.sorter);
     if (list.isEmpty())
       return false; 
     this.target = list.get(0);

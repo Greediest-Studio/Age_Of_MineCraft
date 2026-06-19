@@ -28,7 +28,7 @@ public class EntityItemCarrier extends EntityItem {
         if (entity instanceof EntityTameBase) {
           EntityTameBase entityliving = (EntityTameBase)entity;
           if (!this.world.isRemote && entityliving instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityJzahar)
-            SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzahar.scold") }); 
+            SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.scold"));
           entityliving.writeToNBT(stack.getTagCompound().getCompoundTag("Entity"));
           entityliving.playLivingSound();
           if (!entityliving.isWild() && (entityliving instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEnderDragon || entityliving instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDragonBoss)) {

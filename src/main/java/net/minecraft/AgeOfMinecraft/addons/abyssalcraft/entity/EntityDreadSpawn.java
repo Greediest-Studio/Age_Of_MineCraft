@@ -114,13 +114,13 @@ public class EntityDreadSpawn extends EntityTameBase implements Light {
       par1Entity instanceof EntityLivingBase)
       ((EntityLivingBase)par1Entity).addPotionEffect(new PotionEffect(AbyssalCraftAPI.dread_plague, 100)); 
     if (ACConfig.hardcoreMode && par1Entity instanceof net.minecraft.entity.player.EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.5F * (float)((ACConfig.damageAmpl > 1.0D) ? ACConfig.damageAmpl : 1.0D)); 
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(CLIMBING, Byte.valueOf((byte)0));
+    this.dataManager.register(CLIMBING, (byte) 0);
   }
   
   public void onUpdate() {
@@ -154,17 +154,17 @@ public class EntityDreadSpawn extends EntityTameBase implements Light {
   }
   
   public boolean isBesideClimbableBlock() {
-    return ((((Byte)this.dataManager.get(CLIMBING)).byteValue() & 0x1) != 0);
+    return (((Byte) this.dataManager.get(CLIMBING) & 0x1) != 0);
   }
   
   public void setBesideClimbableBlock(boolean par1) {
-    byte b0 = ((Byte)this.dataManager.get(CLIMBING)).byteValue();
+    byte b0 = (Byte) this.dataManager.get(CLIMBING);
     if (par1) {
       b0 = (byte)(b0 | 0x1);
     } else {
       b0 = (byte)(b0 & 0xFFFFFFFE);
     } 
-    this.dataManager.set(CLIMBING, Byte.valueOf(b0));
+    this.dataManager.set(CLIMBING, b0);
   }
   
   public boolean takesFallDamage() {
@@ -207,14 +207,13 @@ public class EntityDreadSpawn extends EntityTameBase implements Light {
     } 
     List<Entity> list = this.world.getEntitiesWithinAABB(getClass(), getEntityBoundingBox().grow(8.0D));
     if (!list.isEmpty() && list.size() >= 5 && (this.ticksExisted + getEntityId()) % 20 == 0)
-      for (int i1 = 0; i1 < list.size(); i1++) {
-        Entity entity = list.get(i1);
-        if (entity.isEntityAlive() && entity instanceof EntityDreadSpawn) {
-          EntityDreadSpawn mob = (EntityDreadSpawn)entity;
-          if (false)
-            getNavigator().tryMoveToEntityLiving((Entity)mob, 1.2D); 
-        } 
-      }  
+        for (Entity entity : list) {
+            if (entity.isEntityAlive() && entity instanceof EntityDreadSpawn) {
+                EntityDreadSpawn mob = (EntityDreadSpawn) entity;
+                if (false)
+                    getNavigator().tryMoveToEntityLiving((Entity) mob, 1.2D);
+            }
+        }
   }
 }
 

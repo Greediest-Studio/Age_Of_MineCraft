@@ -72,18 +72,17 @@ public class EntityWitherStormSkull extends EntityFireball {
   protected void onImpact(RayTraceResult movingObject) {
     if (!this.world.isRemote)
       if (this.shootingEntity != null) {
-        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
         if (list != null && !list.isEmpty())
-          for (int i1 = 0; i1 < list.size(); i1++) {
-            EntityLivingBase entity1 = list.get(i1);
-            if (entity1 != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart) {
-              if (this.shootingEntity != null)
-                EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY, this.posZ, 1.0F, false, false); 
-              this.shootingEntity.attackEntityAsMob((Entity)entity1);
-              applyEnchantments(this.shootingEntity, (Entity)entity1);
-              setDead();
-            } 
-          }  
+            for (EntityLivingBase entity1 : list) {
+                if (entity1 != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart) {
+                    if (this.shootingEntity != null)
+                        EntityTameBase.createEngenderModExplosion((Entity) this.shootingEntity, this.posX, this.posY, this.posZ, 1.0F, false, false);
+                    this.shootingEntity.attackEntityAsMob((Entity) entity1);
+                    applyEnchantments(this.shootingEntity, (Entity) entity1);
+                    setDead();
+                }
+            }
       }  
     if (movingObject.entityHit != null) {
       copyLocationAndAnglesFrom(movingObject.entityHit);
@@ -102,28 +101,26 @@ public class EntityWitherStormSkull extends EntityFireball {
             ((EntityLivingBase)movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 20 * b0, this.world.getDifficulty().getId()));
             ((EntityLivingBase)movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.WITHER, 2147483647, 3));
           } 
-          List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(6.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+          List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(6.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
           if (list1 != null && !list1.isEmpty())
-            for (int i1 = 0; i1 < list1.size(); i1++) {
-              EntityLivingBase entity1 = list1.get(i1);
-              if (!false) {
-                this.shootingEntity.attackEntityAsMob((Entity)entity1);
-                if (b0 > 0 && movingObject.entityHit instanceof EntityLivingBase) {
-                  ((EntityLivingBase)movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 20 * b0));
-                  ((EntityLivingBase)movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 20 * b0, this.world.getDifficulty().getId()));
-                  ((EntityLivingBase)movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 20 * b0, this.world.getDifficulty().getId()));
-                  ((EntityLivingBase)movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.WITHER, 2147483647, 3));
-                } 
-              } 
-            }  
+              for (EntityLivingBase entity1 : list1) {
+                  if (!false) {
+                      this.shootingEntity.attackEntityAsMob((Entity) entity1);
+                      if (b0 > 0 && movingObject.entityHit instanceof EntityLivingBase) {
+                          ((EntityLivingBase) movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 20 * b0));
+                          ((EntityLivingBase) movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 20 * b0, this.world.getDifficulty().getId()));
+                          ((EntityLivingBase) movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 20 * b0, this.world.getDifficulty().getId()));
+                          ((EntityLivingBase) movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.WITHER, 2147483647, 3));
+                      }
+                  }
+              }
           if (this.shootingEntity != null) {
-            List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow((this.shootingEntity instanceof EntityWitherStormHead) ? 9.0D : 3.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+            List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow((this.shootingEntity instanceof EntityWitherStormHead) ? 9.0D : 3.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
             if (list != null && !list.isEmpty())
-              for (int i1 = 0; i1 < list.size(); i1++) {
-                EntityLivingBase entity1 = list.get(i1);
-                if (!false)
-                  ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)movingObject.entityHit, " was destroyed by ", DamageSource.causeMobDamage(this.shootingEntity), this.damage); 
-              }  
+                for (EntityLivingBase entity1 : list) {
+                    if (!false)
+                        ((EntityTameBase) this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase) movingObject.entityHit, " was destroyed by ", DamageSource.causeMobDamage(this.shootingEntity), this.damage);
+                }
             if (movingObject.entityHit != null)
               if (this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase && movingObject.entityHit instanceof EntityLivingBase && !false) {
                 movingObject.entityHit.hurtResistantTime = 0;
@@ -164,15 +161,15 @@ public class EntityWitherStormSkull extends EntityFireball {
   }
   
   protected void entityInit() {
-    this.dataManager.register(INVULNERABLE, Boolean.valueOf(false));
+    this.dataManager.register(INVULNERABLE, Boolean.FALSE);
   }
   
   public boolean isInvulnerable() {
-    return ((Boolean)this.dataManager.get(INVULNERABLE)).booleanValue();
+    return (Boolean) this.dataManager.get(INVULNERABLE);
   }
   
   public void setInvulnerable(boolean invulnerable) {
-    this.dataManager.set(INVULNERABLE, Boolean.valueOf(invulnerable));
+    this.dataManager.set(INVULNERABLE, invulnerable);
   }
   
   protected boolean isFireballFiery() {
@@ -181,7 +178,7 @@ public class EntityWitherStormSkull extends EntityFireball {
   
   public void onUpdate() {
     super.onUpdate();
-    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (this.shootingEntity != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive() && !false)

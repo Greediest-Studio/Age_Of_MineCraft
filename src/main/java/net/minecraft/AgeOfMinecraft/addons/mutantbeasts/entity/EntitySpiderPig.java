@@ -3,7 +3,7 @@ package net.minecraft.AgeOfMinecraft.addons.mutantbeasts.entity;
 import chumbanotz.mutantbeasts.util.MBSoundEvents;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
 import net.minecraft.AgeOfMinecraft.entity.tame.EnumTier;
 import net.minecraft.AgeOfMinecraft.entity.tame.ai.EntityAIFollowLeader;
@@ -107,15 +107,15 @@ public class EntitySpiderPig extends EntityTameBase implements IJumpingMount {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(CLIMBING, Boolean.valueOf(false));
+    this.dataManager.register(CLIMBING, Boolean.FALSE);
   }
   
   public boolean isBesideClimbableBlock() {
-    return ((Boolean)this.dataManager.get(CLIMBING)).booleanValue();
+    return (Boolean) this.dataManager.get(CLIMBING);
   }
   
   private void setBesideClimbableBlock(boolean climbing) {
-    this.dataManager.set(CLIMBING, Boolean.valueOf(climbing));
+    this.dataManager.set(CLIMBING, climbing);
   }
   
   public EnumCreatureAttribute getCreatureAttribute() {

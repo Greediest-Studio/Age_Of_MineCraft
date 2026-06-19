@@ -102,7 +102,7 @@ public class ItemCarrier extends ItemBEItem {
         if (!player.world.isRemote) {
           mob.setGuardBlock(null);
           if (mob instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityJzahar)
-            SpecialTextUtil.JzaharGroup(player.world, new String[] { I18n.translateToLocal("message.jzahar.collect") }); 
+            SpecialTextUtil.JzaharGroup(player.world, I18n.translateToLocal("message.jzahar.collect"));
           NBTTagCompound tag = mob.serializeNBT();
           item.getTagCompound().setTag("Entity", (NBTBase)tag);
           item.getTagCompound().setString("EntityName", mob.getName());
@@ -142,7 +142,7 @@ public class ItemCarrier extends ItemBEItem {
     if (entity instanceof EntityTameBase) {
       EntityTameBase entityliving = (EntityTameBase)entity;
       if (!player.world.isRemote && entityliving instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityJzahar)
-        SpecialTextUtil.JzaharGroup(player.world, new String[] { I18n.translateToLocal("message.jzahar.release") }); 
+        SpecialTextUtil.JzaharGroup(player.world, I18n.translateToLocal("message.jzahar.release"));
       entityliving.writeToNBT(stack.getTagCompound().getCompoundTag("Entity"));
       entityliving.playLivingSound();
       if (entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEnderDragon || entity instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDragonBoss) {
@@ -186,7 +186,7 @@ public class ItemCarrier extends ItemBEItem {
       if (entity != null && entity instanceof EntityTameBase) {
         EntityTameBase entityliving = (EntityTameBase)entity;
         if (!worldIn.isRemote && entityliving instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityJzahar)
-          SpecialTextUtil.JzaharGroup(worldIn, new String[] { I18n.translateToLocal("message.jzahar.release") }); 
+          SpecialTextUtil.JzaharGroup(worldIn, I18n.translateToLocal("message.jzahar.release"));
         entityliving.writeToNBT(stack.getTagCompound().getCompoundTag("Entity"));
         entityliving.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
         entityliving.rotationYawHead = entityliving.rotationYaw;

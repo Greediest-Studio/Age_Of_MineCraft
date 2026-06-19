@@ -117,7 +117,7 @@ public class EntityPortalLightning extends EntityFireball {
         double d7 = this.posY + (this.posY - this.accelerationY) * -d9;
         double d8 = this.posZ + (this.posZ - this.accelerationZ) * -d9;
         if (this.world.isRemote)
-          this.world.spawnParticle(EnumParticleTypes.END_ROD, true, d6, d7, d8, 0.0D, 0.01D, 0.0D, new int[0]); 
+          this.world.spawnParticle(EnumParticleTypes.END_ROD, true, d6, d7, d8, 0.0D, 0.01D, 0.0D);
       } 
     } 
     if (this.ticksExisted > 5 && this.shootingEntity != null && this.targetEntity != null && getDistance(this.targetEntity) <= 1.0D) {

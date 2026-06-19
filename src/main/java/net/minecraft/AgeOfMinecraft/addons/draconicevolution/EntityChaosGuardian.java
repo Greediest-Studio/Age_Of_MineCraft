@@ -97,11 +97,11 @@ public class EntityChaosGuardian extends EntityEnderDragon {
   
   public EnumBehaviour behaviour = EnumBehaviour.ROAMING;
   
-  private static final List<WeightedAttack> weightedAttacks = Lists.newArrayList(new WeightedAttack[] { new WeightedAttack(16, 0), new WeightedAttack(14, 1), new WeightedAttack(12, 2), new WeightedAttack(10, 3), new WeightedAttack(5, 5), new WeightedAttack(10, 6) });
+  private static final List<WeightedAttack> weightedAttacks = Lists.newArrayList(new WeightedAttack(16, 0), new WeightedAttack(14, 1), new WeightedAttack(12, 2), new WeightedAttack(10, 3), new WeightedAttack(5, 5), new WeightedAttack(10, 6));
   
-  private static final List<WeightedAttack> weightedLowHealthAttaxks = Lists.newArrayList(new WeightedAttack[] { new WeightedAttack(5, 1), new WeightedAttack(5, 4), new WeightedAttack(10, 2), new WeightedAttack(15, 3), new WeightedAttack(15, 5), new WeightedAttack(105, 6) });
+  private static final List<WeightedAttack> weightedLowHealthAttaxks = Lists.newArrayList(new WeightedAttack(5, 1), new WeightedAttack(5, 4), new WeightedAttack(10, 2), new WeightedAttack(15, 3), new WeightedAttack(15, 5), new WeightedAttack(105, 6));
   
-  private static final List<WeightedBehaviour> weightedBehaviours = Lists.newArrayList(new WeightedBehaviour[] { new WeightedBehaviour(1, EnumBehaviour.LOW_HEALTH_STRATEGY), new WeightedBehaviour(10, EnumBehaviour.GUARDING), new WeightedBehaviour(20, EnumBehaviour.CHARGING), new WeightedBehaviour(12, EnumBehaviour.FIREBOMB), new WeightedBehaviour(20, EnumBehaviour.CIRCLE_PLAYER) });
+  private static final List<WeightedBehaviour> weightedBehaviours = Lists.newArrayList(new WeightedBehaviour(1, EnumBehaviour.LOW_HEALTH_STRATEGY), new WeightedBehaviour(10, EnumBehaviour.GUARDING), new WeightedBehaviour(20, EnumBehaviour.CHARGING), new WeightedBehaviour(12, EnumBehaviour.FIREBOMB), new WeightedBehaviour(20, EnumBehaviour.CIRCLE_PLAYER));
   
   public EntityChaosGuardian(World par1World) {
     super(par1World);
@@ -233,7 +233,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
       this.sitting = true;
       this.motionX = this.motionY = this.motionZ *= 0.0D;
       setPositionAndUpdate(getJukeboxToDanceTo().getX(), getJukeboxToDanceTo().getY() + 12.0D, getJukeboxToDanceTo().getZ());
-      if (block != Blocks.JUKEBOX || (block == Blocks.JUKEBOX && !((Boolean)iblockstate.getValue((IProperty)BlockJukebox.HAS_RECORD)).booleanValue()) || getDistanceSqToCenter(this.jukeBoxToDanceTo) > 10000.0D) {
+      if (block != Blocks.JUKEBOX || (block == Blocks.JUKEBOX && !(Boolean) iblockstate.getValue((IProperty) BlockJukebox.HAS_RECORD)) || getDistanceSqToCenter(this.jukeBoxToDanceTo) > 10000.0D) {
         setJukeboxToDanceTo(null);
         this.sitting = false;
       } 
@@ -251,7 +251,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
             BlockPos blockpos = new BlockPos(i3, m, n);
             IBlockState iblockstate = this.world.getBlockState(blockpos);
             Block block = iblockstate.getBlock();
-            if (block == Blocks.JUKEBOX && ((Boolean)iblockstate.getValue((IProperty)BlockJukebox.HAS_RECORD)).booleanValue()) {
+            if (block == Blocks.JUKEBOX && (Boolean) iblockstate.getValue((IProperty) BlockJukebox.HAS_RECORD)) {
               setJukeboxToDanceTo(blockpos);
               if (this.ticksExisted > 100)
                 this.ticksExisted = 20; 
@@ -304,7 +304,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
       float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
       float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
       float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
-      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX + f, this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D, new int[0]);
+      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX + f, this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
     } 
     this.rotationYaw = MathHelper.wrapDegrees(this.rotationYaw);
     if (isAIDisabled()) {
@@ -858,7 +858,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
     if (this.world.isRemote || this.behaviour == EnumBehaviour.DEAD)
       return; 
     EnumBehaviour newBehaviour = this.behaviour;
-    for (; newBehaviour == this.behaviour; newBehaviour = ((WeightedBehaviour)WeightedRandom.getRandomItem(this.rand, weightedBehaviours)).randomBehaviour);
+    for (; newBehaviour == this.behaviour; newBehaviour = WeightedRandom.getRandomItem(this.rand, weightedBehaviours).randomBehaviour);
     this.behaviour = newBehaviour;
     this.previousBehaviour = this.behaviour;
   }
@@ -1046,7 +1046,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
       float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
       float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
       float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
-      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + f, this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D, new int[0]);
+      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + f, this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
     } 
     if (!this.world.isRemote && this.deathTicks == 1) {
       if (Loader.isModLoaded("draconicevolution")) {
@@ -1061,7 +1061,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
       if (getOwner() != null) {
         for (EntityPlayer entityplayer : this.world.playerEntities) {
           this.world.playSound(null, entityplayer.getPosition(), SoundEvents.ENTITY_ENDERDRAGON_DEATH, getSoundCategory(), getSoundVolume(), 1.0F);
-          entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("\u00A74" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
+          entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
         } 
         ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("Your Chaos Guardian has fallen in battle.", new Object[0]));
       } 

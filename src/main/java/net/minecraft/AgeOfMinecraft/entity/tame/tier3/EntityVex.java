@@ -3,7 +3,6 @@ package net.minecraft.AgeOfMinecraft.entity.tame.tier3;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
-import java.util.Random;
 import javax.annotation.Nullable;
 import net.minecraft.AgeOfMinecraft.entity.tame.Elemental;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
@@ -124,7 +123,7 @@ public class EntityVex extends EntityTameBase implements Light, Flying, Elementa
         setBoundOrigin((getJukeboxToDanceTo() != null) ? getJukeboxToDanceTo().up(2) : ((getGuardBlock() != null) ? new BlockPos(this.randPosX, this.randPosY, this.randPosZ) : getOwner().getPosition().up((int)getOwner().getEyeHeight())));
       }  
     if (!this.world.isRemote && isEntityAlive() && getAttackTarget() == null && getSpecialAttackTimer() > 600) {
-      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(24.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(24.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       for (int j2 = 0; j2 < 10 && !list.isEmpty(); j2++) {
         EntityLivingBase entitylivingbase = list.get(this.rand.nextInt(list.size()));
         if (entitylivingbase != this && !false && entitylivingbase.isEntityAlive()) {
@@ -158,7 +157,7 @@ public class EntityVex extends EntityTameBase implements Light, Flying, Elementa
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(VEX_FLAGS, Byte.valueOf((byte)0));
+    this.dataManager.register(VEX_FLAGS, (byte) 0);
   }
   
   public void readEntityFromNBT(NBTTagCompound compound) {
@@ -186,18 +185,18 @@ public class EntityVex extends EntityTameBase implements Light, Flying, Elementa
   }
   
   private boolean getVexFlag(int p_190656_1_) {
-    int i = ((Byte)this.dataManager.get(VEX_FLAGS)).byteValue();
+    int i = (Byte) this.dataManager.get(VEX_FLAGS);
     return ((i & p_190656_1_) != 0);
   }
   
   private void setVexFlag(int p_190660_1_, boolean p_190660_2_) {
-    int i = ((Byte)this.dataManager.get(VEX_FLAGS)).byteValue();
+    int i = this.dataManager.get(VEX_FLAGS);
     if (p_190660_2_) {
       i |= p_190660_1_;
     } else {
-      i &= p_190660_1_ ^ 0xFFFFFFFF;
+      i &= ~p_190660_1_;
     } 
-    this.dataManager.set(VEX_FLAGS, Byte.valueOf((byte)(i & 0xFF)));
+    this.dataManager.set(VEX_FLAGS, (byte) (i & 0xFF));
   }
   
   public boolean isCharging() {

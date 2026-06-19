@@ -21,7 +21,7 @@ public class PhaseDeath extends PhaseBaseFriendly {
       float f = (this.dragon.getRNG().nextFloat() - 0.5F) * 8.0F;
       float f1 = (this.dragon.getRNG().nextFloat() - 0.5F) * 4.0F;
       float f2 = (this.dragon.getRNG().nextFloat() - 0.5F) * 8.0F;
-      this.dragon.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.dragon.posX + f, this.dragon.posY + 2.0D + f1, this.dragon.posZ + f2, 0.0D, 0.0D, 0.0D, new int[0]);
+      this.dragon.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.dragon.posX + f, this.dragon.posY + 2.0D + f1, this.dragon.posZ + f2, 0.0D, 0.0D, 0.0D);
     } 
   }
   

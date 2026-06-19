@@ -55,7 +55,7 @@ public class EntityMagicMissile extends EntityFireball {
     if (this.ticksExisted > 40 && !this.world.isRemote && this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase && result.entityHit != null && result.entityHit.hurtResistantTime <= 0 && result.entityHit instanceof EntityLivingBase)
       if (!false) {
         ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)this.targetEntity, " was shot by ", (new EntityDamageSourceIndirect("arrow", (Entity)this, (Entity)this.shootingEntity)).setMagicDamage().setProjectile(), 2.0F);
-        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D, new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
         playSound(SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1.0F, 1.5F);
         setDead();
         ((EntityLivingBase)this.targetEntity).hurtResistantTime = 0;
@@ -87,19 +87,18 @@ public class EntityMagicMissile extends EntityFireball {
     this.posY += this.motionY;
     this.posZ += this.motionZ;
     if (this.shootingEntity != null) {
-      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(0.5D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(0.5D), Predicates.and(EntitySelectors.NOT_SPECTATING));
       if (list != null && !list.isEmpty())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityLivingBase entity1 = list.get(i1);
-          if (entity1 != null && entity1.isEntityAlive() && this.targetEntity != null && entity1 == this.targetEntity) {
-            entity1.hurtResistantTime = 0;
-            onImpact(new RayTraceResult((Entity)entity1));
-          } 
-        }  
+          for (EntityLivingBase entity1 : list) {
+              if (entity1 != null && entity1.isEntityAlive() && this.targetEntity != null && entity1 == this.targetEntity) {
+                  entity1.hurtResistantTime = 0;
+                  onImpact(new RayTraceResult((Entity) entity1));
+              }
+          }
     } 
     if (this.targetEntity != null && !this.targetEntity.isEntityAlive())
       this.targetEntity = null; 
-    this.world.spawnParticle(EnumParticleTypes.END_ROD, this.posX, this.posY + 0.125D, this.posZ, 0.0D, 0.0D, 0.0D, new int[0]);
+    this.world.spawnParticle(EnumParticleTypes.END_ROD, this.posX, this.posY + 0.125D, this.posZ, 0.0D, 0.0D, 0.0D);
     if (this.motionX > getMotionFactor())
       this.motionX = getMotionFactor(); 
     if (this.motionY > getMotionFactor())

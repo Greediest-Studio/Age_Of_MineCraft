@@ -42,7 +42,7 @@ public class EntityLlamaSpitOther extends EntityLlamaSpit {
     setPosition(x, y, z);
     for (int i = 0; i < 20; i++) {
       double d0 = 0.4D + 0.1D * i;
-      worldIn.spawnParticle(EnumParticleTypes.SPIT, x, y, z, p_i47274_8_ * d0, p_i47274_10_, p_i47274_12_ * d0, new int[0]);
+      worldIn.spawnParticle(EnumParticleTypes.SPIT, x, y, z, p_i47274_8_ * d0, p_i47274_10_, p_i47274_12_ * d0);
     } 
     this.motionX = p_i47274_8_;
     this.motionY = p_i47274_10_;
@@ -67,7 +67,7 @@ public class EntityLlamaSpitOther extends EntityLlamaSpit {
   public void onUpdate() {
     super.onUpdate();
     setSize(0.25F, 0.25F);
-    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (this.owner != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive() && !false)

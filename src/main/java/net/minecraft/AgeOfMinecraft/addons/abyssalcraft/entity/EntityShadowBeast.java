@@ -143,7 +143,7 @@ public class EntityShadowBeast extends EntityTameBase implements Armored, Undead
       ((EntityLivingBase)par1Entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 60));
     } 
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)((ACConfig.damageAmpl > 1.0D) ? ACConfig.damageAmpl : 1.0D)); 
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -173,7 +173,7 @@ public class EntityShadowBeast extends EntityTameBase implements Armored, Undead
   
   public void onLivingUpdate() {
     for (int i = 0; i < 2 && ACConfig.particleEntity && this.world.provider.getDimension() != ACLib.dark_realm_id; i++)
-      this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D, new int[0]); 
+      this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
     if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) <= 64.0D && this.shadowFlameShootTimer <= (isHero() ? -100 : -300))
       this.shadowFlameShootTimer = 100; 
     if (this.shadowFlameShootTimer > 0) {
@@ -184,20 +184,19 @@ public class EntityShadowBeast extends EntityTameBase implements Armored, Undead
         this.world.playSound(null, new BlockPos(this.posX + 0.5D, this.posY + getEyeHeight(), this.posZ + 0.5D), SoundEvents.ENTITY_GHAST_SHOOT, getSoundCategory(), 0.5F + getRNG().nextFloat(), getRNG().nextFloat() * 0.7F + 0.3F); 
       Entity target = getHeadLookTarget();
       if (target != null) {
-        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, target.getEntityBoundingBox().grow(2.0D, 2.0D, 2.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, target.getEntityBoundingBox().grow(2.0D, 2.0D, 2.0D), Predicates.and(EntitySelectors.IS_ALIVE));
         if (list != null && !list.isEmpty())
-          for (int i1 = 0; i1 < list.size(); i1++) {
-            EntityLivingBase entity = list.get(i1);
-            if (entity != null && !false && this.rand.nextInt(3) == 0)
-              if (entity.attackEntityFrom((new DamageSource("shadow")).setDamageBypassesArmor().setDamageIsAbsolute().setMagicDamage(), (float)(15.0D - getDistance((Entity)entity)))) {
-                entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 100));
-                entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 1));
-              } else {
-                attackEntityAsMob((Entity)entity);
-                entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 100));
-                entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 1));
-              }  
-          }  
+            for (EntityLivingBase entity : list) {
+                if (entity != null && !false && this.rand.nextInt(3) == 0)
+                    if (entity.attackEntityFrom((new DamageSource("shadow")).setDamageBypassesArmor().setDamageIsAbsolute().setMagicDamage(), (float) (15.0D - getDistance((Entity) entity)))) {
+                        entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 100));
+                        entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 1));
+                    } else {
+                        attackEntityAsMob((Entity) entity);
+                        entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 100));
+                        entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 1));
+                    }
+            }
         if (target.attackEntityFrom((new DamageSource("shadow")).setDamageBypassesArmor().setDamageIsAbsolute().setMagicDamage(), (float)(15.0D - getDistance(target)))) {
           if (target instanceof EntityLivingBase) {
             ((EntityLivingBase)target).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 200));
@@ -284,7 +283,7 @@ public class EntityShadowBeast extends EntityTameBase implements Armored, Undead
         dx *= velocity;
         dy *= velocity;
         dz *= velocity;
-        this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, px + getRNG().nextDouble() - 0.5D, py + getRNG().nextDouble() - 0.5D, pz + getRNG().nextDouble() - 0.5D, dx, dy, dz, new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, px + getRNG().nextDouble() - 0.5D, py + getRNG().nextDouble() - 0.5D, pz + getRNG().nextDouble() - 0.5D, dx, dy, dz);
       } 
     } else {
       this.world.setEntityState((Entity)this, (byte)23);

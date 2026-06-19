@@ -38,7 +38,7 @@ public class PhaseBreathing extends PhaseBaseFriendly {
         double d4 = d1 + this.dragon.getRNG().nextGaussian() / 2.0D;
         double d5 = d2 + this.dragon.getRNG().nextGaussian() / 2.0D;
         for (int j = 0; j < 4; j++)
-          this.dragon.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, d3, d4, d5, -vec3d.x * 0.1D * j, -vec3d.y * 0.75D, -vec3d.z * 0.1D * j, new int[0]); 
+          this.dragon.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, d3, d4, d5, -vec3d.x * 0.1D * j, -vec3d.y * 0.75D, -vec3d.z * 0.1D * j);
         vec3d.rotateYaw(0.19634955F);
       } 
     } 

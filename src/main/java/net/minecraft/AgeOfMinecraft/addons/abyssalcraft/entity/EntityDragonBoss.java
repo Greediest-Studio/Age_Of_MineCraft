@@ -249,7 +249,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
   
   protected void entityInit() {
     super.entityInit();
-    getDataManager().register(PHASE, Integer.valueOf(PhaseListAsorah.HOLDING_PATTERN.getId()));
+    getDataManager().register(PHASE, PhaseListAsorah.HOLDING_PATTERN.getId());
   }
   
   public double[] getMovementOffsets(int par1, float par2) {
@@ -310,7 +310,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
       if (player != null)
         for (int i1 = 0; i1 < this.convertionInt; i1++) {
           float f1 = i1 * 3.1415927F / timesToConvert() * 0.5F;
-          this.world.spawnParticle(EnumParticleTypes.END_ROD, true, this.posX + MathHelper.cos(f1) * 12.0D, this.posY + this.height + 1.0D, this.posZ + MathHelper.sin(f1) * 12.0D, this.motionX, this.motionY, this.motionZ, new int[0]);
+          this.world.spawnParticle(EnumParticleTypes.END_ROD, true, this.posX + MathHelper.cos(f1) * 12.0D, this.posY + this.height + 1.0D, this.posZ + MathHelper.sin(f1) * 12.0D, this.motionX, this.motionY, this.motionZ);
         }  
     } 
     if (this.moralRaisedTimer <= 0)
@@ -353,7 +353,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
       Block block = iblockstate.getBlock();
       if (this.ticksExisted > 40)
         this.ticksExisted = 0; 
-      if (block != Blocks.JUKEBOX || (block == Blocks.JUKEBOX && !((Boolean)iblockstate.getValue((IProperty)BlockJukebox.HAS_RECORD)).booleanValue()) || getDistanceSqToCenter(this.jukeBoxToDanceTo) > 10000.0D) {
+      if (block != Blocks.JUKEBOX || (block == Blocks.JUKEBOX && !(Boolean) iblockstate.getValue((IProperty) BlockJukebox.HAS_RECORD)) || getDistanceSqToCenter(this.jukeBoxToDanceTo) > 10000.0D) {
         setJukeboxToDanceTo(null);
         getPhaseManager().setPhase(PhaseListAsorah.HOLDING_PATTERN);
       } 
@@ -372,7 +372,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
             BlockPos blockpos = new BlockPos(i3, m, n);
             IBlockState iblockstate = this.world.getBlockState(blockpos);
             Block block = iblockstate.getBlock();
-            if (block == Blocks.JUKEBOX && ((Boolean)iblockstate.getValue((IProperty)BlockJukebox.HAS_RECORD)).booleanValue()) {
+            if (block == Blocks.JUKEBOX && (Boolean) iblockstate.getValue((IProperty) BlockJukebox.HAS_RECORD)) {
               setJukeboxToDanceTo(blockpos);
               getPhaseManager().setPhase(PhaseListAsorah.SITTING_SCANNING);
             } 
@@ -441,7 +441,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
         double d1 = this.rand.nextGaussian() * 0.02D;
         double d2 = this.rand.nextGaussian() * 0.02D;
         double d3 = 10.0D;
-        this.world.spawnParticle(EnumParticleTypes.TOWN_AURA, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width - d0 * d3, this.posY + (this.rand.nextFloat() * this.height) - d1 * d3, this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width - d2 * d3, d0, d1, d2, new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.TOWN_AURA, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width - d0 * d3, this.posY + (this.rand.nextFloat() * this.height) - d1 * d3, this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width - d2 * d3, d0, d1, d2);
       } 
     } else {
       if (getAttackTarget() != null && getJukeboxToDanceTo() == null && !getPhaseManager().getCurrentPhase().getIsStationary()) {
@@ -457,14 +457,14 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
           double d1 = this.rand.nextGaussian() * 0.02D;
           double d2 = this.rand.nextGaussian() * 0.02D;
           double d3 = 10.0D;
-          this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.dragonPartBody.posX + (this.rand.nextFloat() * this.dragonPartBody.width * 2.0F) - this.dragonPartBody.width - d0 * d3, this.dragonPartBody.posY + (this.rand.nextFloat() * this.dragonPartBody.height) - d1 * d3, this.dragonPartBody.posZ + (this.rand.nextFloat() * this.dragonPartBody.width * 2.0F) - this.dragonPartBody.width - d2 * d3, d0, 0.10000000149011612D, d2, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.dragonPartHead.posX + (this.rand.nextFloat() * this.dragonPartHead.width * 2.0F) - this.dragonPartHead.width - d0 * d3, this.dragonPartHead.posY + (this.rand.nextFloat() * this.dragonPartHead.height) - d1 * d3, this.dragonPartHead.posZ + (this.rand.nextFloat() * this.dragonPartHead.width * 2.0F) - this.dragonPartHead.width - d2 * d3, d0, 0.10000000149011612D, d2, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.dragonPartNeck.posX + (this.rand.nextFloat() * this.dragonPartNeck.width * 2.0F) - this.dragonPartNeck.width - d0 * d3, this.dragonPartNeck.posY + (this.rand.nextFloat() * this.dragonPartNeck.height) - d1 * d3, this.dragonPartNeck.posZ + (this.rand.nextFloat() * this.dragonPartNeck.width * 2.0F) - this.dragonPartNeck.width - d2 * d3, d0, 0.10000000149011612D, d2, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.dragonPartWing1.posX + (this.rand.nextFloat() * this.dragonPartWing1.width * 2.0F) - this.dragonPartWing1.width - d0 * d3, this.dragonPartWing1.posY + (this.rand.nextFloat() * this.dragonPartWing1.height) - d1 * d3, this.dragonPartWing1.posZ + (this.rand.nextFloat() * this.dragonPartWing1.width * 2.0F) - this.dragonPartWing1.width - d2 * d3, d0, 0.10000000149011612D, d2, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.dragonPartWing2.posX + (this.rand.nextFloat() * this.dragonPartWing2.width * 2.0F) - this.dragonPartWing2.width - d0 * d3, this.dragonPartWing2.posY + (this.rand.nextFloat() * this.dragonPartWing2.height) - d1 * d3, this.dragonPartWing2.posZ + (this.rand.nextFloat() * this.dragonPartWing2.width * 2.0F) - this.dragonPartWing2.width - d2 * d3, d0, 0.10000000149011612D, d2, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.dragonPartTail1.posX + (this.rand.nextFloat() * this.dragonPartTail1.width * 2.0F) - this.dragonPartTail1.width - d0 * d3, this.dragonPartTail1.posY + (this.rand.nextFloat() * this.dragonPartTail1.height) - d1 * d3, this.dragonPartTail1.posZ + (this.rand.nextFloat() * this.dragonPartTail1.width * 2.0F) - this.dragonPartTail1.width - d2 * d3, d0, 0.10000000149011612D, d2, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.dragonPartTail2.posX + (this.rand.nextFloat() * this.dragonPartTail2.width * 2.0F) - this.dragonPartTail2.width - d0 * d3, this.dragonPartTail2.posY + (this.rand.nextFloat() * this.dragonPartTail2.height) - d1 * d3, this.dragonPartTail2.posZ + (this.rand.nextFloat() * this.dragonPartTail2.width * 2.0F) - this.dragonPartTail2.width - d2 * d3, d0, 0.10000000149011612D, d2, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.dragonPartTail3.posX + (this.rand.nextFloat() * this.dragonPartTail3.width * 2.0F) - this.dragonPartTail3.width - d0 * d3, this.dragonPartTail3.posY + (this.rand.nextFloat() * this.dragonPartTail3.height) - d1 * d3, this.dragonPartTail3.posZ + (this.rand.nextFloat() * this.dragonPartTail3.width * 2.0F) - this.dragonPartTail3.width - d2 * d3, d0, 0.10000000149011612D, d2, new int[0]);
+          this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.dragonPartBody.posX + (this.rand.nextFloat() * this.dragonPartBody.width * 2.0F) - this.dragonPartBody.width - d0 * d3, this.dragonPartBody.posY + (this.rand.nextFloat() * this.dragonPartBody.height) - d1 * d3, this.dragonPartBody.posZ + (this.rand.nextFloat() * this.dragonPartBody.width * 2.0F) - this.dragonPartBody.width - d2 * d3, d0, 0.10000000149011612D, d2);
+          this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.dragonPartHead.posX + (this.rand.nextFloat() * this.dragonPartHead.width * 2.0F) - this.dragonPartHead.width - d0 * d3, this.dragonPartHead.posY + (this.rand.nextFloat() * this.dragonPartHead.height) - d1 * d3, this.dragonPartHead.posZ + (this.rand.nextFloat() * this.dragonPartHead.width * 2.0F) - this.dragonPartHead.width - d2 * d3, d0, 0.10000000149011612D, d2);
+          this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.dragonPartNeck.posX + (this.rand.nextFloat() * this.dragonPartNeck.width * 2.0F) - this.dragonPartNeck.width - d0 * d3, this.dragonPartNeck.posY + (this.rand.nextFloat() * this.dragonPartNeck.height) - d1 * d3, this.dragonPartNeck.posZ + (this.rand.nextFloat() * this.dragonPartNeck.width * 2.0F) - this.dragonPartNeck.width - d2 * d3, d0, 0.10000000149011612D, d2);
+          this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.dragonPartWing1.posX + (this.rand.nextFloat() * this.dragonPartWing1.width * 2.0F) - this.dragonPartWing1.width - d0 * d3, this.dragonPartWing1.posY + (this.rand.nextFloat() * this.dragonPartWing1.height) - d1 * d3, this.dragonPartWing1.posZ + (this.rand.nextFloat() * this.dragonPartWing1.width * 2.0F) - this.dragonPartWing1.width - d2 * d3, d0, 0.10000000149011612D, d2);
+          this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.dragonPartWing2.posX + (this.rand.nextFloat() * this.dragonPartWing2.width * 2.0F) - this.dragonPartWing2.width - d0 * d3, this.dragonPartWing2.posY + (this.rand.nextFloat() * this.dragonPartWing2.height) - d1 * d3, this.dragonPartWing2.posZ + (this.rand.nextFloat() * this.dragonPartWing2.width * 2.0F) - this.dragonPartWing2.width - d2 * d3, d0, 0.10000000149011612D, d2);
+          this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.dragonPartTail1.posX + (this.rand.nextFloat() * this.dragonPartTail1.width * 2.0F) - this.dragonPartTail1.width - d0 * d3, this.dragonPartTail1.posY + (this.rand.nextFloat() * this.dragonPartTail1.height) - d1 * d3, this.dragonPartTail1.posZ + (this.rand.nextFloat() * this.dragonPartTail1.width * 2.0F) - this.dragonPartTail1.width - d2 * d3, d0, 0.10000000149011612D, d2);
+          this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.dragonPartTail2.posX + (this.rand.nextFloat() * this.dragonPartTail2.width * 2.0F) - this.dragonPartTail2.width - d0 * d3, this.dragonPartTail2.posY + (this.rand.nextFloat() * this.dragonPartTail2.height) - d1 * d3, this.dragonPartTail2.posZ + (this.rand.nextFloat() * this.dragonPartTail2.width * 2.0F) - this.dragonPartTail2.width - d2 * d3, d0, 0.10000000149011612D, d2);
+          this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.dragonPartTail3.posX + (this.rand.nextFloat() * this.dragonPartTail3.width * 2.0F) - this.dragonPartTail3.width - d0 * d3, this.dragonPartTail3.posY + (this.rand.nextFloat() * this.dragonPartTail3.height) - d1 * d3, this.dragonPartTail3.posZ + (this.rand.nextFloat() * this.dragonPartTail3.width * 2.0F) - this.dragonPartTail3.width - d2 * d3, d0, 0.10000000149011612D, d2);
         }  
     } 
     if (this.rand.nextInt(5) == 0 && !isWild() && getOwner().getRevengeTarget() != null && this.isOffensive)
@@ -489,7 +489,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
       float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
       float f21 = (this.rand.nextFloat() - 0.5F) * 8.0F;
       if (ACConfig.particleEntity)
-        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX + f, this.posY + 2.0D + f1, this.posZ + f21, 0.0D, 0.0D, 0.0D, new int[0]); 
+        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX + f, this.posY + 2.0D + f1, this.posZ + f21, 0.0D, 0.0D, 0.0D);
     } else {
       if (!getPhaseManager().getCurrentPhase().getIsStationary() && getPhaseManager().getCurrentPhase() != PhaseListAsorah.CHARGING_PLAYER && getPhaseManager().getCurrentPhase() != PhaseListAsorah.STRAFE_PLAYER && getAttackTarget() != null && this.ticksExisted % 60 == 0 && getRNG().nextInt(5) == 0)
         switch (this.rand.nextInt(2)) {
@@ -754,15 +754,14 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
       List<?> list = this.world.getEntitiesWithinAABB(EntityDragonMinion.class, getEntityBoundingBox().grow(f, f, f));
       EntityDragonMinion entitydragonminion = null;
       double d0 = Double.MAX_VALUE;
-      Iterator<?> iterator = list.iterator();
-      while (iterator.hasNext()) {
-        EntityDragonMinion entitydragonminion1 = (EntityDragonMinion)iterator.next();
-        double d1 = entitydragonminion1.getDistanceSq((Entity)this);
-        if (d1 < d0) {
-          d0 = d1;
-          entitydragonminion = entitydragonminion1;
-        } 
-      } 
+        for (Object o : list) {
+            EntityDragonMinion entitydragonminion1 = (EntityDragonMinion) o;
+            double d1 = entitydragonminion1.getDistanceSq((Entity) this);
+            if (d1 < d0) {
+                d0 = d1;
+                entitydragonminion = entitydragonminion1;
+            }
+        }
       this.healingcircle = entitydragonminion;
     } 
   }
@@ -770,34 +769,33 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
   private void collideWithEntities(List<?> par1List) {
     double d0 = ((this.dragonPartBody.getEntityBoundingBox()).minX + (this.dragonPartBody.getEntityBoundingBox()).maxX) / 2.0D;
     double d1 = ((this.dragonPartBody.getEntityBoundingBox()).minZ + (this.dragonPartBody.getEntityBoundingBox()).maxZ) / 2.0D;
-    Iterator<?> iterator = par1List.iterator();
-    while (iterator.hasNext()) {
-      Entity entity = (Entity)iterator.next();
-      if (entity instanceof EntityLivingBase && !false) {
-        double d2 = entity.posX - d0;
-        double d3 = entity.posZ - d1;
-        double d4 = d2 * d2 + d3 * d3;
-        entity.addVelocity(d2 / d4 * 4.0D, 0.20000000298023224D, d3 / d4 * 4.0D);
-        if (entity instanceof EntityLivingBase) {
-          ((EntityLivingBase)entity).renderYawOffset = ((EntityLivingBase)entity).rotationYaw = ((EntityLivingBase)entity).rotationYawHead = (float)MathHelper.atan2(entity.motionZ, entity.motionX) * 57.295776F - 90.0F;
-          ((EntityLivingBase)entity).setRevengeTarget(null);
-          if (entity instanceof EntityLiving)
-            ((EntityLiving)entity).setAttackTarget(null); 
-        } 
-      } 
-    } 
+      for (Object o : par1List) {
+          Entity entity = (Entity) o;
+          if (entity instanceof EntityLivingBase && !false) {
+              double d2 = entity.posX - d0;
+              double d3 = entity.posZ - d1;
+              double d4 = d2 * d2 + d3 * d3;
+              entity.addVelocity(d2 / d4 * 4.0D, 0.20000000298023224D, d3 / d4 * 4.0D);
+              if (entity instanceof EntityLivingBase) {
+                  ((EntityLivingBase) entity).renderYawOffset = ((EntityLivingBase) entity).rotationYaw = ((EntityLivingBase) entity).rotationYawHead = (float) MathHelper.atan2(entity.motionZ, entity.motionX) * 57.295776F - 90.0F;
+                  ((EntityLivingBase) entity).setRevengeTarget(null);
+                  if (entity instanceof EntityLiving)
+                      ((EntityLiving) entity).setAttackTarget(null);
+              }
+          }
+      }
   }
   
   private void attackEntitiesInList(List<?> par1List) {
-    for (int i = 0; i < par1List.size(); i++) {
-      Entity entity = (Entity)par1List.get(i);
-      if (entity.ticksExisted + entity.getEntityId() % 10 == 0 && !this.world.isRemote && entity instanceof EntityLivingBase && !false) {
-        attackEntityAsMob(entity);
-        playSound(SoundEvents.BLOCK_NOTE_HAT, 5.0F, 0.5F);
-        if (ACConfig.hardcoreMode && entity instanceof EntityPlayer)
-          entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.0F * (float)((ACConfig.damageAmpl > 1.0D) ? ACConfig.damageAmpl : 1.0D)); 
-      } 
-    } 
+      for (Object o : par1List) {
+          Entity entity = (Entity) o;
+          if (entity.ticksExisted + entity.getEntityId() % 10 == 0 && !this.world.isRemote && entity instanceof EntityLivingBase && !false) {
+              attackEntityAsMob(entity);
+              playSound(SoundEvents.BLOCK_NOTE_HAT, 5.0F, 0.5F);
+              if (ACConfig.hardcoreMode && entity instanceof EntityPlayer)
+                  entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase) this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.0F * (float) (Math.max(ACConfig.damageAmpl, 1.0D)));
+          }
+      }
   }
   
   private float simplifyAngle(double par1) {
@@ -914,7 +912,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
   
   public void notifyDataManagerChange(DataParameter<?> key) {
     if (PHASE.equals(key) && this.world.isRemote)
-      this.phaseManager.setPhase(PhaseListAsorah.getById(((Integer)getDataManager().get(PHASE)).intValue())); 
+      this.phaseManager.setPhase(PhaseListAsorah.getById((Integer) getDataManager().get(PHASE)));
     super.notifyDataManagerChange(key);
   }
   
@@ -1124,7 +1122,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
       float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
       float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
       if (ACConfig.particleEntity)
-        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + f, this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D, new int[0]); 
+        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + f, this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
     } 
     if (!this.world.isRemote) {
       if (this.deathTicks > 150 && this.deathTicks % 5 == 0) {
@@ -1144,19 +1142,18 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
     move(MoverType.SELF, 0.0D, 0.10000000149011612D, 0.0D);
     this.renderYawOffset = this.rotationYaw += 20.0F;
     if (this.deathTicks == 20 && !this.world.isRemote)
-      SpecialTextUtil.OblivionaireGroup(this.world, new String[] { I18n.translateToLocal("message.asorah.death.1") }); 
+      SpecialTextUtil.OblivionaireGroup(this.world, I18n.translateToLocal("message.asorah.death.1"));
     if (this.deathTicks == 80 && !this.world.isRemote)
-      SpecialTextUtil.OblivionaireGroup(this.world, new String[] { I18n.translateToLocal("message.asorah.death.2") }); 
+      SpecialTextUtil.OblivionaireGroup(this.world, I18n.translateToLocal("message.asorah.death.2"));
     if (this.deathTicks == 140 && !this.world.isRemote)
-      SpecialTextUtil.OblivionaireGroup(this.world, new String[] { I18n.translateToLocal("message.asorah.death.3") }); 
+      SpecialTextUtil.OblivionaireGroup(this.world, I18n.translateToLocal("message.asorah.death.3"));
     if (this.deathTicks >= 200 && !this.world.isRemote) {
       List<Entity> list = this.world.loadedEntityList;
       if (list != null)
-        for (int k2 = 0; k2 < list.size(); k2++) {
-          Entity entity = list.get(k2);
-          if (entity instanceof EntityJzahar && entity.isEntityAlive())
-            SpecialTextUtil.JzaharGroup(this.world, new String[] { false ? I18n.translateToLocal("message.jzaharhelpful.snidecomment.asorah") : I18n.translateToLocal("message.jzahar.snidecomment.asorah") }); 
-        }  
+          for (Entity entity : list) {
+              if (entity instanceof EntityJzahar && entity.isEntityAlive())
+                  SpecialTextUtil.JzaharGroup(this.world, false ? I18n.translateToLocal("message.jzaharhelpful.snidecomment.asorah") : I18n.translateToLocal("message.jzahar.snidecomment.asorah"));
+          }
       setDead();
       this.world.spawnEntity((Entity)new EntityItem(this.world, this.posX, this.posY, this.posZ, new ItemStack(ACItems.eye_of_the_abyss)));
     } 

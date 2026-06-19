@@ -114,7 +114,7 @@ public class EntitySnowman extends EntityTameBase implements IRangedAttackMob, L
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(PUMPKIN_EQUIPPED, Byte.valueOf((byte)0));
+    this.dataManager.register(PUMPKIN_EQUIPPED, (byte) 0);
   }
   
   public EnumTier getTier() {
@@ -225,15 +225,15 @@ public class EntitySnowman extends EntityTameBase implements IRangedAttackMob, L
   }
   
   public boolean isPumpkinEquipped() {
-    return ((((Byte)this.dataManager.get(PUMPKIN_EQUIPPED)).byteValue() & 0x10) != 0);
+    return (((Byte) this.dataManager.get(PUMPKIN_EQUIPPED) & 0x10) != 0);
   }
   
   public void setPumpkinEquipped(boolean p_184747_1_) {
-    byte b0 = ((Byte)this.dataManager.get(PUMPKIN_EQUIPPED)).byteValue();
+    byte b0 = (Byte) this.dataManager.get(PUMPKIN_EQUIPPED);
     if (p_184747_1_) {
-      this.dataManager.set(PUMPKIN_EQUIPPED, Byte.valueOf((byte)(b0 | 0x10)));
+      this.dataManager.set(PUMPKIN_EQUIPPED, (byte) (b0 | 0x10));
     } else {
-      this.dataManager.set(PUMPKIN_EQUIPPED, Byte.valueOf((byte)(b0 & 0xFFFFFFEF)));
+      this.dataManager.set(PUMPKIN_EQUIPPED, (byte) (b0 & 0xFFFFFFEF));
     } 
   }
   

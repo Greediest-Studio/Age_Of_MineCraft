@@ -133,10 +133,10 @@ public class ModelSpiderPig extends ModelBase {
   }
   
   public void setAngles() {
-    resetAngles(new ModelRenderer[] { this.head, this.head.getModel(), this.body1, this.body2, this.butt });
-    resetAngles(new ModelRenderer[] { this.frontLeg1, this.frontLeg1.getModel(), this.frontLegF1, this.frontLegF1.getModel(), this.frontLeg2, this.frontLeg2.getModel(), this.frontLegF2, this.frontLegF2.getModel() });
-    resetAngles(new ModelRenderer[] { this.middleLeg1, this.middleLeg1.getModel(), this.middleLegF1, this.middleLegF1.getModel(), this.middleLeg2, this.middleLeg2.getModel(), this.middleLegF2, this.middleLegF2.getModel() });
-    resetAngles(new ModelRenderer[] { this.backLeg1, this.backLeg1.getModel(), this.backLegF1, this.backLegF1.getModel(), this.backLeg2, this.backLeg2.getModel(), this.backLegF2, this.backLegF2.getModel() });
+    resetAngles(this.head, this.head.getModel(), this.body1, this.body2, this.butt);
+    resetAngles(this.frontLeg1, this.frontLeg1.getModel(), this.frontLegF1, this.frontLegF1.getModel(), this.frontLeg2, this.frontLeg2.getModel(), this.frontLegF2, this.frontLegF2.getModel());
+    resetAngles(this.middleLeg1, this.middleLeg1.getModel(), this.middleLegF1, this.middleLegF1.getModel(), this.middleLeg2, this.middleLeg2.getModel(), this.middleLegF2, this.middleLegF2.getModel());
+    resetAngles(this.backLeg1, this.backLeg1.getModel(), this.backLegF1, this.backLegF1.getModel(), this.backLeg2, this.backLeg2.getModel(), this.backLegF2, this.backLegF2.getModel());
     this.body1.rotateAngleX += 0.3926991F;
     this.body2.rotateAngleX += -0.05235988F;
     this.butt.rotateAngleX += 0.5711987F;

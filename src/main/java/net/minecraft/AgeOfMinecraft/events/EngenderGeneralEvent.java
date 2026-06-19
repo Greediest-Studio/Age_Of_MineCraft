@@ -99,7 +99,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -247,7 +246,7 @@ public class EngenderGeneralEvent {
     if (event.getEntity() instanceof EntityDragon) {
       EntityDragon mob = (EntityDragon)event.getEntity();
       if (!mob.world.isRemote && mob.getFightManager() != null && mob.getFightManager().hasPreviouslyKilledDragon() && EngenderConfig.general.dragonEgg) {
-        ReflectionHelper.setPrivateValue(DragonFightManager.class, mob.getFightManager(), Boolean.valueOf(false), new String[] { "previouslyKilled", "previouslyKilled" });
+        ReflectionHelper.setPrivateValue(DragonFightManager.class, mob.getFightManager(), Boolean.FALSE, new String[] { "previouslyKilled", "previouslyKilled" });
         for (EntityPlayer entityplayer : mob.world.playerEntities) {
           if (EngenderConfig.general.useMessage)
             entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation(TextFormatting.BOLD + "The respawned dragon will drop another egg now.", new Object[0]), true); 
@@ -435,28 +434,16 @@ public class EngenderGeneralEvent {
     } 
     if (event.getEntity() instanceof EntityMob) {
       final EntityMob mob = (EntityMob)event.getEntity();
-      mob.targetTasks.addTask(3, (EntityAIBase)new EntityAINearestAttackableTarget((EntityCreature)mob, EntityTameBase.class, 0, false, false, new Predicate<EntityTameBase>() {
-              public boolean apply(@Nullable EntityTameBase engendermob) {
-                return (engendermob != null && engendermob.isEntityAlive() && !false);
-              }
-            }));
+      mob.targetTasks.addTask(3, (EntityAIBase)new EntityAINearestAttackableTarget((EntityCreature)mob, EntityTameBase.class, 0, false, false, (Predicate<EntityTameBase>) engendermob -> (engendermob != null && engendermob.isEntityAlive() && !false)));
       mob.targetTasks.addTask(3, (EntityAIBase)new EntityAINearestAttackableTarget((EntityCreature)mob, net.minecraft.entity.passive.EntityVillager.class, true));
     } 
     if (event.getEntity() instanceof net.minecraft.entity.monster.EntityIronGolem) {
       net.minecraft.entity.monster.EntityIronGolem golems = (net.minecraft.entity.monster.EntityIronGolem)event.getEntity();
-      golems.targetTasks.addTask(3, (EntityAIBase)new EntityAINearestAttackableTarget((EntityCreature)golems, EntityLivingBase.class, 0, false, false, new Predicate<EntityLivingBase>() {
-              public boolean apply(@Nullable EntityLivingBase p_apply_1_) {
-                return (p_apply_1_ != null && IMob.MOB_SELECTOR.apply(p_apply_1_));
-              }
-            }));
+      golems.targetTasks.addTask(3, (EntityAIBase)new EntityAINearestAttackableTarget((EntityCreature)golems, EntityLivingBase.class, 0, false, false, (Predicate<EntityLivingBase>) p_apply_1_ -> (p_apply_1_ != null && IMob.MOB_SELECTOR.apply(p_apply_1_))));
     } 
     if (event.getEntity() instanceof net.minecraft.entity.passive.EntityVillager) {
       net.minecraft.entity.passive.EntityVillager testificate = (net.minecraft.entity.passive.EntityVillager)event.getEntity();
-      testificate.tasks.addTask(1, (EntityAIBase)new EntityAIAvoidEntity((EntityCreature)testificate, EntityLivingBase.class, new Predicate<EntityLivingBase>() {
-              public boolean apply(EntityLivingBase mob) {
-                return (mob.isEntityAlive() && mob instanceof IMob);
-              }
-            },  8.0F, 0.6D, 0.6D));
+      testificate.tasks.addTask(1, (EntityAIBase)new EntityAIAvoidEntity((EntityCreature)testificate, EntityLivingBase.class, (Predicate<EntityLivingBase>) mob -> (mob.isEntityAlive() && mob instanceof IMob),  8.0F, 0.6D, 0.6D));
     } 
     if (event.getEntity() instanceof EntityItem) {
       EntityItem item = (EntityItem)event.getEntity();

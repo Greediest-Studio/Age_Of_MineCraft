@@ -2,7 +2,6 @@ package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.asorahphases;
 
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDragonBoss;
 import net.minecraft.AgeOfMinecraft.entity.tame.Flying;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
@@ -54,7 +53,7 @@ public class PhaseCircle extends PhaseBaseFriendly {
         d0 = entity.getDistanceSqToCenter(blockpos) / 512.0D; 
       if (entity != null && this.dragon.getRNG().nextInt(2) == 0) {
         this.dragon.getPhaseManager().setPhase(PhaseListAsorah.CHARGING_PLAYER);
-        ((PhaseRamAttack)this.dragon.getPhaseManager().<PhaseRamAttack>getPhase(PhaseListAsorah.CHARGING_PLAYER)).setTarget(new Vec3d(entity.posX, entity.posY, entity.posZ));
+        ((PhaseRamAttack)this.dragon.getPhaseManager().getPhase(PhaseListAsorah.CHARGING_PLAYER)).setTarget(new Vec3d(entity.posX, entity.posY, entity.posZ));
         return;
       } 
       if (entity != null && this.dragon.getRNG().nextInt(3) == 0) {
@@ -87,7 +86,7 @@ public class PhaseCircle extends PhaseBaseFriendly {
   private void strafePlayer(EntityLivingBase p_188674_1_) {
     if (!false) {
       this.dragon.getPhaseManager().setPhase(PhaseListAsorah.STRAFE_PLAYER);
-      ((PhaseFireballAndStrafe)this.dragon.getPhaseManager().<PhaseFireballAndStrafe>getPhase(PhaseListAsorah.STRAFE_PLAYER)).setTarget(p_188674_1_);
+      ((PhaseFireballAndStrafe)this.dragon.getPhaseManager().getPhase(PhaseListAsorah.STRAFE_PLAYER)).setTarget(p_188674_1_);
     } 
   }
   

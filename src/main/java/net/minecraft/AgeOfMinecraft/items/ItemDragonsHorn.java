@@ -67,7 +67,7 @@ public class ItemDragonsHorn extends ItemBEItem {
     if (!playerIn.capabilities.isCreativeMode && !flag)
       return !flag ? new ActionResult(EnumActionResult.FAIL, itemStackIn) : new ActionResult(EnumActionResult.PASS, itemStackIn); 
     playerIn.setActiveHand(hand);
-    return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
+    return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
   }
   
   private ItemStack findAmmo(EntityPlayer player) {
@@ -89,41 +89,39 @@ public class ItemDragonsHorn extends ItemBEItem {
   public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityPlayer playerIn) {
     playerIn.rotationPitch = -75.0F;
     playerIn.world.playSound(playerIn.posX, playerIn.posY + playerIn.getDefaultEyeHeight(), playerIn.posZ, getHornSound(), SoundCategory.PLAYERS, 1.0E9F, 1.0F, false);
-    List<EntityLivingBase> list = playerIn.world.getEntitiesWithinAABB(EntityLivingBase.class, playerIn.getEntityBoundingBox().grow(512.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+    List<EntityLivingBase> list = playerIn.world.getEntitiesWithinAABB(EntityLivingBase.class, playerIn.getEntityBoundingBox().grow(512.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
     if (list != null && !list.isEmpty())
-      for (int i1 = 0; i1 < list.size(); i1++) {
-        EntityLivingBase entity = list.get(i1);
-        if (entity instanceof EntityEnderDragon && entity != null && entity.isEntityAlive() && ((EntityEnderDragon)entity).getOwnerId() == playerIn.getUniqueID()) {
-          ((EntityEnderDragon)entity).getPhaseManager().setPhase(PhaseList.LANDING_APPROACH);
-          ((EntityEnderDragon)entity).playLivingSound();
-        } 
-        if (entity instanceof EntityDragonBoss && entity != null && entity.isEntityAlive() && ((EntityDragonBoss)entity).getOwnerId() == playerIn.getUniqueID()) {
-          ((EntityDragonBoss)entity).getPhaseManager().setPhase(PhaseListAsorah.LANDING_APPROACH);
-          ((EntityDragonBoss)entity).playLivingSound();
-        } 
-        if (entity instanceof EntityChaosGuardian && entity != null && entity.isEntityAlive() && ((EntityChaosGuardian)entity).getOwnerId() == playerIn.getUniqueID()) {
-          ((EntityChaosGuardian)entity).setToGuard();
-          ((EntityChaosGuardian)entity).playLivingSound();
-        } 
-        if (entity instanceof EntityDragonMinion && entity != null && entity.isEntityAlive() && ((EntityDragonMinion)entity).getOwnerId() == playerIn.getUniqueID()) {
-          ((EntityDragonMinion)entity).target = (Entity)playerIn;
-          ((EntityDragonMinion)entity).playLivingSound();
-        } 
-        if (entity instanceof EntityMob) {
-          ((EntityMob)entity).setAttackTarget((EntityLivingBase)playerIn);
-          ((EntityMob)entity).setRevengeTarget((EntityLivingBase)playerIn);
-          ((EntityMob)entity).getMoveHelper().setMoveTo(playerIn.posX, playerIn.posY, playerIn.posY, 1.2D);
-          if (playerIn.getDistanceSq((Entity)entity) <= 64.0D)
-            ((EntityMob)entity).attackEntityFrom(DamageSource.GENERIC, 50.0F); 
-        } 
-      }  
-    List<EntityLivingBase> list1 = playerIn.world.getEntitiesWithinAABB(EntityLivingBase.class, playerIn.getEntityBoundingBox().grow(256.0D, 256.0D, 256.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+        for (EntityLivingBase entity : list) {
+            if (entity instanceof EntityEnderDragon && entity != null && entity.isEntityAlive() && ((EntityEnderDragon) entity).getOwnerId() == playerIn.getUniqueID()) {
+                ((EntityEnderDragon) entity).getPhaseManager().setPhase(PhaseList.LANDING_APPROACH);
+                ((EntityEnderDragon) entity).playLivingSound();
+            }
+            if (entity instanceof EntityDragonBoss && entity != null && entity.isEntityAlive() && ((EntityDragonBoss) entity).getOwnerId() == playerIn.getUniqueID()) {
+                ((EntityDragonBoss) entity).getPhaseManager().setPhase(PhaseListAsorah.LANDING_APPROACH);
+                ((EntityDragonBoss) entity).playLivingSound();
+            }
+            if (entity instanceof EntityChaosGuardian && entity != null && entity.isEntityAlive() && ((EntityChaosGuardian) entity).getOwnerId() == playerIn.getUniqueID()) {
+                ((EntityChaosGuardian) entity).setToGuard();
+                ((EntityChaosGuardian) entity).playLivingSound();
+            }
+            if (entity instanceof EntityDragonMinion && entity != null && entity.isEntityAlive() && ((EntityDragonMinion) entity).getOwnerId() == playerIn.getUniqueID()) {
+                ((EntityDragonMinion) entity).target = (Entity) playerIn;
+                ((EntityDragonMinion) entity).playLivingSound();
+            }
+            if (entity instanceof EntityMob) {
+                ((EntityMob) entity).setAttackTarget((EntityLivingBase) playerIn);
+                ((EntityMob) entity).setRevengeTarget((EntityLivingBase) playerIn);
+                ((EntityMob) entity).getMoveHelper().setMoveTo(playerIn.posX, playerIn.posY, playerIn.posY, 1.2D);
+                if (playerIn.getDistanceSq((Entity) entity) <= 64.0D)
+                    ((EntityMob) entity).attackEntityFrom(DamageSource.GENERIC, 50.0F);
+            }
+        }
+    List<EntityLivingBase> list1 = playerIn.world.getEntitiesWithinAABB(EntityLivingBase.class, playerIn.getEntityBoundingBox().grow(256.0D, 256.0D, 256.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
     if (list1 != null && !list1.isEmpty())
-      for (int i1 = 0; i1 < list1.size(); i1++) {
-        EntityLivingBase entity = list1.get(i1);
-        if (entity instanceof EntityTameBase && entity != null && entity.isEntityAlive() && ((EntityTameBase)entity).getOwner() == playerIn)
-          ((EntityTameBase)entity).moralRaisedTimer = 600; 
-      }  
+        for (EntityLivingBase entity : list1) {
+            if (entity instanceof EntityTameBase && entity != null && entity.isEntityAlive() && ((EntityTameBase) entity).getOwner() == playerIn)
+                ((EntityTameBase) entity).moralRaisedTimer = 600;
+        }
     playerIn.playSound(ESound.battlecry, 10.0F, 1.0F);
     playerIn.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 600, 0));
     playerIn.addPotionEffect(new PotionEffect(MobEffects.SPEED, 600, 1));

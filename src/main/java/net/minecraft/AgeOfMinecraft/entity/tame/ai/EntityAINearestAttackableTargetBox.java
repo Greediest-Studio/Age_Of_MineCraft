@@ -41,15 +41,13 @@ public class EntityAINearestAttackableTargetBox<T extends EntityLivingBase> exte
     this.targetChance = chance;
     this.sorter = new EntityAINearestAttackableTarget.Sorter((Entity)creature);
     setMutexBits(1);
-    this.targetEntitySelector = new Predicate<T>() {
-        public boolean apply(@Nullable T p_apply_1_) {
-          if (p_apply_1_ == null)
-            return false; 
-          if (targetSelector != null && !targetSelector.apply(p_apply_1_))
-            return false; 
-          return !EntitySelectors.NOT_SPECTATING.apply(p_apply_1_) ? false : EntityAINearestAttackableTargetBox.this.isSuitableTarget((EntityLivingBase)p_apply_1_, false);
-        }
-      };
+    this.targetEntitySelector = (Predicate<T>) p_apply_1_ -> {
+      if (p_apply_1_ == null)
+        return false;
+      if (targetSelector != null && !targetSelector.apply(p_apply_1_))
+        return false;
+      return !EntitySelectors.NOT_SPECTATING.apply(p_apply_1_) ? false : EntityAINearestAttackableTargetBox.this.isSuitableTarget((EntityLivingBase)p_apply_1_, false);
+    };
   }
   
   public boolean shouldExecute() {
@@ -59,14 +57,14 @@ public class EntityAINearestAttackableTargetBox<T extends EntityLivingBase> exte
       List<T> list = this.taskOwner.world.getEntitiesWithinAABB(this.targetClass, getTargetableArea(getTargetDistance()), this.targetEntitySelector);
       if (list.isEmpty())
         return false; 
-      Collections.sort(list, (Comparator<? super T>)this.sorter);
+      list.sort(this.sorter);
       this.targetEntity = list.get(0);
       return true;
     } 
     this.targetEntity = (T)this.taskOwner.world.getNearestAttackablePlayer(this.taskOwner.posX, this.taskOwner.posY + this.taskOwner.getEyeHeight(), this.taskOwner.posZ, getTargetDistance(), getTargetDistance(), new Function<EntityPlayer, Double>() {
           @Nullable
           public Double apply(@Nullable EntityPlayer p_apply_1_) {
-            return Double.valueOf(1.0D);
+            return 1.0D;
           }
         },  (com.google.common.base.Predicate<EntityPlayer>)this.targetEntitySelector);
     return (this.targetEntity != null);

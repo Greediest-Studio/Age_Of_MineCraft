@@ -138,7 +138,7 @@ public class EntityWolf extends EntityTameBase implements IJumpingMount, Light, 
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(ANGRY, Byte.valueOf((byte)0));
+    this.dataManager.register(ANGRY, (byte) 0);
   }
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
@@ -206,7 +206,7 @@ public class EntityWolf extends EntityTameBase implements IJumpingMount, Light, 
         for (int j = 0; j < i; j++) {
           float f1 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
           float f2 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
-          this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, this.posX + f1, (f + 0.8F), this.posZ + f2, this.motionX, this.motionY, this.motionZ, new int[0]);
+          this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, this.posX + f1, (f + 0.8F), this.posZ + f2, this.motionX, this.motionY, this.motionZ);
         } 
       } 
     } 
@@ -277,15 +277,15 @@ public class EntityWolf extends EntityTameBase implements IJumpingMount, Light, 
   }
   
   public boolean isAngry() {
-    return ((((Byte)this.dataManager.get(ANGRY)).byteValue() & 0x2) != 0);
+    return (((Byte) this.dataManager.get(ANGRY) & 0x2) != 0);
   }
   
   public void setAngry(boolean angry) {
-    byte b0 = ((Byte)this.dataManager.get(ANGRY)).byteValue();
+    byte b0 = (Byte) this.dataManager.get(ANGRY);
     if (angry) {
-      this.dataManager.set(ANGRY, Byte.valueOf((byte)(b0 | 0x2)));
+      this.dataManager.set(ANGRY, (byte) (b0 | 0x2));
     } else {
-      this.dataManager.set(ANGRY, Byte.valueOf((byte)(b0 & 0xFFFFFFFD)));
+      this.dataManager.set(ANGRY, (byte) (b0 & 0xFFFFFFFD));
     } 
   }
   

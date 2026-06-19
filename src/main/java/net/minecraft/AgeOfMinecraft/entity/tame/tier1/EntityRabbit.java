@@ -134,7 +134,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(RABBIT_TYPE, Integer.valueOf(0));
+    this.dataManager.register(RABBIT_TYPE, 0);
   }
   
   public void updateAITasks() {
@@ -282,7 +282,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
   }
   
   public int getRabbitType() {
-    return ((Integer)this.dataManager.get(RABBIT_TYPE)).intValue();
+    return (Integer) this.dataManager.get(RABBIT_TYPE);
   }
   
   public void setRabbitType(int rabbitTypeId) {
@@ -302,7 +302,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
       getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
     } 
     this.experienceValue = 1;
-    this.dataManager.set(RABBIT_TYPE, Integer.valueOf(rabbitTypeId));
+    this.dataManager.set(RABBIT_TYPE, rabbitTypeId);
   }
   
   protected void jump() {
@@ -351,7 +351,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
   protected void createEatingParticles() {
     BlockCarrot blockcarrot = (BlockCarrot)Blocks.CARROTS;
     IBlockState iblockstate = blockcarrot.withAge(blockcarrot.getMaxAge());
-    this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + 0.5D + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, 0.0D, 0.0D, 0.0D, new int[] { Block.getStateId(iblockstate) });
+    this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + 0.5D + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, 0.0D, 0.0D, 0.0D, Block.getStateId(iblockstate));
     this.carrotTicks = 40;
   }
   
@@ -435,11 +435,11 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
         Block block = iblockstate.getBlock();
         if (this.canRaid && block instanceof BlockCarrot) {
           Integer integer = (Integer)iblockstate.getValue((IProperty)BlockCarrot.AGE);
-          if (integer.intValue() == 0) {
+          if (integer == 0) {
             world.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 2);
             world.destroyBlock(blockpos, true);
           } else {
-            world.setBlockState(blockpos, iblockstate.withProperty((IProperty)BlockCarrot.AGE, Integer.valueOf(integer.intValue() - 1)), 2);
+            world.setBlockState(blockpos, iblockstate.withProperty((IProperty)BlockCarrot.AGE, integer - 1), 2);
             world.playEvent(2001, blockpos, Block.getStateId(iblockstate));
           } 
           this.rabbit.createEatingParticles();

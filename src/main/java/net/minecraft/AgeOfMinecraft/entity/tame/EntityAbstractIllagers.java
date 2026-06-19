@@ -19,23 +19,23 @@ public abstract class EntityAbstractIllagers extends EntityTameBase {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(AGGRESSIVE, Byte.valueOf((byte)0));
+    this.dataManager.register(AGGRESSIVE, (byte) 0);
   }
   
   @SideOnly(Side.CLIENT)
   protected boolean isAggressive(int mask) {
-    int i = ((Byte)this.dataManager.get(AGGRESSIVE)).byteValue();
+    int i = (Byte) this.dataManager.get(AGGRESSIVE);
     return ((i & mask) != 0);
   }
   
   protected void setAggressive(int mask, boolean value) {
-    int i = ((Byte)this.dataManager.get(AGGRESSIVE)).byteValue();
+    int i = this.dataManager.get(AGGRESSIVE);
     if (value) {
       i |= mask;
     } else {
-      i &= mask ^ 0xFFFFFFFF;
+      i &= ~mask;
     } 
-    this.dataManager.set(AGGRESSIVE, Byte.valueOf((byte)(i & 0xFF)));
+    this.dataManager.set(AGGRESSIVE, (byte) (i & 0xFF));
   }
   
   public EnumCreatureAttribute getCreatureAttribute() {
@@ -49,6 +49,6 @@ public abstract class EntityAbstractIllagers extends EntityTameBase {
   
   @SideOnly(Side.CLIENT)
   public enum IllagerArmPose {
-    CROSSED, ATTACKING, SPELLCASTING, BOW_AND_ARROW;
+    CROSSED, ATTACKING, SPELLCASTING, BOW_AND_ARROW
   }
 }

@@ -222,8 +222,7 @@ public class ModelMutantSkeleton extends ModelBase {
     this.leg2.rotateAngleX -= (-0.2F + walkAnim1) * 1.0F * limbSwingAmount;
     (this.foreleg1.getModel()).rotateAngleX += (0.6F + walkAnim2) * 0.6F * limbSwingAmount;
     (this.foreleg2.getModel()).rotateAngleX -= (-0.6F + walkAnim2) * 0.6F * limbSwingAmount;
-    for (int i = 0; i < this.spine.length; i++)
-      this.spine[i].animate(breatheAnim); 
+      for (Spine value : this.spine) value.animate(breatheAnim);
     this.head.rotateAngleX -= breatheAnim * 0.02F;
     this.jaw.rotateAngleX += breatheAnim * 0.04F + 0.04F;
     this.arm1.rotateAngleZ += breatheAnim * 0.025F;
@@ -236,30 +235,26 @@ public class ModelMutantSkeleton extends ModelBase {
     if (fullTick < 3) {
       float tick = (fullTick + this.partialTick) / 3.0F;
       float f = MathHelper.sin(tick * 3.1415927F / 2.0F);
-      for (int i = 0; i < this.spine.length; i++)
-        (this.spine[i]).middle.rotateAngleY += f * 3.1415927F / 16.0F; 
+        for (Spine value : this.spine) value.middle.rotateAngleY += f * 3.1415927F / 16.0F;
       this.arm1.rotateAngleY += f * 3.1415927F / 10.0F;
       this.arm1.rotateAngleZ += f * 3.1415927F / 4.0F;
       this.arm2.rotateAngleZ += f * -3.1415927F / 16.0F;
     } else if (fullTick < 5) {
       float tick = ((fullTick - 3) + this.partialTick) / 2.0F;
       float f = MathHelper.cos(tick * 3.1415927F / 2.0F);
-      for (int i = 0; i < this.spine.length; i++)
-        (this.spine[i]).middle.rotateAngleY += f * 0.5890486F - 0.3926991F; 
+        for (Spine value : this.spine) value.middle.rotateAngleY += f * 0.5890486F - 0.3926991F;
       this.arm1.rotateAngleY += f * 2.7307692F - 2.41661F;
       this.arm1.rotateAngleZ += f * 1.1780972F - 0.3926991F;
       this.arm2.rotateAngleZ += -0.19634955F;
     } else if (fullTick < 8) {
-      for (int i = 0; i < this.spine.length; i++)
-        (this.spine[i]).middle.rotateAngleY += -0.3926991F; 
+        for (Spine value : this.spine) value.middle.rotateAngleY += -0.3926991F;
       this.arm1.rotateAngleY += -2.41661F;
       this.arm1.rotateAngleZ += -0.3926991F;
       this.arm2.rotateAngleZ += -0.19634955F;
     } else if (fullTick < 14) {
       float tick = ((fullTick - 8) + this.partialTick) / 6.0F;
       float f = MathHelper.cos(tick * 3.1415927F / 2.0F);
-      for (int i = 0; i < this.spine.length; i++)
-        (this.spine[i]).middle.rotateAngleY += f * -3.1415927F / 8.0F; 
+        for (Spine value : this.spine) value.middle.rotateAngleY += f * -3.1415927F / 8.0F;
       this.arm1.rotateAngleY += f * -3.1415927F / 1.3F;
       this.arm1.rotateAngleZ += f * -3.1415927F / 8.0F;
       this.arm2.rotateAngleZ += f * -3.1415927F / 16.0F;
@@ -286,11 +281,11 @@ public class ModelMutantSkeleton extends ModelBase {
       float f1 = MathHelper.sin(tick * 3.1415927F / 2.0F);
       float f1s = MathHelper.sin(tick * 3.1415927F / 2.0F * 0.4F);
       (this.head.getModel()).rotateAngleY += f1 * 3.1415927F / 4.0F;
-      for (int i = 0; i < this.spine.length; i++) {
-        (this.spine[i]).middle.rotateAngleY += -f1 * 3.1415927F / 12.0F;
-        (this.spine[i]).middle.rotateAngleX += f1 * facePitch / 3.0F;
-        (this.spine[i]).middle.rotateAngleY += f1 * faceYaw / 3.0F;
-      } 
+        for (Spine value : this.spine) {
+            value.middle.rotateAngleY += -f1 * 3.1415927F / 12.0F;
+            value.middle.rotateAngleX += f1 * facePitch / 3.0F;
+            value.middle.rotateAngleY += f1 * faceYaw / 3.0F;
+        }
       (this.arm1.getModel()).rotateAngleX += f * 0.2617994F - 1.0471976F;
       this.arm1.rotateAngleY += f * -0.9424778F - 0.62831855F;
       this.arm1.rotateAngleZ += f * -0.850848F + 1.0471976F;
@@ -309,11 +304,11 @@ public class ModelMutantSkeleton extends ModelBase {
       this.bow.rope2.rotateAngleX += -f1s * 3.1415927F / 6.0F;
     } else if (fullTick < 26) {
       (this.head.getModel()).rotateAngleY += 0.7853982F;
-      for (int i = 0; i < this.spine.length; i++) {
-        (this.spine[i]).middle.rotateAngleY += -0.2617994F;
-        (this.spine[i]).middle.rotateAngleX += facePitch / 3.0F;
-        (this.spine[i]).middle.rotateAngleY += faceYaw / 3.0F;
-      } 
+        for (Spine value : this.spine) {
+            value.middle.rotateAngleY += -0.2617994F;
+            value.middle.rotateAngleX += facePitch / 3.0F;
+            value.middle.rotateAngleY += faceYaw / 3.0F;
+        }
       (this.arm1.getModel()).rotateAngleX += -1.0471976F;
       this.arm1.rotateAngleY += -0.62831855F;
       this.arm1.rotateAngleZ++;
@@ -335,11 +330,11 @@ public class ModelMutantSkeleton extends ModelBase {
       float tick = ((fullTick - 26) + this.partialTick) / 4.0F;
       float f = MathHelper.cos(tick * 3.1415927F / 2.0F);
       (this.head.getModel()).rotateAngleY += f * 3.1415927F / 4.0F;
-      for (int i = 0; i < this.spine.length; i++) {
-        (this.spine[i]).middle.rotateAngleY += -f * 3.1415927F / 12.0F;
-        (this.spine[i]).middle.rotateAngleX += f * facePitch / 3.0F;
-        (this.spine[i]).middle.rotateAngleY += f * faceYaw / 3.0F;
-      } 
+        for (Spine value : this.spine) {
+            value.middle.rotateAngleY += -f * 3.1415927F / 12.0F;
+            value.middle.rotateAngleX += f * facePitch / 3.0F;
+            value.middle.rotateAngleY += f * faceYaw / 3.0F;
+        }
       (this.arm1.getModel()).rotateAngleX += -f * 3.1415927F / 3.0F;
       this.arm1.rotateAngleY += -f * 3.1415927F / 5.0F;
       this.arm1.rotateAngleZ += f * 3.1415927F / 3.0F;
@@ -372,11 +367,11 @@ public class ModelMutantSkeleton extends ModelBase {
       float f1 = MathHelper.sin(tick * 3.1415927F / 2.0F);
       float f1s = MathHelper.sin(tick * 3.1415927F / 2.0F * 0.4F);
       (this.head.getModel()).rotateAngleY += f1 * 3.1415927F / 4.0F;
-      for (int i = 0; i < this.spine.length; i++) {
-        (this.spine[i]).middle.rotateAngleY += -f1 * 3.1415927F / 12.0F;
-        (this.spine[i]).middle.rotateAngleX += f1 * facePitch / 3.0F;
-        (this.spine[i]).middle.rotateAngleY += f1 * faceYaw / 3.0F;
-      } 
+        for (Spine value : this.spine) {
+            value.middle.rotateAngleY += -f1 * 3.1415927F / 12.0F;
+            value.middle.rotateAngleX += f1 * facePitch / 3.0F;
+            value.middle.rotateAngleY += f1 * faceYaw / 3.0F;
+        }
       (this.arm1.getModel()).rotateAngleX += f * 0.2617994F - 1.0471976F;
       this.arm1.rotateAngleY += f * -0.9424778F - 0.62831855F;
       this.arm1.rotateAngleZ += f * -0.850848F + 1.0471976F;
@@ -395,11 +390,11 @@ public class ModelMutantSkeleton extends ModelBase {
       this.bow.rope2.rotateAngleX += -f1s * 3.1415927F / 6.0F;
     } else if (fullTick < 104) {
       (this.head.getModel()).rotateAngleY += 0.7853982F;
-      for (int i = 0; i < this.spine.length; i++) {
-        (this.spine[i]).middle.rotateAngleY += -0.2617994F;
-        (this.spine[i]).middle.rotateAngleX += facePitch / 3.0F;
-        (this.spine[i]).middle.rotateAngleY += faceYaw / 3.0F;
-      } 
+        for (Spine value : this.spine) {
+            value.middle.rotateAngleY += -0.2617994F;
+            value.middle.rotateAngleX += facePitch / 3.0F;
+            value.middle.rotateAngleY += faceYaw / 3.0F;
+        }
       (this.arm1.getModel()).rotateAngleX += -1.0471976F;
       this.arm1.rotateAngleY += -0.62831855F;
       this.arm1.rotateAngleZ++;
@@ -421,11 +416,11 @@ public class ModelMutantSkeleton extends ModelBase {
       float tick = ((fullTick - 104) + this.partialTick) / 16.0F;
       float f = MathHelper.cos(tick * 3.1415927F / 2.0F);
       (this.head.getModel()).rotateAngleY += f * 3.1415927F / 4.0F;
-      for (int i = 0; i < this.spine.length; i++) {
-        (this.spine[i]).middle.rotateAngleY += -f * 3.1415927F / 12.0F;
-        (this.spine[i]).middle.rotateAngleX += f * facePitch / 3.0F;
-        (this.spine[i]).middle.rotateAngleY += f * faceYaw / 3.0F;
-      } 
+        for (Spine value : this.spine) {
+            value.middle.rotateAngleY += -f * 3.1415927F / 12.0F;
+            value.middle.rotateAngleX += f * facePitch / 3.0F;
+            value.middle.rotateAngleY += f * faceYaw / 3.0F;
+        }
       (this.arm1.getModel()).rotateAngleX += -f * 3.1415927F / 3.0F;
       this.arm1.rotateAngleY += -f * 3.1415927F / 5.0F;
       this.arm1.rotateAngleZ += f * 3.1415927F / 3.0F;
@@ -510,11 +505,11 @@ public class ModelMutantSkeleton extends ModelBase {
       float f1 = MathHelper.sin(tick * 3.1415927F / 2.0F);
       float f1s = MathHelper.sin(tick * 3.1415927F / 2.0F * 0.4F);
       (this.head.getModel()).rotateAngleY += f1 * 3.1415927F / 4.0F;
-      for (int i = 0; i < this.spine.length; i++) {
-        (this.spine[i]).middle.rotateAngleY += -f1 * 3.1415927F / 12.0F;
-        (this.spine[i]).middle.rotateAngleX += f1 * facePitch / 3.0F;
-        (this.spine[i]).middle.rotateAngleY += f1 * faceYaw / 3.0F;
-      } 
+        for (Spine value : this.spine) {
+            value.middle.rotateAngleY += -f1 * 3.1415927F / 12.0F;
+            value.middle.rotateAngleX += f1 * facePitch / 3.0F;
+            value.middle.rotateAngleY += f1 * faceYaw / 3.0F;
+        }
       (this.arm1.getModel()).rotateAngleX += f * 0.2617994F - 1.0471976F;
       this.arm1.rotateAngleY += f * -0.9424778F - 0.62831855F;
       this.arm1.rotateAngleZ += f * -0.850848F + 1.0471976F;
@@ -533,11 +528,11 @@ public class ModelMutantSkeleton extends ModelBase {
       this.bow.rope2.rotateAngleX += -f1s * 3.1415927F / 6.0F;
     } else if (fullTick < 24) {
       (this.head.getModel()).rotateAngleY += 0.7853982F;
-      for (int i = 0; i < this.spine.length; i++) {
-        (this.spine[i]).middle.rotateAngleY += -0.2617994F;
-        (this.spine[i]).middle.rotateAngleX += facePitch / 3.0F;
-        (this.spine[i]).middle.rotateAngleY += faceYaw / 3.0F;
-      } 
+        for (Spine value : this.spine) {
+            value.middle.rotateAngleY += -0.2617994F;
+            value.middle.rotateAngleX += facePitch / 3.0F;
+            value.middle.rotateAngleY += faceYaw / 3.0F;
+        }
       (this.arm1.getModel()).rotateAngleX += -1.0471976F;
       this.arm1.rotateAngleY += -0.62831855F;
       this.arm1.rotateAngleZ++;
@@ -559,11 +554,11 @@ public class ModelMutantSkeleton extends ModelBase {
       float tick = ((fullTick - 24) + this.partialTick) / 4.0F;
       float f = MathHelper.cos(tick * 3.1415927F / 2.0F);
       (this.head.getModel()).rotateAngleY += f * 3.1415927F / 4.0F;
-      for (int i = 0; i < this.spine.length; i++) {
-        (this.spine[i]).middle.rotateAngleY += -f * 3.1415927F / 12.0F;
-        (this.spine[i]).middle.rotateAngleX += f * facePitch / 3.0F;
-        (this.spine[i]).middle.rotateAngleY += f * faceYaw / 3.0F;
-      } 
+        for (Spine value : this.spine) {
+            value.middle.rotateAngleY += -f * 3.1415927F / 12.0F;
+            value.middle.rotateAngleX += f * facePitch / 3.0F;
+            value.middle.rotateAngleY += f * faceYaw / 3.0F;
+        }
       (this.arm1.getModel()).rotateAngleX += -f * 3.1415927F / 3.0F;
       this.arm1.rotateAngleY += -f * 3.1415927F / 5.0F;
       this.arm1.rotateAngleZ += f * 3.1415927F / 3.0F;
@@ -626,22 +621,22 @@ public class ModelMutantSkeleton extends ModelBase {
     if (animTick < 5) {
       float tick = (animTick + this.partialTick) / 5.0F;
       float f = MathHelper.sin(tick * 3.1415927F / 2.0F);
-      for (int i = 0; i < this.spine.length; i++) {
-        (this.spine[i]).side1[0].setScale(1.0F + f * 0.6F);
-        (this.spine[i]).side2[0].setScale(1.0F + f * 0.6F);
-      } 
+        for (Spine value : this.spine) {
+            value.side1[0].setScale(1.0F + f * 0.6F);
+            value.side2[0].setScale(1.0F + f * 0.6F);
+        }
     } else if (animTick < 12) {
-      for (int i = 0; i < this.spine.length; i++) {
-        (this.spine[i]).side1[0].setScale(1.6F);
-        (this.spine[i]).side2[0].setScale(1.6F);
-      } 
+        for (Spine value : this.spine) {
+            value.side1[0].setScale(1.6F);
+            value.side2[0].setScale(1.6F);
+        }
     } else if (animTick < 20) {
       float tick = ((animTick - 12) + this.partialTick) / 8.0F;
       float f = MathHelper.cos(tick * 3.1415927F / 2.0F);
-      for (int i = 0; i < this.spine.length; i++) {
-        (this.spine[i]).side1[0].setScale(1.0F + f * 0.6F);
-        (this.spine[i]).side2[0].setScale(1.0F + f * 0.6F);
-      } 
+        for (Spine value : this.spine) {
+            value.side1[0].setScale(1.0F + f * 0.6F);
+            value.side2[0].setScale(1.0F + f * 0.6F);
+        }
     } 
   }
   
@@ -717,7 +712,7 @@ public class ModelMutantSkeleton extends ModelBase {
     }
     
     public void setAngles(float PI, boolean middleSpine) {
-      resetAngles(new ModelRenderer[] { this.middle });
+      resetAngles(this.middle);
       resetAngles((ModelRenderer[])this.side1);
       resetAngles((ModelRenderer[])this.side2);
       this.middle.rotateAngleX = PI / 18.0F;

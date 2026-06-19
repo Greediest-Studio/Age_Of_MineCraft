@@ -20,7 +20,7 @@ public class PhaseManagerAsorah {
         this.phase.removeAreaEffect(); 
       this.phase = getPhase(phaseIn);
       if (!this.dragon.world.isRemote)
-        this.dragon.getDataManager().set(EntityDragonBoss.PHASE, Integer.valueOf(phaseIn.getId())); 
+        this.dragon.getDataManager().set(EntityDragonBoss.PHASE, phaseIn.getId());
       this.phase.initPhase();
     } 
   }

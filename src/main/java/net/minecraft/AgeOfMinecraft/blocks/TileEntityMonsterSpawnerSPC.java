@@ -83,11 +83,11 @@ public class TileEntityMonsterSpawnerSPC extends TileEntity implements ITickable
   }
   
   public ITextComponent getDisplayName() {
-    return (ITextComponent)new TextComponentString(getName());
+    return new TextComponentString(getName());
   }
   
   public boolean hasCustomName() {
-    return (this.fuserCustomName != null && this.fuserCustomName.length() > 0);
+    return (this.fuserCustomName != null && !this.fuserCustomName.isEmpty());
   }
   
   public void setCustomInventoryName(String p_145951_1_) {
@@ -129,9 +129,9 @@ public class TileEntityMonsterSpawnerSPC extends TileEntity implements ITickable
     double d3 = (this.pos.getX() + rand.nextFloat());
     double d4 = (this.pos.getY() + rand.nextFloat());
     double d5 = (this.pos.getZ() + rand.nextFloat());
-    this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d3, d4, d5, 0.0D, 0.0D, 0.0D, new int[0]);
+    this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d3, d4, d5, 0.0D, 0.0D, 0.0D);
     if (this.fuseTime > 0.0F)
-      this.world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, 0.0D, 0.0D, 0.0D, new int[0]); 
+      this.world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, 0.0D, 0.0D, 0.0D);
     if (rand.nextInt(500) == 0)
       switch (rand.nextInt(40)) {
         case 0:

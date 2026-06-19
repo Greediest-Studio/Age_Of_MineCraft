@@ -228,36 +228,34 @@ public class EntityCow extends EntityTameBase implements IJumpingMount, Light, A
       } 
       if (forward > 0.0F) {
         List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(2.0D, 1.0D, 2.0D));
-        for (int i = 0; i < list.size(); i++) {
-          Entity entity = list.get(i);
-          if (entity instanceof EntityLivingBase && !false) {
-            attackEntityAsMob(entity);
-            double d01 = ((getEntityBoundingBox()).minX + (getEntityBoundingBox()).maxX) / 2.0D;
-            double d11 = ((getEntityBoundingBox()).minZ + (getEntityBoundingBox()).maxZ) / 2.0D;
-            double d2 = entity.posX - d01;
-            double d3 = entity.posZ - d11;
-            double d4 = d2 * d2 + d3 * d3;
-            entity.addVelocity(d2 / d4 * 3.0D, 0.1D, d3 / d4 * 3.0D);
-            if (getDistanceSq(entity) < 9.0D || !entity.isEntityAlive())
-              entity.addVelocity(d2 / d4 * 3.0D, 0.1D, d3 / d4 * 3.0D); 
-          } 
-        } 
+          for (Entity entity : list) {
+              if (entity instanceof EntityLivingBase && !false) {
+                  attackEntityAsMob(entity);
+                  double d01 = ((getEntityBoundingBox()).minX + (getEntityBoundingBox()).maxX) / 2.0D;
+                  double d11 = ((getEntityBoundingBox()).minZ + (getEntityBoundingBox()).maxZ) / 2.0D;
+                  double d2 = entity.posX - d01;
+                  double d3 = entity.posZ - d11;
+                  double d4 = d2 * d2 + d3 * d3;
+                  entity.addVelocity(d2 / d4 * 3.0D, 0.1D, d3 / d4 * 3.0D);
+                  if (getDistanceSq(entity) < 9.0D || !entity.isEntityAlive())
+                      entity.addVelocity(d2 / d4 * 3.0D, 0.1D, d3 / d4 * 3.0D);
+              }
+          }
         if (this.moralRaisedTimer > 100) {
           List<Entity> list1 = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(2.0D, 2.0D, 2.0D));
-          for (int j = 0; j < list1.size(); j++) {
-            Entity entity = list1.get(j);
-            if (entity instanceof EntityLivingBase && !false) {
-              attackEntityAsMob(entity);
-              double d01 = ((getEntityBoundingBox()).minX + (getEntityBoundingBox()).maxX) / 2.0D;
-              double d11 = ((getEntityBoundingBox()).minZ + (getEntityBoundingBox()).maxZ) / 2.0D;
-              double d2 = entity.posX - d01;
-              double d3 = entity.posZ - d11;
-              double d4 = d2 * d2 + d3 * d3;
-              entity.addVelocity(d2 / d4 * 3.0D * getFittness(), 0.15D, d3 / d4 * 3.0D * getFittness());
-              if (getDistanceSq(entity) < 9.0D || !entity.isEntityAlive())
-                entity.addVelocity(d2 / d4 * 3.0D * getFittness(), 0.15D, d3 / d4 * 3.0D * getFittness()); 
-            } 
-          } 
+            for (Entity entity : list1) {
+                if (entity instanceof EntityLivingBase && !false) {
+                    attackEntityAsMob(entity);
+                    double d01 = ((getEntityBoundingBox()).minX + (getEntityBoundingBox()).maxX) / 2.0D;
+                    double d11 = ((getEntityBoundingBox()).minZ + (getEntityBoundingBox()).maxZ) / 2.0D;
+                    double d2 = entity.posX - d01;
+                    double d3 = entity.posZ - d11;
+                    double d4 = d2 * d2 + d3 * d3;
+                    entity.addVelocity(d2 / d4 * 3.0D * getFittness(), 0.15D, d3 / d4 * 3.0D * getFittness());
+                    if (getDistanceSq(entity) < 9.0D || !entity.isEntityAlive())
+                        entity.addVelocity(d2 / d4 * 3.0D * getFittness(), 0.15D, d3 / d4 * 3.0D * getFittness());
+                }
+            }
         } 
       } 
       this.prevLimbSwingAmount = this.limbSwingAmount;

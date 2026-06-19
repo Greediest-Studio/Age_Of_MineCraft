@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 
 public class NecronomiconMobGirlBreedingRitual extends NecronomiconRitual {
   public NecronomiconMobGirlBreedingRitual() {
-    super("mobGirlBreeding", 2, 10000.0F, new Object[] { Items.BED, Items.GOLDEN_APPLE, Items.BED, Items.GOLDEN_APPLE, Items.BED, Items.GOLDEN_APPLE, Items.BED, Items.GOLDEN_APPLE });
+    super("mobGirlBreeding", 2, 10000.0F, Items.BED, Items.GOLDEN_APPLE, Items.BED, Items.GOLDEN_APPLE, Items.BED, Items.GOLDEN_APPLE, Items.BED, Items.GOLDEN_APPLE);
   }
   
   public boolean canCompleteRitual(World world, BlockPos pos, EntityPlayer player) {

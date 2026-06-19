@@ -105,16 +105,16 @@ public class EntityLlama extends EntityTameBase implements IRangedAttackMob, Lig
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(DATA_COLOR_ID, Integer.valueOf(-1));
-    this.dataManager.register(DATA_VARIANT_ID, Integer.valueOf(0));
+    this.dataManager.register(DATA_COLOR_ID, -1);
+    this.dataManager.register(DATA_VARIANT_ID, 0);
   }
   
   public int getVariant() {
-    return MathHelper.clamp(((Integer)this.dataManager.get(DATA_VARIANT_ID)).intValue(), 0, 3);
+    return MathHelper.clamp((Integer) this.dataManager.get(DATA_VARIANT_ID), 0, 3);
   }
   
   public void setVariant(int variantIn) {
-    this.dataManager.set(DATA_VARIANT_ID, Integer.valueOf(variantIn));
+    this.dataManager.set(DATA_VARIANT_ID, variantIn);
   }
   
   public void updatePassenger(Entity passenger) {
@@ -260,12 +260,12 @@ public class EntityLlama extends EntityTameBase implements IRangedAttackMob, Lig
   }
   
   private void setColor(@Nullable EnumDyeColor color) {
-    this.dataManager.set(DATA_COLOR_ID, Integer.valueOf((color == null) ? -1 : color.getMetadata()));
+    this.dataManager.set(DATA_COLOR_ID, (color == null) ? -1 : color.getMetadata());
   }
   
   @Nullable
   public EnumDyeColor getColor() {
-    int i = ((Integer)this.dataManager.get(DATA_COLOR_ID)).intValue();
+    int i = (Integer) this.dataManager.get(DATA_COLOR_ID);
     return (i == -1) ? null : EnumDyeColor.byMetadata(i);
   }
   

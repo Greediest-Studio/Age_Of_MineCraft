@@ -1,9 +1,7 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.ai;
 
-import java.util.Iterator;
 import java.util.List;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAITarget;
@@ -30,13 +28,11 @@ public class EntityAIFriendlyHurtByTarget extends EntityAITarget {
   public void startExecuting() {
     this.taskOwner.setAttackTarget(this.taskOwner.getRevengeTarget());
     if (this.entityCallsForHelp) {
-      List list = this.taskOwner.world.getEntitiesWithinAABB(this.taskOwner.getClass(), (new AxisAlignedBB(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D)).grow(32.0D, 32.0D, 32.0D));
-      Iterator<EntityTameBase> iterator = list.iterator();
-      while (iterator.hasNext()) {
-        EntityTameBase entitycreature = iterator.next();
-        if (this.taskOwner != entitycreature)
-          setEntityAttackTarget((EntityCreature)entitycreature, this.taskOwner.getRevengeTarget()); 
-      } 
+      List<? extends EntityCreature> list = this.taskOwner.world.getEntitiesWithinAABB(this.taskOwner.getClass(), (new AxisAlignedBB(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D)).grow(32.0D, 32.0D, 32.0D));
+        for (EntityTameBase entitycreature : (Iterable<EntityTameBase>) list) {
+            if (this.taskOwner != entitycreature)
+                setEntityAttackTarget((EntityCreature) entitycreature, this.taskOwner.getRevengeTarget());
+        }
     } 
     super.startExecuting();
   }

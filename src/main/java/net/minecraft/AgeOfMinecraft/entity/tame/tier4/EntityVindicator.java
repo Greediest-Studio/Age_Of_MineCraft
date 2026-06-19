@@ -97,7 +97,7 @@ public class EntityVindicator extends EntityAbstractIllagers {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(DATA_FLAGS_ID, Byte.valueOf((byte)0));
+    this.dataManager.register(DATA_FLAGS_ID, (byte) 0);
   }
   
   protected float getSoundPitch() {
@@ -149,18 +149,18 @@ public class EntityVindicator extends EntityAbstractIllagers {
   
   @SideOnly(Side.CLIENT)
   private boolean getVindicatorFlag(int p_190637_1_) {
-    int i = ((Byte)this.dataManager.get(DATA_FLAGS_ID)).byteValue();
+    int i = (Byte) this.dataManager.get(DATA_FLAGS_ID);
     return ((i & p_190637_1_) != 0);
   }
   
   private void setVindicatorFlag(int p_190638_1_, boolean p_190638_2_) {
-    int i = ((Byte)this.dataManager.get(DATA_FLAGS_ID)).byteValue();
+    int i = (Byte) this.dataManager.get(DATA_FLAGS_ID);
     if (p_190638_2_) {
       i |= p_190638_1_;
     } else {
       i &= p_190638_1_ ^ 0xFFFFFFFF;
     } 
-    this.dataManager.set(DATA_FLAGS_ID, Byte.valueOf((byte)(i & 0xFF)));
+    this.dataManager.set(DATA_FLAGS_ID, (byte) (i & 0xFF));
   }
   
   public void setAggressive(boolean p_190636_1_) {

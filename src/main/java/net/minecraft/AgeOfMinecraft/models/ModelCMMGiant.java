@@ -2,7 +2,6 @@ package net.minecraft.AgeOfMinecraft.models;
 
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityGiant;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;

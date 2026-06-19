@@ -66,54 +66,53 @@ public class ItemManaCollector extends ItemBEItem implements IBauble {
       if (!player.isSpectator()) {
         List<Entity> list = world.getEntitiesWithinAABBExcludingEntity((Entity)player, player.getEntityBoundingBox().grow(24.0D));
         if (list != null && !list.isEmpty())
-          for (int i = 0; i < list.size(); i++) {
-            Entity entity = list.get(i);
-            if (entity instanceof EntityManaOrb) {
-              EntityManaOrb orb = (EntityManaOrb)entity;
-              if (this.type == 2) {
-                orb.magnet = stack;
-                orb.closestPlayer = player;
-              } else if (orb.getEntropy()) {
-                if (getEntropy(stack) < getMaxEntropy(stack)) {
-                  orb.magnet = stack;
-                  orb.closestPlayer = player;
-                } 
-              } else if (getMana(stack) < getMaxMana(stack)) {
-                orb.magnet = stack;
-                orb.closestPlayer = player;
-              } 
-              if (player.getDistance((Entity)orb) <= 2.0D)
-                if (orb.getMana() > 0) {
-                  if (orb.getEntropy() && getEntropy(stack) < getMaxEntropy(stack)) {
-                    orb.world.playSound(null, entityIn.getPosition(), SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, entityIn.getSoundCategory(), 2.0F, 2.0F);
-                    if (orb.getMana() > getMaxEntropy(stack) - getEntropy(stack)) {
-                      int oldamount = orb.getMana();
-                      orb.setMana(oldamount - getMaxEntropy(stack) - getEntropy(stack));
-                      increaseHolding(oldamount, stack, true);
-                      orb.magnet = ItemStack.EMPTY;
-                      orb.closestPlayer = null;
-                    } else {
-                      increaseHolding(orb.getMana(), stack, true);
-                      orb.setDead();
-                    } 
-                  } else if (!orb.getEntropy() && getMana(stack) < getMaxMana(stack)) {
-                    orb.world.playSound(null, entityIn.getPosition(), SoundEvents.BLOCK_CHORUS_FLOWER_GROW, entityIn.getSoundCategory(), 2.0F, 2.0F);
-                    if (orb.getMana() > getMaxMana(stack) - getMana(stack)) {
-                      int oldamount = orb.getMana();
-                      orb.setMana(oldamount - getMaxMana(stack) - getMana(stack));
-                      increaseHolding(oldamount, stack, false);
-                      orb.magnet = ItemStack.EMPTY;
-                      orb.closestPlayer = null;
-                    } else {
-                      increaseHolding(orb.getMana(), stack, false);
-                      orb.setDead();
-                    } 
-                  } 
-                } else {
-                  orb.setDead();
-                }  
-            } 
-          }  
+            for (Entity entity : list) {
+                if (entity instanceof EntityManaOrb) {
+                    EntityManaOrb orb = (EntityManaOrb) entity;
+                    if (this.type == 2) {
+                        orb.magnet = stack;
+                        orb.closestPlayer = player;
+                    } else if (orb.getEntropy()) {
+                        if (getEntropy(stack) < getMaxEntropy(stack)) {
+                            orb.magnet = stack;
+                            orb.closestPlayer = player;
+                        }
+                    } else if (getMana(stack) < getMaxMana(stack)) {
+                        orb.magnet = stack;
+                        orb.closestPlayer = player;
+                    }
+                    if (player.getDistance((Entity) orb) <= 2.0D)
+                        if (orb.getMana() > 0) {
+                            if (orb.getEntropy() && getEntropy(stack) < getMaxEntropy(stack)) {
+                                orb.world.playSound(null, entityIn.getPosition(), SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, entityIn.getSoundCategory(), 2.0F, 2.0F);
+                                if (orb.getMana() > getMaxEntropy(stack) - getEntropy(stack)) {
+                                    int oldamount = orb.getMana();
+                                    orb.setMana(oldamount - getMaxEntropy(stack) - getEntropy(stack));
+                                    increaseHolding(oldamount, stack, true);
+                                    orb.magnet = ItemStack.EMPTY;
+                                    orb.closestPlayer = null;
+                                } else {
+                                    increaseHolding(orb.getMana(), stack, true);
+                                    orb.setDead();
+                                }
+                            } else if (!orb.getEntropy() && getMana(stack) < getMaxMana(stack)) {
+                                orb.world.playSound(null, entityIn.getPosition(), SoundEvents.BLOCK_CHORUS_FLOWER_GROW, entityIn.getSoundCategory(), 2.0F, 2.0F);
+                                if (orb.getMana() > getMaxMana(stack) - getMana(stack)) {
+                                    int oldamount = orb.getMana();
+                                    orb.setMana(oldamount - getMaxMana(stack) - getMana(stack));
+                                    increaseHolding(oldamount, stack, false);
+                                    orb.magnet = ItemStack.EMPTY;
+                                    orb.closestPlayer = null;
+                                } else {
+                                    increaseHolding(orb.getMana(), stack, false);
+                                    orb.setDead();
+                                }
+                            }
+                        } else {
+                            orb.setDead();
+                        }
+                }
+            }
       } 
     } 
   }
@@ -148,13 +147,13 @@ public class ItemManaCollector extends ItemBEItem implements IBauble {
   public void setMana(int amount, ItemStack stack) {
     if (!stack.hasTagCompound())
       stack.setTagCompound(new NBTTagCompound()); 
-    stack.getTagCompound().setInteger("mana", (amount > getMaxMana(stack)) ? getMaxMana(stack) : amount);
+    stack.getTagCompound().setInteger("mana", Math.min(amount, getMaxMana(stack)));
   }
   
   public void setEntropy(int amount, ItemStack stack) {
     if (!stack.hasTagCompound())
       stack.setTagCompound(new NBTTagCompound()); 
-    stack.getTagCompound().setInteger("entropy", (amount > getMaxEntropy(stack)) ? getMaxEntropy(stack) : amount);
+    stack.getTagCompound().setInteger("entropy", Math.min(amount, getMaxEntropy(stack)));
   }
   
   public int getMana(ItemStack stack) {

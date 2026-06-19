@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -26,11 +25,10 @@ public class TileEntityRenderBeaconSPC extends TileEntitySpecialRenderer<TileEnt
     if (textureScale > 0.0D) {
       GlStateManager.disableFog();
       int i = 0;
-      for (int j = 0; j < beamSegments.size(); j++) {
-        TileEntityBeaconSPC.BeamSegment tileentitybeacon$beamsegment = beamSegments.get(j);
-        renderBeamSegment(x, y, z, partialTicks, textureScale, totalWorldTime, i, tileentitybeacon$beamsegment.getHeight(), tileentitybeacon$beamsegment.getColors());
-        i += tileentitybeacon$beamsegment.getHeight();
-      } 
+        for (TileEntityBeaconSPC.BeamSegment tileentitybeacon$beamsegment : beamSegments) {
+            renderBeamSegment(x, y, z, partialTicks, textureScale, totalWorldTime, i, tileentitybeacon$beamsegment.getHeight(), tileentitybeacon$beamsegment.getColors());
+            i += tileentitybeacon$beamsegment.getHeight();
+        }
       GlStateManager.enableFog();
     } 
   }

@@ -53,15 +53,15 @@ public class EntityEndersoulFragment extends Entity {
   }
   
   protected void entityInit() {
-    this.dataManager.register(TAMED, Boolean.valueOf(false));
+    this.dataManager.register(TAMED, Boolean.FALSE);
   }
   
   public boolean isTamed() {
-    return ((Boolean)this.dataManager.get(TAMED)).booleanValue();
+    return (Boolean) this.dataManager.get(TAMED);
   }
   
   public void setTamed(boolean tamed) {
-    this.dataManager.set(TAMED, Boolean.valueOf(tamed));
+    this.dataManager.set(TAMED, tamed);
   }
   
   public EntityPlayer getCollector() {

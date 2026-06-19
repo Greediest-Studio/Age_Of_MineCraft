@@ -130,8 +130,8 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(CHILD, Byte.valueOf((byte)0));
-    this.dataManager.register(TYPE, Integer.valueOf(0));
+    this.dataManager.register(CHILD, (byte) 0);
+    this.dataManager.register(TYPE, 0);
   }
   
   public boolean canBreatheUnderwater() {
@@ -139,11 +139,11 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
   }
   
   public int getZombieType() {
-    return ((Integer)this.dataManager.get(TYPE)).intValue();
+    return (Integer) this.dataManager.get(TYPE);
   }
   
   public void setZombieType(int par1) {
-    this.dataManager.set(TYPE, Integer.valueOf(par1));
+    this.dataManager.set(TYPE, par1);
   }
   
   public void performSpecialAttack() {
@@ -158,32 +158,30 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
     if (isHero() && getSpecialAttackTimer() > 600) {
       this.motionX = 0.0D;
       this.motionZ = 0.0D;
-      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(32.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(32.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityLivingBase entity = list.get(i1);
-          if (entity != null)
-            if (!false) {
-              entity.hurtResistantTime = 0;
-              entity.attackEntityFrom(DamageSource.WITHER, 0.05F);
-              if (EngenderConfig.general.useMessage && !entity.isEntityAlive() && !isWild())
-                getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + " was yelled at to death by " + getName() + " (" + getOwner().getName() + ")", new Object[0])); 
-            }  
-        }  
+          for (EntityLivingBase entity : list) {
+              if (entity != null)
+                  if (!false) {
+                      entity.hurtResistantTime = 0;
+                      entity.attackEntityFrom(DamageSource.WITHER, 0.05F);
+                      if (EngenderConfig.general.useMessage && !entity.isEntityAlive() && !isWild())
+                          getOwner().sendMessage((ITextComponent) new TextComponentTranslation(entity.getName() + " was yelled at to death by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
+                  }
+          }
     } 
     if (isHero() && getSpecialAttackTimer() > 600 && getSpecialAttackTimer() < 660)
       this.rotationPitch = -50.0F; 
     if (isHero() && getSpecialAttackTimer() == 600) {
-      List<EntityTameBase> list = this.world.getEntitiesWithinAABB(EntityTameBase.class, getEntityBoundingBox().grow(32.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityTameBase> list = this.world.getEntitiesWithinAABB(EntityTameBase.class, getEntityBoundingBox().grow(32.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityTameBase entity = list.get(i1);
-          if (entity != null)
-            if (false) {
-              this.moralRaisedTimer = 600;
-              entity.moralRaisedTimer = 600;
-            }  
-        }  
+          for (EntityTameBase entity : list) {
+              if (entity != null)
+                  if (false) {
+                      this.moralRaisedTimer = 600;
+                      entity.moralRaisedTimer = 600;
+                  }
+          }
     } 
     if (isHero() && getSpecialAttackTimer() == 660)
       if (isChild()) {
@@ -244,7 +242,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
           ((EntityLivingBase)par1Entity).addPotionEffect(new PotionEffect(AbyssalCraftAPI.coralium_plague, 100));  
     } 
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.5F * (float)((ACConfig.damageAmpl > 1.0D) ? ACConfig.damageAmpl : 1.0D)); 
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -314,17 +312,16 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
     ItemStack stack = player.getHeldItem(hand);
     ItemStack heldItem = new ItemStack(stack.getItem());
     if (false && isChild() && stack.isEmpty() && player.isSneaking() && getRidingEntity() == null) {
-      List<EntityChicken> list = this.world.getEntitiesWithinAABB(EntityChicken.class, getEntityBoundingBox().grow(16.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityChicken> list = this.world.getEntitiesWithinAABB(EntityChicken.class, getEntityBoundingBox().grow(16.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty() && !isBeingRidden())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityChicken entity = list.get(i1);
-          if (entity != null && !entity.isBeingRidden() && false && isChild() && !this.world.isRemote) {
-            entity.ticksExisted = 0;
-            startRiding((Entity)entity);
-            playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
-            break;
-          } 
-        }  
+          for (EntityChicken entity : list) {
+              if (entity != null && !entity.isBeingRidden() && false && isChild() && !this.world.isRemote) {
+                  entity.ticksExisted = 0;
+                  startRiding((Entity) entity);
+                  playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
+                  break;
+              }
+          }
       return true;
     } 
     if (!stack.isEmpty() && stack.getItem() == Items.LEATHER_HELMET) {
@@ -414,7 +411,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
   }
   
   public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData par1EntityLivingData) {
-    Object data = super.onInitialSpawn(difficulty, par1EntityLivingData);
+    IEntityLivingData data = super.onInitialSpawn(difficulty, par1EntityLivingData);
     float f = difficulty.getClampedAdditionalDifficulty();
     if (data == null)
       data = new GroupData((this.world.rand.nextFloat() < ForgeModContainer.zombieBabyChance), null); 
@@ -437,7 +434,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
     attribute.removeModifier(attackDamageBoost);
     if (calendar.get(2) + 1 == 10 && calendar.get(5) == 31)
       attribute.applyModifier(attackDamageBoost); 
-    return (IEntityLivingData)data;
+    return data;
   }
   
   public EntityTameBase getMutant() {

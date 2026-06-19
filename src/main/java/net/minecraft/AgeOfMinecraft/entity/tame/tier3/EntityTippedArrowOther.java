@@ -81,9 +81,9 @@ public class EntityTippedArrowOther extends EntityTippedArrow {
         int k = MathHelper.floor(this.posZ);
         IBlockState iblockstate = this.world.getBlockState(new BlockPos(i, j, k));
         if (iblockstate.getMaterial() != Material.AIR)
-          this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX, (getEntityBoundingBox()).minY + 0.3D, this.posZ, -this.motionX, 2.0D, -this.motionZ, new int[] { Block.getStateId(iblockstate) }); 
+          this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX, (getEntityBoundingBox()).minY + 0.3D, this.posZ, -this.motionX, 2.0D, -this.motionZ, Block.getStateId(iblockstate));
       }  
-    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(2.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(2.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (this.shooter != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive())

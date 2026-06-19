@@ -57,7 +57,7 @@ public class ItemPEGun extends ItemBow implements IEnergyContainerItem {
     ItemStack itemStackIn = player.getHeldItem(hand);
     if (itemStackIn.isEmpty() || (!itemStackIn.isEmpty() && getContainedEnergy(itemStackIn) <= 0.0F)) {
       player.world.playSound(null, new BlockPos((Entity)player), ESound.pegunjam, SoundCategory.PLAYERS, 0.5F, 1.0F);
-      return new ActionResult(EnumActionResult.FAIL, itemStackIn);
+      return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
     } 
     float f = MathHelper.cos((player.rotationYawHead + (180 * (((hand == EnumHand.OFF_HAND) ? 1 : 2) - 1))) * 0.017453292F);
     float f1 = MathHelper.sin((player.rotationYawHead + (180 * (((hand == EnumHand.OFF_HAND) ? 1 : 2) - 1))) * 0.017453292F);
@@ -77,7 +77,7 @@ public class ItemPEGun extends ItemBow implements IEnergyContainerItem {
       worldIn.spawnEntity((Entity)entitywitherskull); 
     player.world.playSound(null, new BlockPos((Entity)player), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 0.5F, 0.5F + player.getRNG().nextFloat() * 0.25F);
     player.world.playSound(null, new BlockPos((Entity)player), ESound.pegunfire, SoundCategory.PLAYERS, 0.5F, 0.6F + player.getRNG().nextFloat() * 0.2F + entitywitherskull.damage / 100.0F);
-    return new ActionResult(EnumActionResult.PASS, itemStackIn);
+    return new ActionResult<>(EnumActionResult.PASS, itemStackIn);
   }
   
   public float getContainedEnergy(ItemStack stack) {

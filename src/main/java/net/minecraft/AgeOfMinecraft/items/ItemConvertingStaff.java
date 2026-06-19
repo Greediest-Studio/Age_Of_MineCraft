@@ -1,11 +1,8 @@
 package net.minecraft.AgeOfMinecraft.items;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import java.util.List;
 import javax.annotation.Nullable;
-import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
-import net.minecraft.AgeOfMinecraft.entity.tame.EnumTier;
+
 import net.minecraft.AgeOfMinecraft.registry.ESetup;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -15,15 +12,11 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -71,7 +64,7 @@ public class ItemConvertingStaff extends ItemBEItem {
   
   public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
     ItemStack itemStackIn = playerIn.getHeldItem(hand);
-    return new ActionResult(EnumActionResult.PASS, itemStackIn);
+    return new ActionResult<>(EnumActionResult.PASS, itemStackIn);
   }
   
   private ItemStack findAmmo(EntityPlayer player) {

@@ -67,16 +67,15 @@ public class EntityPoisonSpray extends EntitySnowball {
       playSound(SoundEvents.ENTITY_SMALL_SLIME_SQUISH, 1.0F, 1.0F);
       this.world.spawnEntity((Entity)entityareaeffectcloud);
     } 
-    List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+    List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
     if (list1 != null && !list1.isEmpty())
-      for (int i1 = 0; i1 < list1.size(); i1++) {
-        EntityLivingBase entity1 = list1.get(i1);
-        if (!false) {
-          getThrower().attackEntityAsMob((Entity)entity1);
-          if (b0 > 0 && entity1 instanceof EntityLivingBase)
-            entity1.addPotionEffect(new PotionEffect(MobEffects.POISON, 20 * b0)); 
-        } 
-      }  
+        for (EntityLivingBase entity1 : list1) {
+            if (!false) {
+                getThrower().attackEntityAsMob((Entity) entity1);
+                if (b0 > 0 && entity1 instanceof EntityLivingBase)
+                    entity1.addPotionEffect(new PotionEffect(MobEffects.POISON, 20 * b0));
+            }
+        }
   }
 }
 

@@ -108,7 +108,7 @@ public class EntityFrostRay extends EntityFireball {
         double d7 = this.posY + (this.posY - this.accelerationY) * -d9;
         double d8 = this.posZ + (this.posZ - this.accelerationZ) * -d9;
         if (this.world.isRemote)
-          this.world.spawnParticle(EnumParticleTypes.SNOWBALL, true, d6, d7, d8, 0.0D, 0.025D, 0.0D, new int[0]); 
+          this.world.spawnParticle(EnumParticleTypes.SNOWBALL, true, d6, d7, d8, 0.0D, 0.025D, 0.0D);
       } 
       setPosition(this.posX, this.posY, this.posZ);
     } else {
@@ -116,7 +116,7 @@ public class EntityFrostRay extends EntityFireball {
       this.motionY *= 0.0D;
       this.motionZ *= 0.0D;
     } 
-    this.world.spawnParticle(EnumParticleTypes.SNOWBALL, this.posX, this.posY, this.posZ, 0.0D, 0.025D, 0.0D, new int[0]);
+    this.world.spawnParticle(EnumParticleTypes.SNOWBALL, this.posX, this.posY, this.posZ, 0.0D, 0.025D, 0.0D);
     if (this.ticksExisted > 20 || (!this.world.isRemote && this.targetEntity == null))
       setDead(); 
   }

@@ -59,24 +59,24 @@ public class EntityManaOrb extends Entity {
   }
   
   protected void entityInit() {
-    getDataManager().register(amount, Integer.valueOf(0));
-    getDataManager().register(entropy, Boolean.valueOf(false));
+    getDataManager().register(amount, 0);
+    getDataManager().register(entropy, Boolean.FALSE);
   }
   
   public void setEntropy(boolean value) {
-    getDataManager().set(entropy, Boolean.valueOf(value));
+    getDataManager().set(entropy, value);
   }
   
   public boolean getEntropy() {
-    return ((Boolean)this.dataManager.get(entropy)).booleanValue();
+    return (Boolean) this.dataManager.get(entropy);
   }
   
   public void setMana(int mana) {
-    getDataManager().set(amount, Integer.valueOf(mana));
+    getDataManager().set(amount, mana);
   }
   
   public int getMana() {
-    return ((Integer)this.dataManager.get(amount)).intValue();
+    return (Integer) this.dataManager.get(amount);
   }
   
   @SideOnly(Side.CLIENT)

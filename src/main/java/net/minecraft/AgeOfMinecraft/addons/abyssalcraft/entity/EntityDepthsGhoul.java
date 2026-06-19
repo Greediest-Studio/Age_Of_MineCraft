@@ -149,11 +149,11 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(TYPE, Integer.valueOf(0));
+    this.dataManager.register(TYPE, 0);
   }
   
   public int getGhoulType() {
-    return ((Integer)this.dataManager.get(TYPE)).intValue();
+    return (Integer) this.dataManager.get(TYPE);
   }
   
   public void setGhoulType(int par1) {
@@ -165,7 +165,7 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
       iattributeinstancepete.applyModifier(peteSpeedBoost); 
     if (par1 == 2)
       iattributeinstancewilson.applyModifier(wilsonDamageBoost); 
-    this.dataManager.set(TYPE, Integer.valueOf(par1));
+    this.dataManager.set(TYPE, par1);
   }
   
   public void onLivingUpdate() {
@@ -244,7 +244,7 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
           ((EntityLivingBase)par1Entity).addPotionEffect(new PotionEffect(AbyssalCraftAPI.coralium_plague, 100));  
     } 
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.5F * (float)((ACConfig.damageAmpl > 1.0D) ? ACConfig.damageAmpl : 1.0D)); 
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -352,7 +352,7 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
   }
   
   public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData par1EntityLivingData) {
-    Object data = super.onInitialSpawn(difficulty, par1EntityLivingData);
+    IEntityLivingData data = super.onInitialSpawn(difficulty, par1EntityLivingData);
     int type = 0;
     if (this.world.rand.nextFloat() < 0.2F) {
       int temp = this.world.rand.nextInt(4);
@@ -379,7 +379,7 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
     attribute.removeModifier(ghoulHDamageBoost);
     if (calendar.get(2) + 1 == 10 && calendar.get(5) == 31)
       attribute.applyModifier(ghoulHDamageBoost); 
-    return (IEntityLivingData)data;
+    return data;
   }
   
   public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {

@@ -182,11 +182,11 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
   }
   
   public boolean hasSpawnedSkeletons() {
-    return ((Boolean)getDataManager().get(SPAWNEDSKELETONS)).booleanValue();
+    return (Boolean) getDataManager().get(SPAWNEDSKELETONS);
   }
   
   public void setCanSpawnSkeletons(boolean childZombie) {
-    getDataManager().set(SPAWNEDSKELETONS, Boolean.valueOf(childZombie));
+    getDataManager().set(SPAWNEDSKELETONS, childZombie);
   }
   
   public void updateBossBar() {
@@ -260,13 +260,13 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(FIRST_HEAD_TARGET, Integer.valueOf(0));
-    this.dataManager.register(SECOND_HEAD_TARGET, Integer.valueOf(0));
-    this.dataManager.register(THIRD_HEAD_TARGET, Integer.valueOf(0));
-    this.dataManager.register(INVULNERABILITY_TIME, Integer.valueOf(0));
-    this.dataManager.register(HOVERTIMER, Integer.valueOf(0));
-    this.dataManager.register(RAMTIMER, Integer.valueOf(0));
-    getDataManager().register(SPAWNEDSKELETONS, Boolean.valueOf(false));
+    this.dataManager.register(FIRST_HEAD_TARGET, 0);
+    this.dataManager.register(SECOND_HEAD_TARGET, 0);
+    this.dataManager.register(THIRD_HEAD_TARGET, 0);
+    this.dataManager.register(INVULNERABILITY_TIME, 0);
+    this.dataManager.register(HOVERTIMER, 0);
+    this.dataManager.register(RAMTIMER, 0);
+    getDataManager().register(SPAWNEDSKELETONS, Boolean.FALSE);
   }
   
   public int getMaxSpawnedInChunk() {
@@ -416,7 +416,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
               updateWatchedTargetId(i, 0);
             } 
           } else {
-            List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(20.0D, 8.0D, 20.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+            List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(20.0D, 8.0D, 20.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
             for (int k1 = 0; k1 < 10 && !list.isEmpty(); k1++) {
               EntityLivingBase entitylivingbase1 = list.get(this.rand.nextInt(list.size()));
               if (entitylivingbase1 != this && entitylivingbase1.isEntityAlive() && canEntityBeSeen((Entity)entitylivingbase1) && (!false || (entitylivingbase1 instanceof EntityTameBase && false && entitylivingbase1 != this && ((EntityTameBase)entitylivingbase1).getFakeHealth() > 0.0F && getFakeHealth() > 0.0F)) && entitylivingbase1 != getOwner())
@@ -652,24 +652,23 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
           double d2 = ((getEntityBoundingBox()).minZ + (getEntityBoundingBox()).maxZ) * 5.0D;
           List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(5.0D));
           if (!list.isEmpty())
-            for (int i1 = 0; i1 < list.size(); i1++) {
-              Entity e = list.get(i1);
-              if (e.isEntityAlive() && e instanceof EntityLivingBase) {
-                EntityLivingBase entity = (EntityLivingBase)e;
-                if (!false) {
-                  double d3 = entity.posX - d0;
-                  double d4 = entity.posZ - d1;
-                  double d5 = entity.posZ - d2;
-                  double d6 = d3 * d3 + d4 * d4 + d5 * d5;
-                  inflictEngenderMobDamage(entity, " was rammed into by ", DamageSource.causeMobDamage((EntityLivingBase)this), (float)getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue() * 2.0F);
-                  entity.renderYawOffset = entity.rotationYaw = entity.rotationYawHead = (float)MathHelper.atan2(entity.motionZ, entity.motionX) * 57.295776F - 90.0F;
-                  entity.setRevengeTarget(null);
-                  if (entity instanceof EntityLiving)
-                    ((EntityLiving)entity).setAttackTarget(null); 
-                  entity.addVelocity(d3 / d6 * 5.0D, d4 / d6 * 1.0D, d5 / d6 * 5.0D);
-                } 
-              } 
-            }  
+              for (Entity e : list) {
+                  if (e.isEntityAlive() && e instanceof EntityLivingBase) {
+                      EntityLivingBase entity = (EntityLivingBase) e;
+                      if (!false) {
+                          double d3 = entity.posX - d0;
+                          double d4 = entity.posZ - d1;
+                          double d5 = entity.posZ - d2;
+                          double d6 = d3 * d3 + d4 * d4 + d5 * d5;
+                          inflictEngenderMobDamage(entity, " was rammed into by ", DamageSource.causeMobDamage((EntityLivingBase) this), (float) getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue() * 2.0F);
+                          entity.renderYawOffset = entity.rotationYaw = entity.rotationYawHead = (float) MathHelper.atan2(entity.motionZ, entity.motionX) * 57.295776F - 90.0F;
+                          entity.setRevengeTarget(null);
+                          if (entity instanceof EntityLiving)
+                              ((EntityLiving) entity).setAttackTarget(null);
+                          entity.addVelocity(d3 / d6 * 5.0D, d4 / d6 * 1.0D, d5 / d6 * 5.0D);
+                      }
+                  }
+              }
           if (!this.world.isRemote && EngenderConfig.mobs.grief) {
             int i11 = MathHelper.floor(this.posY);
             int l1 = MathHelper.floor(this.posX);
@@ -754,7 +753,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
     if (isHero() && getSpecialAttackTimer() == 1400) {
       createEngenderModExplosionFireless((Entity)this, this.posX, this.posY + getEyeHeight(), this.posZ, 7.0F, false);
       this.world.playBroadcastSound(1023, new BlockPos((Entity)this), 0);
-      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(128.0D, 128.0D, 128.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(128.0D, 128.0D, 128.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
         for (int i1 = 0; i1 < list.size(); i1++) {
           EntityLivingBase entity = list.get(i1);
@@ -792,10 +791,10 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
     } 
     if (this.world.isRemote) {
       for (k = 0; k < 2; k++)
-        this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D, new int[0]); 
+        this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
       if (isHero() && getSpecialAttackTimer() >= 1400)
         for (int i1 = 0; i1 < 128; i1++)
-          this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY + 1.75D, this.posZ, this.rand.nextDouble() - 0.5D, this.rand.nextDouble() - 0.5D, this.rand.nextDouble() - 0.5D, new int[0]);  
+          this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY + 1.75D, this.posZ, this.rand.nextDouble() - 0.5D, this.rand.nextDouble() - 0.5D, this.rand.nextDouble() - 0.5D);
     } 
     boolean flag = isArmored();
     int j;
@@ -803,16 +802,16 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
       double d10 = getHeadX(j);
       double d2 = getHeadY(j);
       double d4 = getHeadZ(j);
-      this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d10 + this.rand.nextGaussian() * 0.30000001192092896D, d2 + this.rand.nextGaussian() * 0.30000001192092896D, d4 + this.rand.nextGaussian() * 0.30000001192092896D, 0.0D, 0.0D, 0.0D, new int[0]);
+      this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d10 + this.rand.nextGaussian() * 0.30000001192092896D, d2 + this.rand.nextGaussian() * 0.30000001192092896D, d4 + this.rand.nextGaussian() * 0.30000001192092896D, 0.0D, 0.0D, 0.0D);
       if (flag && this.world.rand.nextInt(4) == 0)
-        this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, d10 + this.rand.nextGaussian() * 0.30000001192092896D, d2 + this.rand.nextGaussian() * 0.30000001192092896D, d4 + this.rand.nextGaussian() * 0.30000001192092896D, 0.699999988079071D, 0.699999988079071D, 0.5D, new int[0]); 
+        this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, d10 + this.rand.nextGaussian() * 0.30000001192092896D, d2 + this.rand.nextGaussian() * 0.30000001192092896D, d4 + this.rand.nextGaussian() * 0.30000001192092896D, 0.699999988079071D, 0.699999988079071D, 0.5D);
     } 
     if (isInWater())
       for (j = 0; j < this.partArray.length; j++)
-        this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.partArray[j]).posX + this.rand.nextGaussian() * ((this.partArray[j]).width / 2.0F), (this.partArray[j]).posY + this.rand.nextDouble() * ((this.partArray[j]).width / 2.0F), (this.partArray[j]).posZ + this.rand.nextGaussian() * ((this.partArray[j]).width / 2.0F), 0.0D, 0.0D, 0.0D, new int[0]);  
+        this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.partArray[j]).posX + this.rand.nextGaussian() * ((this.partArray[j]).width / 2.0F), (this.partArray[j]).posY + this.rand.nextDouble() * ((this.partArray[j]).width / 2.0F), (this.partArray[j]).posZ + this.rand.nextGaussian() * ((this.partArray[j]).width / 2.0F), 0.0D, 0.0D, 0.0D);
     if (getInvulTime() > 0)
       for (j = 0; j < 3; j++)
-        this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + this.rand.nextGaussian() * 1.0D, this.posY + (this.rand.nextFloat() * 3.3F), this.posZ + this.rand.nextGaussian() * 1.0D, 0.699999988079071D, 0.699999988079071D, 0.8999999761581421D, new int[0]);  
+        this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + this.rand.nextGaussian() * 1.0D, this.posY + (this.rand.nextFloat() * 3.3F), this.posZ + this.rand.nextGaussian() * 1.0D, 0.699999988079071D, 0.699999988079071D, 0.8999999761581421D);
   }
   
   protected void updateAITasks() {
@@ -866,7 +865,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
               updateWatchedTargetId(i, 0);
             } 
           } else {
-            List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(32.0D, 32.0D, 32.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+            List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(32.0D, 32.0D, 32.0D), Predicates.and(EntitySelectors.IS_ALIVE));
             for (int k1 = 0; k1 < 10 && !list.isEmpty(); k1++) {
               EntityLivingBase entitylivingbase = list.get(this.rand.nextInt(list.size()));
               if (entitylivingbase != this && entitylivingbase.isEntityAlive() && canEntityBeSeen((Entity)entitylivingbase) && (!false || (getAttackTarget() != null && this.rand.nextInt(120) == 0))) {
@@ -1066,35 +1065,35 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
   }
   
   public int getHoverTime() {
-    return ((Integer)this.dataManager.get(HOVERTIMER)).intValue();
+    return (Integer) this.dataManager.get(HOVERTIMER);
   }
   
   public void setHoverTime(int p_82215_1_) {
-    this.dataManager.set(HOVERTIMER, Integer.valueOf(p_82215_1_));
+    this.dataManager.set(HOVERTIMER, p_82215_1_);
   }
   
   public int getRamTime() {
-    return ((Integer)this.dataManager.get(RAMTIMER)).intValue();
+    return (Integer) this.dataManager.get(RAMTIMER);
   }
   
   public void setRamTime(int p_82215_1_) {
-    this.dataManager.set(RAMTIMER, Integer.valueOf(p_82215_1_));
+    this.dataManager.set(RAMTIMER, p_82215_1_);
   }
   
   public int getInvulTime() {
-    return ((Integer)this.dataManager.get(INVULNERABILITY_TIME)).intValue();
+    return (Integer) this.dataManager.get(INVULNERABILITY_TIME);
   }
   
   public void setInvulTime(int p_82215_1_) {
-    this.dataManager.set(INVULNERABILITY_TIME, Integer.valueOf(p_82215_1_));
+    this.dataManager.set(INVULNERABILITY_TIME, p_82215_1_);
   }
   
   public int getWatchedTargetId(int p_82203_1_) {
-    return ((Integer)this.dataManager.get(HEAD_TARGETS[p_82203_1_])).intValue();
+    return (Integer) this.dataManager.get(HEAD_TARGETS[p_82203_1_]);
   }
   
   public void updateWatchedTargetId(int targetOffset, int newId) {
-    this.dataManager.set(HEAD_TARGETS[targetOffset], Integer.valueOf(newId));
+    this.dataManager.set(HEAD_TARGETS[targetOffset], newId);
   }
   
   public boolean isArmored() {
@@ -1129,22 +1128,21 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
       this.world.playEvent(3000, getPosition(), 0);
       playSound(ESound.blast, 10.0F, 1.0F);
       if (list != null && !list.isEmpty())
-        for (int i = 0; i < list.size(); i++) {
-          Entity entity = list.get(i);
-          double scale = (128.0D - entity.getDistance(this.posX, this.posY, this.posZ)) / 128.0D;
-          Vec3d dir = new Vec3d(entity.posX - this.posX, entity.posY - this.posY, entity.posZ - this.posZ);
-          dir = dir.normalize();
-          if (entity instanceof EntityLivingBase)
-            if (entity.isEntityAlive()) {
-              if (entity.getDistance((Entity)this) <= 16.0D) {
-                entity.hurtResistantTime = 0;
-                inflictEngenderMobDamage((EntityLivingBase)entity, " was blown up by ", DamageSource.causeExplosionDamage((EntityLivingBase)this), 96.0F);
-              } 
-              entity.addVelocity(dir.x * 2.5D * scale, 1.5D + this.rand.nextDouble(), dir.z * 2.5D * scale);
-            } else {
-              entity.addVelocity(dir.x * 2.5D * scale, 1.5D + this.rand.nextDouble(), dir.z * 2.5D * scale);
-            }  
-        }  
+          for (Entity entity : list) {
+              double scale = (128.0D - entity.getDistance(this.posX, this.posY, this.posZ)) / 128.0D;
+              Vec3d dir = new Vec3d(entity.posX - this.posX, entity.posY - this.posY, entity.posZ - this.posZ);
+              dir = dir.normalize();
+              if (entity instanceof EntityLivingBase)
+                  if (entity.isEntityAlive()) {
+                      if (entity.getDistance((Entity) this) <= 16.0D) {
+                          entity.hurtResistantTime = 0;
+                          inflictEngenderMobDamage((EntityLivingBase) entity, " was blown up by ", DamageSource.causeExplosionDamage((EntityLivingBase) this), 96.0F);
+                      }
+                      entity.addVelocity(dir.x * 2.5D * scale, 1.5D + this.rand.nextDouble(), dir.z * 2.5D * scale);
+                  } else {
+                      entity.addVelocity(dir.x * 2.5D * scale, 1.5D + this.rand.nextDouble(), dir.z * 2.5D * scale);
+                  }
+          }
       if (!this.world.isRemote && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")) {
         int i = getExperiencePoints(this.attackingPlayer);
         i = ForgeEventFactory.getExperienceDrop((EntityLivingBase)this, this.attackingPlayer, i);
@@ -1158,7 +1156,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
         double d2 = this.rand.nextGaussian() * 0.02D;
         double d0 = this.rand.nextGaussian() * 0.02D;
         double d1 = this.rand.nextGaussian() * 0.02D;
-        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, d0, d1, new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, d0, d1);
       } 
       setDead();
     } 
@@ -1167,7 +1165,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
         if (getOwner() != null) {
           for (EntityPlayer entityplayer : this.world.playerEntities) {
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
-            entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("\u00A74" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
+            entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
           } 
           ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("Your " + getName() + " has been destroyed!", new Object[0]));
         }   

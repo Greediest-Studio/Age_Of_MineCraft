@@ -4,7 +4,6 @@ import chumbanotz.mutantbeasts.entity.CreeperMinionEggEntity;
 import chumbanotz.mutantbeasts.pathfinding.MBGroundPathNavigator;
 import chumbanotz.mutantbeasts.util.EntityUtil;
 import chumbanotz.mutantbeasts.util.MBSoundEvents;
-import java.util.Random;
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
 import net.minecraft.AgeOfMinecraft.entity.tame.Armored;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
@@ -136,7 +135,7 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(STATUS, Byte.valueOf((byte)0));
+    this.dataManager.register(STATUS, (byte) 0);
   }
   
   public boolean takesFallDamage() {
@@ -144,30 +143,30 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
   }
   
   public boolean getPowered() {
-    return ((((Byte)this.dataManager.get(STATUS)).byteValue() & 0x1) != 0);
+    return (((Byte) this.dataManager.get(STATUS) & 0x1) != 0);
   }
   
   private void setPowered(boolean powered) {
-    byte b0 = ((Byte)this.dataManager.get(STATUS)).byteValue();
-    this.dataManager.set(STATUS, Byte.valueOf(powered ? 1 : (byte)(b0 & 0xFFFFFFFE)));
+    byte b0 = (Byte) this.dataManager.get(STATUS);
+    this.dataManager.set(STATUS, powered ? 1 : (byte) (b0 & 0xFFFFFFFE));
   }
   
   public boolean isJumpAttacking() {
-    return ((((Byte)this.dataManager.get(STATUS)).byteValue() & 0x2) != 0);
+    return (((Byte) this.dataManager.get(STATUS) & 0x2) != 0);
   }
   
   private void setJumpAttacking(boolean jumping) {
-    byte b0 = ((Byte)this.dataManager.get(STATUS)).byteValue();
-    this.dataManager.set(STATUS, Byte.valueOf(jumping ? (byte)(b0 | 0x2) : (byte)(b0 & 0xFFFFFFFD)));
+    byte b0 = (Byte) this.dataManager.get(STATUS);
+    this.dataManager.set(STATUS, jumping ? (byte) (b0 | 0x2) : (byte) (b0 & 0xFFFFFFFD));
   }
   
   public boolean isCharging() {
-    return ((((Byte)this.dataManager.get(STATUS)).byteValue() & 0x4) != 0);
+    return (((Byte) this.dataManager.get(STATUS) & 0x4) != 0);
   }
   
   public void setCharging(boolean flag) {
-    byte b0 = ((Byte)this.dataManager.get(STATUS)).byteValue();
-    this.dataManager.set(STATUS, Byte.valueOf(flag ? (byte)(b0 | 0x4) : (byte)(b0 & 0xFFFFFFFB)));
+    byte b0 = (Byte) this.dataManager.get(STATUS);
+    this.dataManager.set(STATUS, flag ? (byte) (b0 | 0x4) : (byte) (b0 & 0xFFFFFFFB));
   }
   
   public float getEyeHeight() {
@@ -265,7 +264,7 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
-            ((WorldServer)this.world).spawnParticle(EnumParticleTypes.HEART, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + 0.5D + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, 0, d0, d1, d2, 1.0D, new int[0]);
+            ((WorldServer)this.world).spawnParticle(EnumParticleTypes.HEART, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + 0.5D + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, 0, d0, d1, d2, 1.0D);
           }  
       } 
       return true;

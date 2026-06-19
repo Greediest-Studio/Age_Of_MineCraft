@@ -182,6 +182,6 @@ public class ModelParrot extends ModelBase {
   
   @SideOnly(Side.CLIENT)
   enum State {
-    FLYING, STANDING, SITTING, PARTY;
+    FLYING, STANDING, SITTING, PARTY
   }
 }

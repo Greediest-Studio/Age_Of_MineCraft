@@ -54,13 +54,12 @@ public class EntityOcelot extends EntityTameBase implements Light, Animal {
   
   public void onLivingUpdate() {
     super.onLivingUpdate();
-    List<EntityCreeper> list = this.world.getEntitiesWithinAABB(EntityCreeper.class, getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+    List<EntityCreeper> list = this.world.getEntitiesWithinAABB(EntityCreeper.class, getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
     if (list != null && !list.isEmpty() && this.ticksExisted % 40 == 0)
-      for (int i1 = 0; i1 < list.size(); i1++) {
-        EntityCreeper entity = list.get(i1);
-        if (entity != null)
-          entity.tasks.addTask(0, (EntityAIBase)new EntityAIAvoidEntity((EntityCreature)entity, EntityOcelot.class, 6.0F, 1.75D, 1.25D)); 
-      }  
+        for (EntityCreeper entity : list) {
+            if (entity != null)
+                entity.tasks.addTask(0, (EntityAIBase) new EntityAIAvoidEntity((EntityCreature) entity, EntityOcelot.class, 6.0F, 1.75D, 1.25D));
+        }
   }
   
   public float getBonusVSLight() {

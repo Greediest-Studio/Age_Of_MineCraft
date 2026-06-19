@@ -108,7 +108,7 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
   
   @SideOnly(Side.CLIENT)
   public boolean isAttacking() {
-    return ((Boolean)this.dataManager.get(ATTACKING)).booleanValue();
+    return (Boolean) this.dataManager.get(ATTACKING);
   }
   
   public EnumTier getTier() {
@@ -135,15 +135,15 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
   }
   
   public void setAttacking(boolean attacking) {
-    this.dataManager.set(ATTACKING, Boolean.valueOf(attacking));
+    this.dataManager.set(ATTACKING, attacking);
   }
   
   public void setFlying(boolean attacking) {
-    this.dataManager.set(SHOULD_FLY, Boolean.valueOf(attacking));
+    this.dataManager.set(SHOULD_FLY, attacking);
   }
   
   public boolean isFlying() {
-    return ((Boolean)this.dataManager.get(SHOULD_FLY)).booleanValue();
+    return (Boolean) this.dataManager.get(SHOULD_FLY);
   }
   
   public void performSpecialAttack() {
@@ -183,19 +183,18 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
     } 
     if (isHero() && getSpecialAttackTimer() > 1100) {
       playSound(getHurtSound((DamageSource)null), getSoundVolume(), getSoundPitch());
-      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(64.0D, 64.0D, 64.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(64.0D, 64.0D, 64.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityLivingBase entity = list.get(i1);
-          if (entity != null)
-            if (!false) {
-              if (getSpecialAttackTimer() > 1190 && entity instanceof EntityCreature && !(entity instanceof EntityTameBase))
-                ((EntityCreature)entity).tasks.addTask(0, (EntityAIBase)new EntityAIAvoidEntitySPC((EntityCreature)entity, EntityGhast.class, 128.0F, 1.5D, 1.5D)); 
-              entity.hurtResistantTime = 0;
-              inflictEngenderMobDamage(entity, "'s ears exploded thanks to ", DamageSource.WITHER, 0.25F);
-              entity.addVelocity(this.rand.nextGaussian() * 0.05D, this.rand.nextGaussian() * 0.05D, this.rand.nextGaussian() * 0.05D);
-            }  
-        }  
+          for (EntityLivingBase entity : list) {
+              if (entity != null)
+                  if (!false) {
+                      if (getSpecialAttackTimer() > 1190 && entity instanceof EntityCreature && !(entity instanceof EntityTameBase))
+                          ((EntityCreature) entity).tasks.addTask(0, (EntityAIBase) new EntityAIAvoidEntitySPC((EntityCreature) entity, EntityGhast.class, 128.0F, 1.5D, 1.5D));
+                      entity.hurtResistantTime = 0;
+                      inflictEngenderMobDamage(entity, "'s ears exploded thanks to ", DamageSource.WITHER, 0.25F);
+                      entity.addVelocity(this.rand.nextGaussian() * 0.05D, this.rand.nextGaussian() * 0.05D, this.rand.nextGaussian() * 0.05D);
+                  }
+          }
     } 
     if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 2048.0D && getSpecialAttackTimer() <= 0 && isHero())
       performSpecialAttack(); 
@@ -215,7 +214,7 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
     if (getOwner() != null)
       if (getAttackTarget() == null && this.ticksExisted % 10 == 0) {
         double d0 = getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue();
-        List<Entity> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(d0, d0, d0), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+        List<Entity> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(d0, d0, d0), Predicates.and(EntitySelectors.NOT_SPECTATING));
         if (list != null && !list.isEmpty())
           for (int i1 = 0; i1 < list.size(); i1++) {
             Entity entity = list.get(i1);
@@ -299,8 +298,8 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(ATTACKING, Boolean.valueOf(false));
-    this.dataManager.register(SHOULD_FLY, Boolean.valueOf(false));
+    this.dataManager.register(ATTACKING, Boolean.FALSE);
+    this.dataManager.register(SHOULD_FLY, Boolean.FALSE);
   }
   
   protected void applyEntityAttributes() {

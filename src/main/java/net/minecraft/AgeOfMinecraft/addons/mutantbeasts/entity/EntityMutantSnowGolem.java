@@ -4,7 +4,7 @@ import chumbanotz.mutantbeasts.pathfinding.MBGroundPathNavigator;
 import chumbanotz.mutantbeasts.util.MBSoundEvents;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
 import net.minecraft.AgeOfMinecraft.entity.tame.Armored;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
@@ -137,15 +137,15 @@ public class EntityMutantSnowGolem extends EntityTameBase implements IRangedAtta
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(PUMPKIN_EQUIPPED, Boolean.valueOf(true));
+    this.dataManager.register(PUMPKIN_EQUIPPED, Boolean.TRUE);
   }
   
   public boolean isPumpkinEquipped() {
-    return ((Boolean)this.dataManager.get(PUMPKIN_EQUIPPED)).booleanValue();
+    return (Boolean) this.dataManager.get(PUMPKIN_EQUIPPED);
   }
   
   private void setPumpkinEquipped(boolean pumpkinEquipped) {
-    this.dataManager.set(PUMPKIN_EQUIPPED, Boolean.valueOf(pumpkinEquipped));
+    this.dataManager.set(PUMPKIN_EQUIPPED, pumpkinEquipped);
   }
   
   protected SoundEvent getRegularHurtSound() {
@@ -194,6 +194,7 @@ public class EntityMutantSnowGolem extends EntityTameBase implements IRangedAtta
     if (isBeingRidden()) {
       EntityLivingBase entitylivingbase = (EntityLivingBase)getControllingPassenger();
       this.prevRotationYaw = this.rotationYaw = entitylivingbase.rotationYaw;
+      this.rotationYaw = entitylivingbase.rotationYaw;
       this.rotationPitch = entitylivingbase.rotationPitch;
       setRotation(this.rotationYaw, this.rotationPitch);
       this.rotationYawHead = this.renderYawOffset = this.rotationYaw;
@@ -271,9 +272,8 @@ public class EntityMutantSnowGolem extends EntityTameBase implements IRangedAtta
                 if (placeIce)
                   this.world.setBlockState(blockpos1, Blocks.ICE.getDefaultState()); 
               }  
-          } 
-          continue;
-        } 
+          }
+        }
       } 
     } 
   }
@@ -300,7 +300,7 @@ public class EntityMutantSnowGolem extends EntityTameBase implements IRangedAtta
       this.isThrowing = (id == 1);
       this.throwingTick = 0;
     } else if (id == 4) {
-      this.world.spawnParticle(EnumParticleTypes.WATER_DROP, this.posX + (this.rand.nextFloat() * this.width * 1.5F) - this.width, this.posY - 0.15D + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 1.5F) - this.width, 0.0D, 0.0D, 0.0D, new int[0]);
+      this.world.spawnParticle(EnumParticleTypes.WATER_DROP, this.posX + (this.rand.nextFloat() * this.width * 1.5F) - this.width, this.posY - 0.15D + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 1.5F) - this.width, 0.0D, 0.0D, 0.0D);
     } else if (id == 5 || id == 6 || id == 7) {
       int i = 0;
       while (true) {
@@ -309,9 +309,9 @@ public class EntityMutantSnowGolem extends EntityTameBase implements IRangedAtta
           double d1 = this.rand.nextGaussian() * 0.02D;
           double d2 = this.rand.nextGaussian() * 0.02D;
           if (id == 7) {
-            this.world.spawnParticle(EnumParticleTypes.HEART, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + 0.5D + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d0, d1, d2, new int[0]);
+            this.world.spawnParticle(EnumParticleTypes.HEART, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + 0.5D + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d0, d1, d2);
           } else {
-            this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + 0.5D + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d0, d1, d2, new int[] { Block.getStateId(Blocks.SNOW_LAYER.getDefaultState()) });
+            this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + 0.5D + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d0, d1, d2, Block.getStateId(Blocks.SNOW_LAYER.getDefaultState()));
           } 
           i++;
           continue;

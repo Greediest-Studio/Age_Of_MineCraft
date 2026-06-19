@@ -480,16 +480,16 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
   protected void entityInit() {
     super.entityInit();
     getDataManager().register(DIRECTION, EnumFacing.SOUTH);
-    getDataManager().register(ATTACKID, Integer.valueOf(-1));
-    getDataManager().register(EYEID, Integer.valueOf(0));
+    getDataManager().register(ATTACKID, -1);
+    getDataManager().register(EYEID, 0);
   }
   
   public int getAttackType() {
-    return ((Integer)this.dataManager.get(ATTACKID)).intValue();
+    return (Integer) this.dataManager.get(ATTACKID);
   }
   
   public void setAttackType(int id) {
-    this.dataManager.set(ATTACKID, Integer.valueOf(id));
+    this.dataManager.set(ATTACKID, id);
     setHandDirection(EnumFacing.SOUTH);
     setEyeType(0);
     switch (id) {
@@ -522,11 +522,11 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
   }
   
   public int getEyeType() {
-    return ((Integer)this.dataManager.get(EYEID)).intValue();
+    return (Integer) this.dataManager.get(EYEID);
   }
   
   public void setEyeType(int age) {
-    this.dataManager.set(EYEID, Integer.valueOf(age));
+    this.dataManager.set(EYEID, age);
   }
   
   public EnumFacing getHandDirection() {

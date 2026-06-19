@@ -48,7 +48,7 @@ public class EntityShulkerBulletFriendly extends EntityShulkerBullet {
   public void setDead() {
     if (!this.owner.getHeldItemMainhand().isEmpty()) {
       EntityFireworkRocket entityfireworkrocket = new EntityFireworkRocket(this.world, this.posX, this.posY, this.posZ, this.owner.getHeldItemMainhand());
-      ((WorldServer)this.world).spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY, this.posZ, 2, 0.2D, 0.2D, 0.2D, 0.0D, new int[0]);
+      ((WorldServer)this.world).spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY, this.posZ, 2, 0.2D, 0.2D, 0.2D, 0.0D);
       playSound(SoundEvents.ENTITY_SHULKER_BULLET_HIT, 1.0F, 1.0F);
       if (!this.world.isRemote)
         this.world.spawnEntity((Entity)entityfireworkrocket); 
@@ -70,7 +70,7 @@ public class EntityShulkerBulletFriendly extends EntityShulkerBullet {
       this.motionZ *= 1.100000023841858D;
     } 
     if (this.target == null) {
-      ((WorldServer)this.world).spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY, this.posZ, 2, 0.2D, 0.2D, 0.2D, 0.0D, new int[0]);
+      ((WorldServer)this.world).spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY, this.posZ, 2, 0.2D, 0.2D, 0.2D, 0.0D);
       playSound(SoundEvents.ENTITY_SHULKER_BULLET_HIT, 1.0F, 1.0F);
       if (!this.world.isRemote)
         setDead(); 
@@ -78,7 +78,7 @@ public class EntityShulkerBulletFriendly extends EntityShulkerBullet {
       if (!this.target.isEntityAlive())
         setDead(); 
       if (this.target instanceof net.minecraft.entity.IEntityMultiPart && this.target instanceof EntityLivingBase) {
-        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
         if (!list.isEmpty())
           for (EntityLivingBase entity1 : list) {
             if (entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive()) {
@@ -99,7 +99,7 @@ public class EntityShulkerBulletFriendly extends EntityShulkerBullet {
         this.owner.inflictEngenderMobDamage((EntityLivingBase)result.entityHit, " was shot by ", DamageSource.causeThrownDamage((Entity)this, (Entity)this.owner), (float)this.owner.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue());
         ((EntityShulker)this.owner).inflictShulkerEffects((EntityLivingBase)result.entityHit);
         applyEnchantments((EntityLivingBase)this.owner, result.entityHit);
-        ((WorldServer)this.world).spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY, this.posZ, 2, 0.2D, 0.2D, 0.2D, 0.0D, new int[0]);
+        ((WorldServer)this.world).spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY, this.posZ, 2, 0.2D, 0.2D, 0.2D, 0.0D);
         playSound(SoundEvents.ENTITY_SHULKER_BULLET_HIT, 1.0F, 1.0F);
         if (!this.world.isRemote)
           setDead(); 

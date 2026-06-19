@@ -7,7 +7,6 @@ import com.shinoow.abyssalcraft.lib.ACConfig;
 import com.shinoow.abyssalcraft.lib.ACLib;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import javax.annotation.Nullable;
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
 import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.FriendlyZombieSummon;
@@ -19,7 +18,6 @@ import net.minecraft.AgeOfMinecraft.entity.tame.Massive;
 import net.minecraft.AgeOfMinecraft.entity.tame.Undead;
 import net.minecraft.AgeOfMinecraft.entity.tame.ai.EntityAIFollowLeader;
 import net.minecraft.AgeOfMinecraft.entity.tame.ai.EntityAIFriendlyAttackMelee;
-import net.minecraft.AgeOfMinecraft.entity.tame.tier2.EntityVillager;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntityZombie;
 import net.minecraft.AgeOfMinecraft.registry.ESound;
 import net.minecraft.block.Block;
@@ -271,13 +269,13 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
   
   protected void entityInit() {
     super.entityInit();
-    getDataManager().register(ZOMBIE_VARIANT, Integer.valueOf(0));
-    getDataManager().register(THROW_ATTACK_STATE, Byte.valueOf((byte)0));
-    getDataManager().register(LIVES, Integer.valueOf(0));
+    getDataManager().register(ZOMBIE_VARIANT, 0);
+    getDataManager().register(THROW_ATTACK_STATE, (byte) 0);
+    getDataManager().register(LIVES, 0);
   }
   
   public int getZombieType() {
-    return ((Integer)getDataManager().get(ZOMBIE_VARIANT)).intValue() - 1;
+    return (Integer) getDataManager().get(ZOMBIE_VARIANT) - 1;
   }
   
   public void setZombieType(int villagerType) {
@@ -297,7 +295,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
     } 
     if (isAntiMob())
       getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue() * 2.0D); 
-    getDataManager().set(ZOMBIE_VARIANT, Integer.valueOf(villagerType + 1));
+    getDataManager().set(ZOMBIE_VARIANT, villagerType + 1);
   }
   
   public boolean isEntityUndead() {
@@ -313,29 +311,29 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
   }
   
   public int getLives() {
-    return ((Integer)this.dataManager.get(LIVES)).intValue();
+    return (Integer) this.dataManager.get(LIVES);
   }
   
   private void setLives(int lives) {
-    this.dataManager.set(LIVES, Integer.valueOf(lives));
+    this.dataManager.set(LIVES, lives);
   }
   
   public boolean hasThrowAttackHit() {
-    return (((Byte)this.dataManager.get(THROW_ATTACK_STATE)).byteValue() != 0);
+    return ((Byte) this.dataManager.get(THROW_ATTACK_STATE) != 0);
   }
   
   public void setThrowAttackHit(boolean hit) {
-    byte b0 = ((Byte)this.dataManager.get(THROW_ATTACK_STATE)).byteValue();
-    this.dataManager.set(THROW_ATTACK_STATE, Byte.valueOf(hit ? 1 : (byte)(b0 & 0xFFFFFFFE)));
+    byte b0 = (Byte) this.dataManager.get(THROW_ATTACK_STATE);
+    this.dataManager.set(THROW_ATTACK_STATE, hit ? 1 : (byte) (b0 & 0xFFFFFFFE));
   }
   
   public boolean isThrowAttackFinished() {
-    return ((((Byte)this.dataManager.get(THROW_ATTACK_STATE)).byteValue() & 0x2) != 0);
+    return (((Byte) this.dataManager.get(THROW_ATTACK_STATE) & 0x2) != 0);
   }
   
   public void setThrowAttackFinished(boolean finished) {
-    byte b0 = ((Byte)this.dataManager.get(THROW_ATTACK_STATE)).byteValue();
-    this.dataManager.set(THROW_ATTACK_STATE, Byte.valueOf(finished ? (byte)(b0 | 0x2) : (byte)(b0 & 0xFFFFFFFD)));
+    byte b0 = (Byte) this.dataManager.get(THROW_ATTACK_STATE);
+    this.dataManager.set(THROW_ATTACK_STATE, finished ? (byte) (b0 | 0x2) : (byte) (b0 & 0xFFFFFFFD));
   }
   
   public int getAttackID() {
@@ -486,7 +484,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
       int k = MathHelper.floor(this.posZ);
       IBlockState iblockstate = this.world.getBlockState(new BlockPos(i, j, k));
       if (iblockstate.getMaterial() != Material.AIR)
-        this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (this.rand.nextFloat() - 0.5D) * this.width, (getEntityBoundingBox()).minY + 0.1D, this.posZ + (this.rand.nextFloat() - 0.5D) * this.width, 4.0D * (this.rand.nextFloat() - 0.5D), 0.5D, (this.rand.nextFloat() - 0.5D) * 4.0D, new int[] { Block.getStateId(iblockstate) }); 
+        this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (this.rand.nextFloat() - 0.5D) * this.width, (getEntityBoundingBox()).minY + 0.1D, this.posZ + (this.rand.nextFloat() - 0.5D) * this.width, 4.0D * (this.rand.nextFloat() - 0.5D), 0.5D, (this.rand.nextFloat() - 0.5D) * 4.0D, Block.getStateId(iblockstate));
     } 
   }
   

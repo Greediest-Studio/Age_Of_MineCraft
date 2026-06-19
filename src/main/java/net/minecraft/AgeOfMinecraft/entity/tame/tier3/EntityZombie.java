@@ -104,7 +104,7 @@ public class EntityZombie extends EntityTameBase implements IRangedAttackMob, Un
   
   private int helmetCount = 1;
   
-  private final EntityAIAttackRangedBowAlly<EntityZombie> aiArrowAttack = new EntityAIAttackRangedBowAlly(this, 1.0D, 5, 15.0F);
+  private final EntityAIAttackRangedBowAlly<EntityZombie> aiArrowAttack = new EntityAIAttackRangedBowAlly<>(this, 1.0D, 5, 15.0F);
   
   private final EntityAIAttackRangedAlly aiRangedAttack = new EntityAIAttackRangedAlly(this, 1.0D, 30, 15.0F);
   
@@ -134,9 +134,9 @@ public class EntityZombie extends EntityTameBase implements IRangedAttackMob, Un
   
   protected void entityInit() {
     super.entityInit();
-    getDataManager().register(ZOMBIE_VARIANT, Integer.valueOf(0));
-    getDataManager().register(VILLAGER_TYPE, Integer.valueOf(0));
-    getDataManager().register(CONVERTING, Boolean.valueOf(false));
+    getDataManager().register(ZOMBIE_VARIANT, 0);
+    getDataManager().register(VILLAGER_TYPE, 0);
+    getDataManager().register(CONVERTING, Boolean.FALSE);
   }
   
   public String getDescName() {
@@ -205,27 +205,27 @@ public class EntityZombie extends EntityTameBase implements IRangedAttackMob, Un
   }
   
   public boolean isVillager() {
-    return isAntiMob() ? false : ((((Integer)getDataManager().get(VILLAGER_TYPE)).intValue() > 0));
+    return isAntiMob() ? false : (((Integer) getDataManager().get(VILLAGER_TYPE) > 0));
   }
   
   public int getVillagerType() {
-    return ((Integer)getDataManager().get(VILLAGER_TYPE)).intValue() - 1;
+    return (Integer) getDataManager().get(VILLAGER_TYPE) - 1;
   }
   
   public void setVillagerType(int villagerType) {
-    getDataManager().set(VILLAGER_TYPE, Integer.valueOf(isAntiMob() ? 0 : (villagerType + 1)));
+    getDataManager().set(VILLAGER_TYPE, isAntiMob() ? 0 : (villagerType + 1));
   }
   
   public int getZombieType() {
-    return ((Integer)getDataManager().get(ZOMBIE_VARIANT)).intValue() - 1;
+    return (Integer) getDataManager().get(ZOMBIE_VARIANT) - 1;
   }
   
   public void setZombieType(int villagerType) {
-    getDataManager().set(ZOMBIE_VARIANT, Integer.valueOf(villagerType + 1));
+    getDataManager().set(ZOMBIE_VARIANT, villagerType + 1);
   }
   
   public void setToNotVillager() {
-    getDataManager().set(VILLAGER_TYPE, Integer.valueOf(0));
+    getDataManager().set(VILLAGER_TYPE, 0);
   }
   
   public void attackWithAdditionalEffects(Entity entity) {
@@ -354,30 +354,28 @@ public class EntityZombie extends EntityTameBase implements IRangedAttackMob, Un
       if (isHero() && getSpecialAttackTimer() > 600) {
         this.motionX = 0.0D;
         this.motionZ = 0.0D;
-        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(32.0D, 32.0D, 32.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(32.0D, 32.0D, 32.0D), Predicates.and(EntitySelectors.IS_ALIVE));
         if (list != null && !list.isEmpty())
-          for (int i1 = 0; i1 < list.size(); i1++) {
-            EntityLivingBase entity = list.get(i1);
-            if (entity != null)
-              if (!false) {
-                entity.hurtResistantTime = 0;
-                inflictEngenderMobDamage(entity, " was yelled at to death by ", (new DamageSource("yell")).setDamageBypassesArmor(), 0.05F);
-              }  
-          }  
+            for (EntityLivingBase entity : list) {
+                if (entity != null)
+                    if (!false) {
+                        entity.hurtResistantTime = 0;
+                        inflictEngenderMobDamage(entity, " was yelled at to death by ", (new DamageSource("yell")).setDamageBypassesArmor(), 0.05F);
+                    }
+            }
       } 
       if (isHero() && getSpecialAttackTimer() > 600 && getSpecialAttackTimer() < 640)
         this.rotationPitch = -50.0F; 
       if (isHero() && getSpecialAttackTimer() == 600) {
-        List<EntityTameBase> list = this.world.getEntitiesWithinAABB(EntityTameBase.class, getEntityBoundingBox().grow(32.0D, 32.0D, 32.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+        List<EntityTameBase> list = this.world.getEntitiesWithinAABB(EntityTameBase.class, getEntityBoundingBox().grow(32.0D, 32.0D, 32.0D), Predicates.and(EntitySelectors.IS_ALIVE));
         if (list != null && !list.isEmpty())
-          for (int i1 = 0; i1 < list.size(); i1++) {
-            EntityTameBase entity = list.get(i1);
-            if (entity != null)
-              if (false) {
-                this.moralRaisedTimer = 600;
-                entity.moralRaisedTimer = 600;
-              }  
-          }  
+            for (EntityTameBase entity : list) {
+                if (entity != null)
+                    if (false) {
+                        this.moralRaisedTimer = 600;
+                        entity.moralRaisedTimer = 600;
+                    }
+            }
       } 
       if (isHero() && getSpecialAttackTimer() == 640) {
         if (isChild()) {
@@ -699,17 +697,16 @@ public class EntityZombie extends EntityTameBase implements IRangedAttackMob, Un
     ItemStack stack = player.getHeldItem(hand);
     ItemStack heldItem = new ItemStack(stack.getItem());
     if (false && isChild() && stack.isEmpty() && player.isSneaking() && getRidingEntity() == null) {
-      List<EntityChicken> list = this.world.getEntitiesWithinAABB(EntityChicken.class, getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityChicken> list = this.world.getEntitiesWithinAABB(EntityChicken.class, getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty() && !isBeingRidden())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityChicken entity = list.get(i1);
-          if (entity != null && !entity.isBeingRidden() && false && isChild() && !this.world.isRemote) {
-            entity.ticksExisted = 0;
-            startRiding((Entity)entity);
-            playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
-            break;
-          } 
-        }  
+          for (EntityChicken entity : list) {
+              if (entity != null && !entity.isBeingRidden() && false && isChild() && !this.world.isRemote) {
+                  entity.ticksExisted = 0;
+                  startRiding((Entity) entity);
+                  playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
+                  break;
+              }
+          }
       return true;
     } 
     if (this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityPigZombie && !stack.isEmpty() && stack.getItem() == Items.SADDLE && getRidingEntity() == null && (hasOwner(player) || false)) {
@@ -800,7 +797,7 @@ public class EntityZombie extends EntityTameBase implements IRangedAttackMob, Un
   
   protected void startConversion(int ticks) {
     this.conversionTime = ticks;
-    getDataManager().set(CONVERTING, Boolean.valueOf(true));
+    getDataManager().set(CONVERTING, Boolean.TRUE);
     removePotionEffect(MobEffects.WEAKNESS);
     addPotionEffect(new PotionEffect(MobEffects.STRENGTH, ticks, Math.min(this.world.getDifficulty().getId() - 1, 0)));
     this.world.setEntityState((Entity)this, (byte)16);
@@ -858,7 +855,7 @@ public class EntityZombie extends EntityTameBase implements IRangedAttackMob, Un
   }
   
   public boolean isConverting() {
-    return ((Boolean)getDataManager().get(CONVERTING)).booleanValue();
+    return (Boolean) getDataManager().get(CONVERTING);
   }
   
   protected void convertToVillager() {

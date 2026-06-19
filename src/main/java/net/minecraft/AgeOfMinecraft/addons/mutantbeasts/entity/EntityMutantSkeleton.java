@@ -7,7 +7,7 @@ import chumbanotz.mutantbeasts.util.EntityUtil;
 import chumbanotz.mutantbeasts.util.MBSoundEvents;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
 import net.minecraft.AgeOfMinecraft.entity.tame.Armored;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;

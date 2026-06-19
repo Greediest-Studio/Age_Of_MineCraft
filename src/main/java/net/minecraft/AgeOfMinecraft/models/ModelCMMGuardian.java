@@ -205,7 +205,7 @@ public class ModelCMMGuardian extends ModelBase implements ICappedModel {
     if (!entity.isElder())
       limbSwing *= 2.0F; 
     this.Eye.rotationPointZ = -2.6F;
-    Object object = Minecraft.getMinecraft().getRenderViewEntity();
+    Entity object = Minecraft.getMinecraft().getRenderViewEntity();
     if (entity.isElder() && !this.isChild) {
       this.BustFront.isHidden = false;
     } else {
@@ -214,7 +214,7 @@ public class ModelCMMGuardian extends ModelBase implements ICappedModel {
     if (entity.hasTargetedEntity())
       object = entity.getTargetedEntity(); 
     if (object != null) {
-      Vec3d vec3 = ((Entity)object).getPositionEyes(0.0F);
+      Vec3d vec3 = object.getPositionEyes(0.0F);
       Vec3d vec31 = entityIn.getPositionEyes(0.0F);
       double d0 = vec3.y - vec31.y;
       if (d0 <= 0.0D || !entity.getCurrentBook().isEmpty()) {

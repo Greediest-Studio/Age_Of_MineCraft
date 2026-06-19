@@ -116,13 +116,12 @@ public class EntityWitherStormTentacleDevourer extends EntityTameBase implements
   public boolean attackEntityAsMob(Entity entityIn) {
     if (super.attackEntityAsMob(entityIn)) {
       entityIn.playSound(ESound.witherStormTentacleWhack, 10.0F, getSoundPitch() - 0.15F);
-      List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, entityIn.getEntityBoundingBox().grow(6.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+      List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, entityIn.getEntityBoundingBox().grow(6.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
       if (list1 != null && !list1.isEmpty())
-        for (int i1 = 0; i1 < list1.size(); i1++) {
-          EntityLivingBase entity1 = list1.get(i1);
-          if (!false)
-            super.attackEntityAsMob((Entity)entity1); 
-        }  
+          for (EntityLivingBase entity1 : list1) {
+              if (!false)
+                  super.attackEntityAsMob((Entity) entity1);
+          }
       this.world.playEvent(3000, entityIn.getPosition(), 0);
       return true;
     } 
@@ -371,7 +370,7 @@ public class EntityWitherStormTentacleDevourer extends EntityTameBase implements
       float f13 = (this.rand.nextFloat() - 0.5F) * 12.0F;
       float f15 = (this.rand.nextFloat() - 0.5F) * 12.0F;
       float f17 = (this.rand.nextFloat() - 0.5F) * 12.0F;
-      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + f13, this.posY + 2.0D + f15, this.posZ + f17, 0.0D, 0.0D, 0.0D, new int[0]);
+      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + f13, this.posY + 2.0D + f15, this.posZ + f17, 0.0D, 0.0D, 0.0D);
     } 
     if (this.residentWitherStorm != null) {
       this.onGround = false;

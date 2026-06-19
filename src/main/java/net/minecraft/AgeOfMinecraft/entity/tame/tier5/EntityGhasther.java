@@ -133,7 +133,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
   
   @SideOnly(Side.CLIENT)
   public boolean isAttacking() {
-    return ((Boolean)this.dataManager.get(ATTACKING)).booleanValue();
+    return (Boolean) this.dataManager.get(ATTACKING);
   }
   
   public EnumTier getTier() {
@@ -145,7 +145,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
   }
   
   public void setAttacking(boolean attacking) {
-    this.dataManager.set(ATTACKING, Boolean.valueOf(attacking));
+    this.dataManager.set(ATTACKING, attacking);
   }
   
   public void performSpecialAttack() {
@@ -180,19 +180,18 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
     this.isAirBorne = true;
     if (isHero() && getSpecialAttackTimer() > 1100) {
       playSound(getHurtSound((DamageSource)null), getSoundVolume(), getSoundPitch());
-      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(64.0D, 64.0D, 64.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(64.0D, 64.0D, 64.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityLivingBase entity = list.get(i1);
-          if (entity != null)
-            if (!false) {
-              if (getSpecialAttackTimer() > 1190 && entity instanceof EntityCreature && !(entity instanceof EntityTameBase))
-                ((EntityCreature)entity).tasks.addTask(0, (EntityAIBase)new EntityAIAvoidEntitySPC((EntityCreature)entity, EntityGhasther.class, 128.0F, 1.5D, 1.5D)); 
-              entity.hurtResistantTime = 0;
-              inflictEngenderMobDamage(entity, "'s ears exploded thanks to ", DamageSource.WITHER, 0.25F);
-              entity.addVelocity(this.rand.nextGaussian() * 0.05D, this.rand.nextGaussian() * 0.05D, this.rand.nextGaussian() * 0.05D);
-            }  
-        }  
+          for (EntityLivingBase entity : list) {
+              if (entity != null)
+                  if (!false) {
+                      if (getSpecialAttackTimer() > 1190 && entity instanceof EntityCreature && !(entity instanceof EntityTameBase))
+                          ((EntityCreature) entity).tasks.addTask(0, (EntityAIBase) new EntityAIAvoidEntitySPC((EntityCreature) entity, EntityGhasther.class, 128.0F, 1.5D, 1.5D));
+                      entity.hurtResistantTime = 0;
+                      inflictEngenderMobDamage(entity, "'s ears exploded thanks to ", DamageSource.WITHER, 0.25F);
+                      entity.addVelocity(this.rand.nextGaussian() * 0.05D, this.rand.nextGaussian() * 0.05D, this.rand.nextGaussian() * 0.05D);
+                  }
+          }
     } 
     if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 2048.0D && getSpecialAttackTimer() <= 0 && isHero())
       performSpecialAttack(); 
@@ -214,7 +213,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
     if (getOwner() != null)
       if (getAttackTarget() == null && this.ticksExisted % 10 == 0) {
         double d0 = getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue();
-        List<Entity> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(d0, d0, d0), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+        List<Entity> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(d0, d0, d0), Predicates.and(EntitySelectors.NOT_SPECTATING));
         if (list != null && !list.isEmpty())
           for (int i1 = 0; i1 < list.size(); i1++) {
             Entity entity = list.get(i1);
@@ -293,7 +292,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(ATTACKING, Boolean.valueOf(false));
+    this.dataManager.register(ATTACKING, Boolean.FALSE);
   }
   
   protected void applyEntityAttributes() {
@@ -423,11 +422,11 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
   
   protected void onDeathUpdate() {
     this.deathTicks++;
-    this.world.spawnParticle((this.rand.nextFloat() <= 0.2F) ? EnumParticleTypes.EXPLOSION_HUGE : EnumParticleTypes.EXPLOSION_LARGE, this.posX + (this.rand.nextFloat() * 9.0F - 4.5F), this.posY + (this.rand.nextFloat() * 9.0F - 4.5F), this.posZ + (this.rand.nextFloat() * 9.0F - 4.5F), 0.0D, 0.0D, 0.0D, new int[0]);
+    this.world.spawnParticle((this.rand.nextFloat() <= 0.2F) ? EnumParticleTypes.EXPLOSION_HUGE : EnumParticleTypes.EXPLOSION_LARGE, this.posX + (this.rand.nextFloat() * 9.0F - 4.5F), this.posY + (this.rand.nextFloat() * 9.0F - 4.5F), this.posZ + (this.rand.nextFloat() * 9.0F - 4.5F), 0.0D, 0.0D, 0.0D);
     if (this.deathTicks >= 300) {
       this.rotationPitch--;
       this.deathTime++;
-      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + (this.rand.nextFloat() * 9.0F - 4.5F), this.posY + (this.rand.nextFloat() * 9.0F - 4.5F), this.posZ + (this.rand.nextFloat() * 9.0F - 4.5F), 0.0D, 0.0D, 0.0D, new int[0]);
+      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + (this.rand.nextFloat() * 9.0F - 4.5F), this.posY + (this.rand.nextFloat() * 9.0F - 4.5F), this.posZ + (this.rand.nextFloat() * 9.0F - 4.5F), 0.0D, 0.0D, 0.0D);
     } 
     if (!this.world.isRemote) {
       if (this.deathTicks == 340) {
@@ -456,7 +455,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
         if (getOwner() != null) {
           for (EntityPlayer entityplayer : this.world.playerEntities) {
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
-            entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("\u00A74" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
+            entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
           } 
           ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("Your Ghasther has been destroyed!", new Object[0]));
         } 
@@ -799,7 +798,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
   }
   
   private enum EnumBehaviour {
-    REGULAR, SPREAD, BOMBARD, CATCH, MACHINEGUN, PEPPER, TRISHOT, GHASTCALL, ENRAGED, RANDOM, FINALE;
+    REGULAR, SPREAD, BOMBARD, CATCH, MACHINEGUN, PEPPER, TRISHOT, GHASTCALL, ENRAGED, RANDOM, FINALE
   }
 }
 

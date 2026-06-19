@@ -211,16 +211,15 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
   }
   
   public void performSpecialAttack() {
-    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(128.0D, 128.0D, 128.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(128.0D, 128.0D, 128.0D), Predicates.and(EntitySelectors.IS_ALIVE));
     if (list != null && !list.isEmpty())
-      for (int i1 = 0; i1 < list.size(); i1++) {
-        EntityLivingBase entity = list.get(i1);
-        if (entity != null)
-          if (!false) {
-            teleportToEntity((Entity)entity);
-            attackEntityAsMob((Entity)entity);
-          }  
-      }  
+        for (EntityLivingBase entity : list) {
+            if (entity != null)
+                if (!false) {
+                    teleportToEntity((Entity) entity);
+                    attackEntityAsMob((Entity) entity);
+                }
+        }
     setSpecialAttackTimer(1200);
   }
   
@@ -241,8 +240,8 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
       } 
     } 
     if (this.world.isRemote) {
-      this.world.spawnParticle(EnumParticleTypes.END_ROD, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D, new int[0]);
-      this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D, new int[0]);
+      this.world.spawnParticle(EnumParticleTypes.END_ROD, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
+      this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
       for (int i = 0; i < 2; i++) {
         double d0 = (float)this.posX - 0.5D + this.rand.nextFloat();
         double d1 = ((float)this.posY + this.rand.nextFloat());
@@ -251,7 +250,7 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
         double d4 = -this.rand.nextDouble();
         double d5 = (this.rand.nextDouble() - 0.5D) * 2.0D;
         d1 += this.rand.nextDouble() * this.height;
-        this.world.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5, new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
       } 
     } 
     if (!isBeingRidden() && getGuardBlock() == null && getOwner() != null && (getDistanceSq((Entity)getOwner()) > 4096.0D || !canEntityBeSeen((Entity)getOwner())) && !this.world.isRemote) {
@@ -357,7 +356,7 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
       double d3 = d0 + (this.posX - d0) * d6 + (random.nextDouble() - 0.5D) * this.width * 2.0D;
       double d4 = d1 + (this.posY - d1) * d6 + random.nextDouble() * this.height;
       double d5 = d2 + (this.posZ - d2) * d6 + (random.nextDouble() - 0.5D) * this.width * 2.0D;
-      world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, f, f1, f2, new int[0]);
+      world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, f, f1, f2);
     } 
     if (this instanceof EntityCreature)
       getNavigator().clearPath(); 
@@ -391,16 +390,15 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
       return true;
     } 
     if (!stack.isEmpty() && stack.getItem() == Items.ENDER_EYE && (hasOwner(player) || false)) {
-      List<EntityTameBase> list = this.world.getEntitiesWithinAABB(EntityTameBase.class, getEntityBoundingBox().grow(256.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityTameBase> list = this.world.getEntitiesWithinAABB(EntityTameBase.class, getEntityBoundingBox().grow(256.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty() && !isBeingRidden())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityTameBase entity = list.get(i1);
-          if (entity != null)
-            if (false) {
-              this.world.playSound((EntityPlayer)null, entity.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
-              entity.changeDimension(1);
-            }  
-        }  
+          for (EntityTameBase entity : list) {
+              if (entity != null)
+                  if (false) {
+                      this.world.playSound((EntityPlayer) null, entity.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
+                      entity.changeDimension(1);
+                  }
+          }
       this.world.playSound((EntityPlayer)null, getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
       this.world.playSound((EntityPlayer)null, player.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
       changeDimension(1);

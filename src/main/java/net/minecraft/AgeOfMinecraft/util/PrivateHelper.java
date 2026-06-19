@@ -2,6 +2,7 @@ package net.minecraft.AgeOfMinecraft.util;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.lang.reflect.Field;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -18,17 +19,14 @@ public class PrivateHelper {
   }
   
   private static <T, E> Field findField(Class<? super T> classToAccess, T instance, E value, String... fieldNames) throws Exception {
-    List<String> names = new ArrayList<String>();
-    for (String fieldName : fieldNames)
-      names.add(fieldName); 
+      List<String> names = new ArrayList<>(Arrays.asList(fieldNames));
     try {
       String[] remappedNames = ObfuscationReflectionHelper.remapFieldNames(classToAccess.getName(), fieldNames);
-      for (String fieldName : remappedNames)
-        names.add(fieldName); 
+        names.addAll(Arrays.asList(remappedNames));
     } catch (Throwable ignored) {}
     for (String fieldName : names) {
       try {
-        Field field = ReflectionHelper.findField(classToAccess, new String[] { fieldName });
+        Field field = ReflectionHelper.findField(classToAccess, fieldName);
         field.setAccessible(true);
         return field;
       } catch (Throwable ignored) {}

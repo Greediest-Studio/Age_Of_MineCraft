@@ -1,7 +1,6 @@
 package net.minecraft.AgeOfMinecraft.entity.tame;
 
 import chumbanotz.mutantbeasts.entity.SkullSpiritEntity;
-import chumbanotz.mutantbeasts.entity.mutant.MutantEndermanEntity;
 import com.brandon3055.draconicevolution.entity.EntityGuardianCrystal;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
@@ -9,9 +8,9 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.shinoow.abyssalcraft.api.AbyssalCraftAPI;
-import com.shinoow.abyssalcraft.common.entity.EntityAbygolem;
-import com.shinoow.abyssalcraft.common.entity.EntityRemnant;
 import com.shinoow.abyssalcraft.lib.ACLib;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nullable;
@@ -31,7 +30,6 @@ import net.minecraft.AgeOfMinecraft.entity.tame.ai.EntityAILeaderHurtTarget;
 import net.minecraft.AgeOfMinecraft.entity.tame.ai.EntityAIMobGirlMate;
 import net.minecraft.AgeOfMinecraft.entity.tame.cameos.EntitySans;
 import net.minecraft.AgeOfMinecraft.entity.tame.other.EntityPortalLightning;
-import net.minecraft.AgeOfMinecraft.entity.tame.tier1.EntityChicken;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier1.EntityCow;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntityCreeper;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntityVex;
@@ -72,19 +70,14 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
-import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.monster.EntityZombieVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
@@ -112,10 +105,8 @@ import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.CombatRules;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -140,7 +131,6 @@ import net.minecraftforge.fml.common.Optional.Interface;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import twilightforest.entity.boss.EntityTFLich;
 
 @Interface(iface = "com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues", modid = "iceandfire")
 public abstract class EntityTameBase extends EntityBase implements IEntityOwnable, IBlacklistedFromStatues {
@@ -329,16 +319,10 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     setDoorAItask((getIntelligence() < 12.0F));
     this.renderYawOffset = this.rotationYaw = this.rotationYawHead = this.rand.nextFloat() * 360.0F;
     this.onGround = true;
-    for (int k = 0; k < this.inventoryArmorDropChances.length; k++)
-      this.inventoryArmorDropChances[k] = 0.0F; 
-    for (int j = 0; j < this.inventoryHandsDropChances.length; j++)
-      this.inventoryHandsDropChances[j] = 0.0F; 
+      Arrays.fill(this.inventoryArmorDropChances, 0.0F);
+      Arrays.fill(this.inventoryHandsDropChances, 0.0F);
     this.experienceValue = 10;
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIAvoidEntitySPC((EntityCreature)this, EntityLivingBase.class, new Predicate<EntityLivingBase>() {
-            public boolean apply(EntityLivingBase p_apply_1_) {
-              return (p_apply_1_ != null && ((EntityTameBase.this.shouldFleeAtLowHealth() && p_apply_1_.isEntityAlive() && EntityTameBase.this.getIntelligence() > 4.0F) || (EntityTameBase.this.isChild() && EngenderConfig.mobs.useMobTalkerModels) || (p_apply_1_ instanceof EntityLiving && p_apply_1_.getHealth() <= 0.0F && p_apply_1_.deathTime <= 0 && !(p_apply_1_ instanceof EntityTameBase)) || (p_apply_1_ instanceof EntityWither && ((EntityWither)p_apply_1_).getInvulTime() > 0)));
-            }
-          },  16.0F, 1.25D, 1.25D));
+    this.tasks.addTask(1, (EntityAIBase)new EntityAIAvoidEntitySPC((EntityCreature)this, EntityLivingBase.class, (Predicate<EntityLivingBase>) p_apply_1_ -> (p_apply_1_ != null && ((EntityTameBase.this.shouldFleeAtLowHealth() && p_apply_1_.isEntityAlive() && EntityTameBase.this.getIntelligence() > 4.0F) || (EntityTameBase.this.isChild() && EngenderConfig.mobs.useMobTalkerModels) || (p_apply_1_ instanceof EntityLiving && p_apply_1_.getHealth() <= 0.0F && p_apply_1_.deathTime <= 0 && !(p_apply_1_ instanceof EntityTameBase)) || (p_apply_1_ instanceof EntityWither && ((EntityWither)p_apply_1_).getInvulTime() > 0))),  16.0F, 1.25D, 1.25D));
     this.tasks.addTask(0, (EntityAIBase)new EntityAIOpenDoor((EntityLiving)this, true));
     this.tasks.addTask(0, (EntityAIBase)new EntityAIMobGirlMate(this, 1.2D));
     this.tasks.addTask(0, (EntityAIBase)new EntityAIFollowWildAdult(this, 1.25D));
@@ -350,9 +334,9 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
             return super.shouldExecute();
           }
         });
-    this.targetTasks.addTask(0, (EntityAIBase)new EntityAIFriendlyHurtByTarget((EntityCreature)this, true, new Class[0]));
-    this.targetTasks.addTask(0, (EntityAIBase)new EntityAILeaderHurtByTarget(this));
-    this.targetTasks.addTask(0, (EntityAIBase)new EntityAILeaderHurtTarget(this));
+    this.targetTasks.addTask(0, new EntityAIFriendlyHurtByTarget((EntityCreature)this, true, new Class[0]));
+    this.targetTasks.addTask(0, new EntityAILeaderHurtByTarget(this));
+    this.targetTasks.addTask(0, new EntityAILeaderHurtTarget(this));
     if (getBookID() != 0)
       setCurrentBook(new ItemStack(books[getBookID()], 1, getBookDurability())); 
     this.renderLocations = new Vec3d[2][4];
@@ -424,7 +408,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public enum EnumStudy {
-    Physical, Mental, Combative;
+    Physical, Mental, Combative
   }
   
   public Vec3d[] getRenderLocations(float p_193098_1_) {
@@ -474,11 +458,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public void setArmsRaised(boolean armsRaised) {
-    getDataManager().set(ARMS_RAISED, Boolean.valueOf(armsRaised));
+    getDataManager().set(ARMS_RAISED, armsRaised);
   }
   
   public boolean isArmsRaised() {
-    return ((Boolean)getDataManager().get(ARMS_RAISED)).booleanValue();
+    return (Boolean) getDataManager().get(ARMS_RAISED);
   }
   
   public int timesToConvert() {
@@ -589,11 +573,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public final float getEnergy() {
-    return ((Float)this.dataManager.get(ENERGY)).floatValue();
+    return (Float) this.dataManager.get(ENERGY);
   }
   
   public void setEnergy(float health) {
-    this.dataManager.set(ENERGY, Float.valueOf(health));
+    this.dataManager.set(ENERGY, health);
   }
   
   public void learnLevelUp(ItemLearningBook book) {
@@ -710,11 +694,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public final float getFakeHealth() {
-    return ((Float)this.dataManager.get(FAKE_HEALTH)).floatValue();
+    return (Float) this.dataManager.get(FAKE_HEALTH);
   }
   
   public void setFakeHealth(float health) {
-    this.dataManager.set(FAKE_HEALTH, Float.valueOf(MathHelper.clamp(health, 0.0F, getMaxHealth() * 2.0F)));
+    this.dataManager.set(FAKE_HEALTH, MathHelper.clamp(health, 0.0F, getMaxHealth() * 2.0F));
   }
   
   protected void jump() {
@@ -846,76 +830,76 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   
   protected void entityInit() {
     super.entityInit();
-    getDataManager().register(ARMS_RAISED, Boolean.valueOf(false));
-    getDataManager().register(IS_CHILD, Boolean.valueOf(false));
-    getDataManager().register(IS_MARRIED, Boolean.valueOf(false));
+    getDataManager().register(ARMS_RAISED, Boolean.FALSE);
+    getDataManager().register(IS_CHILD, Boolean.FALSE);
+    getDataManager().register(IS_MARRIED, Boolean.FALSE);
     getDataManager().register(OWNER_UNIQUE_ID, Optional.absent());
-    getDataManager().register(HERO, Boolean.valueOf(false));
-    getDataManager().register(REBIRTH, Boolean.valueOf(false));
-    getDataManager().register(ANTIMOB, Boolean.valueOf(false));
-    getDataManager().register(SITRESTING, Boolean.valueOf(false));
-    getDataManager().register(HEROSPECIALATTACKTIMER, Integer.valueOf(0));
-    getDataManager().register(AGE, Integer.valueOf(0));
-    getDataManager().register(LEVEL, Integer.valueOf(0));
-    getDataManager().register(EXP, Float.valueOf(0.0F));
-    getDataManager().register(TOTALEXP, Float.valueOf(0.0F));
-    getDataManager().register(ENERGY, Float.valueOf(100.0F));
-    getDataManager().register(FAKE_HEALTH, Float.valueOf(0.0F));
+    getDataManager().register(HERO, Boolean.FALSE);
+    getDataManager().register(REBIRTH, Boolean.FALSE);
+    getDataManager().register(ANTIMOB, Boolean.FALSE);
+    getDataManager().register(SITRESTING, Boolean.FALSE);
+    getDataManager().register(HEROSPECIALATTACKTIMER, 0);
+    getDataManager().register(AGE, 0);
+    getDataManager().register(LEVEL, 0);
+    getDataManager().register(EXP, 0.0F);
+    getDataManager().register(TOTALEXP, 0.0F);
+    getDataManager().register(ENERGY, 100.0F);
+    getDataManager().register(FAKE_HEALTH, 0.0F);
     getDataManager().register(GUARD_BLOCK_POS, Optional.absent());
-    getDataManager().register(BOOK_ID, Integer.valueOf(0));
-    getDataManager().register(BOOK_DURABILITY, Integer.valueOf(0));
-    getDataManager().register(GHOST_TIME, Integer.valueOf(0));
-    getDataManager().register(ILLUSION_FORM_TIME, Integer.valueOf(0));
-    getDataManager().register(POLYMORPH_TIME, Integer.valueOf(0));
-    getDataManager().register(ATTACKSTATE, Integer.valueOf(0));
+    getDataManager().register(BOOK_ID, 0);
+    getDataManager().register(BOOK_DURABILITY, 0);
+    getDataManager().register(GHOST_TIME, 0);
+    getDataManager().register(ILLUSION_FORM_TIME, 0);
+    getDataManager().register(POLYMORPH_TIME, 0);
+    getDataManager().register(ATTACKSTATE, 0);
   }
   
   public int getAttackState() {
-    return ((Integer)this.dataManager.get(ATTACKSTATE)).intValue();
+    return (Integer) this.dataManager.get(ATTACKSTATE);
   }
   
   public void setAttackState(int age) {
-    this.dataManager.set(ATTACKSTATE, Integer.valueOf(age));
+    this.dataManager.set(ATTACKSTATE, age);
   }
   
   public int getPolymorphTime() {
-    return ((Integer)this.dataManager.get(POLYMORPH_TIME)).intValue();
+    return (Integer) this.dataManager.get(POLYMORPH_TIME);
   }
   
   public void setPolymorphTime(int age) {
-    this.dataManager.set(POLYMORPH_TIME, Integer.valueOf(age));
+    this.dataManager.set(POLYMORPH_TIME, age);
   }
   
   public int getIllusionFormTime() {
-    return ((Integer)this.dataManager.get(ILLUSION_FORM_TIME)).intValue();
+    return (Integer) this.dataManager.get(ILLUSION_FORM_TIME);
   }
   
   public void setIllusionFormTime(int age) {
-    this.dataManager.set(ILLUSION_FORM_TIME, Integer.valueOf(age));
+    this.dataManager.set(ILLUSION_FORM_TIME, age);
   }
   
   public int getGhostTime() {
-    return ((Integer)this.dataManager.get(GHOST_TIME)).intValue();
+    return (Integer) this.dataManager.get(GHOST_TIME);
   }
   
   public void setGhostTime(int age) {
-    this.dataManager.set(GHOST_TIME, Integer.valueOf(age));
+    this.dataManager.set(GHOST_TIME, age);
   }
   
   public int getBookID() {
-    return ((Integer)this.dataManager.get(BOOK_ID)).intValue();
+    return (Integer) this.dataManager.get(BOOK_ID);
   }
   
   public void setBookID(int age) {
-    this.dataManager.set(BOOK_ID, Integer.valueOf(age));
+    this.dataManager.set(BOOK_ID, age);
   }
   
   public int getBookDurability() {
-    return ((Integer)this.dataManager.get(BOOK_DURABILITY)).intValue();
+    return (Integer) this.dataManager.get(BOOK_DURABILITY);
   }
   
   public void setBookDurability(int age) {
-    this.dataManager.set(BOOK_DURABILITY, Integer.valueOf(age));
+    this.dataManager.set(BOOK_DURABILITY, age);
   }
   
   public boolean canBeMarried() {
@@ -923,19 +907,19 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public boolean isMarried() {
-    return ((Boolean)getDataManager().get(IS_MARRIED)).booleanValue();
+    return (Boolean) getDataManager().get(IS_MARRIED);
   }
   
   public void setMarried(boolean childZombie) {
-    getDataManager().set(IS_MARRIED, Boolean.valueOf(childZombie));
+    getDataManager().set(IS_MARRIED, childZombie);
   }
   
   public boolean isChild() {
-    return ((Boolean)getDataManager().get(IS_CHILD)).booleanValue();
+    return (Boolean) getDataManager().get(IS_CHILD);
   }
   
   public void setChild(boolean childZombie) {
-    getDataManager().set(IS_CHILD, Boolean.valueOf(childZombie));
+    getDataManager().set(IS_CHILD, childZombie);
     if (this.world != null && !this.world.isRemote) {
       IAttributeInstance iattributeinstance = getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
       iattributeinstance.removeModifier(BABY_SPEED_BOOST);
@@ -1184,11 +1168,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public int getSpecialAttackTimer() {
-    return ((Integer)this.dataManager.get(HEROSPECIALATTACKTIMER)).intValue();
+    return (Integer) this.dataManager.get(HEROSPECIALATTACKTIMER);
   }
   
   public void setSpecialAttackTimer(int p_82215_1_) {
-    this.dataManager.set(HEROSPECIALATTACKTIMER, Integer.valueOf(p_82215_1_));
+    this.dataManager.set(HEROSPECIALATTACKTIMER, p_82215_1_);
   }
   
   public void performSpecialAttack() {}
@@ -1233,10 +1217,10 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     setMarried(tagCompund.getBoolean("IsMarried"));
     setChild(tagCompund.getBoolean("IsBaby"));
     setOwnerId(null);
-    this.dataManager.set(REBIRTH, Boolean.valueOf(tagCompund.getBoolean("LastChance")));
-    this.dataManager.set(HERO, Boolean.valueOf(tagCompund.getBoolean("Hero")));
-    this.dataManager.set(ANTIMOB, Boolean.valueOf(tagCompund.getBoolean("Anti")));
-    this.dataManager.set(SITRESTING, Boolean.valueOf(tagCompund.getBoolean("SitResting")));
+    this.dataManager.set(REBIRTH, tagCompund.getBoolean("LastChance"));
+    this.dataManager.set(HERO, tagCompund.getBoolean("Hero"));
+    this.dataManager.set(ANTIMOB, tagCompund.getBoolean("Anti"));
+    this.dataManager.set(SITRESTING, tagCompund.getBoolean("SitResting"));
     setSpecialAttackTimer(tagCompund.getInteger("SAT"));
     this.inLove = tagCompund.getInteger("InLove");
     setGrowingAge(tagCompund.getInteger("Age"));
@@ -1288,9 +1272,9 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     tagCompound.setBoolean("IsMarried", isMarried());
     tagCompound.setBoolean("IsBaby", isChild());
     tagCompound.setBoolean("Hero", isHero());
-    tagCompound.setBoolean("LastChance", ((Boolean)this.dataManager.get(REBIRTH)).booleanValue());
-    tagCompound.setBoolean("Anti", ((Boolean)this.dataManager.get(ANTIMOB)).booleanValue());
-    tagCompound.setBoolean("SitResting", ((Boolean)this.dataManager.get(SITRESTING)).booleanValue());
+    tagCompound.setBoolean("LastChance", (Boolean) this.dataManager.get(REBIRTH));
+    tagCompound.setBoolean("Anti", (Boolean) this.dataManager.get(ANTIMOB));
+    tagCompound.setBoolean("SitResting", (Boolean) this.dataManager.get(SITRESTING));
     tagCompound.setInteger("SAT", getSpecialAttackTimer());
     tagCompound.setFloat("EXP", getEXP());
     tagCompound.setFloat("TotalEXP", getTotalEXP());
@@ -1328,27 +1312,27 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public boolean isSitResting() {
-    return ((Boolean)this.dataManager.get(SITRESTING)).booleanValue();
+    return (Boolean) this.dataManager.get(SITRESTING);
   }
   
   public void setSitResting(boolean bool) {
-    this.dataManager.set(SITRESTING, Boolean.valueOf(bool));
+    this.dataManager.set(SITRESTING, bool);
   }
   
   public boolean isAntiMob() {
-    return ((Boolean)this.dataManager.get(ANTIMOB)).booleanValue();
+    return (Boolean) this.dataManager.get(ANTIMOB);
   }
   
   public void setIsAntiMob(boolean bool) {
-    this.dataManager.set(ANTIMOB, Boolean.valueOf(bool));
+    this.dataManager.set(ANTIMOB, bool);
   }
   
   public boolean isHero() {
-    return ((Boolean)this.dataManager.get(HERO)).booleanValue();
+    return (Boolean) this.dataManager.get(HERO);
   }
   
   public void setIsHero(boolean bool) {
-    this.dataManager.set(HERO, Boolean.valueOf(bool));
+    this.dataManager.set(HERO, bool);
   }
   
   public void becomeAHero() {
@@ -1358,11 +1342,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public boolean hasLastChance() {
-    return ((Boolean)this.dataManager.get(REBIRTH)).booleanValue();
+    return (Boolean) this.dataManager.get(REBIRTH);
   }
   
   public void setLastChance(boolean bool) {
-    this.dataManager.set(REBIRTH, Boolean.valueOf(bool));
+    this.dataManager.set(REBIRTH, bool);
   }
   
   public SoundCategory getSoundCategory() {
@@ -1371,7 +1355,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   
   @Nullable
   public BlockPos getGuardBlock() {
-    return (BlockPos)((Optional)this.dataManager.get(GUARD_BLOCK_POS)).orNull();
+    return (BlockPos)((Optional<?>)this.dataManager.get(GUARD_BLOCK_POS)).orNull();
   }
   
   public void setGuardBlock(@Nullable BlockPos pos) {
@@ -1676,11 +1660,10 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         List<EntityTameBase> allies = this.world.getEntitiesWithinAABB(getClass(), getEntityBoundingBox().grow(3.0D));
         if (!this.world.isRemote && 
           !allies.isEmpty())
-          for (int i1 = 0; i1 < allies.size(); i1++) {
-            EntityTameBase entities = allies.get(i1);
-            if (entities.isEntityAlive() && entities.isASwarmingMob() && entities.getClass() == getClass())
-              f += 0.1F; 
-          }  
+            for (EntityTameBase entities : allies) {
+                if (entities.isEntityAlive() && entities.isASwarmingMob() && entities.getClass() == getClass())
+                    f += 0.1F;
+            }
       }  
     IAttributeInstance bonus = getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
     AttributeModifier vslight = (new AttributeModifier(UUID.fromString("B9766B59-8566-4402-BC1F-3EE2A276D831"), "Light Bonus", getBonusVSLight(), 1)).setSaved(false);
@@ -2155,11 +2138,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public int getGrowingAge() {
-    return ((Integer)this.dataManager.get(AGE)).intValue();
+    return (Integer) this.dataManager.get(AGE);
   }
   
   public void setGrowingAge(int age) {
-    this.dataManager.set(AGE, Integer.valueOf(age));
+    this.dataManager.set(AGE, age);
     if (age == 0)
       resetInLove(); 
     if (age < 0 && !isChild())
@@ -2167,27 +2150,27 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public int getLevel() {
-    return ((Integer)this.dataManager.get(LEVEL)).intValue();
+    return (Integer) this.dataManager.get(LEVEL);
   }
   
   public void setLevel(int age) {
-    this.dataManager.set(LEVEL, Integer.valueOf(age));
+    this.dataManager.set(LEVEL, age);
   }
   
   public float getEXP() {
-    return ((Float)this.dataManager.get(EXP)).floatValue();
+    return (Float) this.dataManager.get(EXP);
   }
   
   public void setEXP(float age) {
-    this.dataManager.set(EXP, Float.valueOf(age));
+    this.dataManager.set(EXP, age);
   }
   
   public float getTotalEXP() {
-    return ((Float)this.dataManager.get(TOTALEXP)).floatValue();
+    return (Float) this.dataManager.get(TOTALEXP);
   }
   
   public void setTotalEXP(float age) {
-    this.dataManager.set(TOTALEXP, Float.valueOf(age));
+    this.dataManager.set(TOTALEXP, age);
   }
   
   public int getNextLevelRequirement() {
@@ -2629,7 +2612,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         if (getOwner() != null)
           if (isHero()) {
             for (EntityPlayer entityplayer : this.world.playerEntities)
-              entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("\u00A74" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true); 
+              entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
             ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("A Hero mob has fallen!", new Object[0]));
           }  
         if (!this.world.isRemote && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")) {
@@ -2826,7 +2809,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   public void spawnHeartParticle() {
     if (this.world.isRemote) {
       if (isEntityAlive())
-        this.world.spawnParticle(EnumParticleTypes.HEART, this.posX + this.rand.nextGaussian(), this.posY + this.height, this.posZ + this.rand.nextGaussian(), 0.0D, 0.0D, 0.0D, new int[0]); 
+        this.world.spawnParticle(EnumParticleTypes.HEART, this.posX + this.rand.nextGaussian(), this.posY + this.height, this.posZ + this.rand.nextGaussian(), 0.0D, 0.0D, 0.0D);
     } else {
       this.world.setEntityState((Entity)this, (byte)22);
     } 
@@ -2838,7 +2821,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       double d1 = this.rand.nextGaussian() * 0.02D;
       double d2 = this.rand.nextGaussian() * 0.02D;
       if (isEntityAlive())
-        this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + getEyeHeight(), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d0, d1, d2, new int[0]); 
+        this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + getEyeHeight(), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d0, d1, d2);
     } else {
       this.world.setEntityState((Entity)this, (byte)23);
     } 
@@ -2851,9 +2834,9 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         double d1 = this.rand.nextDouble() * this.height;
         double d2 = this.rand.nextGaussian() * (this.width / 2.0F);
         if (isEntityAlive()) {
-          this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + d0, this.posY + d1, this.posZ + d2, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX + d0, this.posY + d1, this.posZ + d2, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + d0, this.posY + d1, this.posZ + d2, this.rand.nextDouble(), this.rand.nextDouble(), this.rand.nextDouble(), new int[0]);
+          this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + d0, this.posY + d1, this.posZ + d2, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
+          this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX + d0, this.posY + d1, this.posZ + d2, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
+          this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + d0, this.posY + d1, this.posZ + d2, this.rand.nextDouble(), this.rand.nextDouble(), this.rand.nextDouble());
         } 
       } 
     } else {
@@ -2866,7 +2849,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       for (int i1 = 0; i1 < this.convertionInt; i1++) {
         float f1 = i1 * 3.1415927F / timesToConvert() * 0.5F;
         if (isEntityAlive())
-          this.world.spawnParticle(EnumParticleTypes.END_ROD, true, this.posX + MathHelper.cos(f1) * ((this.width > 6.0F) ? 6.0F : this.width), this.posY + this.height + 1.0D, this.posZ + MathHelper.sin(f1) * ((this.width > 6.0F) ? 6.0F : this.width), this.motionX, this.motionY, this.motionZ, new int[0]); 
+          this.world.spawnParticle(EnumParticleTypes.END_ROD, true, this.posX + MathHelper.cos(f1) * (Math.min(this.width, 6.0F)), this.posY + this.height + 1.0D, this.posZ + MathHelper.sin(f1) * (Math.min(this.width, 6.0F)), this.motionX, this.motionY, this.motionZ);
       } 
     } else {
       this.world.setEntityState((Entity)this, (byte)21);
@@ -2936,11 +2919,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       setRevengeTarget(null); 
     if (!this.world.isRemote && getRevengeTarget() == null && getAttackTarget() == null)
       if (Maths.chance(75)) {
-        List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue()), Predicates.and(new Predicate<Entity>() {
-                public boolean apply(@Nullable Entity p_apply_1_) {
-                  return p_apply_1_.isEntityAlive();
-                }
-              },  EntitySelectors.CAN_AI_TARGET));
+        List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue()), Predicates.and((Predicate<Entity>) p_apply_1_ -> p_apply_1_.isEntityAlive(),  EntitySelectors.CAN_AI_TARGET));
         for (int j2 = 0; j2 < 10 && !list1.isEmpty(); j2++) {
           EntityLivingBase entitylivingbase = list1.get(this.rand.nextInt(list1.size()));
           if (entitylivingbase != this) {
@@ -3008,7 +2987,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
           double d5 = this.rand.nextGaussian() * 0.02D;
           double d6 = this.rand.nextGaussian() * 0.02D;
           double d7 = 10.0D;
-          this.world.spawnParticle(EnumParticleTypes.CRIT, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width - d4 * d7, this.posY + (this.rand.nextFloat() * this.height) - d5 * d7, this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width - d6 * d7, 0.0D, 0.0D, 0.0D, new int[0]);
+          this.world.spawnParticle(EnumParticleTypes.CRIT, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width - d4 * d7, this.posY + (this.rand.nextFloat() * this.height) - d5 * d7, this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width - d6 * d7, 0.0D, 0.0D, 0.0D);
         } 
       } 
     } 
@@ -3235,8 +3214,8 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (this.ticksExisted > 20 && getRidingEntity() != null && getRidingEntity() instanceof EntityPlayer && !(this instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityChagaroth) && !(this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntitySlime) && !isChild())
       dismountRidingEntity(); 
     if (getLevel() >= 299 && getTier() != EnumTier.TIER6 && this.rand.nextInt(5) == 0)
-      this.world.spawnParticle(EnumParticleTypes.END_ROD, this.posX + (this.rand.nextFloat() * this.width * 2.0F - this.width) * 0.6D, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextFloat() * this.width * 2.0F - this.width) * 0.6D, 0.0D, 0.01D, 0.0D, new int[0]); 
-    List<EntityTameBase> list = this.world.getEntitiesWithinAABB(EntityTameBase.class, getEntityBoundingBox().grow(0.1D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      this.world.spawnParticle(EnumParticleTypes.END_ROD, this.posX + (this.rand.nextFloat() * this.width * 2.0F - this.width) * 0.6D, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextFloat() * this.width * 2.0F - this.width) * 0.6D, 0.0D, 0.01D, 0.0D);
+    List<EntityTameBase> list = this.world.getEntitiesWithinAABB(EntityTameBase.class, getEntityBoundingBox().grow(0.1D), Predicates.and(EntitySelectors.IS_ALIVE));
     if (!this.world.isRemote && list != null && !list.isEmpty() && isAntiMob())
       for (int i1 = 0; i1 < list.size(); i1++) {
         EntityTameBase entity = list.get(i1);
@@ -3357,8 +3336,8 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         } 
       } else if (this.hurtResistantTime == 1 || this.moralRaisedTimer == 1) {
         for (int j = 0; j < 4; j++) {
-          float f1 = 1.0F + ((this.width < 1.0F) ? 1.0F : this.width) * 0.5F;
-          float f11 = 1.0F + ((this.width < 1.0F) ? 1.0F : this.width) * 1.0F;
+          float f1 = 1.0F + (Math.max(this.width, 1.0F)) * 0.5F;
+          float f11 = 1.0F + (Math.max(this.width, 1.0F)) * 1.0F;
           this.renderLocations[0][j] = this.renderLocations[1][j];
           this.renderLocations[1][j] = new Vec3d((this.rand.nextFloat() * f11 - f1), Math.max(0, this.rand.nextInt(2)), (this.rand.nextFloat() * f11 - f1));
         } 
@@ -3380,7 +3359,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (this.motionY > 0.0D)
       this.fallDistance = 0.0F; 
     if (getJukeboxToDanceTo() != null && this.ticksExisted % 10 == 0 && isEntityAlive())
-      this.world.spawnParticle(EnumParticleTypes.NOTE, this.posX, this.posY + this.height, this.posZ, this.rand.nextDouble(), this.rand.nextDouble(), this.rand.nextDouble(), new int[0]); 
+      this.world.spawnParticle(EnumParticleTypes.NOTE, this.posX, this.posY + this.height, this.posZ, this.rand.nextDouble(), this.rand.nextDouble(), this.rand.nextDouble());
     if (this.convertionInt > 0 && this.ticksExisted % 10 == 0)
       this.world.setEntityState((Entity)this, (byte)21); 
     if (this.convertionInt > 0)
@@ -3390,14 +3369,14 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (Loader.isModLoaded("iceandfire")) {
       List<?> list = this.world.loadedEntityList;
       if (!list.isEmpty())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          Entity entity = (Entity)list.get(i1);
-          if (entity.isEntityAlive() && entity instanceof EntityMob) {
-            EntityMob mob = (EntityMob)entity;
-            if (mob.width == 0.8F && mob.height == 1.99F && mob.getAttackTarget() != null)
-              mob.setAttackTarget((EntityLivingBase)mob); 
-          } 
-        }  
+          for (Object o : list) {
+              Entity entity = (Entity) o;
+              if (entity.isEntityAlive() && entity instanceof EntityMob) {
+                  EntityMob mob = (EntityMob) entity;
+                  if (mob.width == 0.8F && mob.height == 1.99F && mob.getAttackTarget() != null)
+                      mob.setAttackTarget((EntityLivingBase) mob);
+              }
+          }
     } 
     if (isBeingRidden() && !(this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier2.EntitySquid) && !(this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityGuardian)) {
       if (isInWater() || isInLava())
@@ -3506,7 +3485,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       getNavigator().clearPath();
       IBlockState iblockstate = this.world.getBlockState(getJukeboxToDanceTo());
       Block block = iblockstate.getBlock();
-      if (block != Blocks.JUKEBOX || (block == Blocks.JUKEBOX && !((Boolean)iblockstate.getValue((IProperty)BlockJukebox.HAS_RECORD)).booleanValue()) || getDistanceSqToCenter(this.jukeBoxToDanceTo) > 10000.0D)
+      if (block != Blocks.JUKEBOX || (block == Blocks.JUKEBOX && !(Boolean) iblockstate.getValue((IProperty) BlockJukebox.HAS_RECORD)) || getDistanceSqToCenter(this.jukeBoxToDanceTo) > 10000.0D)
         setJukeboxToDanceTo((BlockPos)null); 
     } 
     if (getAttackTarget() == null && getJukeboxToDanceTo() == null && (this.ticksExisted % 40 == 0 || this.ticksExisted < 5)) {
@@ -3522,7 +3501,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
             BlockPos blockpos = new BlockPos(i3, k, l);
             IBlockState iblockstate = this.world.getBlockState(blockpos);
             Block block = iblockstate.getBlock();
-            if (block == Blocks.JUKEBOX && ((Boolean)iblockstate.getValue((IProperty)BlockJukebox.HAS_RECORD)).booleanValue())
+            if (block == Blocks.JUKEBOX && (Boolean) iblockstate.getValue((IProperty) BlockJukebox.HAS_RECORD))
               setJukeboxToDanceTo(blockpos); 
           } 
         } 
@@ -3559,11 +3538,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
           for (Entity part : getParts()) {
             if (this.world.isRemote)
               if (isEntityAlive() && this.rand.nextInt(2) == 0)
-                this.world.spawnParticle((getOwnerId() == null) ? EnumParticleTypes.REDSTONE : EnumParticleTypes.FIREWORKS_SPARK, part.posX + (this.rand.nextFloat() * part.width * 2.0F) - part.width, part.posY + (this.rand.nextFloat() * part.height), part.posZ + (this.rand.nextFloat() * part.width * 2.0F) - part.width, 0.0D, 0.0D, 0.0D, new int[0]);  
+                this.world.spawnParticle((getOwnerId() == null) ? EnumParticleTypes.REDSTONE : EnumParticleTypes.FIREWORKS_SPARK, part.posX + (this.rand.nextFloat() * part.width * 2.0F) - part.width, part.posY + (this.rand.nextFloat() * part.height), part.posZ + (this.rand.nextFloat() * part.width * 2.0F) - part.width, 0.0D, 0.0D, 0.0D);
           } 
         } else if (this.world.isRemote) {
           if (isEntityAlive() && this.rand.nextInt(2) == 0)
-            this.world.spawnParticle((getOwnerId() == null) ? EnumParticleTypes.REDSTONE : EnumParticleTypes.FIREWORKS_SPARK, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, 0.0D, 0.0D, 0.0D, new int[0]); 
+            this.world.spawnParticle((getOwnerId() == null) ? EnumParticleTypes.REDSTONE : EnumParticleTypes.FIREWORKS_SPARK, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, 0.0D, 0.0D, 0.0D);
         }  
     } else {
       if (this.ticksExisted == 2) {

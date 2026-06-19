@@ -131,7 +131,7 @@ public class EntityOmotholGhoul extends EntityTameBase implements Armored, Undea
       ((EntityLivingBase)par1Entity).addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 20));
     } 
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)((ACConfig.damageAmpl > 1.0D) ? ACConfig.damageAmpl : 1.0D)); 
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return super.attackEntityAsMob(par1Entity);
   }
   

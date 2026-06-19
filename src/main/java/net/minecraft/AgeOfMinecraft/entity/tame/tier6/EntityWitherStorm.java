@@ -289,8 +289,8 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(SIZE, Integer.valueOf(0));
-    this.dataManager.register(DOESNT_HAVE_COMMAND_BLOCK, Boolean.valueOf(false));
+    this.dataManager.register(SIZE, 0);
+    this.dataManager.register(DOESNT_HAVE_COMMAND_BLOCK, Boolean.FALSE);
   }
   
   public void outOfWorld() {}
@@ -621,7 +621,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       float f13 = (this.rand.nextFloat() - 0.5F) * 12.0F;
       float f15 = (this.rand.nextFloat() - 0.5F) * 36.0F;
       float f17 = (this.rand.nextFloat() - 0.5F) * 12.0F;
-      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX + f13, this.posY - 4.0D + f15, this.posZ + f17, 0.0D, 0.0D, 0.0D, new int[0]);
+      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX + f13, this.posY - 4.0D + f15, this.posZ + f17, 0.0D, 0.0D, 0.0D);
     } 
     if (!this.world.isRemote && getOwner() != null && this.posY <= (getOwner()).posY && this.posY >= (getOwner()).posY - 0.5D && !isSneaking())
       createEngenderModExplosion((Entity)this, this.posX, this.posY, this.posZ, 8.0F, false, EngenderConfig.mobs.grief); 
@@ -669,7 +669,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
           } 
         }  
       if (this.ticksExisted % 60 == 0) {
-        List<EntityCreature> list2 = this.world.getEntitiesWithinAABB(EntityCreature.class, getEntityBoundingBox().grow(128.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+        List<EntityCreature> list2 = this.world.getEntitiesWithinAABB(EntityCreature.class, getEntityBoundingBox().grow(128.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
         if (list2 != null && !list2.isEmpty())
           for (int i1 = 0; i1 < list2.size(); i1++) {
             EntityCreature entity = list2.get(i1);
@@ -682,101 +682,93 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
           }  
       } 
       if (this.ticksExisted > 20 && !doesntContainACommandBlock()) {
-        List<Entity> list2 = this.world.getEntitiesWithinAABB(Entity.class, getEntityBoundingBox().grow(128.0D, 128.0D, 128.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+        List<Entity> list2 = this.world.getEntitiesWithinAABB(Entity.class, getEntityBoundingBox().grow(128.0D, 128.0D, 128.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
         if (list2 != null && !list2.isEmpty() && isEntityAlive())
-          for (int i1 = 0; i1 < list2.size(); i1++) {
-            Entity entity = list2.get(i1);
-            if (!(entity instanceof EntityFallingBlock) && entity != null && entity.getEyeHeight() == 0.0F && entity.height == 0.98F && entity.width == 0.98F) {
-              entity.noClip = (entity.collidedHorizontally || entity.collidedVertically);
-              double d01 = this.posX - entity.posX;
-              double d11 = this.posY + getEyeHeight() - entity.posY;
-              double d21 = this.posZ - entity.posZ;
-              float f2 = MathHelper.sqrt(d01 * d01 + d11 * d11 + d21 * d21);
-              entity.motionX = d01 / f2 * 0.5D * 0.5D + entity.motionX * 0.5D;
-              entity.motionY = d11 / f2 * 0.5D * 0.5D + entity.motionY * 0.5D;
-              entity.motionZ = d21 / f2 * 0.5D * 0.5D + entity.motionZ * 0.5D;
-            } 
-          }  
+            for (Entity entity : list2) {
+                if (!(entity instanceof EntityFallingBlock) && entity != null && entity.getEyeHeight() == 0.0F && entity.height == 0.98F && entity.width == 0.98F) {
+                    entity.noClip = (entity.collidedHorizontally || entity.collidedVertically);
+                    double d01 = this.posX - entity.posX;
+                    double d11 = this.posY + getEyeHeight() - entity.posY;
+                    double d21 = this.posZ - entity.posZ;
+                    float f2 = MathHelper.sqrt(d01 * d01 + d11 * d11 + d21 * d21);
+                    entity.motionX = d01 / f2 * 0.5D * 0.5D + entity.motionX * 0.5D;
+                    entity.motionY = d11 / f2 * 0.5D * 0.5D + entity.motionY * 0.5D;
+                    entity.motionZ = d21 / f2 * 0.5D * 0.5D + entity.motionZ * 0.5D;
+                }
+            }
       } 
-      List<EntityFallingBlock> list = this.world.getEntitiesWithinAABB(EntityFallingBlock.class, getEntityBoundingBox().grow(128.0D, 128.0D, 128.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+      List<EntityFallingBlock> list = this.world.getEntitiesWithinAABB(EntityFallingBlock.class, getEntityBoundingBox().grow(128.0D, 128.0D, 128.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
       if (list != null && !list.isEmpty() && isEntityAlive() && !doesntContainACommandBlock())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityFallingBlock entity = list.get(i1);
-          if (entity != null) {
-            double d01 = this.posX - entity.posX;
-            double d11 = this.posY + getEyeHeight() - entity.posY;
-            double d21 = this.posZ - entity.posZ;
-            float f2 = MathHelper.sqrt(d01 * d01 + d11 * d11 + d21 * d21);
-            entity.motionX = d01 / f2 * 0.5D * 0.5D + entity.motionX * 0.5D;
-            entity.motionY = d11 / f2 * 0.5D * 0.5D + entity.motionY * 0.5D;
-            entity.motionZ = d21 / f2 * 0.5D * 0.5D + entity.motionZ * 0.5D;
-            List<EntityLivingBase> sublist = this.world.getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox(), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
-            if (isEntityAlive() && sublist != null && !sublist.isEmpty())
-              for (int i11 = 0; i11 < sublist.size(); i11++) {
-                EntityLivingBase subentity = sublist.get(i11);
-                if (subentity != null && !false)
-                  subentity.attackEntityFrom(DamageSource.IN_WALL, 5.0F); 
-              }  
-          } 
-        }  
-      List<EntityFallingBlock> list1 = this.world.getEntitiesWithinAABB(EntityFallingBlock.class, getEntityBoundingBox(), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+          for (EntityFallingBlock entity : list) {
+              if (entity != null) {
+                  double d01 = this.posX - entity.posX;
+                  double d11 = this.posY + getEyeHeight() - entity.posY;
+                  double d21 = this.posZ - entity.posZ;
+                  float f2 = MathHelper.sqrt(d01 * d01 + d11 * d11 + d21 * d21);
+                  entity.motionX = d01 / f2 * 0.5D * 0.5D + entity.motionX * 0.5D;
+                  entity.motionY = d11 / f2 * 0.5D * 0.5D + entity.motionY * 0.5D;
+                  entity.motionZ = d21 / f2 * 0.5D * 0.5D + entity.motionZ * 0.5D;
+                  List<EntityLivingBase> sublist = this.world.getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox(), Predicates.and(EntitySelectors.NOT_SPECTATING));
+                  if (isEntityAlive() && sublist != null && !sublist.isEmpty())
+                      for (EntityLivingBase subentity : sublist) {
+                          if (subentity != null && !false)
+                              subentity.attackEntityFrom(DamageSource.IN_WALL, 5.0F);
+                      }
+              }
+          }
+      List<EntityFallingBlock> list1 = this.world.getEntitiesWithinAABB(EntityFallingBlock.class, getEntityBoundingBox(), Predicates.and(EntitySelectors.NOT_SPECTATING));
       if (list1 != null && !list1.isEmpty() && isEntityAlive() && !doesntContainACommandBlock())
-        for (int i1 = 0; i1 < list1.size(); i1++) {
-          EntityFallingBlock entity = list1.get(i1);
-          if (entity != null) {
-            entity.setDead();
-            Grow(getSize() + 3);
-            heal(2.0F);
-          } 
-        }  
-      List<EntityItem> list11 = this.world.getEntitiesWithinAABB(EntityItem.class, getEntityBoundingBox().grow(256.0D, 256.0D, 256.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+          for (EntityFallingBlock entity : list1) {
+              if (entity != null) {
+                  entity.setDead();
+                  Grow(getSize() + 3);
+                  heal(2.0F);
+              }
+          }
+      List<EntityItem> list11 = this.world.getEntitiesWithinAABB(EntityItem.class, getEntityBoundingBox().grow(256.0D, 256.0D, 256.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
       if (list11 != null && !list11.isEmpty() && isEntityAlive() && !doesntContainACommandBlock())
-        for (int i1 = 0; i1 < list11.size(); i1++) {
-          EntityItem entity = list11.get(i1);
-          if (entity != null && entity.getItem().getItem() != EItem.witheredNetherStar) {
-            double d01 = this.posX - entity.posX;
-            double d11 = this.posY + 2.0D - entity.posY;
-            double d21 = this.posZ - entity.posZ;
-            float f2 = MathHelper.sqrt(d01 * d01 + d11 * d11 + d21 * d21);
-            entity.motionX = d01 / f2 * 0.6D * 0.6D + entity.motionX * 0.6D;
-            entity.motionY = d11 / f2 * 0.6D * 0.6D + entity.motionY * 0.6D;
-            entity.motionZ = d21 / f2 * 0.6D * 0.6D + entity.motionZ * 0.6D;
-          } 
-        }  
-      List<EntityItem> list111 = this.world.getEntitiesWithinAABB(EntityItem.class, getEntityBoundingBox().grow(4.0D, 4.0D, 4.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+          for (EntityItem entity : list11) {
+              if (entity != null && entity.getItem().getItem() != EItem.witheredNetherStar) {
+                  double d01 = this.posX - entity.posX;
+                  double d11 = this.posY + 2.0D - entity.posY;
+                  double d21 = this.posZ - entity.posZ;
+                  float f2 = MathHelper.sqrt(d01 * d01 + d11 * d11 + d21 * d21);
+                  entity.motionX = d01 / f2 * 0.6D * 0.6D + entity.motionX * 0.6D;
+                  entity.motionY = d11 / f2 * 0.6D * 0.6D + entity.motionY * 0.6D;
+                  entity.motionZ = d21 / f2 * 0.6D * 0.6D + entity.motionZ * 0.6D;
+              }
+          }
+      List<EntityItem> list111 = this.world.getEntitiesWithinAABB(EntityItem.class, getEntityBoundingBox().grow(4.0D, 4.0D, 4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
       if (list111 != null && !list111.isEmpty() && isEntityAlive() && !doesntContainACommandBlock())
-        for (int i1 = 0; i1 < list111.size(); i1++) {
-          EntityItem entity = list111.get(i1);
-          if (entity != null && entity.getItem().getItem() != EItem.witheredNetherStar) {
-            entity.setDead();
-            Grow(getSize() + 1 + entity.getItem().getCount());
-            heal((1 + entity.getItem().getCount()));
-          } 
-        }  
-      List<EntityArrow> list1111 = this.world.getEntitiesWithinAABB(EntityArrow.class, getEntityBoundingBox().grow(256.0D, 256.0D, 256.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+          for (EntityItem entity : list111) {
+              if (entity != null && entity.getItem().getItem() != EItem.witheredNetherStar) {
+                  entity.setDead();
+                  Grow(getSize() + 1 + entity.getItem().getCount());
+                  heal((1 + entity.getItem().getCount()));
+              }
+          }
+      List<EntityArrow> list1111 = this.world.getEntitiesWithinAABB(EntityArrow.class, getEntityBoundingBox().grow(256.0D, 256.0D, 256.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
       if (list1111 != null && !list1111.isEmpty() && isEntityAlive() && !doesntContainACommandBlock())
-        for (int i1 = 0; i1 < list1111.size(); i1++) {
-          EntityArrow entity = list1111.get(i1);
-          if (entity != null && !(entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntityTippedArrowOther)) {
-            double d01 = this.posX - entity.posX;
-            double d11 = this.posY + 2.0D - entity.posY;
-            double d21 = this.posZ - entity.posZ;
-            float f2 = MathHelper.sqrt(d01 * d01 + d11 * d11 + d21 * d21);
-            entity.motionX = d01 / f2 * 0.6D * 0.6D + entity.motionX * 0.6D;
-            entity.motionY = d11 / f2 * 0.6D * 0.6D + entity.motionY * 0.6D;
-            entity.motionZ = d21 / f2 * 0.6D * 0.6D + entity.motionZ * 0.6D;
-          } 
-        }  
-      List<EntityArrow> list11111 = this.world.getEntitiesWithinAABB(EntityArrow.class, getEntityBoundingBox().grow(4.0D, 4.0D, 4.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+          for (EntityArrow entity : list1111) {
+              if (entity != null && !(entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntityTippedArrowOther)) {
+                  double d01 = this.posX - entity.posX;
+                  double d11 = this.posY + 2.0D - entity.posY;
+                  double d21 = this.posZ - entity.posZ;
+                  float f2 = MathHelper.sqrt(d01 * d01 + d11 * d11 + d21 * d21);
+                  entity.motionX = d01 / f2 * 0.6D * 0.6D + entity.motionX * 0.6D;
+                  entity.motionY = d11 / f2 * 0.6D * 0.6D + entity.motionY * 0.6D;
+                  entity.motionZ = d21 / f2 * 0.6D * 0.6D + entity.motionZ * 0.6D;
+              }
+          }
+      List<EntityArrow> list11111 = this.world.getEntitiesWithinAABB(EntityArrow.class, getEntityBoundingBox().grow(4.0D, 4.0D, 4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
       if (list11111 != null && !list11111.isEmpty() && isEntityAlive() && !doesntContainACommandBlock())
-        for (int i1 = 0; i1 < list11111.size(); i1++) {
-          EntityArrow entity = list11111.get(i1);
-          if (entity != null && !(entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntityTippedArrowOther)) {
-            entity.setDead();
-            Grow(getSize() + 1);
-            heal(1.0F);
-          } 
-        }  
+          for (EntityArrow entity : list11111) {
+              if (entity != null && !(entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntityTippedArrowOther)) {
+                  entity.setDead();
+                  Grow(getSize() + 1);
+                  heal(1.0F);
+              }
+          }
     } 
     this.ignoreFrustumCheck = true;
     super.onLivingUpdate();
@@ -934,27 +926,27 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
   }
   
   public int getSize() {
-    return ((Integer)this.dataManager.get(SIZE)).intValue();
+    return (Integer) this.dataManager.get(SIZE);
   }
   
   public void Grow(int p_82215_1_) {
     if (!this.world.isRemote) {
-      this.dataManager.set(SIZE, Integer.valueOf(doesntContainACommandBlock() ? 12500 : p_82215_1_));
+      this.dataManager.set(SIZE, doesntContainACommandBlock() ? 12500 : p_82215_1_);
       getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(doesntContainACommandBlock() ? 1000.0D : p_82215_1_);
       if (p_82215_1_ == 12500 && !isWild())
         for (EntityPlayer entityplayer : this.world.playerEntities)
-          entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation(doesntContainACommandBlock() ? "\u00A75 A Wither Storm has fissioned!" : ("\u00A75" + getOwner().getName() + "'s Wither Storm has grown to Destroyer form!!"), new Object[0]), true);  
+          entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation(doesntContainACommandBlock() ? "§5 A Wither Storm has fissioned!" : ("§5" + getOwner().getName() + "'s Wither Storm has grown to Destroyer form!!"), new Object[0]), true);
     } 
   }
   
   public boolean doesntContainACommandBlock() {
-    return ((Boolean)this.dataManager.get(DOESNT_HAVE_COMMAND_BLOCK)).booleanValue();
+    return (Boolean) this.dataManager.get(DOESNT_HAVE_COMMAND_BLOCK);
   }
   
   public void setNotContainingCommandBlock(boolean p_82215_1_) {
     if (p_82215_1_)
       this.lastDamage = Float.MAX_VALUE; 
-    this.dataManager.set(DOESNT_HAVE_COMMAND_BLOCK, Boolean.valueOf(p_82215_1_));
+    this.dataManager.set(DOESNT_HAVE_COMMAND_BLOCK, p_82215_1_);
   }
   
   @Nullable
@@ -1005,15 +997,14 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         this.centerHead.motionZ = d21 / f2 * 0.6D * 0.6D + this.centerHead.motionZ;
       } 
     } 
-    List<EntityFallingBlock> list = this.world.getEntitiesWithinAABB(EntityFallingBlock.class, getEntityBoundingBox().grow(128.0D, 128.0D, 128.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+    List<EntityFallingBlock> list = this.world.getEntitiesWithinAABB(EntityFallingBlock.class, getEntityBoundingBox().grow(128.0D, 128.0D, 128.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
     if (list != null && !list.isEmpty() && this.world.isRemote)
-      for (int j = 0; j < list.size(); j++) {
-        EntityFallingBlock entity = list.get(j);
-        if (entity != null) {
-          createEngenderModExplosionFireless((Entity)this, entity.posX, entity.posY, entity.posZ, 2.0F, false);
-          entity.setDead();
-        } 
-      }  
+        for (EntityFallingBlock entity : list) {
+            if (entity != null) {
+                createEngenderModExplosionFireless((Entity) this, entity.posX, entity.posY, entity.posZ, 2.0F, false);
+                entity.setDead();
+            }
+        }
     for (EntityPlayer entityplayer : this.world.playerEntities)
       this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F); 
     int i = getSize();
@@ -1068,14 +1059,14 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         float f13 = (this.rand.nextFloat() - 0.5F) * 12.0F;
         float f15 = (this.rand.nextFloat() - 0.5F) * 36.0F;
         float f17 = (this.rand.nextFloat() - 0.5F) * 12.0F;
-        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX + f13, this.posY - 4.0D + f15, this.posZ + f17, 0.0D, 0.0D, 0.0D, new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX + f13, this.posY - 4.0D + f15, this.posZ + f17, 0.0D, 0.0D, 0.0D);
       } 
       if (!this.world.isRemote)
         if (this.deathTicks == 1)
           if (getOwner() != null) {
             for (EntityPlayer entityplayer : this.world.playerEntities) {
               this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
-              entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("\u00A74" + getOwner().getName() + "'s Wither Storm has been killed!!!", new Object[0]), true);
+              entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("§4" + getOwner().getName() + "'s Wither Storm has been killed!!!", new Object[0]), true);
             } 
             ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("Your Wither Storm has been destroyed!", new Object[0]));
           }   

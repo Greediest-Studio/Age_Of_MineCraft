@@ -54,7 +54,7 @@ public class PhaseFaceNearestEnemy extends PhaseBaseFriendly {
       this.dragon.getPhaseManager().setPhase(PhaseListAsorah.TAKEOFF);
       if (entitylivingbase != null && this.dragon.getDistanceSq((Entity)entitylivingbase) > 1024.0D) {
         this.dragon.getPhaseManager().setPhase(PhaseListAsorah.CHARGING_PLAYER);
-        ((PhaseRamAttack)this.dragon.getPhaseManager().<PhaseRamAttack>getPhase(PhaseListAsorah.CHARGING_PLAYER)).setTarget(new Vec3d(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ));
+        ((PhaseRamAttack)this.dragon.getPhaseManager().getPhase(PhaseListAsorah.CHARGING_PLAYER)).setTarget(new Vec3d(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ));
       } 
     } else if (this.dragon.getOwner() != null) {
       this.dragon.rotationYaw = (this.dragon.getOwner()).rotationYaw - 180.0F;

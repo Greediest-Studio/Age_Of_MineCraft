@@ -16,7 +16,6 @@ public class PotionBleeding extends PotionEngender {
   }
   
   public void performEffect(EntityLivingBase mob, int amplifier) {
-    return;
   }
   
   public boolean isReady(int par1, int par2) {

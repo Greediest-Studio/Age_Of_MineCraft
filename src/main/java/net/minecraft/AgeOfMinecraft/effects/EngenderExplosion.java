@@ -130,48 +130,47 @@ public class EngenderExplosion extends Explosion {
       List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this.exploder, new AxisAlignedBB(k1, i2, j2, l1, i1, j1));
       ForgeEventFactory.onExplosionDetonate(this.world, this, list, f3);
       Vec3d vec3d = new Vec3d(this.explosionX, this.explosionY, this.explosionZ);
-      for (int k2 = 0; k2 < list.size(); k2++) {
-        Entity entity = list.get(k2);
-        if (entity != null && !entity.isImmuneToExplosions() && !(entity instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityJzahar) && !(entity instanceof net.minecraft.entity.projectile.EntityFireball)) {
-          double d12 = entity.getDistance(this.explosionX, this.explosionY, this.explosionZ) / f3 * 4.0D;
-          if (d12 <= 1.0D) {
-            double d5 = entity.posX - this.explosionX;
-            double d7 = entity.posY - this.explosionY;
-            double d9 = entity.posZ - this.explosionZ;
-            if (entity.getDistance(this.explosionX, this.explosionY, this.explosionZ) <= 3.0D)
-              d7 = entity.posY; 
-            double d13 = MathHelper.sqrt(d5 * d5 + d7 * d7 + d9 * d9);
-            if (d13 != 0.0D) {
-              d5 /= d13;
-              d7 /= d13;
-              d9 /= d13;
-              double d14 = this.world.getBlockDensity(vec3d, entity.getEntityBoundingBox());
-              double d10 = (1.0D - d12) * d14;
-              if (entity instanceof EntityLivingBase && !false)
-                this.exploder.inflictEngenderMobDamage((EntityLivingBase)entity, " was blown up by ", DamageSource.causeExplosionDamage(this), (int)((d10 * d10 + d10) / 2.0D * 7.0D * f3 + 1.0D)); 
-              double d11 = d10 * f3;
-              if (entity instanceof EntityLivingBase)
-                d11 = EnchantmentProtection.getBlastDamageReduction((EntityLivingBase)entity, d10); 
-              if (!(entity instanceof net.minecraft.entity.IEntityMultiPart) && entity instanceof EntityLivingBase && !false) {
-                entity.motionX += d5 * d11;
-                entity.motionY += d7 * d11 + 1.0D;
-                entity.motionZ += d9 * d11;
-                if (entity instanceof EntityLivingBase) {
-                  ((EntityLivingBase)entity).renderYawOffset = ((EntityLivingBase)entity).rotationYaw = ((EntityLivingBase)entity).rotationYawHead = (float)MathHelper.atan2(entity.motionZ, entity.motionX) * 57.295776F - 90.0F;
-                  ((EntityLivingBase)entity).setRevengeTarget(null);
-                  if (entity instanceof EntityLiving)
-                    ((EntityLiving)entity).setAttackTarget(null); 
-                } 
-              } 
-              if (entity instanceof EntityPlayer) {
-                EntityPlayer entityplayer = (EntityPlayer)entity;
-                if (!entityplayer.isSpectator() && (!entityplayer.isCreative() || !entityplayer.capabilities.isFlying))
-                  this.playerKnockbackMap.put(entityplayer, new Vec3d(d5 * d10, d7 * d10, d9 * d10)); 
-              } 
-            } 
-          } 
-        } 
-      } 
+        for (Entity entity : list) {
+            if (entity != null && !entity.isImmuneToExplosions() && !(entity instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityJzahar) && !(entity instanceof net.minecraft.entity.projectile.EntityFireball)) {
+                double d12 = entity.getDistance(this.explosionX, this.explosionY, this.explosionZ) / f3 * 4.0D;
+                if (d12 <= 1.0D) {
+                    double d5 = entity.posX - this.explosionX;
+                    double d7 = entity.posY - this.explosionY;
+                    double d9 = entity.posZ - this.explosionZ;
+                    if (entity.getDistance(this.explosionX, this.explosionY, this.explosionZ) <= 3.0D)
+                        d7 = entity.posY;
+                    double d13 = MathHelper.sqrt(d5 * d5 + d7 * d7 + d9 * d9);
+                    if (d13 != 0.0D) {
+                        d5 /= d13;
+                        d7 /= d13;
+                        d9 /= d13;
+                        double d14 = this.world.getBlockDensity(vec3d, entity.getEntityBoundingBox());
+                        double d10 = (1.0D - d12) * d14;
+                        if (entity instanceof EntityLivingBase && !false)
+                            this.exploder.inflictEngenderMobDamage((EntityLivingBase) entity, " was blown up by ", DamageSource.causeExplosionDamage(this), (int) ((d10 * d10 + d10) / 2.0D * 7.0D * f3 + 1.0D));
+                        double d11 = d10 * f3;
+                        if (entity instanceof EntityLivingBase)
+                            d11 = EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, d10);
+                        if (!(entity instanceof net.minecraft.entity.IEntityMultiPart) && entity instanceof EntityLivingBase && !false) {
+                            entity.motionX += d5 * d11;
+                            entity.motionY += d7 * d11 + 1.0D;
+                            entity.motionZ += d9 * d11;
+                            if (entity instanceof EntityLivingBase) {
+                                ((EntityLivingBase) entity).renderYawOffset = ((EntityLivingBase) entity).rotationYaw = ((EntityLivingBase) entity).rotationYawHead = (float) MathHelper.atan2(entity.motionZ, entity.motionX) * 57.295776F - 90.0F;
+                                ((EntityLivingBase) entity).setRevengeTarget(null);
+                                if (entity instanceof EntityLiving)
+                                    ((EntityLiving) entity).setAttackTarget(null);
+                            }
+                        }
+                        if (entity instanceof EntityPlayer) {
+                            EntityPlayer entityplayer = (EntityPlayer) entity;
+                            if (!entityplayer.isSpectator() && (!entityplayer.isCreative() || !entityplayer.capabilities.isFlying))
+                                this.playerKnockbackMap.put(entityplayer, new Vec3d(d5 * d10, d7 * d10, d9 * d10));
+                        }
+                    }
+                }
+            }
+        }
     } 
   }
   
@@ -197,8 +196,8 @@ public class EngenderExplosion extends Explosion {
         d4 *= d7;
         d5 *= d7;
         if (this.world instanceof WorldServer) {
-          ((WorldServer)this.world).spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5, new int[0]);
-          ((WorldServer)this.world).spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
+          ((WorldServer)this.world).spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
+          ((WorldServer)this.world).spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
         } 
         if (iblockstate.getMaterial() != Material.AIR) {
           if (block.canDropFromExplosion(this))

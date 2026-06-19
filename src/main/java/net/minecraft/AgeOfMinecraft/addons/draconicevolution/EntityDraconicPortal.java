@@ -149,11 +149,11 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
   }
   
   public int getMetaData() {
-    return ((Integer)this.dataManager.get(METADATA)).intValue();
+    return (Integer) this.dataManager.get(METADATA);
   }
   
   public void setMetaData(int p_82215_1_) {
-    this.dataManager.set(METADATA, Integer.valueOf(p_82215_1_));
+    this.dataManager.set(METADATA, p_82215_1_);
   }
   
   public TextFormatting getTextFormat() {
@@ -178,19 +178,19 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(METADATA, Integer.valueOf(0));
-    this.dataManager.register(TOWER1_TARGET, Integer.valueOf(0));
-    this.dataManager.register(TOWER2_TARGET, Integer.valueOf(0));
-    this.dataManager.register(TOWER3_TARGET, Integer.valueOf(0));
-    this.dataManager.register(TOWER4_TARGET, Integer.valueOf(0));
+    this.dataManager.register(METADATA, 0);
+    this.dataManager.register(TOWER1_TARGET, 0);
+    this.dataManager.register(TOWER2_TARGET, 0);
+    this.dataManager.register(TOWER3_TARGET, 0);
+    this.dataManager.register(TOWER4_TARGET, 0);
   }
   
   public int getWatchedTargetId(int p_82203_1_) {
-    return ((Integer)this.dataManager.get(TARGETS[p_82203_1_])).intValue();
+    return (Integer) this.dataManager.get(TARGETS[p_82203_1_]);
   }
   
   public void updateWatchedTargetId(int targetOffset, int newId) {
-    this.dataManager.set(TARGETS[targetOffset], Integer.valueOf(newId));
+    this.dataManager.set(TARGETS[targetOffset], newId);
   }
   
   protected void applyEntityAttributes() {
@@ -311,25 +311,24 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
     if (i > 0) {
       playSound(ESound.golemSmash, 10.0F, 0.75F);
       playSound(ESound.golemSmash, 10.0F, 0.5F);
-      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D + i, 2.0D, 4.0D + i), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D + i, 2.0D, 4.0D + i), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityLivingBase entity = list.get(i1);
-          if (entity != null) {
-            if (!false) {
-              entity.motionY += 1.0D + i * 0.05D;
-              entity.attackEntityFrom(DamageSource.causeExplosionDamage((Explosion)null), 5.0F + i);
-              entity.isAirBorne = true;
-              float f = MathHelper.sqrt(MathHelper.sin(this.rotationYaw * 0.017453292F) * MathHelper.sin(this.rotationYaw * 0.017453292F) + -MathHelper.cos(this.rotationYaw * 0.017453292F) * -MathHelper.cos(this.rotationYaw * 0.017453292F));
-              entity.motionX /= 2.0D;
-              entity.motionZ /= 2.0D;
-              entity.motionX -= (MathHelper.sin(this.rotationYaw * 0.017453292F) / f) * 1.0D;
-              entity.motionZ -= (-MathHelper.cos(this.rotationYaw * 0.017453292F) / f) * 1.0D;
-            } 
-            if (EngenderConfig.general.useMessage && !entity.isEntityAlive() && !isWild())
-              getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + " was blown up by " + getName() + " (" + getOwner().getName() + ")", new Object[0])); 
-          } 
-        }  
+          for (EntityLivingBase entity : list) {
+              if (entity != null) {
+                  if (!false) {
+                      entity.motionY += 1.0D + i * 0.05D;
+                      entity.attackEntityFrom(DamageSource.causeExplosionDamage((Explosion) null), 5.0F + i);
+                      entity.isAirBorne = true;
+                      float f = MathHelper.sqrt(MathHelper.sin(this.rotationYaw * 0.017453292F) * MathHelper.sin(this.rotationYaw * 0.017453292F) + -MathHelper.cos(this.rotationYaw * 0.017453292F) * -MathHelper.cos(this.rotationYaw * 0.017453292F));
+                      entity.motionX /= 2.0D;
+                      entity.motionZ /= 2.0D;
+                      entity.motionX -= (MathHelper.sin(this.rotationYaw * 0.017453292F) / f) * 1.0D;
+                      entity.motionZ -= (-MathHelper.cos(this.rotationYaw * 0.017453292F) / f) * 1.0D;
+                  }
+                  if (EngenderConfig.general.useMessage && !entity.isEntityAlive() && !isWild())
+                      getOwner().sendMessage((ITextComponent) new TextComponentTranslation(entity.getName() + " was blown up by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
+              }
+          }
     } 
   }
   
@@ -448,7 +447,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
               updateWatchedTargetId(i, 0);
             } 
           } else {
-            List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+            List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()), Predicates.and(EntitySelectors.IS_ALIVE));
             for (int k1 = 0; k1 < 10 && !list1.isEmpty(); k1++) {
               EntityLivingBase entitylivingbase = list1.get(this.rand.nextInt(list1.size()));
               if (entitylivingbase != this && entitylivingbase.isEntityAlive() && canEntityBeSeen((Entity)entitylivingbase) && !false) {
@@ -478,16 +477,15 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
           for (Entity part : aentity) {
             List<Entity> partlist = this.world.getEntitiesInAABBexcluding((Entity)this, part.getEntityBoundingBox(), EntitySelectors.IS_ALIVE);
             if (!partlist.isEmpty())
-              for (int l1 = 0; l1 < partlist.size(); l1++) {
-                Entity entity = partlist.get(l1);
-                if (entity instanceof EntityLivingBase && !entity.noClip && !(entity instanceof IEntityMultiPart)) {
-                  if (entity.collided)
-                    entity.attackEntityFrom(DamageSource.IN_WALL, 1.0F); 
-                  part.applyEntityCollision(entity);
-                  entity.applyEntityCollision(part);
-                  entity.motionY += 0.1D;
-                } 
-              }  
+                for (Entity entity : partlist) {
+                    if (entity instanceof EntityLivingBase && !entity.noClip && !(entity instanceof IEntityMultiPart)) {
+                        if (entity.collided)
+                            entity.attackEntityFrom(DamageSource.IN_WALL, 1.0F);
+                        part.applyEntityCollision(entity);
+                        entity.applyEntityCollision(part);
+                        entity.motionY += 0.1D;
+                    }
+                }
           }  
       }  
     this.motionX = 0.0D;
@@ -503,30 +501,30 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
     if (this.world.isRemote)
       for (int i = 0; i < 3 && this.ticksExisted > 60; i++) {
         if (this.towerUpdate[i] > 20)
-          this.world.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, getHeadX(i), getHeadY(i), getHeadY(i), ((float)getHeadX(i) + this.rand.nextFloat()) - 0.5D, ((float)getHeadY(i) - this.rand.nextFloat() - 1.0F), ((float)getHeadY(i) + this.rand.nextFloat()) - 0.5D, new int[0]); 
+          this.world.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, getHeadX(i), getHeadY(i), getHeadY(i), ((float)getHeadX(i) + this.rand.nextFloat()) - 0.5D, ((float)getHeadY(i) - this.rand.nextFloat() - 1.0F), ((float)getHeadY(i) + this.rand.nextFloat()) - 0.5D);
         if (getMetaData() > 0)
-          this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + 1.0D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 1.0D, 0.0D, 0.0D, new int[0]); 
+          this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + 1.0D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 1.0D, 0.0D, 0.0D);
         if (getMetaData() > 1) {
-          this.world.spawnParticle(EnumParticleTypes.SPELL_INSTANT, true, this.posX + 3.25D + f + this.rand.nextDouble() - 0.5D, this.posY + 4.0D + this.rand.nextDouble() - 0.5D, this.posZ + 3.25D + f + this.rand.nextDouble() - 0.5D, f * 0.1D, 0.02D, f * 0.1D, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.SPELL_INSTANT, true, this.posX + 3.25D + f + this.rand.nextDouble() - 0.5D, this.posY + 4.0D + this.rand.nextDouble() - 0.5D, this.posZ - 3.25D - f + this.rand.nextDouble() - 0.5D, f * 0.1D, 0.02D, f * 0.1D, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.SPELL_INSTANT, true, this.posX - 3.25D - f + this.rand.nextDouble() - 0.5D, this.posY + 4.0D + this.rand.nextDouble() - 0.5D, this.posZ - 3.25D - f + this.rand.nextDouble() - 0.5D, f * 0.1D, 0.02D, f * 0.1D, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.SPELL_INSTANT, true, this.posX - 3.25D - f + this.rand.nextDouble() - 0.5D, this.posY + 4.0D + this.rand.nextDouble() - 0.5D, this.posZ + 3.25D + f + this.rand.nextDouble() - 0.5D, f * 0.1D, 0.02D, f * 0.1D, new int[0]);
+          this.world.spawnParticle(EnumParticleTypes.SPELL_INSTANT, true, this.posX + 3.25D + f + this.rand.nextDouble() - 0.5D, this.posY + 4.0D + this.rand.nextDouble() - 0.5D, this.posZ + 3.25D + f + this.rand.nextDouble() - 0.5D, f * 0.1D, 0.02D, f * 0.1D);
+          this.world.spawnParticle(EnumParticleTypes.SPELL_INSTANT, true, this.posX + 3.25D + f + this.rand.nextDouble() - 0.5D, this.posY + 4.0D + this.rand.nextDouble() - 0.5D, this.posZ - 3.25D - f + this.rand.nextDouble() - 0.5D, f * 0.1D, 0.02D, f * 0.1D);
+          this.world.spawnParticle(EnumParticleTypes.SPELL_INSTANT, true, this.posX - 3.25D - f + this.rand.nextDouble() - 0.5D, this.posY + 4.0D + this.rand.nextDouble() - 0.5D, this.posZ - 3.25D - f + this.rand.nextDouble() - 0.5D, f * 0.1D, 0.02D, f * 0.1D);
+          this.world.spawnParticle(EnumParticleTypes.SPELL_INSTANT, true, this.posX - 3.25D - f + this.rand.nextDouble() - 0.5D, this.posY + 4.0D + this.rand.nextDouble() - 0.5D, this.posZ + 3.25D + f + this.rand.nextDouble() - 0.5D, f * 0.1D, 0.02D, f * 0.1D);
         } 
         if (getMetaData() > 2)
-          this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + 1.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 1.0D, 0.0D, 0.5D, new int[0]); 
+          this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + 1.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 1.0D, 0.0D, 0.5D);
         if (getMetaData() > 3) {
-          this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + 0.8D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.05D, 0.0D, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + 0.8D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.05D, 0.0D, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + 0.8D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.05D, 0.0D, new int[0]);
+          this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + 0.8D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.05D, 0.0D);
+          this.world.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + 0.8D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.05D, 0.0D);
+          this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + 0.8D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.05D, 0.0D);
         } 
-        this.world.spawnParticle(EnumParticleTypes.TOWN_AURA, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + 1.0D + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D + this.rand.nextDouble() * 0.1D - 0.05D, 0.0D + this.rand.nextDouble() * 0.2D, 0.0D + this.rand.nextDouble() * 0.1D - 0.05D, new int[0]);
-        this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + 0.8D + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.25D, 0.0D, new int[0]);
-        this.world.spawnParticle(EnumParticleTypes.DRAGON_BREATH, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + 0.8D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.05D, 0.0D, new int[0]);
-        this.world.spawnParticle(EnumParticleTypes.DRAGON_BREATH, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + 0.8D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.05D, 0.0D, new int[0]);
-        this.world.spawnParticle(EnumParticleTypes.REDSTONE, true, this.posX + 3.25D + f + this.rand.nextDouble() - 0.5D, this.posY + 4.0D + this.rand.nextDouble() - 0.5D, this.posZ + 3.25D + f + this.rand.nextDouble() - 0.5D, f * 0.1D, 0.02D, f * 0.1D, new int[0]);
-        this.world.spawnParticle(EnumParticleTypes.REDSTONE, true, this.posX + 3.25D + f + this.rand.nextDouble() - 0.5D, this.posY + 4.0D + this.rand.nextDouble() - 0.5D, this.posZ - 3.25D - f + this.rand.nextDouble() - 0.5D, f * 0.1D, 0.02D, f * 0.1D, new int[0]);
-        this.world.spawnParticle(EnumParticleTypes.REDSTONE, true, this.posX - 3.25D - f + this.rand.nextDouble() - 0.5D, this.posY + 4.0D + this.rand.nextDouble() - 0.5D, this.posZ - 3.25D - f + this.rand.nextDouble() - 0.5D, f * 0.1D, 0.02D, f * 0.1D, new int[0]);
-        this.world.spawnParticle(EnumParticleTypes.REDSTONE, true, this.posX - 3.25D - f + this.rand.nextDouble() - 0.5D, this.posY + 4.0D + this.rand.nextDouble() - 0.5D, this.posZ + 3.25D + f + this.rand.nextDouble() - 0.5D, f * 0.1D, 0.02D, f * 0.1D, new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.TOWN_AURA, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + 1.0D + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D + this.rand.nextDouble() * 0.1D - 0.05D, 0.0D + this.rand.nextDouble() * 0.2D, 0.0D + this.rand.nextDouble() * 0.1D - 0.05D);
+        this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + 0.8D + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.25D, 0.0D);
+        this.world.spawnParticle(EnumParticleTypes.DRAGON_BREATH, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + 0.8D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.05D, 0.0D);
+        this.world.spawnParticle(EnumParticleTypes.DRAGON_BREATH, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + 0.8D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.05D, 0.0D);
+        this.world.spawnParticle(EnumParticleTypes.REDSTONE, true, this.posX + 3.25D + f + this.rand.nextDouble() - 0.5D, this.posY + 4.0D + this.rand.nextDouble() - 0.5D, this.posZ + 3.25D + f + this.rand.nextDouble() - 0.5D, f * 0.1D, 0.02D, f * 0.1D);
+        this.world.spawnParticle(EnumParticleTypes.REDSTONE, true, this.posX + 3.25D + f + this.rand.nextDouble() - 0.5D, this.posY + 4.0D + this.rand.nextDouble() - 0.5D, this.posZ - 3.25D - f + this.rand.nextDouble() - 0.5D, f * 0.1D, 0.02D, f * 0.1D);
+        this.world.spawnParticle(EnumParticleTypes.REDSTONE, true, this.posX - 3.25D - f + this.rand.nextDouble() - 0.5D, this.posY + 4.0D + this.rand.nextDouble() - 0.5D, this.posZ - 3.25D - f + this.rand.nextDouble() - 0.5D, f * 0.1D, 0.02D, f * 0.1D);
+        this.world.spawnParticle(EnumParticleTypes.REDSTONE, true, this.posX - 3.25D - f + this.rand.nextDouble() - 0.5D, this.posY + 4.0D + this.rand.nextDouble() - 0.5D, this.posZ + 3.25D + f + this.rand.nextDouble() - 0.5D, f * 0.1D, 0.02D, f * 0.1D);
       }  
     if ((this.ticksExisted + getEntityId()) % ((getJukeboxToDanceTo() != null) ? 20 : 200) == 0)
       playSound(ESound.portalWhoosh, 5.0F, 1.0F); 
@@ -1123,9 +1121,9 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
       for (int k = 0; k < 2500; k++) {
         double d2 = this.rand.nextGaussian() * 0.05D;
         double d1 = this.rand.nextGaussian() * 0.05D;
-        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height * 4.0F), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, -0.25D, d1, new int[0]);
-        this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height * 4.0F), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, -0.25D, d1, new int[0]);
-        this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height * 4.0F), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, 0.5D, d1, new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height * 4.0F), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, -0.25D, d1);
+        this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height * 4.0F), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, -0.25D, d1);
+        this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height * 4.0F), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, 0.5D, d1);
       } 
     } 
     if (!this.world.isRemote && (isPlayer() || (this.recentlyHit > 0 && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")))) {
@@ -1183,16 +1181,15 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
     ItemStack stack = player.getHeldItem(hand);
     if (this.ticksExisted > 40 && stack.isEmpty() && !isWild() && player == getOwner()) {
       if (player.isSneaking()) {
-        List<EntityTameBase> list = this.world.getEntitiesWithinAABB(EntityTameBase.class, getEntityBoundingBox().grow(256.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+        List<EntityTameBase> list = this.world.getEntitiesWithinAABB(EntityTameBase.class, getEntityBoundingBox().grow(256.0D), Predicates.and(EntitySelectors.IS_ALIVE));
         if (list != null && !list.isEmpty() && !isBeingRidden())
-          for (int i1 = 0; i1 < list.size(); i1++) {
-            EntityTameBase entity = list.get(i1);
-            if (entity != null)
-              if (false) {
-                playSound(SoundEvents.ITEM_TOTEM_USE, 1.0F, 1.0F);
-                entity.changeDimension(1);
-              }  
-          }  
+            for (EntityTameBase entity : list) {
+                if (entity != null)
+                    if (false) {
+                        playSound(SoundEvents.ITEM_TOTEM_USE, 1.0F, 1.0F);
+                        entity.changeDimension(1);
+                    }
+            }
         playSound(SoundEvents.ITEM_TOTEM_USE, 1.0F, 1.0F);
         player.changeDimension(1);
         return true;

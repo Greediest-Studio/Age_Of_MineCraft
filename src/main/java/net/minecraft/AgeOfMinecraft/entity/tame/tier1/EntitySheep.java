@@ -148,7 +148,7 @@ public class EntitySheep extends EntityTameBase implements Light, Animal, IShear
           double d6 = this.posX + (this.posX - (getAttackTarget()).posX) * -d9;
           double d7 = this.posY + getEyeHeight() + (this.posY - (getAttackTarget()).posY) * -d9;
           double d8 = this.posZ + (this.posZ - (getAttackTarget()).posZ) * -d9;
-          this.world.spawnParticle(EnumParticleTypes.END_ROD, d6, d7, d8, 0.0D, 0.01D, 0.0D, new int[0]);
+          this.world.spawnParticle(EnumParticleTypes.END_ROD, d6, d7, d8, 0.0D, 0.01D, 0.0D);
         } 
         playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, getSoundVolume(), this.rand.nextFloat() - this.rand.nextFloat() * 0.4F + 1.0F);
         getAttackTarget().attackEntityFrom(DamageSource.causeExplosionDamage((EntityLivingBase)this), 12.0F);
@@ -167,7 +167,7 @@ public class EntitySheep extends EntityTameBase implements Light, Animal, IShear
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(DYE_COLOR, Byte.valueOf((byte)0));
+    this.dataManager.register(DYE_COLOR, (byte) 0);
   }
   
   @Nullable
@@ -354,24 +354,24 @@ public class EntitySheep extends EntityTameBase implements Light, Animal, IShear
   }
   
   public EnumDyeColor getFleeceColor() {
-    return EnumDyeColor.byMetadata(((Byte)this.dataManager.get(DYE_COLOR)).byteValue() & 0xF);
+    return EnumDyeColor.byMetadata((Byte) this.dataManager.get(DYE_COLOR) & 0xF);
   }
   
   public void setFleeceColor(EnumDyeColor color) {
-    byte b0 = ((Byte)this.dataManager.get(DYE_COLOR)).byteValue();
-    this.dataManager.set(DYE_COLOR, Byte.valueOf((byte)(b0 & 0xF0 | color.getMetadata() & 0xF)));
+    byte b0 = (Byte) this.dataManager.get(DYE_COLOR);
+    this.dataManager.set(DYE_COLOR, (byte) (b0 & 0xF0 | color.getMetadata() & 0xF));
   }
   
   public boolean getSheared() {
-    return ((((Byte)this.dataManager.get(DYE_COLOR)).byteValue() & 0x10) != 0);
+    return (((Byte) this.dataManager.get(DYE_COLOR) & 0x10) != 0);
   }
   
   public void setSheared(boolean sheared) {
-    byte b0 = ((Byte)this.dataManager.get(DYE_COLOR)).byteValue();
+    byte b0 = (Byte) this.dataManager.get(DYE_COLOR);
     if (sheared) {
-      this.dataManager.set(DYE_COLOR, Byte.valueOf((byte)(b0 | 0x10)));
+      this.dataManager.set(DYE_COLOR, (byte) (b0 | 0x10));
     } else {
-      this.dataManager.set(DYE_COLOR, Byte.valueOf((byte)(b0 & 0xFFFFFFEF)));
+      this.dataManager.set(DYE_COLOR, (byte) (b0 & 0xFFFFFFEF));
     } 
   }
   

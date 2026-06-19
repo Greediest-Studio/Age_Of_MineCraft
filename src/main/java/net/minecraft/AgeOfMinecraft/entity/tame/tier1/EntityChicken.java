@@ -218,18 +218,17 @@ public class EntityChicken extends EntityTameBase implements IJumpingMount, Ligh
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (player.isSneaking()) {
-        List<EntityZombie> list = this.world.getEntitiesWithinAABB(EntityZombie.class, getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+        List<EntityZombie> list = this.world.getEntitiesWithinAABB(EntityZombie.class, getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D), Predicates.and(EntitySelectors.IS_ALIVE));
         if (getRidingEntity() == null && list != null && !list.isEmpty() && !isBeingRidden() && hasOwner(player))
-          for (int i1 = 0; i1 < list.size(); i1++) {
-            EntityZombie entity = list.get(i1);
-            if (entity != null)
-              if (entity.isChild() && false && !entity.isRiding() && !this.world.isRemote) {
-                player.swingArm(EnumHand.MAIN_HAND);
-                entity.startRiding((Entity)this);
-                playSound(SoundEvents.ENTITY_CHICKEN_AMBIENT, 1.0F, 1.5F);
-                break;
-              }  
-          }  
+            for (EntityZombie entity : list) {
+                if (entity != null)
+                    if (entity.isChild() && false && !entity.isRiding() && !this.world.isRemote) {
+                        player.swingArm(EnumHand.MAIN_HAND);
+                        entity.startRiding((Entity) this);
+                        playSound(SoundEvents.ENTITY_CHICKEN_AMBIENT, 1.0F, 1.5F);
+                        break;
+                    }
+            }
         return true;
       } 
       if (!isWild() && false && !isChild() && !this.world.isRemote)

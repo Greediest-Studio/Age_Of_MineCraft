@@ -147,9 +147,9 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(TYPE, Integer.valueOf(0));
-    this.dataManager.register(FOOD, Integer.valueOf(0));
-    this.dataManager.register(CLIMBING, Byte.valueOf((byte)0));
+    this.dataManager.register(TYPE, 0);
+    this.dataManager.register(FOOD, 0);
+    this.dataManager.register(CLIMBING, (byte) 0);
   }
   
   public boolean canBreatheUnderwater() {
@@ -163,24 +163,24 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
   }
   
   public int getShoggothType() {
-    return ((Integer)this.dataManager.get(TYPE)).intValue();
+    return (Integer) this.dataManager.get(TYPE);
   }
   
   public void setShoggothType(int par1) {
-    this.dataManager.set(TYPE, Integer.valueOf(par1));
+    this.dataManager.set(TYPE, par1);
   }
   
   public void setFoodLevel(int par1) {
-    this.dataManager.set(FOOD, Integer.valueOf(par1));
+    this.dataManager.set(FOOD, par1);
   }
   
   public int getFoodLevel() {
-    return ((Integer)this.dataManager.get(FOOD)).intValue();
+    return (Integer) this.dataManager.get(FOOD);
   }
   
   public void feed() {
     int food = getFoodLevel() + 1;
-    this.dataManager.set(FOOD, Integer.valueOf(food));
+    this.dataManager.set(FOOD, food);
     setGrowingAge(getGrowingAge() + 4000);
     if (getFittness() < 1.5F && this.rand.nextInt(10) == 0)
       setFittness(getFittness() + 0.05F); 
@@ -244,7 +244,7 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
       } 
     } 
     for (int i = 0; i < 2 && getShoggothType() == 4 && !isInvisible() && ACConfig.particleEntity && this.world.provider.getDimension() != ACLib.dark_realm_id; i++)
-      this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D, new int[0]); 
+      this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
   }
   
   private void spawnOoze(int x, int y, int z) {
@@ -253,25 +253,25 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
       if ((this.world.getBlockState(pos).getMaterial() == Material.AIR || this.world.getBlockState(pos).getBlock().isReplaceable((IBlockAccess)this.world, pos)) && ACBlocks.shoggoth_ooze.canPlaceBlockAt(this.world, pos) && this.world
         .getBlockState(pos).getBlock() != ACBlocks.shoggoth_ooze && !this.world.getBlockState(pos).getMaterial().isLiquid()) {
         this.world.setBlockState(pos, ACBlocks.shoggoth_ooze.getDefaultState());
-      } else if (this.world.getBlockState(pos).getBlock() == ACBlocks.shoggoth_ooze && ((Integer)this.world.getBlockState(pos).getValue((IProperty)BlockShoggothOoze.LAYERS)).intValue() < 8 && this.ticksExisted % 10 == 0 && this.rand
+      } else if (this.world.getBlockState(pos).getBlock() == ACBlocks.shoggoth_ooze && (Integer) this.world.getBlockState(pos).getValue((IProperty) BlockShoggothOoze.LAYERS) < 8 && this.ticksExisted % 10 == 0 && this.rand
         .nextInt(5) == 0) {
         IBlockState state = this.world.getBlockState(pos);
-        this.world.setBlockState(pos, state.withProperty((IProperty)BlockShoggothOoze.LAYERS, Integer.valueOf(((Integer)state.getValue((IProperty)BlockShoggothOoze.LAYERS)).intValue() + 1)));
+        this.world.setBlockState(pos, state.withProperty((IProperty)BlockShoggothOoze.LAYERS, (Integer) state.getValue((IProperty) BlockShoggothOoze.LAYERS) + 1));
       }  
   }
   
   public boolean isBesideClimbableBlock() {
-    return ((((Byte)this.dataManager.get(CLIMBING)).byteValue() & 0x1) != 0);
+    return (((Byte) this.dataManager.get(CLIMBING) & 0x1) != 0);
   }
   
   public void setBesideClimbableBlock(boolean par1) {
-    byte b0 = ((Byte)this.dataManager.get(CLIMBING)).byteValue();
+    byte b0 = (Byte) this.dataManager.get(CLIMBING);
     if (par1) {
       b0 = (byte)(b0 | 0x1);
     } else {
       b0 = (byte)(b0 & 0xFFFFFFFE);
     } 
-    this.dataManager.set(CLIMBING, Byte.valueOf(b0));
+    this.dataManager.set(CLIMBING, b0);
   }
   
   public boolean attackEntityAsMob(Entity par1Entity) {
@@ -302,7 +302,7 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
         break;
     } 
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)((ACConfig.damageAmpl > 1.0D) ? ACConfig.damageAmpl : 1.0D)); 
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -468,7 +468,7 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
   }
   
   public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData par1EntityLivingData) {
-    Object data = super.onInitialSpawn(difficulty, par1EntityLivingData);
+    IEntityLivingData data = super.onInitialSpawn(difficulty, par1EntityLivingData);
     setShoggothType(0);
     if (this.world.provider.getDimension() == ACLib.abyssal_wasteland_id)
       setShoggothType(1); 
@@ -485,7 +485,7 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
       if (groupdata.isBaby)
         setGrowingAge(-24000); 
     } 
-    return (IEntityLivingData)data;
+    return data;
   }
   
   class GroupData implements IEntityLivingData {

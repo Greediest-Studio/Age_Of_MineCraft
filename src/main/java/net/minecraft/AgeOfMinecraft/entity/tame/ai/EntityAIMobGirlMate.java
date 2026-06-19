@@ -102,7 +102,7 @@ public class EntityAIMobGirlMate extends EntityAIBase {
         double d3 = random.nextDouble() * this.theAnimal.width * 2.0D - this.theAnimal.width;
         double d4 = 0.5D + random.nextDouble() * this.theAnimal.height;
         double d5 = random.nextDouble() * this.theAnimal.width * 2.0D - this.theAnimal.width;
-        this.world.spawnParticle(EnumParticleTypes.HEART, this.theAnimal.posX + d3, this.theAnimal.posY + d4, this.theAnimal.posZ + d5, d0, d1, d2, new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.HEART, this.theAnimal.posX + d3, this.theAnimal.posY + d4, this.theAnimal.posZ + d5, d0, d1, d2);
       } 
       if (this.world.getGameRules().getBoolean("doMobLoot"))
         this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.theAnimal.posX, this.theAnimal.posY, this.theAnimal.posZ, random.nextInt(15) + 5 + (int)this.theAnimal.height + (int)this.theAnimal.width + (int)this.theAnimal.getEyeHeight())); 

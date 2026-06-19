@@ -216,28 +216,28 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(ACTIVE_ARM, Byte.valueOf((byte)0));
-    this.dataManager.register(CLONE_STATE, Byte.valueOf((byte)0));
+    this.dataManager.register(ACTIVE_ARM, (byte) 0);
+    this.dataManager.register(CLONE_STATE, (byte) 0);
   }
   
   public int getActiveArm() {
-    return ((Byte)this.dataManager.get(ACTIVE_ARM)).byteValue();
+    return (Byte) this.dataManager.get(ACTIVE_ARM);
   }
   
   private void setActiveArm(int armID) {
-    this.dataManager.set(ACTIVE_ARM, Byte.valueOf((byte)armID));
+    this.dataManager.set(ACTIVE_ARM, (byte) armID);
   }
   
   public boolean isClone() {
-    return (((Byte)this.dataManager.get(CLONE_STATE)).byteValue() > 0);
+    return ((Byte) this.dataManager.get(CLONE_STATE) > 0);
   }
   
   private boolean isDecoyClone() {
-    return (((Byte)this.dataManager.get(CLONE_STATE)).byteValue() > 1);
+    return ((Byte) this.dataManager.get(CLONE_STATE) > 1);
   }
   
   private void setCloneState(int newState) {
-    byte currentState = ((Byte)this.dataManager.get(CLONE_STATE)).byteValue();
+    byte currentState = (Byte) this.dataManager.get(CLONE_STATE);
     if (currentState == newState)
       return; 
     if (currentState == 1 && newState == 0) {
@@ -248,7 +248,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
       this.navigator.clearPath();
       this.stepHeight = 2.5F;
     } 
-    this.dataManager.set(CLONE_STATE, Byte.valueOf((byte)newState));
+    this.dataManager.set(CLONE_STATE, (byte) newState);
     setAttackID((newState > 0) ? 9 : 0);
   }
   
@@ -381,7 +381,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
       double d3 = d0 + (this.posX - d0) * d6 + (random.nextDouble() - 0.5D) * this.width * 2.0D;
       double d4 = d1 + (this.posY - d1) * d6 + random.nextDouble() * this.height;
       double d5 = d2 + (this.posZ - d2) * d6 + (random.nextDouble() - 0.5D) * this.width * 2.0D;
-      world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, f, f1, f2, new int[0]);
+      world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, f, f1, f2);
     } 
     if (this instanceof EntityCreature)
       getNavigator().clearPath(); 
@@ -487,7 +487,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
         double x = this.posX + (this.rand.nextDouble() - 0.5D) * w;
         double y = this.posY + this.rand.nextDouble() * h - 0.25D;
         double z = this.posZ + (this.rand.nextDouble() - 0.5D) * w;
-        this.world.spawnParticle(EnumParticleTypes.PORTAL, x, y, z, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D, new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.PORTAL, x, y, z, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
       } 
       if (getAttackTarget() != null) {
         if ((getAttackTarget() instanceof net.minecraft.entity.EntityFlying || (getAttackTarget()).posY > this.posY + this.height) && !isClone() && !isDecoyClone()) {
@@ -559,11 +559,11 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
     List<Integer> list = new ArrayList<>();
     for (int i = 1; i < this.heldBlock.length; i++) {
       if (this.heldBlock[i] == 0)
-        list.add(Integer.valueOf(i)); 
+        list.add(i);
     } 
     if (list.isEmpty())
       return -1; 
-    return ((Integer)list.get(this.rand.nextInt(list.size()))).intValue();
+    return (Integer) list.get(this.rand.nextInt(list.size()));
   }
   
   private int getFavorableHand() {
@@ -572,16 +572,16 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
     for (int i = 1; i < this.heldBlock.length; i++) {
       if (this.heldBlock[i] == 0)
         if (i <= 2) {
-          outer.add(Integer.valueOf(i));
+          outer.add(i);
         } else {
-          inner.add(Integer.valueOf(i));
+          inner.add(i);
         }  
     } 
     if (outer.isEmpty() && inner.isEmpty())
       return -1; 
     if (!outer.isEmpty())
-      return ((Integer)outer.get(this.rand.nextInt(outer.size()))).intValue(); 
-    return ((Integer)inner.get(this.rand.nextInt(inner.size()))).intValue();
+      return (Integer) outer.get(this.rand.nextInt(outer.size()));
+    return (Integer) inner.get(this.rand.nextInt(inner.size()));
   }
   
   private int getThrowingHand() {
@@ -590,16 +590,16 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
     for (int i = 1; i < this.heldBlock.length; i++) {
       if (this.heldBlock[i] != 0)
         if (i <= 2) {
-          outer.add(Integer.valueOf(i));
+          outer.add(i);
         } else {
-          inner.add(Integer.valueOf(i));
+          inner.add(i);
         }  
     } 
     if (outer.isEmpty() && inner.isEmpty())
       return -1; 
     if (!inner.isEmpty())
-      return ((Integer)inner.get(this.rand.nextInt(inner.size()))).intValue(); 
-    return ((Integer)outer.get(this.rand.nextInt(outer.size()))).intValue();
+      return (Integer) inner.get(this.rand.nextInt(inner.size()));
+    return (Integer) outer.get(this.rand.nextInt(outer.size()));
   }
   
   public boolean attackEntityAsMob(Entity entityIn) {
@@ -663,7 +663,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
       double tempX = this.posX + (this.rand.nextDouble() - 0.5D) * w;
       double tempY = this.posY + (this.rand.nextDouble() - 0.5D) * h + (death ? 1.5F : 0.5F);
       double tempZ = this.posZ + (this.rand.nextDouble() - 0.5D) * w;
-      this.world.spawnParticle(MBParticles.ENDERSOUL, tempX, tempY, tempZ, f, f1, f2, new int[0]);
+      this.world.spawnParticle(MBParticles.ENDERSOUL, tempX, tempY, tempZ, f, f1, f2);
     } 
   }
   
@@ -830,7 +830,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
   
   public void writeEntityToNBT(NBTTagCompound compound) {
     super.writeEntityToNBT(compound);
-    compound.setByte("CloneState", ((Byte)this.dataManager.get(CLONE_STATE)).byteValue());
+    compound.setByte("CloneState", (Byte) this.dataManager.get(CLONE_STATE));
     compound.setShort("ScreamDelay", (short)this.screamDelayTick);
   }
   

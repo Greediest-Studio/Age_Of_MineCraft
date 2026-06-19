@@ -45,15 +45,15 @@ public class EntityImplosion extends Entity {
   }
   
   protected void entityInit() {
-    this.dataManager.register(IMPLOSIONTIMER, Integer.valueOf(0));
+    this.dataManager.register(IMPLOSIONTIMER, 0);
   }
   
   public int getImplosionTime() {
-    return ((Integer)this.dataManager.get(IMPLOSIONTIMER)).intValue();
+    return (Integer) this.dataManager.get(IMPLOSIONTIMER);
   }
   
   public void setImplosionTime(int time) {
-    this.dataManager.set(IMPLOSIONTIMER, Integer.valueOf(time));
+    this.dataManager.set(IMPLOSIONTIMER, time);
   }
   
   public void setDead() {
@@ -62,25 +62,24 @@ public class EntityImplosion extends Entity {
     playSound(ESound.blast, 10.0F, 1.0F);
     playSound(ESound.jzaharshout, 10.0F, 1.0F);
     if (list != null && !list.isEmpty())
-      for (int i = 0; i < list.size(); i++) {
-        Entity entity = list.get(i);
-        double scale = (128.0D - entity.getDistance(this.posX, this.posY, this.posZ)) / 128.0D;
-        Vec3d dir = new Vec3d(entity.posX - this.posX, entity.posY - this.posY, entity.posZ - this.posZ);
-        dir = dir.normalize();
-        if (this.shootingEntity != null && (entity == this.shootingEntity || (entity instanceof EntityLivingBase && false))) {
-          entity.hurtResistantTime = 100;
-          if (entity instanceof EntityLivingBase)
-            ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 100, 4)); 
-        } else if (entity.isEntityAlive()) {
-          if (entity.getDistanceSq(this) <= 25.0D) {
-            entity.hurtResistantTime = 0;
-            entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 100.0F);
-            if (EngenderConfig.general.useMessage && this.shootingEntity != null && entity instanceof EntityLivingBase && !entity.isEntityAlive() && !this.shootingEntity.isWild())
-              this.shootingEntity.getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + " was blasted apart by an Implosion thanks to " + this.shootingEntity.getName() + " (" + this.shootingEntity.getOwner().getName() + ")", new Object[0])); 
-          } 
-          entity.addVelocity(dir.x * 10.0D * scale, 2.0D + this.rand.nextDouble(), dir.z * 10.0D * scale);
-        } 
-      }  
+        for (Entity entity : list) {
+            double scale = (128.0D - entity.getDistance(this.posX, this.posY, this.posZ)) / 128.0D;
+            Vec3d dir = new Vec3d(entity.posX - this.posX, entity.posY - this.posY, entity.posZ - this.posZ);
+            dir = dir.normalize();
+            if (this.shootingEntity != null && (entity == this.shootingEntity || (entity instanceof EntityLivingBase && false))) {
+                entity.hurtResistantTime = 100;
+                if (entity instanceof EntityLivingBase)
+                    ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 100, 4));
+            } else if (entity.isEntityAlive()) {
+                if (entity.getDistanceSq(this) <= 25.0D) {
+                    entity.hurtResistantTime = 0;
+                    entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 100.0F);
+                    if (EngenderConfig.general.useMessage && this.shootingEntity != null && entity instanceof EntityLivingBase && !entity.isEntityAlive() && !this.shootingEntity.isWild())
+                        this.shootingEntity.getOwner().sendMessage((ITextComponent) new TextComponentTranslation(entity.getName() + " was blasted apart by an Implosion thanks to " + this.shootingEntity.getName() + " (" + this.shootingEntity.getOwner().getName() + ")", new Object[0]));
+                }
+                entity.addVelocity(dir.x * 10.0D * scale, 2.0D + this.rand.nextDouble(), dir.z * 10.0D * scale);
+            }
+        }
     super.setDead();
   }
   
@@ -98,22 +97,21 @@ public class EntityImplosion extends Entity {
     if (getImplosionTime() == 1)
       playSound(ACSounds.jzahar_charge, 10.0F, 1.0F); 
     if (list != null && !list.isEmpty())
-      for (int i = 0; i < list.size(); i++) {
-        Entity entity = list.get(i);
-        double scale = (size - entity.getDistance(this.posX, this.posY, this.posZ)) / size;
-        Vec3d dir = new Vec3d(entity.posX - this.posX, entity.posY - this.posY, entity.posZ - this.posZ);
-        dir = dir.normalize();
-        if (this.shootingEntity == null && entity instanceof EntityJzahar)
-          this.shootingEntity = (EntityJzahar)entity; 
-        if (entity.isEntityAlive() && !(entity instanceof EntityJzahar) && this.shootingEntity != null && entity instanceof EntityLivingBase && !false) {
-          entity.addVelocity(dir.x * -getImplosionTime() * 0.001D * scale, dir.y * -getImplosionTime() * 0.001D * scale, dir.z * -getImplosionTime() * 0.001D * scale);
-          if (entity.getDistanceSq(this) <= 4.0D) {
-            entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 4.0F);
-            if (EngenderConfig.general.useMessage && entity instanceof EntityLivingBase && !entity.isEntityAlive() && this.shootingEntity != null && !this.shootingEntity.isWild())
-              this.shootingEntity.getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + " was electricuted by " + this.shootingEntity.getName() + " (" + this.shootingEntity.getOwner().getName() + ")", new Object[0])); 
-          } 
-        } 
-      }  
+        for (Entity entity : list) {
+            double scale = (size - entity.getDistance(this.posX, this.posY, this.posZ)) / size;
+            Vec3d dir = new Vec3d(entity.posX - this.posX, entity.posY - this.posY, entity.posZ - this.posZ);
+            dir = dir.normalize();
+            if (this.shootingEntity == null && entity instanceof EntityJzahar)
+                this.shootingEntity = (EntityJzahar) entity;
+            if (entity.isEntityAlive() && !(entity instanceof EntityJzahar) && this.shootingEntity != null && entity instanceof EntityLivingBase && !false) {
+                entity.addVelocity(dir.x * -getImplosionTime() * 0.001D * scale, dir.y * -getImplosionTime() * 0.001D * scale, dir.z * -getImplosionTime() * 0.001D * scale);
+                if (entity.getDistanceSq(this) <= 4.0D) {
+                    entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 4.0F);
+                    if (EngenderConfig.general.useMessage && entity instanceof EntityLivingBase && !entity.isEntityAlive() && this.shootingEntity != null && !this.shootingEntity.isWild())
+                        this.shootingEntity.getOwner().sendMessage((ITextComponent) new TextComponentTranslation(entity.getName() + " was electricuted by " + this.shootingEntity.getName() + " (" + this.shootingEntity.getOwner().getName() + ")", new Object[0]));
+                }
+            }
+        }
   }
   
   protected void writeEntityToNBT(NBTTagCompound compound) {}

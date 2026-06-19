@@ -164,7 +164,7 @@ public class EntityElderGuardian extends EntityGuardian implements Massive {
     super.onLivingUpdate();
     this.fallDistance = 0.0F;
     if (EngenderConfig.mobs.useMobTalkerModels && !isChild() && this.onGround) {
-      this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, this.posX + this.rand.nextDouble() - 0.5D, this.posY + 0.75D + (MathHelper.cos(this.ticksExisted * 0.2F) * 0.1F), this.posZ + this.rand.nextDouble() - 0.5D, 0.0D, 0.0D, 0.0D, new int[0]);
+      this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, this.posX + this.rand.nextDouble() - 0.5D, this.posY + 0.75D + (MathHelper.cos(this.ticksExisted * 0.2F) * 0.1F), this.posZ + this.rand.nextDouble() - 0.5D, 0.0D, 0.0D, 0.0D);
       if (this.ticksExisted % 30 == 0)
         playSound(SoundEvents.EVOCATION_ILLAGER_CAST_SPELL, 0.1F, 0.75F); 
     } 
@@ -181,11 +181,7 @@ public class EntityElderGuardian extends EntityGuardian implements Massive {
   protected void updateAITasks() {
     super.updateAITasks();
     if ((this.ticksExisted + getEntityId()) % 200 == 0) {
-      List<EntityLivingBase> list = this.world.getEntities(EntityLivingBase.class, new Predicate<EntityLivingBase>() {
-            public boolean apply(@Nullable EntityLivingBase p_apply_1_) {
-              return (EntityElderGuardian.this.getDistanceSq((Entity)p_apply_1_) < 2500.0D && EntityElderGuardian.this.getRNG().nextInt(20) == 0);
-            }
-          });
+      List<EntityLivingBase> list = this.world.getEntities(EntityLivingBase.class, p_apply_1_ -> (EntityElderGuardian.this.getDistanceSq((Entity)p_apply_1_) < 2500.0D && EntityElderGuardian.this.getRNG().nextInt(20) == 0));
       int j = 1;
       int k = 6000;
       int l = 1200;
@@ -204,11 +200,7 @@ public class EntityElderGuardian extends EntityGuardian implements Massive {
       } 
     } 
     if (this.ticksExisted % 20 == 0) {
-      List<EntityPlayerMP> list = this.world.getPlayers(EntityPlayerMP.class, new Predicate<EntityPlayerMP>() {
-            public boolean apply(@Nullable EntityPlayerMP p_apply_1_) {
-              return (EntityElderGuardian.this.getDistanceSq((Entity)p_apply_1_) < 2500.0D);
-            }
-          });
+      List<EntityPlayerMP> list = this.world.getPlayers(EntityPlayerMP.class, p_apply_1_ -> (EntityElderGuardian.this.getDistanceSq((Entity)p_apply_1_) < 2500.0D));
       for (EntityPlayerMP entityplayermp : list) {
         Potion potion;
         if (false) {

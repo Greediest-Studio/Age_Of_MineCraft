@@ -107,10 +107,9 @@ public class GuiEngenderMobInventory extends GuiContainer {
     GlStateManager.pushMatrix();
     GlStateManager.translate(i, j, 0.0F);
     GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-    for (int k = 0; k < this.buttonList.size(); k++)
-      ((GuiButton)this.buttonList.get(k)).drawButton(this.mc, mouseX, mouseY, partialTicks); 
-    for (int j1 = 0; j1 < this.labelList.size(); j1++)
-      ((GuiLabel)this.labelList.get(j1)).drawLabel(this.mc, mouseX, mouseY); 
+      for (GuiButton guiButton : this.buttonList)
+          ((GuiButton) guiButton).drawButton(this.mc, mouseX, mouseY, partialTicks);
+      for (GuiLabel guiLabel : this.labelList) ((GuiLabel) guiLabel).drawLabel(this.mc, mouseX, mouseY);
     drawGuiContainerForegroundLayer(mouseX, mouseY);
     for (int i1 = 0; i1 < this.mob.basicInventory.getSizeInventory(); i1++) {
       Slot slot = new Slot((IInventory)this.mob.basicInventory, i1, 8, 8);

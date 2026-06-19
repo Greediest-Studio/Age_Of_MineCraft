@@ -117,13 +117,12 @@ public class EntityWitherStormHead extends EntityTameBase implements IRangedAtta
   
   public boolean attackEntityAsMob(Entity entityIn) {
     if (super.attackEntityAsMob(entityIn)) {
-      List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, entityIn.getEntityBoundingBox().grow(3.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+      List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, entityIn.getEntityBoundingBox().grow(3.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
       if (list1 != null && !list1.isEmpty())
-        for (int i1 = 0; i1 < list1.size(); i1++) {
-          EntityLivingBase entity1 = list1.get(i1);
-          if (!false)
-            super.attackEntityAsMob((Entity)entity1); 
-        }  
+          for (EntityLivingBase entity1 : list1) {
+              if (!false)
+                  super.attackEntityAsMob((Entity) entity1);
+          }
       return true;
     } 
     return false;
@@ -421,7 +420,7 @@ public class EntityWitherStormHead extends EntityTameBase implements IRangedAtta
       float f13 = (this.rand.nextFloat() - 0.5F) * 9.0F;
       float f15 = (this.rand.nextFloat() - 0.5F) * 9.0F;
       float f17 = (this.rand.nextFloat() - 0.5F) * 9.0F;
-      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + f13, this.posY + 2.0D + f15, this.posZ + f17, 0.0D, 0.0D, 0.0D, new int[0]);
+      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + f13, this.posY + 2.0D + f15, this.posZ + f17, 0.0D, 0.0D, 0.0D);
     } 
     if (this.residentWitherStorm != null && this.residentWitherStorm.hurtTime <= 0)
       this.residentWitherStorm.hurtTime = 10; 
@@ -490,53 +489,51 @@ public class EntityWitherStormHead extends EntityTameBase implements IRangedAtta
         if ((this.ticksExisted + getEntityId()) % 10 == 0)
           attackEntityAsMob((Entity)entity); 
       } 
-      List<EntityLiving> list1111 = this.world.getEntitiesWithinAABB(EntityLiving.class, entity.getEntityBoundingBox().grow((this.residentWitherStorm != null) ? (this.residentWitherStorm.getSize() / 25000.0D + 4.0D) : 4.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityLiving> list1111 = this.world.getEntitiesWithinAABB(EntityLiving.class, entity.getEntityBoundingBox().grow((this.residentWitherStorm != null) ? (this.residentWitherStorm.getSize() / 25000.0D + 4.0D) : 4.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list1111 != null && !list1111.isEmpty())
-        for (int i = 0; i < list1111.size(); i++) {
-          EntityLiving entity1 = list1111.get(i);
-          if (entity1 != null && entity1.isEntityAlive() && (!false || entity1 instanceof net.minecraft.entity.passive.EntityAnimal) && !(entity1 instanceof EntityTameBase) && !(entity1 instanceof net.minecraft.entity.boss.EntityDragon) && !(entity1 instanceof EntityWitherStorm) && !(entity1 instanceof EntityWitherStormHead) && !(entity1 instanceof EntityWitherStormTentacle) && !(entity1 instanceof EntityWitherStormTentacleDevourer)) {
-            double d011 = entity.posX - entity1.posX;
-            double d111 = entity.posY - entity1.posY;
-            double d211 = entity.posZ - entity1.posZ;
-            float f21 = MathHelper.sqrt(d011 * d011 + d111 * d111 + d211 * d211);
-            if (entity1 instanceof EntityEnderman || (entity instanceof EntityTameBase && (entity instanceof EntityWitherStorm || entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityWither || entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEnderDragon || entity instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDragonBoss || entity instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityChagaroth || entity instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntitySacthoth || entity instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityJzahar || !((EntityTameBase)entity).isNonBoss() || ((EntityTameBase)entity).isHero()))) {
-              entity1.setAttackTarget((EntityLivingBase)this);
-              if (this.rand.nextInt(500) == 0 && (entity1 instanceof net.minecraft.entity.monster.EntityEnderman || entity1 instanceof EntityEnderman)) {
-                attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)entity1), 500.0F);
-                if (entity1 instanceof net.minecraft.entity.monster.EntityEnderman && ((net.minecraft.entity.monster.EntityEnderman)entity1).getHeldBlockState() == null)
-                  ((net.minecraft.entity.monster.EntityEnderman)entity1).setHeldBlockState(Blocks.OBSIDIAN.getDefaultState()); 
-              } 
-            } else {
-              entity1.motionX = d01 / f2 * 0.75D * 0.75D + entity1.motionX * 0.5D;
-              entity1.motionY = d11 / f2 * 0.75D * 0.75D + entity1.motionY * 0.5D;
-              entity1.motionZ = d21 / f2 * 0.75D * 0.75D + entity1.motionZ * 0.5D;
-            } 
-          } 
-        }  
+          for (EntityLiving entity1 : list1111) {
+              if (entity1 != null && entity1.isEntityAlive() && (!false || entity1 instanceof net.minecraft.entity.passive.EntityAnimal) && !(entity1 instanceof EntityTameBase) && !(entity1 instanceof net.minecraft.entity.boss.EntityDragon) && !(entity1 instanceof EntityWitherStorm) && !(entity1 instanceof EntityWitherStormHead) && !(entity1 instanceof EntityWitherStormTentacle) && !(entity1 instanceof EntityWitherStormTentacleDevourer)) {
+                  double d011 = entity.posX - entity1.posX;
+                  double d111 = entity.posY - entity1.posY;
+                  double d211 = entity.posZ - entity1.posZ;
+                  float f21 = MathHelper.sqrt(d011 * d011 + d111 * d111 + d211 * d211);
+                  if (entity1 instanceof EntityEnderman || (entity instanceof EntityTameBase && (entity instanceof EntityWitherStorm || entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityWither || entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEnderDragon || entity instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDragonBoss || entity instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityChagaroth || entity instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntitySacthoth || entity instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityJzahar || !((EntityTameBase) entity).isNonBoss() || ((EntityTameBase) entity).isHero()))) {
+                      entity1.setAttackTarget((EntityLivingBase) this);
+                      if (this.rand.nextInt(500) == 0 && (entity1 instanceof net.minecraft.entity.monster.EntityEnderman || entity1 instanceof EntityEnderman)) {
+                          attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase) entity1), 500.0F);
+                          if (entity1 instanceof net.minecraft.entity.monster.EntityEnderman && ((net.minecraft.entity.monster.EntityEnderman) entity1).getHeldBlockState() == null)
+                              ((net.minecraft.entity.monster.EntityEnderman) entity1).setHeldBlockState(Blocks.OBSIDIAN.getDefaultState());
+                      }
+                  } else {
+                      entity1.motionX = d01 / f2 * 0.75D * 0.75D + entity1.motionX * 0.5D;
+                      entity1.motionY = d11 / f2 * 0.75D * 0.75D + entity1.motionY * 0.5D;
+                      entity1.motionZ = d21 / f2 * 0.75D * 0.75D + entity1.motionZ * 0.5D;
+                  }
+              }
+          }
     } 
-    List<EntityLiving> list11111 = this.world.getEntitiesWithinAABB(EntityLiving.class, getEntityBoundingBox().grow(4.0D, 4.0D, 4.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+    List<EntityLiving> list11111 = this.world.getEntitiesWithinAABB(EntityLiving.class, getEntityBoundingBox().grow(4.0D, 4.0D, 4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
     if (list11111 != null && !list11111.isEmpty())
-      for (int i1 = 0; i1 < list11111.size(); i1++) {
-        EntityLiving entity1 = list11111.get(i1);
-        if (this.residentWitherStorm == null && entity1 != null && entity1.isEntityAlive() && (!false || entity1 instanceof net.minecraft.entity.passive.EntityAnimal) && !(entity instanceof net.minecraft.entity.monster.EntityEnderman) && !(entity instanceof EntityEnderman) && !(entity1 instanceof EntityTameBase) && !(entity1 instanceof EntityWitherStorm) && !(entity1 instanceof EntityWitherStormHead) && !(entity1 instanceof EntityWitherStormTentacle) && !(entity1 instanceof EntityWitherStormTentacleDevourer))
-          attackEntityAsMob((Entity)entity1); 
-        if (this.residentWitherStorm != null && entity1 != null && getDistance((Entity)entity1) <= 10.0D && entity1.isEntityAlive() && (!false || entity1 instanceof net.minecraft.entity.passive.EntityAnimal) && !(entity instanceof net.minecraft.entity.monster.EntityEnderman) && !(entity instanceof EntityEnderman) && !(entity1 instanceof EntityTameBase) && !(entity1 instanceof EntityWitherStorm) && !(entity1 instanceof EntityWitherStormHead) && !(entity1 instanceof EntityWitherStormTentacle) && !(entity1 instanceof EntityWitherStormTentacleDevourer)) {
-          if (!isWild() && EngenderConfig.general.useMessage)
-            getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity1.getName() + " was eaten by The Wither Storm (" + getOwner().getName() + ")", new Object[0])); 
-          this.world.setEntityState((Entity)entity1, (byte)3);
-          if (!entity1.isNonBoss()) {
-            entity1.setHealth(0.0F);
-            entity1.motionY++;
-            entity1.motionY++;
-            entity1.motionY++;
-          } else {
-            entity1.setDead();
-          } 
-          this.residentWitherStorm.Grow(this.residentWitherStorm.getSize() + 1 + (int)entity1.getMaxHealth() + (int)entity1.height * (int)entity1.height + (int)entity1.width * (int)entity1.width);
-          this.residentWitherStorm.heal((1 + (int)entity1.getMaxHealth() + (int)entity1.height * (int)entity1.height + (int)entity1.width * (int)entity1.width));
-          this.openMouthCounter = 2;
-        } 
-      }  
+        for (EntityLiving entity1 : list11111) {
+            if (this.residentWitherStorm == null && entity1 != null && entity1.isEntityAlive() && (!false || entity1 instanceof net.minecraft.entity.passive.EntityAnimal) && !(entity instanceof net.minecraft.entity.monster.EntityEnderman) && !(entity instanceof EntityEnderman) && !(entity1 instanceof EntityTameBase) && !(entity1 instanceof EntityWitherStorm) && !(entity1 instanceof EntityWitherStormHead) && !(entity1 instanceof EntityWitherStormTentacle) && !(entity1 instanceof EntityWitherStormTentacleDevourer))
+                attackEntityAsMob((Entity) entity1);
+            if (this.residentWitherStorm != null && entity1 != null && getDistance((Entity) entity1) <= 10.0D && entity1.isEntityAlive() && (!false || entity1 instanceof net.minecraft.entity.passive.EntityAnimal) && !(entity instanceof net.minecraft.entity.monster.EntityEnderman) && !(entity instanceof EntityEnderman) && !(entity1 instanceof EntityTameBase) && !(entity1 instanceof EntityWitherStorm) && !(entity1 instanceof EntityWitherStormHead) && !(entity1 instanceof EntityWitherStormTentacle) && !(entity1 instanceof EntityWitherStormTentacleDevourer)) {
+                if (!isWild() && EngenderConfig.general.useMessage)
+                    getOwner().sendMessage((ITextComponent) new TextComponentTranslation(entity1.getName() + " was eaten by The Wither Storm (" + getOwner().getName() + ")", new Object[0]));
+                this.world.setEntityState((Entity) entity1, (byte) 3);
+                if (!entity1.isNonBoss()) {
+                    entity1.setHealth(0.0F);
+                    entity1.motionY++;
+                    entity1.motionY++;
+                    entity1.motionY++;
+                } else {
+                    entity1.setDead();
+                }
+                this.residentWitherStorm.Grow(this.residentWitherStorm.getSize() + 1 + (int) entity1.getMaxHealth() + (int) entity1.height * (int) entity1.height + (int) entity1.width * (int) entity1.width);
+                this.residentWitherStorm.heal((1 + (int) entity1.getMaxHealth() + (int) entity1.height * (int) entity1.height + (int) entity1.width * (int) entity1.width));
+                this.openMouthCounter = 2;
+            }
+        }
     super.onLivingUpdate();
   }
   

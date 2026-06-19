@@ -195,11 +195,10 @@ public class EntityAbomniableSnowman extends EntityTameBase implements IRangedAt
         this.motionZ = 0.0D;
       } 
       List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(1.0D));
-      for (int i = 0; i < list.size(); i++) {
-        Entity entity = list.get(i);
-        if (entity instanceof EntityLivingBase && !false && !this.world.isRemote && this.ticksExisted % 10 == 0)
-          attackEntityAsMob(entity); 
-      } 
+        for (Entity entity : list) {
+            if (entity instanceof EntityLivingBase && !false && !this.world.isRemote && this.ticksExisted % 10 == 0)
+                attackEntityAsMob(entity);
+        }
       this.prevLimbSwingAmount = this.limbSwingAmount;
       double d5 = this.posX - this.prevPosX;
       double d7 = this.posZ - this.prevPosZ;
@@ -229,7 +228,7 @@ public class EntityAbomniableSnowman extends EntityTameBase implements IRangedAt
       int k = MathHelper.floor(this.posZ);
       IBlockState iblockstate = this.world.getBlockState(new BlockPos(i, j, k));
       if (iblockstate.getMaterial() != Material.AIR)
-        this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (this.rand.nextFloat() - 0.5D) * this.width, (getEntityBoundingBox()).minY + 0.1D, this.posZ + (this.rand.nextFloat() - 0.5D) * this.width, 4.0D * (this.rand.nextFloat() - 0.5D), 0.5D, (this.rand.nextFloat() - 0.5D) * 4.0D, new int[] { Block.getStateId(iblockstate) }); 
+        this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (this.rand.nextFloat() - 0.5D) * this.width, (getEntityBoundingBox()).minY + 0.1D, this.posZ + (this.rand.nextFloat() - 0.5D) * this.width, 4.0D * (this.rand.nextFloat() - 0.5D), 0.5D, (this.rand.nextFloat() - 0.5D) * 4.0D, Block.getStateId(iblockstate));
     } 
   }
   
@@ -292,29 +291,28 @@ public class EntityAbomniableSnowman extends EntityTameBase implements IRangedAt
       setSpecialAttackTimer(300);
       playSound(ESound.golemSmash, 10.0F, 1.0F);
       createEngenderModExplosionFireless((Entity)this, this.posX, this.posY - 2.0D, this.posZ, 3.0F, false);
-      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(24.0D, 3.0D, 24.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(24.0D, 3.0D, 24.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityLivingBase entity = list.get(i1);
-          if (entity != null) {
-            if (!false) {
-              entity.motionY += 1.5D;
-              if (entity instanceof net.minecraft.entity.monster.IMob) {
-                entity.attackEntityFrom(DamageSource.causeExplosionDamage((EntityLivingBase)this), 24.0F);
-              } else {
-                entity.attackEntityFrom(DamageSource.causeExplosionDamage((EntityLivingBase)this), 12.0F);
-              } 
-              entity.isAirBorne = true;
-              float f = MathHelper.sqrt(MathHelper.sin(this.rotationYaw * 0.017453292F) * MathHelper.sin(this.rotationYaw * 0.017453292F) + -MathHelper.cos(this.rotationYaw * 0.017453292F) * -MathHelper.cos(this.rotationYaw * 0.017453292F));
-              entity.motionX /= 2.0D;
-              entity.motionZ /= 2.0D;
-              entity.motionX -= (MathHelper.sin(this.rotationYaw * 0.017453292F) / f) * 1.0D;
-              entity.motionZ -= (-MathHelper.cos(this.rotationYaw * 0.017453292F) / f) * 1.0D;
-            } 
-            if (EngenderConfig.general.useMessage && !entity.isEntityAlive() && !isWild())
-              getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + " was blown up by " + getName() + " (" + getOwner().getName() + ")", new Object[0])); 
-          } 
-        }  
+          for (EntityLivingBase entity : list) {
+              if (entity != null) {
+                  if (!false) {
+                      entity.motionY += 1.5D;
+                      if (entity instanceof net.minecraft.entity.monster.IMob) {
+                          entity.attackEntityFrom(DamageSource.causeExplosionDamage((EntityLivingBase) this), 24.0F);
+                      } else {
+                          entity.attackEntityFrom(DamageSource.causeExplosionDamage((EntityLivingBase) this), 12.0F);
+                      }
+                      entity.isAirBorne = true;
+                      float f = MathHelper.sqrt(MathHelper.sin(this.rotationYaw * 0.017453292F) * MathHelper.sin(this.rotationYaw * 0.017453292F) + -MathHelper.cos(this.rotationYaw * 0.017453292F) * -MathHelper.cos(this.rotationYaw * 0.017453292F));
+                      entity.motionX /= 2.0D;
+                      entity.motionZ /= 2.0D;
+                      entity.motionX -= (MathHelper.sin(this.rotationYaw * 0.017453292F) / f) * 1.0D;
+                      entity.motionZ -= (-MathHelper.cos(this.rotationYaw * 0.017453292F) / f) * 1.0D;
+                  }
+                  if (EngenderConfig.general.useMessage && !entity.isEntityAlive() && !isWild())
+                      getOwner().sendMessage((ITextComponent) new TextComponentTranslation(entity.getName() + " was blown up by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
+              }
+          }
     } 
   }
   
@@ -352,7 +350,7 @@ public class EntityAbomniableSnowman extends EntityTameBase implements IRangedAt
         double d2 = this.rand.nextGaussian() * 0.02D;
         double d0 = this.rand.nextGaussian() * 0.02D;
         double d1 = this.rand.nextGaussian() * 0.02D;
-        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, d0, d1, new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, d0, d1);
       } 
       setDead();
     } 
@@ -361,7 +359,7 @@ public class EntityAbomniableSnowman extends EntityTameBase implements IRangedAt
       double d2 = this.rand.nextGaussian() * 0.02D;
       double d0 = this.rand.nextGaussian() * 0.02D;
       double d1 = this.rand.nextGaussian() * 0.02D;
-      this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX + this.rand.nextGaussian() * this.width * 0.5D, this.posY + (this.rand.nextFloat() * this.height), this.posZ + this.rand.nextGaussian() * this.width * 0.5D, d2, d0, d1, new int[] { Block.getStateId(Blocks.SNOW.getDefaultState()) });
+      this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX + this.rand.nextGaussian() * this.width * 0.5D, this.posY + (this.rand.nextFloat() * this.height), this.posZ + this.rand.nextGaussian() * this.width * 0.5D, d2, d0, d1, Block.getStateId(Blocks.SNOW.getDefaultState()));
     } 
     if (!this.world.isRemote)
       if (this.deathTicks == 1) {
@@ -369,9 +367,9 @@ public class EntityAbomniableSnowman extends EntityTameBase implements IRangedAt
         if (getOwner() != null) {
           for (EntityPlayer entityplayer : this.world.playerEntities) {
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
-            entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("\u00A74" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
+            entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
           } 
-          ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("Your " + getName() + " has been destroyed!", new Object[0]));
+          getOwner().sendMessage(new TextComponentTranslation("Your " + getName() + " has been destroyed!", new Object[0]));
         } 
       }  
   }

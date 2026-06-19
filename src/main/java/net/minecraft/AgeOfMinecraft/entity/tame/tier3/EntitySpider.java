@@ -118,16 +118,16 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
   
   protected void entityInit() {
     super.entityInit();
-    getDataManager().register(SURVIVAL_TEST_SKIN, Boolean.valueOf(false));
-    this.dataManager.register(CLIMBING, Byte.valueOf((byte)0));
+    getDataManager().register(SURVIVAL_TEST_SKIN, Boolean.FALSE);
+    this.dataManager.register(CLIMBING, (byte) 0);
   }
   
   public boolean isSurvivalTestSkin() {
-    return ((Boolean)getDataManager().get(SURVIVAL_TEST_SKIN)).booleanValue();
+    return (Boolean) getDataManager().get(SURVIVAL_TEST_SKIN);
   }
   
   public void setSurvivalTestSkin(boolean childZombie) {
-    getDataManager().set(SURVIVAL_TEST_SKIN, Boolean.valueOf(childZombie));
+    getDataManager().set(SURVIVAL_TEST_SKIN, childZombie);
   }
   
   public void readEntityFromNBT(NBTTagCompound tagCompund) {
@@ -137,7 +137,7 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
     super.writeEntityToNBT(tagCompound);
-    if (((Boolean)this.dataManager.get(SURVIVAL_TEST_SKIN)).booleanValue())
+    if ((Boolean) this.dataManager.get(SURVIVAL_TEST_SKIN))
       tagCompound.setBoolean("EasterEgg", true); 
   }
   
@@ -166,13 +166,12 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
       setBesideClimbableBlock(this.collidedHorizontally);
       if (isBeingRidden() && !this.onGround && this.ticksExisted % 10 == 0) {
         playSound(SoundEvents.ENTITY_SPIDER_AMBIENT, 1.0F, 1.5F);
-        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
         if (list != null && !list.isEmpty() && this.jumpPower >= 1.0F)
-          for (int i1 = 0; i1 < list.size(); i1++) {
-            EntityLivingBase entity1 = list.get(i1);
-            if (entity1 != null && entity1.isEntityAlive())
-              attackEntityAsMob((Entity)entity1); 
-          }  
+            for (EntityLivingBase entity1 : list) {
+                if (entity1 != null && entity1.isEntityAlive())
+                    attackEntityAsMob((Entity) entity1);
+            }
       } 
     } 
   }
@@ -257,17 +256,17 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
   }
   
   public boolean isBesideClimbableBlock() {
-    return ((((Byte)this.dataManager.get(CLIMBING)).byteValue() & 0x1) != 0);
+    return (((Byte) this.dataManager.get(CLIMBING) & 0x1) != 0);
   }
   
   public void setBesideClimbableBlock(boolean climbing) {
-    byte b0 = ((Byte)this.dataManager.get(CLIMBING)).byteValue();
+    byte b0 = (Byte) this.dataManager.get(CLIMBING);
     if (climbing) {
       b0 = (byte)(b0 | 0x1);
     } else {
       b0 = (byte)(b0 & 0xFFFFFFFE);
     } 
-    this.dataManager.set(CLIMBING, Byte.valueOf(b0));
+    this.dataManager.set(CLIMBING, b0);
   }
   
   @Nullable
@@ -304,18 +303,17 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (player.isSneaking() && stack.isEmpty() && getRidingEntity() == null) {
-      List<EntitySkeleton> list = this.world.getEntitiesWithinAABB(EntitySkeleton.class, getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntitySkeleton> list = this.world.getEntitiesWithinAABB(EntitySkeleton.class, getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (getRidingEntity() == null && list != null && !list.isEmpty() && !isBeingRidden() && hasOwner(player))
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntitySkeleton entity = list.get(i1);
-          if (entity != null)
-            if (false && !entity.isRiding() && !this.world.isRemote) {
-              player.swingArm(EnumHand.MAIN_HAND);
-              entity.startRiding((Entity)this);
-              playSound(SoundEvents.ENTITY_SPIDER_AMBIENT, 1.0F, 1.5F);
-              break;
-            }  
-        }  
+          for (EntitySkeleton entity : list) {
+              if (entity != null)
+                  if (false && !entity.isRiding() && !this.world.isRemote) {
+                      player.swingArm(EnumHand.MAIN_HAND);
+                      entity.startRiding((Entity) this);
+                      playSound(SoundEvents.ENTITY_SPIDER_AMBIENT, 1.0F, 1.5F);
+                      break;
+                  }
+          }
       return true;
     } 
     if (!player.isSneaking() && stack.isEmpty() && getRidingEntity() == null) {

@@ -187,25 +187,25 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(EARTHQUAKETIMER, Integer.valueOf(0));
-    this.dataManager.register(BLACKHOLETIMER, Integer.valueOf(0));
-    this.dataManager.register(IMPLOSIONTIMER, Integer.valueOf(0));
-    this.dataManager.register(SHOUTTIMER, Integer.valueOf(0));
-    this.dataManager.register(COOLDOWNTIMER, Integer.valueOf(0));
+    this.dataManager.register(EARTHQUAKETIMER, 0);
+    this.dataManager.register(BLACKHOLETIMER, 0);
+    this.dataManager.register(IMPLOSIONTIMER, 0);
+    this.dataManager.register(SHOUTTIMER, 0);
+    this.dataManager.register(COOLDOWNTIMER, 0);
   }
   
   public int getTimer(int timer) {
     switch (timer) {
       case 0:
-        return ((Integer)this.dataManager.get(EARTHQUAKETIMER)).intValue();
+        return (Integer) this.dataManager.get(EARTHQUAKETIMER);
       case 1:
-        return ((Integer)this.dataManager.get(BLACKHOLETIMER)).intValue();
+        return (Integer) this.dataManager.get(BLACKHOLETIMER);
       case 2:
-        return ((Integer)this.dataManager.get(IMPLOSIONTIMER)).intValue();
+        return (Integer) this.dataManager.get(IMPLOSIONTIMER);
       case 3:
-        return ((Integer)this.dataManager.get(SHOUTTIMER)).intValue();
+        return (Integer) this.dataManager.get(SHOUTTIMER);
       case 4:
-        return ((Integer)this.dataManager.get(COOLDOWNTIMER)).intValue();
+        return (Integer) this.dataManager.get(COOLDOWNTIMER);
     } 
     return 0;
   }
@@ -213,19 +213,19 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
   public void setTimer(int timer, int value) {
     switch (timer) {
       case 0:
-        this.dataManager.set(EARTHQUAKETIMER, Integer.valueOf(value));
+        this.dataManager.set(EARTHQUAKETIMER, value);
         break;
       case 1:
-        this.dataManager.set(BLACKHOLETIMER, Integer.valueOf(value));
+        this.dataManager.set(BLACKHOLETIMER, value);
         break;
       case 2:
-        this.dataManager.set(IMPLOSIONTIMER, Integer.valueOf(value));
+        this.dataManager.set(IMPLOSIONTIMER, value);
         break;
       case 3:
-        this.dataManager.set(SHOUTTIMER, Integer.valueOf(value));
+        this.dataManager.set(SHOUTTIMER, value);
         break;
       case 4:
-        this.dataManager.set(COOLDOWNTIMER, Integer.valueOf(value));
+        this.dataManager.set(COOLDOWNTIMER, value);
         break;
     } 
   }
@@ -386,7 +386,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
   public boolean attackEntityAsMob(Entity par1Entity) {
     boolean flag = super.attackEntityAsMob(par1Entity);
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 4.5F * (float)((ACConfig.damageAmpl > 1.0D) ? ACConfig.damageAmpl : 1.0D)); 
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 4.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -481,10 +481,10 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
                 if (EngenderConfig.general.useMessage && !isWild())
                   getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + " was super-banished by " + getName() + " (" + getOwner().getName() + ")", new Object[0])); 
                 list.remove(entity);
-                SpecialTextUtil.JzaharGroup(this.world, new String[] { !isWild() ? I18n.translateToLocal("message.jzaharhelpful.banish.vanilla") : I18n.translateToLocal("message.jzahar.banish.vanilla") });
+                SpecialTextUtil.JzaharGroup(this.world, !isWild() ? I18n.translateToLocal("message.jzaharhelpful.banish.vanilla") : I18n.translateToLocal("message.jzahar.banish.vanilla"));
               } 
             } else if (ACConfig.particleEntity) {
-              this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, entity.posX + f, entity.posY + 2.0D + f1, entity.posZ + f2, 0.0D, 0.0D, 0.0D, new int[0]);
+              this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, entity.posX + f, entity.posY + 2.0D + f1, entity.posZ + f2, 0.0D, 0.0D, 0.0D);
             } 
           } else if (entity instanceof com.shinoow.abyssalcraft.common.entity.EntityDragonBoss || entity instanceof com.shinoow.abyssalcraft.common.entity.EntitySacthoth || entity instanceof com.shinoow.abyssalcraft.common.entity.EntityChagaroth) {
             if (!this.world.isRemote) {
@@ -500,10 +500,10 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
                 entitywitherskull.startRiding(entity);
                 if (EngenderConfig.general.useMessage && !isWild())
                   getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + " was super-banished by " + getName() + " (" + getOwner().getName() + ")", new Object[0])); 
-                SpecialTextUtil.JzaharGroup(this.world, new String[] { !isWild() ? I18n.translateToLocal("message.jzaharhelpful.banish.ac") : I18n.translateToLocal("message.jzahar.banish.ac") });
+                SpecialTextUtil.JzaharGroup(this.world, !isWild() ? I18n.translateToLocal("message.jzaharhelpful.banish.ac") : I18n.translateToLocal("message.jzahar.banish.ac"));
               } 
             } else if (ACConfig.particleEntity) {
-              this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, entity.posX + f, entity.posY + 2.0D + f1, entity.posZ + f2, 0.0D, 0.0D, 0.0D, new int[0]);
+              this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, entity.posX + f, entity.posY + 2.0D + f1, entity.posZ + f2, 0.0D, 0.0D, 0.0D);
             } 
           } else if (entity instanceof com.shinoow.abyssalcraft.common.entity.EntityJzahar) {
             if (!this.world.isRemote) {
@@ -519,10 +519,10 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
                 entitywitherskull.startRiding(entity);
                 if (EngenderConfig.general.useMessage && !isWild())
                   getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + " was super-banished by " + getName() + " (" + getOwner().getName() + ")", new Object[0])); 
-                SpecialTextUtil.JzaharGroup(this.world, new String[] { !isWild() ? I18n.translateToLocal("message.jzaharhelpful.banish.jzh") : I18n.translateToLocal("message.jzahar.banish.jzh") });
+                SpecialTextUtil.JzaharGroup(this.world, !isWild() ? I18n.translateToLocal("message.jzaharhelpful.banish.jzh") : I18n.translateToLocal("message.jzahar.banish.jzh"));
               } 
             } else if (ACConfig.particleEntity) {
-              this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, entity.posX + f, entity.posY + 2.0D + f1, entity.posZ + f2, 0.0D, 0.0D, 0.0D, new int[0]);
+              this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, entity.posX + f, entity.posY + 2.0D + f1, entity.posZ + f2, 0.0D, 0.0D, 0.0D);
             } 
           } else if (!entity.isNonBoss()) {
             if (!this.world.isRemote) {
@@ -540,22 +540,22 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
                 entitywitherskull.startRiding(entity);
                 if (EngenderConfig.general.useMessage && !isWild())
                   getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + " was super-banished by " + getName() + " (" + getOwner().getName() + ")", new Object[0])); 
-                SpecialTextUtil.JzaharGroup(this.world, new String[] { !isWild() ? I18n.translateToLocal("message.jzaharhelpful.banish.other") : I18n.translateToLocal("message.jzahar.banish.other") });
+                SpecialTextUtil.JzaharGroup(this.world, !isWild() ? I18n.translateToLocal("message.jzaharhelpful.banish.other") : I18n.translateToLocal("message.jzahar.banish.other"));
               } 
             } else if (ACConfig.particleEntity) {
-              this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, entity.posX + f, entity.posY + 2.0D + f1, entity.posZ + f2, 0.0D, 0.0D, 0.0D, new int[0]);
+              this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, entity.posX + f, entity.posY + 2.0D + f1, entity.posZ + f2, 0.0D, 0.0D, 0.0D);
             } 
           } else if (entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode && this.talkTimer == 0 && getDistanceSq(entity) <= 8.0D) {
             this.talkTimer = 1200;
             if (this.world.isRemote)
               if (EntityUtil.isPlayerCoralium((EntityPlayer)entity)) {
-                SpecialTextUtil.JzaharText(new String[] { "Hello, old friend." });
+                SpecialTextUtil.JzaharText("Hello, old friend.");
               } else if (false) {
-                SpecialTextUtil.JzaharText(new String[] { String.format(I18n.translateToLocal("message.jzaharhelpful.creative.1"), new Object[] { entity.getName() }) });
-                SpecialTextUtil.JzaharText(new String[] { I18n.translateToLocal("message.jzaharhelpful.creative.2") });
+                SpecialTextUtil.JzaharText(String.format(I18n.translateToLocal("message.jzaharhelpful.creative.1"), entity.getName()));
+                SpecialTextUtil.JzaharText(I18n.translateToLocal("message.jzaharhelpful.creative.2"));
               } else {
-                SpecialTextUtil.JzaharText(new String[] { String.format(I18n.translateToLocal("message.jzahar.creative.1"), new Object[] { entity.getName() }) });
-                SpecialTextUtil.JzaharText(new String[] { I18n.translateToLocal("message.jzahar.creative.2") });
+                SpecialTextUtil.JzaharText(String.format(I18n.translateToLocal("message.jzahar.creative.1"), entity.getName()));
+                SpecialTextUtil.JzaharText(I18n.translateToLocal("message.jzahar.creative.2"));
               }  
           }  
       }  
@@ -607,7 +607,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
       if (getTimer(3) < 0 && this.rand.nextInt(20) == 0 && getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) <= 9216.0D && !this.doShout && getTimer(4) < 0) {
         playSound(ACSounds.jzahar_shout, 5.0F, 1.0F);
         if (!this.world.isRemote)
-          SpecialTextUtil.JzaharGroup(this.world, new String[] { "Uftoin..." }); 
+          SpecialTextUtil.JzaharGroup(this.world, "Uftoin...");
         this.shoutTicks = getTimer(3) - 30;
         this.doShout = true;
         setTimer(4, 100);
@@ -618,7 +618,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         setTimer(3, 400);
         playSound(ACSounds.jzahar_blast, 5.0F, 1.0F);
         if (!this.world.isRemote)
-          SpecialTextUtil.JzaharGroup(this.world, new String[] { "...mglagln!" }); 
+          SpecialTextUtil.JzaharGroup(this.world, "...mglagln!");
         if (isEntityAlive()) {
           double size = 64.0D;
           Vec3d vector = getLookVec();
@@ -647,7 +647,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         setTimer(0, 1000);
         playSound(ACSounds.jzahar_earthquake, 5.0F, 1.0F);
         if (!this.world.isRemote)
-          SpecialTextUtil.JzaharGroup(this.world, new String[] { "Shugnah throd!" }); 
+          SpecialTextUtil.JzaharGroup(this.world, "Shugnah throd!");
         setTimer(4, 100);
       } 
       if (getTimer(2) < 0 && getAttackTarget() != null && getTimer(4) < 0) {
@@ -655,7 +655,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         setTimer(2, 1200);
         playSound(ACSounds.jzahar_implosion, 5.0F, 1.0F);
         if (!this.world.isRemote)
-          SpecialTextUtil.JzaharGroup(this.world, new String[] { "Nilgh'ri mtli!" }); 
+          SpecialTextUtil.JzaharGroup(this.world, "Nilgh'ri mtli!");
         EntityImplosion entitywitherskull = new EntityImplosion(this.world, this);
         BlockPos targetpos = getAttackTarget().getPosition();
         entitywitherskull.setPosition((targetpos.getX() + this.rand.nextInt(10) * (this.rand.nextBoolean() ? 1 : -1)), (targetpos.getY() + 2), (targetpos.getZ() + this.rand.nextInt(10) * (this.rand.nextBoolean() ? 1 : -1)));
@@ -669,7 +669,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         setTimer(1, 1600);
         playSound(ACSounds.jzahar_black_hole, 5.0F, 1.0F);
         if (!this.world.isRemote)
-          SpecialTextUtil.JzaharGroup(this.world, new String[] { "Ph'nilgh'ri n'ghft!" }); 
+          SpecialTextUtil.JzaharGroup(this.world, "Ph'nilgh'ri n'ghft!");
         EntityBlackHole entitywitherskull = new EntityBlackHole(this.world, this);
         entitywitherskull.copyLocationAndAnglesFrom((Entity)getAttackTarget());
         BlockPos targetpos = getAttackTarget().getPosition();
@@ -700,7 +700,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         dx *= velocity;
         dy *= velocity;
         dz *= velocity;
-        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, true, px + getRNG().nextDouble() - 0.5D, py + getRNG().nextDouble() - 0.5D, pz + getRNG().nextDouble() - 0.5D, dx, dy, dz, new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, true, px + getRNG().nextDouble() - 0.5D, py + getRNG().nextDouble() - 0.5D, pz + getRNG().nextDouble() - 0.5D, dx, dy, dz);
       } 
     } else {
       this.world.setEntityState((Entity)this, (byte)23);
@@ -744,15 +744,14 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
       if (this.deathTicks == 1) {
         List<Entity> list = this.world.loadedEntityList;
         if (list != null)
-          for (int k2 = 0; k2 < list.size(); k2++) {
-            Entity entity = list.get(k2);
-            if (entity instanceof EntityJzahar && entity.isEntityAlive())
-              SpecialTextUtil.JzaharGroup(this.world, new String[] { false ? I18n.translateToLocal("message.jzaharhelpful.snidecomment.jzahar") : I18n.translateToLocal("message.jzahar.snidecomment.jzahar") }); 
-          }  
+            for (Entity entity : list) {
+                if (entity instanceof EntityJzahar && entity.isEntityAlive())
+                    SpecialTextUtil.JzaharGroup(this.world, false ? I18n.translateToLocal("message.jzaharhelpful.snidecomment.jzahar") : I18n.translateToLocal("message.jzahar.snidecomment.jzahar"));
+            }
         if (getOwner() != null) {
           for (EntityPlayer entityplayer : this.world.playerEntities) {
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
-            entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("\u00A74" + getOwner().getName() + "'s Jz'ahar has been destroyed!!!", new Object[0]), true);
+            entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("§4" + getOwner().getName() + "'s Jz'ahar has been destroyed!!!", new Object[0]), true);
           } 
           ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("Your Jz'ahar has been destroyed!", new Object[0]));
         } 
@@ -762,19 +761,19 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         for (int a = 1; a < 10; a++)
           playSound(ACSounds.jzahar_charge, a, 1.0F);  
       if (this.deathTicks < 400)
-        this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY + 2.5D, this.posZ, 0.0D, 0.0D, 0.0D, new int[0]); 
+        this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY + 2.5D, this.posZ, 0.0D, 0.0D, 0.0D);
       float f = (this.rand.nextFloat() - 0.5F) * 3.0F;
       float f1 = (this.rand.nextFloat() - 0.5F) * 2.0F;
       float f2 = (this.rand.nextFloat() - 0.5F) * 3.0F;
       if (this.deathTicks >= 100 && this.deathTicks < 400)
-        this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + f, this.posY + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D, new int[0]); 
+        this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + f, this.posY + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
       if (this.deathTicks >= 200 && this.deathTicks < 400) {
-        this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + f, this.posY + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D, new int[0]);
-        this.world.spawnParticle(EnumParticleTypes.LAVA, this.posX, this.posY + 2.5D, this.posZ, 0.0D, 0.0D, 0.0D, new int[] { 0 });
+        this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + f, this.posY + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
+        this.world.spawnParticle(EnumParticleTypes.LAVA, this.posX, this.posY + 2.5D, this.posZ, 0.0D, 0.0D, 0.0D, 0);
       } 
-      this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY + 1.5D, this.posZ, 0.0D, 0.0D, 0.0D, new int[0]);
+      this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY + 1.5D, this.posZ, 0.0D, 0.0D, 0.0D);
       if (this.deathTicks >= 790 && this.deathTicks <= 800) {
-        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX, this.posY + 1.5D, this.posZ, 0.0D, 0.0D, 0.0D, new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX, this.posY + 1.5D, this.posZ, 0.0D, 0.0D, 0.0D);
         playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 4.0F, (1.0F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F) * 0.7F);
       } 
       if (this.deathTicks > 400 && this.deathTicks < 800) {
@@ -859,25 +858,25 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
     } 
     if (!isWild()) {
       if (this.deathTicks == 20 && !this.world.isRemote)
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzaharhelpful.death.1") }); 
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.1"));
       if (this.deathTicks == 100 && !this.world.isRemote)
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzaharhelpful.death.2") }); 
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.2"));
       if (this.deathTicks == 180 && !this.world.isRemote)
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzaharhelpful.death.3") }); 
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.3"));
       if (this.deathTicks == 260 && !this.world.isRemote)
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzaharhelpful.death.4") }); 
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.4"));
       if (this.deathTicks == 340 && !this.world.isRemote)
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzaharhelpful.death.5") }); 
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.5"));
       if (this.deathTicks == 420 && !this.world.isRemote)
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzaharhelpful.death.6") }); 
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.6"));
       if (this.deathTicks == 500 && !this.world.isRemote)
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzaharhelpful.death.7") }); 
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.7"));
       if (this.deathTicks == 580 && !this.world.isRemote)
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzaharhelpful.death.8") }); 
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.8"));
       if (this.deathTicks == 660 && !this.world.isRemote)
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzaharhelpful.death.9") }); 
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.9"));
       if (this.deathTicks == 800 && !this.world.isRemote) {
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzaharhelpful.death.10") });
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.10"));
         int i = 60000;
         this.world.spawnEntity((Entity)new EntityGatekeeperEssence(this.world, this.posX, this.posY, this.posZ));
         while (i > 0) {
@@ -889,25 +888,25 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
       } 
     } else {
       if (this.deathTicks == 20 && !this.world.isRemote)
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzahar.death.1") }); 
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.1"));
       if (this.deathTicks == 100 && !this.world.isRemote)
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzahar.death.2") }); 
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.2"));
       if (this.deathTicks == 180 && !this.world.isRemote)
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzahar.death.3") }); 
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.3"));
       if (this.deathTicks == 260 && !this.world.isRemote)
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzahar.death.4") }); 
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.4"));
       if (this.deathTicks == 340 && !this.world.isRemote)
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzahar.death.5") }); 
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.5"));
       if (this.deathTicks == 420 && !this.world.isRemote)
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzahar.death.6") }); 
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.6"));
       if (this.deathTicks == 500 && !this.world.isRemote)
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzahar.death.7") }); 
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.7"));
       if (this.deathTicks == 580 && !this.world.isRemote)
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzahar.death.8") }); 
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.8"));
       if (this.deathTicks == 660 && !this.world.isRemote)
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzahar.death.9") }); 
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.9"));
       if (this.deathTicks == 800 && !this.world.isRemote) {
-        SpecialTextUtil.JzaharGroup(this.world, new String[] { I18n.translateToLocal("message.jzahar.death.10") });
+        SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.10"));
         int i = 60000;
         this.world.spawnEntity((Entity)new EntityGatekeeperEssence(this.world, this.posX, this.posY, this.posZ));
         while (i > 0) {
@@ -945,7 +944,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
   
   public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData par1EntityLivingData) {
     par1EntityLivingData = super.onInitialSpawn(difficulty, par1EntityLivingData);
-    SpecialTextUtil.JzaharGroup(this.world, new String[] { "Allahu Akbar!" });
+    SpecialTextUtil.JzaharGroup(this.world, "Allahu Akbar!");
     IAttributeInstance attribute = getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
     Calendar calendar = this.world.getCurrentDate();
     attribute.removeModifier(attackDamageBoost);

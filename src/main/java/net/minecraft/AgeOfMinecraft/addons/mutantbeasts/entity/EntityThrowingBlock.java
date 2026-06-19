@@ -87,8 +87,8 @@ public class EntityThrowingBlock extends EntityThrowable {
   
   protected void entityInit() {
     this.dataManager.register(BLOCK_STATE, Optional.of(Blocks.GRASS.getDefaultState()));
-    this.dataManager.register(THROWER_ENTITY_ID, Integer.valueOf(-1));
-    this.dataManager.register(HELD, Boolean.valueOf(false));
+    this.dataManager.register(THROWER_ENTITY_ID, -1);
+    this.dataManager.register(HELD, Boolean.FALSE);
   }
   
   public IBlockState getBlockState() {
@@ -114,11 +114,11 @@ public class EntityThrowingBlock extends EntityThrowable {
   
   private void setThrower(EntityLivingBase thrower) {
     this.thrower = thrower;
-    this.dataManager.set(THROWER_ENTITY_ID, Integer.valueOf(thrower.getEntityId()));
+    this.dataManager.set(THROWER_ENTITY_ID, thrower.getEntityId());
   }
   
   public EntityLivingBase getThrowerByID() {
-    int throwerId = ((Integer)this.dataManager.get(THROWER_ENTITY_ID)).intValue();
+    int throwerId = (Integer) this.dataManager.get(THROWER_ENTITY_ID);
     if (throwerId >= 0) {
       Entity entity = this.world.getEntityByID(throwerId);
       if (entity instanceof EntityLivingBase)
@@ -128,11 +128,11 @@ public class EntityThrowingBlock extends EntityThrowable {
   }
   
   public boolean isHeld() {
-    return ((Boolean)this.dataManager.get(HELD)).booleanValue();
+    return (Boolean) this.dataManager.get(HELD);
   }
   
   private void setHeld(boolean held) {
-    this.dataManager.set(HELD, Boolean.valueOf(held));
+    this.dataManager.set(HELD, held);
   }
   
   protected float getGravityVelocity() {
@@ -173,7 +173,7 @@ public class EntityThrowingBlock extends EntityThrowable {
         double motx = ((this.rand.nextFloat() - this.rand.nextFloat()) * 3.0F);
         double moty = (0.5F + this.rand.nextFloat() * 2.0F);
         double motz = ((this.rand.nextFloat() - this.rand.nextFloat()) * 3.0F);
-        this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, x, y, z, motx, moty, motz, new int[] { Block.getStateId(getBlockState()) });
+        this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, x, y, z, motx, moty, motz, Block.getStateId(getBlockState()));
       }  
   }
   
@@ -220,7 +220,7 @@ public class EntityThrowingBlock extends EntityThrowable {
       ProjectileHelper.rotateTowardsMovement((Entity)this, 0.2F);
       if (isInWater()) {
         for (int i = 0; i < 4; i++)
-          this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ, new int[0]); 
+          this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
         f = 0.8F;
       } else {
         f = 0.99F;

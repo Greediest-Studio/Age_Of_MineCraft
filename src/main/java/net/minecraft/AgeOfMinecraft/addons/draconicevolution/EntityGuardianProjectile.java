@@ -122,7 +122,7 @@ public class EntityGuardianProjectile extends Entity {
   protected void entityInit() {
     if (this.type == 4 || this.type == 5 || this.type == 6 || this.world.isRemote)
       this.noClip = true; 
-    this.dataManager.register(TYPE, Byte.valueOf((byte)this.type));
+    this.dataManager.register(TYPE, (byte) this.type);
   }
   
   public void onUpdate() {
@@ -134,10 +134,10 @@ public class EntityGuardianProjectile extends Entity {
     if (this.target instanceof EntityWitherStormTentacleDevourer && ((EntityWitherStormTentacleDevourer)this.target).residentWitherStorm != null)
       this.target = (EntityLivingBase)((EntityWitherStormTentacleDevourer)this.target).residentWitherStorm; 
     if (!this.world.isRemote && this.ticksExisted == 1)
-      this.dataManager.set(TYPE, Byte.valueOf((byte)this.type)); 
+      this.dataManager.set(TYPE, (byte) this.type);
     if (this.world.isRemote) {
       if (this.type == 0)
-        this.type = ((Byte)this.dataManager.get(TYPE)).byteValue(); 
+        this.type = (Byte) this.dataManager.get(TYPE);
       spawnParticle();
     } 
     if (this.shooter != null && this.shooter instanceof EntityTameBase && !((EntityTameBase)this.shooter).isWild() && ((EntityTameBase)this.shooter).getOwner().getHealth() <= ((EntityTameBase)this.shooter).getOwner().getMaxHealth() / 2.0F)
@@ -216,7 +216,7 @@ public class EntityGuardianProjectile extends Entity {
         break;
       case 4:
         if (genericHit || (targetDistance > this.lastTickTargetDistance && targetDistance < this.power) || this.ticksExisted > 800 || this.heath <= 0.0F) {
-          BCEffectHandler.spawnFX(DEParticles.GUARDIAN_PROJECTILE, this.world, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D, new int[] { 256, getEntityId(), 0, 255, 255 });
+          BCEffectHandler.spawnFX(DEParticles.GUARDIAN_PROJECTILE, this.world, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D, 256, getEntityId(), 0, 255, 255);
           damageEntitiesInRadius(this.damageEnergy, this.power, this.power * 3.0F);
           this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.HOSTILE, 4.0F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F, false);
           setDead();
@@ -224,12 +224,12 @@ public class EntityGuardianProjectile extends Entity {
         break;
       case 5:
         if (genericHit || (targetDistance > this.lastTickTargetDistance && targetDistance < this.power) || this.ticksExisted > 800 || this.heath <= 0.0F) {
-          BCEffectHandler.spawnFX(DEParticles.GUARDIAN_PROJECTILE, this.world, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D, new int[] { 256, getEntityId(), 68, 0, 0 });
+          BCEffectHandler.spawnFX(DEParticles.GUARDIAN_PROJECTILE, this.world, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D, 256, getEntityId(), 68, 0, 0);
           damageEntitiesInRadius(this.damageChaos, this.power, this.power * 3.0F);
           this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.HOSTILE, 4.0F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F, false);
           List<Entity> list = this.world.getEntitiesInAABBexcluding(this.shooter, getEntityBoundingBox().grow(60.0D), FilterUtils.IS_PLAYER);
           for (int i = 3 + this.rand.nextInt(3); i > 0; i--) {
-            Entity target = (list.size() > 0) ? list.get(this.rand.nextInt(list.size())) : null;
+            Entity target = (!list.isEmpty()) ? list.get(this.rand.nextInt(list.size())) : null;
             if (!(target instanceof EntityLivingBase))
               target = null; 
             EntityGuardianProjectile newProjectile = new EntityGuardianProjectile(this.world, 6, (EntityLivingBase)target, this.power / 2.0F, this.shooter);
@@ -248,7 +248,7 @@ public class EntityGuardianProjectile extends Entity {
         break;
       case 6:
         if ((genericHit || (targetDistance > this.lastTickTargetDistance && targetDistance < this.power) || this.ticksExisted > 800 || this.heath <= 0.0F) && this.ticksExisted > 5) {
-          BCEffectHandler.spawnFX(DEParticles.GUARDIAN_PROJECTILE, this.world, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D, new int[] { 256, getEntityId(), 68, 0, 0 });
+          BCEffectHandler.spawnFX(DEParticles.GUARDIAN_PROJECTILE, this.world, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D, 256, getEntityId(), 68, 0, 0);
           damageEntitiesInRadius(this.damageChaos, this.power, this.power * 3.0F);
           this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.HOSTILE, 4.0F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F, false);
           setDead();
@@ -265,21 +265,20 @@ public class EntityGuardianProjectile extends Entity {
     Entity entityHit = null;
     List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(this.motionX, this.motionY, this.motionZ).grow(1.0D, 1.0D, 1.0D));
     double d0 = 0.0D;
-    for (int i = 0; i < list.size(); i++) {
-      Entity entity1 = list.get(i);
-      if (this.target != null && entity1 == this.target && (entity1 != this.shooter || this.ticksExisted >= 5)) {
-        float f1 = 2.0F;
-        AxisAlignedBB axisalignedbb1 = entity1.getEntityBoundingBox().grow(f1, f1, f1);
-        RayTraceResult traceResult = axisalignedbb1.calculateIntercept(vec31, vec3);
-        if (traceResult != null) {
-          double d1 = vec31.distanceTo(traceResult.hitVec);
-          if (d1 < d0 || d0 == 0.0D) {
-            entityHit = entity1;
-            d0 = d1;
-          } 
-        } 
-      } 
-    } 
+      for (Entity entity1 : list) {
+          if (this.target != null && entity1 == this.target && (entity1 != this.shooter || this.ticksExisted >= 5)) {
+              float f1 = 2.0F;
+              AxisAlignedBB axisalignedbb1 = entity1.getEntityBoundingBox().grow(f1, f1, f1);
+              RayTraceResult traceResult = axisalignedbb1.calculateIntercept(vec31, vec3);
+              if (traceResult != null) {
+                  double d1 = vec31.distanceTo(traceResult.hitVec);
+                  if (d1 < d0 || d0 == 0.0D) {
+                      entityHit = entity1;
+                      d0 = d1;
+                  }
+              }
+          }
+      }
     return (entityHit instanceof EntityGuardianProjectile) ? null : entityHit;
   }
   
@@ -354,7 +353,7 @@ public class EntityGuardianProjectile extends Entity {
     int[] colour = getParticleColour();
     if (Arrays.equals(colour, new int[] { 0, 0, 0 }))
       return; 
-    BCEffectHandler.spawnFX(DEParticles.GUARDIAN_PROJECTILE, this.world, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D, 256.0D, new int[] { getEntityId(), colour[0], colour[1], colour[2] });
+    BCEffectHandler.spawnFX(DEParticles.GUARDIAN_PROJECTILE, this.world, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D, 256.0D, getEntityId(), colour[0], colour[1], colour[2]);
   }
   
   public int[] getParticleColour() {
@@ -390,7 +389,7 @@ public class EntityGuardianProjectile extends Entity {
   protected void readEntityFromNBT(NBTTagCompound compound) {
     this.type = compound.getInteger("Type");
     if (!this.world.isRemote)
-      this.dataManager.set(TYPE, Byte.valueOf((byte)this.type)); 
+      this.dataManager.set(TYPE, (byte) this.type);
     this.noClip = (this.type == 4 || this.type == 5 || this.type == 6);
     this.isChaser = (this.type == 3 || this.type == 4 || this.type == 5 || this.type == 6);
   }

@@ -8,7 +8,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
@@ -36,7 +35,7 @@ public abstract class EntitySpellcasterIllager extends EntityAbstractIllagers im
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(SPELL, Byte.valueOf((byte)0));
+    this.dataManager.register(SPELL, (byte) 0);
   }
   
   protected void setWololoTarget(@Nullable EntitySheep p_190748_1_) {
@@ -83,17 +82,17 @@ public abstract class EntitySpellcasterIllager extends EntityAbstractIllagers im
   
   public boolean isSpellcasting() {
     if (this.world.isRemote)
-      return (((Byte)this.dataManager.get(SPELL)).byteValue() > 0); 
+      return ((Byte) this.dataManager.get(SPELL) > 0);
     return (this.spellTicks > 0);
   }
   
   public void setSpellType(SpellType spellType) {
     this.activeSpell = spellType;
-    this.dataManager.set(SPELL, Byte.valueOf((byte)spellType.id));
+    this.dataManager.set(SPELL, (byte) spellType.id);
   }
   
   protected SpellType getSpellType() {
-    return !this.world.isRemote ? this.activeSpell : SpellType.getFromId(((Byte)this.dataManager.get(SPELL)).byteValue());
+    return !this.world.isRemote ? this.activeSpell : SpellType.getFromId((Byte) this.dataManager.get(SPELL));
   }
   
   protected void updateAITasks() {
@@ -115,8 +114,8 @@ public abstract class EntitySpellcasterIllager extends EntityAbstractIllagers im
       float f = this.renderYawOffset * 0.017453292F + MathHelper.cos(this.ticksExisted * 0.6662F) * 0.25F;
       float f1 = MathHelper.cos(f);
       float f2 = MathHelper.sin(f);
-      this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + f1 * 0.6D, this.posY + 1.8D, this.posZ + f2 * 0.6D, d0, d1, d2, new int[0]);
-      this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX - f1 * 0.6D, this.posY + 1.8D, this.posZ - f2 * 0.6D, d0, d1, d2, new int[0]);
+      this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + f1 * 0.6D, this.posY + 1.8D, this.posZ + f2 * 0.6D, d0, d1, d2);
+      this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX - f1 * 0.6D, this.posY + 1.8D, this.posZ - f2 * 0.6D, d0, d1, d2);
     } 
   }
   

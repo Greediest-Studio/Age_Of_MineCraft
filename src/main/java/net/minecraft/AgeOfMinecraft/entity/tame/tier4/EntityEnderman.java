@@ -174,7 +174,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
   protected void entityInit() {
     super.entityInit();
     this.dataManager.register(CARRIED_BLOCK, Optional.absent());
-    this.dataManager.register(OMNI_DODGE, Boolean.valueOf(false));
+    this.dataManager.register(OMNI_DODGE, Boolean.FALSE);
   }
   
   public EnumTier getTier() {
@@ -238,7 +238,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
   public void readEntityFromNBT(NBTTagCompound tagCompund) {
     IBlockState iblockstate;
     super.readEntityFromNBT(tagCompund);
-    setDodgeAllAttacks(Boolean.valueOf(tagCompund.getBoolean("OmniDodge")).booleanValue());
+    setDodgeAllAttacks(Boolean.valueOf(tagCompund.getBoolean("OmniDodge")));
     this.andr = tagCompund.getBoolean("Andrea");
     if (tagCompund.hasKey("carried", 8)) {
       iblockstate = Block.getBlockFromName(tagCompund.getString("carried")).getStateFromMeta(tagCompund.getShort("carriedData") & 0xFFFF);
@@ -251,11 +251,11 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
   }
   
   public boolean canDodgeAllAttacks() {
-    return ((Boolean)this.dataManager.get(OMNI_DODGE)).booleanValue();
+    return (Boolean) this.dataManager.get(OMNI_DODGE);
   }
   
   public void setDodgeAllAttacks(boolean powered) {
-    this.dataManager.set(OMNI_DODGE, Boolean.valueOf(powered));
+    this.dataManager.set(OMNI_DODGE, powered);
   }
   
   protected float getSoundPitch() {
@@ -267,17 +267,16 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
   }
   
   public void performSpecialAttack() {
-    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(128.0D, 128.0D, 128.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(128.0D, 128.0D, 128.0D), Predicates.and(EntitySelectors.IS_ALIVE));
     if (list != null && !list.isEmpty())
-      for (int i1 = 0; i1 < list.size(); i1++) {
-        EntityLivingBase entity = list.get(i1);
-        if (entity != null)
-          if (!false) {
-            teleportTo(entity.posX, entity.posY, entity.posZ);
-            teleportRandomly();
-            attackEntityAsMob((Entity)entity);
-          }  
-      }  
+        for (EntityLivingBase entity : list) {
+            if (entity != null)
+                if (!false) {
+                    teleportTo(entity.posX, entity.posY, entity.posZ);
+                    teleportRandomly();
+                    attackEntityAsMob((Entity) entity);
+                }
+        }
     setSpecialAttackTimer(this.andr ? 20 : 1200);
   }
   
@@ -343,13 +342,13 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
     if (this.world.isRemote && isEntityAlive()) {
       int i;
       for (i = 0; i < 2; i++) {
-        this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D, new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
         if (canDodgeAllAttacks()) {
-          this.world.spawnParticle(EnumParticleTypes.DRAGON_BREATH, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.CLOUD, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D, new int[0]);
-          this.world.spawnParticle(EnumParticleTypes.END_ROD, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D, new int[0]);
+          this.world.spawnParticle(EnumParticleTypes.DRAGON_BREATH, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
+          this.world.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
+          this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
+          this.world.spawnParticle(EnumParticleTypes.CLOUD, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
+          this.world.spawnParticle(EnumParticleTypes.END_ROD, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
         } 
       } 
       for (i = 0; i < 2; i++) {
@@ -360,7 +359,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
         double d4 = -this.rand.nextDouble();
         double d5 = (this.rand.nextDouble() - 0.5D) * 2.0D;
         d1 += this.rand.nextDouble() * this.height;
-        this.world.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5, new int[0]);
+        this.world.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
       } 
     } 
     if (isEntityAlive() && !isBeingRidden() && getGuardBlock() == null && getOwner() != null && (getDistanceSq((Entity)getOwner()) > 4096.0D || !canEntityBeSeen((Entity)getOwner())) && !this.world.isRemote) {
@@ -469,7 +468,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
       double d3 = d0 + (this.posX - d0) * d6 + (random.nextDouble() - 0.5D) * this.width * 2.0D;
       double d4 = d1 + (this.posY - d1) * d6 + random.nextDouble() * this.height;
       double d5 = d2 + (this.posZ - d2) * d6 + (random.nextDouble() - 0.5D) * this.width * 2.0D;
-      world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, f, f1, f2, new int[0]);
+      world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, f, f1, f2);
     } 
     if (this instanceof EntityCreature)
       getNavigator().clearPath(); 
@@ -510,16 +509,15 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
       return true;
     } 
     if (!stack.isEmpty() && stack.getItem() == Items.ENDER_EYE && (hasOwner(player) || false)) {
-      List<EntityTameBase> list = this.world.getEntitiesWithinAABB(EntityTameBase.class, getEntityBoundingBox().grow(256.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityTameBase> list = this.world.getEntitiesWithinAABB(EntityTameBase.class, getEntityBoundingBox().grow(256.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty() && !isBeingRidden())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityTameBase entity = list.get(i1);
-          if (entity != null)
-            if (false) {
-              this.world.playSound((EntityPlayer)null, entity.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
-              entity.changeDimension(1);
-            }  
-        }  
+          for (EntityTameBase entity : list) {
+              if (entity != null)
+                  if (false) {
+                      this.world.playSound((EntityPlayer) null, entity.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
+                      entity.changeDimension(1);
+                  }
+          }
       this.world.playSound((EntityPlayer)null, getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
       this.world.playSound((EntityPlayer)null, player.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
       changeDimension(1);
@@ -629,7 +627,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
   }
   
   public IBlockState getHeldBlockState() {
-    return (IBlockState)((Optional)this.dataManager.get(CARRIED_BLOCK)).orNull();
+    return (IBlockState)((Optional<?>)this.dataManager.get(CARRIED_BLOCK)).orNull();
   }
   
   public boolean takesFallDamage() {
@@ -687,7 +685,6 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
     carriableBlocks.add(Blocks.SAND);
     carriableBlocks.add(Blocks.SANDSTONE);
     carriableBlocks.add(Blocks.RED_SANDSTONE);
-    carriableBlocks.add(Blocks.SANDSTONE);
     carriableBlocks.add(Blocks.STAINED_HARDENED_CLAY);
     carriableBlocks.add(Blocks.HARDENED_CLAY);
     carriableBlocks.add(Blocks.HAY_BLOCK);

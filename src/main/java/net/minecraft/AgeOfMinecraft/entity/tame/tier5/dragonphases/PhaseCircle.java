@@ -2,7 +2,6 @@ package net.minecraft.AgeOfMinecraft.entity.tame.tier5.dragonphases;
 
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEnderDragon;
 import net.minecraft.AgeOfMinecraft.entity.tame.Flying;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
@@ -54,7 +53,7 @@ public class PhaseCircle extends PhaseBaseFriendly {
         d0 = entity.getDistanceSqToCenter(blockpos) / 512.0D; 
       if (entity != null && this.dragon.getRNG().nextInt(2) == 0) {
         this.dragon.getPhaseManager().setPhase(PhaseList.CHARGING_PLAYER);
-        ((PhaseRamAttack)this.dragon.getPhaseManager().<PhaseRamAttack>getPhase(PhaseList.CHARGING_PLAYER)).setTarget(new Vec3d(entity.posX, entity.posY, entity.posZ));
+        ((PhaseRamAttack)this.dragon.getPhaseManager().getPhase(PhaseList.CHARGING_PLAYER)).setTarget(new Vec3d(entity.posX, entity.posY, entity.posZ));
         return;
       } 
       if (entity != null && this.dragon.getRNG().nextInt(3) == 0) {
@@ -87,7 +86,7 @@ public class PhaseCircle extends PhaseBaseFriendly {
   private void strafePlayer(EntityLivingBase p_188674_1_) {
     if (!false) {
       this.dragon.getPhaseManager().setPhase(PhaseList.STRAFE_PLAYER);
-      ((PhaseFireballAndStrafe)this.dragon.getPhaseManager().<PhaseFireballAndStrafe>getPhase(PhaseList.STRAFE_PLAYER)).setTarget(p_188674_1_);
+      ((PhaseFireballAndStrafe)this.dragon.getPhaseManager().getPhase(PhaseList.STRAFE_PLAYER)).setTarget(p_188674_1_);
     } 
   }
   

@@ -62,8 +62,8 @@ public class EngenderMod {
     logger.info("Loading The Engender Mod...");
     logger.debug("Pre-Initialization started");
     NetworkRegistry.INSTANCE.registerGuiHandler(instance, new CommonProxy());
-    PrivateHelper.set(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.MAX_HEALTH, Double.valueOf(2147483647.0D), "maximumValue", "field_111118_b", "b");
-    PrivateHelper.set(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.ATTACK_DAMAGE, Double.valueOf(2147483647.0D), "maximumValue", "field_111118_b", "b");
+    PrivateHelper.set(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.MAX_HEALTH, 2147483647.0D, "maximumValue", "field_111118_b", "b");
+    PrivateHelper.set(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.ATTACK_DAMAGE, 2147483647.0D, "maximumValue", "field_111118_b", "b");
     proxy.preInit(e);
     logger.debug("Pre-Initialization finished");
   }
@@ -104,13 +104,13 @@ public class EngenderMod {
     if (Loader.isModLoaded("abyssalcraft")) {
       List<?> list = world.loadedEntityList;
       if (!list.isEmpty())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          Entity entity = (Entity)list.get(i1);
-          if (entity instanceof com.shinoow.abyssalcraft.common.entity.EntityJzahar)
-            return true; 
-          if (entity instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityJzahar)
-            return true; 
-        }  
+          for (Object o : list) {
+              Entity entity = (Entity) o;
+              if (entity instanceof com.shinoow.abyssalcraft.common.entity.EntityJzahar)
+                  return true;
+              if (entity instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityJzahar)
+                  return true;
+          }
     } 
     return false;
   }
@@ -118,11 +118,11 @@ public class EngenderMod {
   public static boolean sensorsShowWithers(World world) {
     List<?> list = world.loadedEntityList;
     if (!list.isEmpty())
-      for (int i1 = 0; i1 < list.size(); i1++) {
-        Entity entity = (Entity)list.get(i1);
-        if (entity instanceof net.minecraft.entity.boss.EntityWither)
-          return true; 
-      }  
+        for (Object o : list) {
+            Entity entity = (Entity) o;
+            if (entity instanceof net.minecraft.entity.boss.EntityWither)
+                return true;
+        }
     return false;
   }
   

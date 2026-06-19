@@ -56,7 +56,7 @@ public class EntityMooshroom extends EntityCow implements IShearable {
       return true;
     } 
     if (!stack.isEmpty() && stack.getItem() == Items.SHEARS) {
-      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY + this.height, this.posZ, 0.0D, 0.0D, 0.0D, new int[0]);
+      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY + this.height, this.posZ, 0.0D, 0.0D, 0.0D);
       if (!this.world.isRemote) {
         for (int i = 0; i < 5; i++)
           this.world.spawnEntity((Entity)new EntityItem(this.world, this.posX, this.posY + this.height, this.posZ, new ItemStack((Block)Blocks.RED_MUSHROOM))); 
@@ -78,7 +78,7 @@ public class EntityMooshroom extends EntityCow implements IShearable {
   }
   
   public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
-    this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY + (this.height / 2.0F), this.posZ, 0.0D, 0.0D, 0.0D, new int[0]);
+    this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY + (this.height / 2.0F), this.posZ, 0.0D, 0.0D, 0.0D);
     List<ItemStack> ret = new ArrayList<>();
     for (int i = 0; i < 5; i++)
       ret.add(new ItemStack((Block)Blocks.RED_MUSHROOM)); 

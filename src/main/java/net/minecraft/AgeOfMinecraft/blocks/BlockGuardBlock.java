@@ -11,7 +11,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -49,24 +48,23 @@ public class BlockGuardBlock extends Block {
     double d0 = pos.getX() + 0.5D;
     double d1 = pos.getY() + 1.0D;
     double d2 = pos.getZ() + 0.5D;
-    worldIn.spawnParticle(EnumParticleTypes.END_ROD, true, d0, d1 + 0.1D, d2, 0.0D, 0.0D, 0.0D, new int[0]);
+    worldIn.spawnParticle(EnumParticleTypes.END_ROD, true, d0, d1 + 0.1D, d2, 0.0D, 0.0D, 0.0D);
   }
   
   public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
     if (!worldIn.isRemote && playerIn != null) {
-      List<EntityTameBase> list = worldIn.getEntitiesWithinAABB(EntityTameBase.class, playerIn.getEntityBoundingBox().grow(48.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityTameBase> list = worldIn.getEntitiesWithinAABB(EntityTameBase.class, playerIn.getEntityBoundingBox().grow(48.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty()) {
         worldIn.playSound(null, playerIn.getPosition(), SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.MASTER, 1.0F, 1.0F);
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityTameBase entity = list.get(i1);
-          if (entity != null && entity.canUseGuardBlock()) {
-            entity.spawnExplosionParticle();
-            entity.randPosX = entity.posX;
-            entity.randPosY = entity.posY;
-            entity.randPosZ = entity.posZ;
-            entity.setGuardBlock(pos);
-          } 
-        } 
+          for (EntityTameBase entity : list) {
+              if (entity != null && entity.canUseGuardBlock()) {
+                  entity.spawnExplosionParticle();
+                  entity.randPosX = entity.posX;
+                  entity.randPosY = entity.posY;
+                  entity.randPosZ = entity.posZ;
+                  entity.setGuardBlock(pos);
+              }
+          }
       } 
       return true;
     } 

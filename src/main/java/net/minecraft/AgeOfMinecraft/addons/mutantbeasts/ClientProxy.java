@@ -18,8 +18,6 @@ import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.render.RenderMutantSnowG
 import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.render.RenderMutantZombie;
 import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.render.RenderSpiderPig;
 import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.render.RenderThrowingBlock;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -42,15 +40,15 @@ public class ClientProxy extends CommonProxy {
   
   public void renderEntitiesMutantBeasts() {
     if (Loader.isModLoaded("mutantbeasts")) {
-      RenderingRegistry.registerEntityRenderingHandler(EntitySpiderPig.class, manager -> new RenderSpiderPig(manager));
-      RenderingRegistry.registerEntityRenderingHandler(EntityMutantSnowGolem.class, manager -> new RenderMutantSnowGolem(manager));
-      RenderingRegistry.registerEntityRenderingHandler(EntityMutantZombie.class, manager -> new RenderMutantZombie(manager));
-      RenderingRegistry.registerEntityRenderingHandler(EntityMutantCreeper.class, manager -> new RenderMutantCreeper(manager));
-      RenderingRegistry.registerEntityRenderingHandler(EntityMutantSkeleton.class, manager -> new RenderMutantSkeleton(manager));
-      RenderingRegistry.registerEntityRenderingHandler(EntityMutantEnderman.class, manager -> new RenderMutantEnderman(manager));
-      RenderingRegistry.registerEntityRenderingHandler(EntityMutantSkeletonArrow.class, manager -> new RenderMutantSkeletonArrow(manager));
-      RenderingRegistry.registerEntityRenderingHandler(EntityThrowingBlock.class, manager -> new RenderThrowingBlock(manager));
-      RenderingRegistry.registerEntityRenderingHandler(EntityEndersoulFragment.class, manager -> new RenderEndersoulFragment(manager));
+      RenderingRegistry.registerEntityRenderingHandler(EntitySpiderPig.class, RenderSpiderPig::new);
+      RenderingRegistry.registerEntityRenderingHandler(EntityMutantSnowGolem.class, RenderMutantSnowGolem::new);
+      RenderingRegistry.registerEntityRenderingHandler(EntityMutantZombie.class, RenderMutantZombie::new);
+      RenderingRegistry.registerEntityRenderingHandler(EntityMutantCreeper.class, RenderMutantCreeper::new);
+      RenderingRegistry.registerEntityRenderingHandler(EntityMutantSkeleton.class, RenderMutantSkeleton::new);
+      RenderingRegistry.registerEntityRenderingHandler(EntityMutantEnderman.class, RenderMutantEnderman::new);
+      RenderingRegistry.registerEntityRenderingHandler(EntityMutantSkeletonArrow.class, RenderMutantSkeletonArrow::new);
+      RenderingRegistry.registerEntityRenderingHandler(EntityThrowingBlock.class, RenderThrowingBlock::new);
+      RenderingRegistry.registerEntityRenderingHandler(EntityEndersoulFragment.class, RenderEndersoulFragment::new);
     } 
   }
 }

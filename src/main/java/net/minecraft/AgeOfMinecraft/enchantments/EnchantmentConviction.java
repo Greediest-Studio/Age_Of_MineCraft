@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 
 public class EnchantmentConviction extends EnchantmentDamage {
   public EnchantmentConviction() {
-    super(Enchantment.Rarity.UNCOMMON, 6, new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND });
+    super(Enchantment.Rarity.UNCOMMON, 6, EntityEquipmentSlot.MAINHAND);
   }
   
   public int getMinEnchantability(int par1) {

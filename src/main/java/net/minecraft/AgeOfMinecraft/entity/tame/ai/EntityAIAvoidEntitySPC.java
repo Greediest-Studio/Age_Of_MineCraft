@@ -39,11 +39,7 @@ public class EntityAIAvoidEntitySPC<T extends Entity> extends EntityAIBase {
   }
   
   public EntityAIAvoidEntitySPC(EntityCreature theEntityIn, Class<T> classToAvoidIn, Predicate<? super T> avoidTargetSelectorIn, float avoidDistanceIn, double farSpeedIn, double nearSpeedIn) {
-    this.canBeSeenSelector = new Predicate<Entity>() {
-        public boolean apply(@Nullable Entity p_apply_1_) {
-          return EntityAIAvoidEntitySPC.this.theEntity.getEntitySenses().canSee(p_apply_1_);
-        }
-      };
+    this.canBeSeenSelector = p_apply_1_ -> EntityAIAvoidEntitySPC.this.theEntity.getEntitySenses().canSee(p_apply_1_);
     this.theEntity = theEntityIn;
     this.classToAvoid = classToAvoidIn;
     this.avoidTargetSelector = avoidTargetSelectorIn;
@@ -55,7 +51,7 @@ public class EntityAIAvoidEntitySPC<T extends Entity> extends EntityAIBase {
   }
   
   public boolean shouldExecute() {
-    List<T> list = this.theEntity.world.getEntitiesWithinAABB(this.classToAvoid, this.theEntity.getEntityBoundingBox().grow(this.avoidDistance, this.avoidDistance, this.avoidDistance), Predicates.and(new Predicate[] { EntitySelectors.CAN_AI_TARGET, this.canBeSeenSelector, this.avoidTargetSelector }));
+    List<T> list = this.theEntity.world.getEntitiesWithinAABB(this.classToAvoid, this.theEntity.getEntityBoundingBox().grow(this.avoidDistance, this.avoidDistance, this.avoidDistance), Predicates.and(EntitySelectors.CAN_AI_TARGET, this.canBeSeenSelector, this.avoidTargetSelector));
     if (list.isEmpty())
       return false; 
     this.closestLivingEntity = list.get(0);

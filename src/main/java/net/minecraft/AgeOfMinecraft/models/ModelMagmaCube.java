@@ -44,7 +44,6 @@ public class ModelMagmaCube extends ModelBase {
   public void render(Entity p_78088_1_, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float p_78088_7_) {
     setRotationAngles(p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, p_78088_7_, p_78088_1_);
     this.core.render(p_78088_7_);
-    for (int i = 0; i < this.segments.length; i++)
-      this.segments[i].render(p_78088_7_); 
+      for (ModelRenderer segment : this.segments) segment.render(p_78088_7_);
   }
 }

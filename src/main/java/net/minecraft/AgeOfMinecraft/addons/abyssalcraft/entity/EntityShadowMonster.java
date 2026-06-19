@@ -102,7 +102,7 @@ public class EntityShadowMonster extends EntityTameBase implements Armored, Unde
   
   public boolean attackEntityAsMob(Entity par1Entity) {
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.5F * (float)((ACConfig.damageAmpl > 1.0D) ? ACConfig.damageAmpl : 1.0D)); 
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return super.attackEntityAsMob(par1Entity);
   }
   
@@ -124,7 +124,7 @@ public class EntityShadowMonster extends EntityTameBase implements Armored, Unde
   
   public void onLivingUpdate() {
     for (int i = 0; i < 2 && ACConfig.particleEntity && this.world.provider.getDimension() != ACLib.dark_realm_id; i++)
-      this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D, new int[0]); 
+      this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
     super.onLivingUpdate();
   }
   

@@ -5,7 +5,6 @@ import net.minecraft.AgeOfMinecraft.entity.tame.Flying;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
@@ -40,7 +39,7 @@ public class PhaseHoveringOverOwner extends PhaseBaseFriendly {
       double d3 = d0 + this.dragon.getRNG().nextGaussian() / 2.0D;
       double d4 = d1 + this.dragon.getRNG().nextGaussian() / 2.0D;
       double d5 = d2 + this.dragon.getRNG().nextGaussian() / 2.0D;
-      this.dragon.world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, d3, d4, d5, -vec3d.x * 0.07999999821186066D + this.dragon.motionX, -vec3d.y * 0.30000001192092896D + this.dragon.motionY, -vec3d.z * 0.07999999821186066D + this.dragon.motionZ, new int[0]);
+      this.dragon.world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, d3, d4, d5, -vec3d.x * 0.07999999821186066D + this.dragon.motionX, -vec3d.y * 0.30000001192092896D + this.dragon.motionY, -vec3d.z * 0.07999999821186066D + this.dragon.motionZ);
       vec3d.rotateYaw(0.19634955F);
     } 
   }
@@ -53,7 +52,7 @@ public class PhaseHoveringOverOwner extends PhaseBaseFriendly {
         this.targetLocation = new Vec3d((Vec3i)this.dragon.world.getTopSolidOrLiquidBlock(WorldGenEndPodium.END_PODIUM_LOCATION));
       }  
     if (this.targetLocation.squareDistanceTo(this.dragon.posX, this.dragon.posY, this.dragon.posZ) < 9.0D) {
-      ((PhaseBreathing)this.dragon.getPhaseManager().<PhaseBreathing>getPhase(PhaseListAsorah.SITTING_FLAMING)).resetFlameCount();
+      ((PhaseBreathing)this.dragon.getPhaseManager().getPhase(PhaseListAsorah.SITTING_FLAMING)).resetFlameCount();
       this.dragon.getPhaseManager().setPhase(PhaseListAsorah.SITTING_SCANNING);
     } 
   }

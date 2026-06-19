@@ -130,7 +130,7 @@ public class MobSpawnerRecipes {
   
   public void addSmeltingRecipe(ItemStack input, ItemStack stack, float experience) {
     this.smeltingList.put(input, stack);
-    this.experienceList.put(stack, Float.valueOf(experience));
+    this.experienceList.put(stack, experience);
   }
   
   public ItemStack getSmeltingResult(ItemStack stack) {
@@ -162,7 +162,7 @@ public class MobSpawnerRecipes {
         return 0.0F; 
       Map.Entry entry = (Map.Entry)iterator.next();
       if (compareItemStacks(stack, (ItemStack)entry.getKey()))
-        return ((Float)entry.getValue()).floatValue(); 
+        return (Float) entry.getValue();
     } 
   }
 }

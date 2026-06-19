@@ -146,7 +146,7 @@ public class EntityDreadguard extends EntityTameBase implements Armored {
       par1Entity instanceof EntityLivingBase)
       ((EntityLivingBase)par1Entity).addPotionEffect(new PotionEffect(AbyssalCraftAPI.dread_plague, 100)); 
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)((ACConfig.damageAmpl > 1.0D) ? ACConfig.damageAmpl : 1.0D)); 
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -220,19 +220,18 @@ public class EntityDreadguard extends EntityTameBase implements Armored {
         this.world.playSound(null, new BlockPos(this.posX + 0.5D, this.posY + getEyeHeight(), this.posZ + 0.5D), ACSounds.dreadguard_barf, getSoundCategory(), 0.5F + getRNG().nextFloat(), getRNG().nextFloat() * 0.5F + 0.2F); 
       Entity target = getHeadLookTarget();
       if (target != null) {
-        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, target.getEntityBoundingBox().grow(2.0D, 2.0D, 2.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, target.getEntityBoundingBox().grow(2.0D, 2.0D, 2.0D), Predicates.and(EntitySelectors.IS_ALIVE));
         if (list != null && !list.isEmpty())
-          for (int i1 = 0; i1 < list.size(); i1++) {
-            EntityLivingBase entity = list.get(i1);
-            if (entity != null && !false && this.rand.nextInt(3) == 0)
-              if (entity.attackEntityFrom(AbyssalCraftAPI.dread, (float)(15.0D - getDistance((Entity)entity)))) {
-                entity.addPotionEffect(new PotionEffect(AbyssalCraftAPI.dread_plague, 100));
-                entity.setFire((int)(15.0F - getDistance((Entity)entity)));
-              } else {
-                attackEntityAsMob((Entity)entity);
-                entity.setFire((int)(15.0F - getDistance((Entity)entity)));
-              }  
-          }  
+            for (EntityLivingBase entity : list) {
+                if (entity != null && !false && this.rand.nextInt(3) == 0)
+                    if (entity.attackEntityFrom(AbyssalCraftAPI.dread, (float) (15.0D - getDistance((Entity) entity)))) {
+                        entity.addPotionEffect(new PotionEffect(AbyssalCraftAPI.dread_plague, 100));
+                        entity.setFire((int) (15.0F - getDistance((Entity) entity)));
+                    } else {
+                        attackEntityAsMob((Entity) entity);
+                        entity.setFire((int) (15.0F - getDistance((Entity) entity)));
+                    }
+            }
         if (target.attackEntityFrom(AbyssalCraftAPI.dread, (float)(15.0D - getDistance(target)))) {
           if (target instanceof EntityLivingBase)
             ((EntityLivingBase)target).addPotionEffect(new PotionEffect(AbyssalCraftAPI.dread_plague, 100)); 
@@ -303,8 +302,8 @@ public class EntityDreadguard extends EntityTameBase implements Armored {
         dx *= velocity;
         dy *= velocity;
         dz *= velocity;
-        this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, px + getRNG().nextDouble() - 0.5D, py + getRNG().nextDouble() - 0.5D, pz + getRNG().nextDouble() - 0.5D, dx, dy, dz, new int[] { Item.getIdFromItem(ACItems.dreaded_shard_of_abyssalnite) });
-        this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, px + getRNG().nextDouble() - 0.5D, py + getRNG().nextDouble() - 0.5D, pz + getRNG().nextDouble() - 0.5D, dx, dy, dz, new int[] { Item.getIdFromItem(ACItems.dread_fragment) });
+        this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, px + getRNG().nextDouble() - 0.5D, py + getRNG().nextDouble() - 0.5D, pz + getRNG().nextDouble() - 0.5D, dx, dy, dz, Item.getIdFromItem(ACItems.dreaded_shard_of_abyssalnite));
+        this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, px + getRNG().nextDouble() - 0.5D, py + getRNG().nextDouble() - 0.5D, pz + getRNG().nextDouble() - 0.5D, dx, dy, dz, Item.getIdFromItem(ACItems.dread_fragment));
       } 
     } else {
       this.world.setEntityState((Entity)this, (byte)23);

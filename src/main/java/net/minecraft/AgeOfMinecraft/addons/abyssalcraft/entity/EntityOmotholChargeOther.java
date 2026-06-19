@@ -58,16 +58,15 @@ public class EntityOmotholChargeOther extends EntityFireball {
     } 
     if (!this.world.isRemote) {
       if (this.shootingEntity != null) {
-        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
         if (list != null && !list.isEmpty())
-          for (int i1 = 0; i1 < list.size(); i1++) {
-            EntityLivingBase entity1 = list.get(i1);
-            if (entity1 != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart) {
-              this.shootingEntity.attackEntityAsMob((Entity)entity1);
-              applyEnchantments(this.shootingEntity, (Entity)entity1);
-              setDead();
-            } 
-          }  
+            for (EntityLivingBase entity1 : list) {
+                if (entity1 != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart) {
+                    this.shootingEntity.attackEntityAsMob((Entity) entity1);
+                    applyEnchantments(this.shootingEntity, (Entity) entity1);
+                    setDead();
+                }
+            }
       } 
       if (result.entityHit != null) {
         if (this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase && result.entityHit instanceof EntityLivingBase) {
@@ -103,7 +102,7 @@ public class EntityOmotholChargeOther extends EntityFireball {
   
   public void onUpdate() {
     super.onUpdate();
-    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive())

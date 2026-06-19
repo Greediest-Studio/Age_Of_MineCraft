@@ -84,26 +84,24 @@ public class BlockBeaconSPC extends BlockContainer {
   }
   
   public static void updateColorAsync(final World worldIn, final BlockPos glassPos) {
-    HttpUtil.DOWNLOADER_EXECUTOR.submit(new Runnable() {
-          public void run() {
-            Chunk chunk = worldIn.getChunk(glassPos);
-            for (int i = glassPos.getY() - 1; i >= 0; i--) {
-              final BlockPos blockpos = new BlockPos(glassPos.getX(), i, glassPos.getZ());
-              if (!chunk.canSeeSky(blockpos))
-                break; 
-              IBlockState iblockstate = worldIn.getBlockState(blockpos);
-              if (iblockstate.getBlock() == Blocks.BEACON)
-                ((WorldServer)worldIn).addScheduledTask(new Runnable() {
-                      public void run() {
-                        TileEntity tileentity = worldIn.getTileEntity(blockpos);
-                        if (tileentity instanceof TileEntityBeaconSPC) {
-                          ((TileEntityBeaconSPC)tileentity).updateBeacon();
-                          worldIn.addBlockEvent(blockpos, (Block)Blocks.BEACON, 1, 0);
-                        } 
-                      }
-                    }); 
-            } 
-          }
-        });
+    HttpUtil.DOWNLOADER_EXECUTOR.submit(() -> {
+      Chunk chunk = worldIn.getChunk(glassPos);
+      for (int i = glassPos.getY() - 1; i >= 0; i--) {
+        final BlockPos blockpos = new BlockPos(glassPos.getX(), i, glassPos.getZ());
+        if (!chunk.canSeeSky(blockpos))
+          break;
+        IBlockState iblockstate = worldIn.getBlockState(blockpos);
+        if (iblockstate.getBlock() == Blocks.BEACON)
+          ((WorldServer)worldIn).addScheduledTask(new Runnable() {
+                public void run() {
+                  TileEntity tileentity = worldIn.getTileEntity(blockpos);
+                  if (tileentity instanceof TileEntityBeaconSPC) {
+                    ((TileEntityBeaconSPC)tileentity).updateBeacon();
+                    worldIn.addBlockEvent(blockpos, (Block)Blocks.BEACON, 1, 0);
+                  }
+                }
+              });
+      }
+    });
   }
 }

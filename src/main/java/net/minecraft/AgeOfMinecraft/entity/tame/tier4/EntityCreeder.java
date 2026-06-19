@@ -8,7 +8,6 @@ import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
 import net.minecraft.AgeOfMinecraft.entity.tame.EnumTier;
 import net.minecraft.AgeOfMinecraft.entity.tame.Light;
 import net.minecraft.AgeOfMinecraft.entity.tame.ai.EntityAIAvoidEntitySPC;
-import net.minecraft.AgeOfMinecraft.entity.tame.tier1.EntityOcelot;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntitySpider;
 import net.minecraft.AgeOfMinecraft.registry.ELoot;
 import net.minecraft.block.Block;
@@ -22,6 +21,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -62,16 +62,8 @@ public class EntityCreeder extends EntitySpider implements Light {
   
   public EntityCreeder(World worldIn) {
     super(worldIn);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIAvoidEntitySPC((EntityCreature)this, net.minecraft.entity.passive.EntityOcelot.class, new Predicate<net.minecraft.entity.passive.EntityOcelot>() {
-            public boolean apply(net.minecraft.entity.passive.EntityOcelot p_apply_1_) {
-              return (p_apply_1_ != null && p_apply_1_.isEntityAlive() && EntityCreeder.this.getIntelligence() < 10.0F);
-            }
-          },  6.0F, 1.0D, 1.2D));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIAvoidEntitySPC((EntityCreature)this, net.minecraft.entity.passive.EntityOcelot.class, new Predicate<net.minecraft.entity.passive.EntityOcelot>() {
-            public boolean apply(net.minecraft.entity.passive.EntityOcelot p_apply_1_) {
-              return (p_apply_1_ != null && p_apply_1_.isEntityAlive() && EntityCreeder.this.getIntelligence() < 10.0F);
-            }
-          },  6.0F, 1.0D, 1.2D));
+    this.tasks.addTask(0, (EntityAIBase)new EntityAIAvoidEntitySPC((EntityCreature)this, net.minecraft.entity.passive.EntityOcelot.class, (Predicate<EntityOcelot>) p_apply_1_ -> (p_apply_1_ != null && p_apply_1_.isEntityAlive() && EntityCreeder.this.getIntelligence() < 10.0F),  6.0F, 1.0D, 1.2D));
+    this.tasks.addTask(0, (EntityAIBase)new EntityAIAvoidEntitySPC((EntityCreature)this, net.minecraft.entity.passive.EntityOcelot.class, (Predicate<EntityOcelot>) p_apply_1_ -> (p_apply_1_ != null && p_apply_1_.isEntityAlive() && EntityCreeder.this.getIntelligence() < 10.0F),  6.0F, 1.0D, 1.2D));
     setSize(0.75F, 1.75F);
     this.experienceValue = 10;
   }
@@ -137,14 +129,14 @@ public class EntityCreeder extends EntitySpider implements Light {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(STATE, Integer.valueOf(-1));
-    this.dataManager.register(POWERED, Boolean.valueOf(false));
-    this.dataManager.register(IGNITED, Boolean.valueOf(false));
+    this.dataManager.register(STATE, -1);
+    this.dataManager.register(POWERED, Boolean.FALSE);
+    this.dataManager.register(IGNITED, Boolean.FALSE);
   }
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
     super.writeEntityToNBT(tagCompound);
-    if (((Boolean)this.dataManager.get(POWERED)).booleanValue())
+    if ((Boolean) this.dataManager.get(POWERED))
       tagCompound.setBoolean("powered", true); 
     tagCompound.setShort("Fuse", (short)this.fuseTime);
     tagCompound.setByte("ExplosionRadius", (byte)this.explosionRadius);
@@ -153,7 +145,7 @@ public class EntityCreeder extends EntitySpider implements Light {
   
   public void readEntityFromNBT(NBTTagCompound tagCompund) {
     super.readEntityFromNBT(tagCompund);
-    this.dataManager.set(POWERED, Boolean.valueOf(tagCompund.getBoolean("powered")));
+    this.dataManager.set(POWERED, tagCompund.getBoolean("powered"));
     if (tagCompund.hasKey("Fuse", 99))
       this.fuseTime = tagCompund.getShort("Fuse"); 
     if (tagCompund.hasKey("ExplosionRadius", 99))
@@ -259,13 +251,13 @@ public class EntityCreeder extends EntitySpider implements Light {
   }
   
   public boolean getPowered() {
-    return ((Boolean)this.dataManager.get(POWERED)).booleanValue();
+    return (Boolean) this.dataManager.get(POWERED);
   }
   
   public void setPowered(boolean powered) {
     if (powered)
       getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(7.0D); 
-    this.dataManager.set(POWERED, Boolean.valueOf(powered));
+    this.dataManager.set(POWERED, powered);
   }
   
   @SideOnly(Side.CLIENT)
@@ -279,11 +271,11 @@ public class EntityCreeder extends EntitySpider implements Light {
   }
   
   public int getCreeperState() {
-    return ((Integer)this.dataManager.get(STATE)).intValue();
+    return (Integer) this.dataManager.get(STATE);
   }
   
   public void setCreeperState(int state) {
-    this.dataManager.set(STATE, Integer.valueOf(state));
+    this.dataManager.set(STATE, state);
   }
   
   public void onStruckByLightning(EntityLightningBolt lightningBolt) {
@@ -330,14 +322,14 @@ public class EntityCreeder extends EntitySpider implements Light {
       float f = getPowered() ? 2.0F : 1.0F;
       if (getAttackTarget() != null && getSpecialAttackTimer() <= 0 && isHero()) {
         createEngenderModExplosionFireless((Entity)this, this.posX, this.posY + 1.0D, this.posZ, 20.0F * f, flag);
-        this.dataManager.set(IGNITED, Boolean.valueOf(false));
+        this.dataManager.set(IGNITED, Boolean.FALSE);
         setCreeperState(-1);
         setSpecialAttackTimer(800);
         this.timeSinceIgnited = 0;
         this.motionY = 0.0D;
       } else {
         this.timeSinceIgnited = 0;
-        this.dataManager.set(IGNITED, Boolean.valueOf(false));
+        this.dataManager.set(IGNITED, Boolean.FALSE);
         setCreeperState(-1);
         createEngenderModExplosionFireless((Entity)this, this.posX, this.posY + 1.0D, this.posZ, this.explosionRadius * f, flag);
       } 
@@ -359,7 +351,7 @@ public class EntityCreeder extends EntitySpider implements Light {
           getOwner().sendMessage((ITextComponent)new TextComponentTranslation("death.attack.self_destruct", new Object[] { getDisplayName() })); 
       } else {
         this.timeSinceIgnited = 0;
-        this.dataManager.set(IGNITED, Boolean.valueOf(false));
+        this.dataManager.set(IGNITED, Boolean.FALSE);
       } 
     } 
   }
@@ -373,11 +365,11 @@ public class EntityCreeder extends EntitySpider implements Light {
   }
   
   public boolean hasIgnited() {
-    return ((Boolean)this.dataManager.get(IGNITED)).booleanValue();
+    return (Boolean) this.dataManager.get(IGNITED);
   }
   
   public void ignite() {
-    this.dataManager.set(IGNITED, Boolean.valueOf(true));
+    this.dataManager.set(IGNITED, Boolean.TRUE);
   }
   
   public class EntityAICreeperSwell extends EntityAIBase {

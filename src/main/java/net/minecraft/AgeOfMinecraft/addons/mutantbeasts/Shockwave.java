@@ -13,7 +13,6 @@ import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 
@@ -123,7 +122,7 @@ public class Shockwave extends Vec3i {
           world.playEvent(1020, posUp, 0);
         }  
       if (block instanceof BlockTNT) {
-        ((BlockTNT)block).explode(world, pos, blockState.withProperty((IProperty)BlockTNT.EXPLODE, Boolean.valueOf(true)), entity);
+        ((BlockTNT)block).explode(world, pos, blockState.withProperty((IProperty)BlockTNT.EXPLODE, Boolean.TRUE), entity);
         world.setBlockToAir(pos);
       } 
     } 

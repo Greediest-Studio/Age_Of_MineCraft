@@ -198,20 +198,20 @@ public class EntityGuardian extends EntityTameBase implements Armored {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(STATUS, Byte.valueOf((byte)0));
-    this.dataManager.register(TARGET_ENTITY, Integer.valueOf(0));
+    this.dataManager.register(STATUS, (byte) 0);
+    this.dataManager.register(TARGET_ENTITY, 0);
   }
   
   private boolean isSyncedFlagSet(int flagId) {
-    return ((((Byte)this.dataManager.get(STATUS)).byteValue() & flagId) != 0);
+    return ((this.dataManager.get(STATUS) & flagId) != 0);
   }
   
   private void setSyncedFlag(int flagId, boolean state) {
-    byte b0 = ((Byte)this.dataManager.get(STATUS)).byteValue();
+    byte b0 = this.dataManager.get(STATUS);
     if (state) {
-      this.dataManager.set(STATUS, Byte.valueOf((byte)(b0 | flagId)));
+      this.dataManager.set(STATUS, (byte) (b0 | flagId));
     } else {
-      this.dataManager.set(STATUS, Byte.valueOf((byte)(b0 & (flagId ^ 0xFFFFFFFF))));
+      this.dataManager.set(STATUS, (byte) (b0 & (~flagId)));
     } 
   }
   
@@ -237,15 +237,16 @@ public class EntityGuardian extends EntityTameBase implements Armored {
   
   @SideOnly(Side.CLIENT)
   public void setElder() {
-    this.clientSideSpikesAnimationO = this.spineExtention = 1.0F;
+    this.clientSideSpikesAnimationO = 1.0F;
+    this.spineExtention = 1.0F;
   }
   
   private void setTargetedEntity(int entityId) {
-    this.dataManager.set(TARGET_ENTITY, Integer.valueOf(entityId));
+    this.dataManager.set(TARGET_ENTITY, entityId);
   }
   
   public boolean hasTargetedEntity() {
-    return (((Integer)this.dataManager.get(TARGET_ENTITY)).intValue() != 0 && isEntityAlive());
+    return ((Integer) this.dataManager.get(TARGET_ENTITY) != 0 && isEntityAlive());
   }
   
   public EntityLivingBase getTargetedEntity() {
@@ -254,7 +255,7 @@ public class EntityGuardian extends EntityTameBase implements Armored {
     if (this.world.isRemote) {
       if (this.targetedEntity != null)
         return this.targetedEntity; 
-      Entity entity = this.world.getEntityByID(((Integer)this.dataManager.get(TARGET_ENTITY)).intValue());
+      Entity entity = this.world.getEntityByID((Integer) this.dataManager.get(TARGET_ENTITY));
       if (entity instanceof EntityLivingBase) {
         this.targetedEntity = (EntityLivingBase)entity;
         return this.targetedEntity;
@@ -373,7 +374,7 @@ public class EntityGuardian extends EntityTameBase implements Armored {
       if (isMoving() && isInWater()) {
         Vec3d vec3 = getLook(0.0F);
         for (int i = 0; i < 2; i++)
-          this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX + (this.rand.nextDouble() - 0.5D) * this.width - vec3.x * 1.5D, this.posY + this.rand.nextDouble() * this.height - vec3.y * 1.5D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width - vec3.z * 1.5D, 0.0D, 0.0D, 0.0D, new int[0]); 
+          this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX + (this.rand.nextDouble() - 0.5D) * this.width - vec3.x * 1.5D, this.posY + this.rand.nextDouble() * this.height - vec3.y * 1.5D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width - vec3.z * 1.5D, 0.0D, 0.0D, 0.0D);
       } 
       if (hasTargetedEntity()) {
         if (this.clientSideAttackTime < getAttackDuration())
@@ -393,7 +394,7 @@ public class EntityGuardian extends EntityTameBase implements Armored {
           double d4 = this.rand.nextDouble();
           while (d4 < d3) {
             d4 += 1.8D - d5 + this.rand.nextDouble() * (1.7D - d5);
-            this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX + d0 * d4, this.posY + d1 * d4 + getEyeHeight(), this.posZ + d2 * d4, 0.0D, 0.0D, 0.0D, new int[0]);
+            this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX + d0 * d4, this.posY + d1 * d4 + getEyeHeight(), this.posZ + d2 * d4, 0.0D, 0.0D, 0.0D);
           } 
         } 
       } 

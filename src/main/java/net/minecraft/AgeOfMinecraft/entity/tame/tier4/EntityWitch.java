@@ -96,7 +96,7 @@ public class EntityWitch extends EntityTameBase implements IRangedAttackMob, Lig
   
   protected void entityInit() {
     super.entityInit();
-    getDataManager().register(IS_AGGRESSIVE, Boolean.valueOf(false));
+    getDataManager().register(IS_AGGRESSIVE, Boolean.FALSE);
   }
   
   public EnumTier getTier() {
@@ -162,11 +162,11 @@ public class EntityWitch extends EntityTameBase implements IRangedAttackMob, Lig
   }
   
   public void setAggressive(boolean aggressive) {
-    getDataManager().set(IS_AGGRESSIVE, Boolean.valueOf(aggressive));
+    getDataManager().set(IS_AGGRESSIVE, aggressive);
   }
   
   public boolean isDrinkingPotion() {
-    return ((Boolean)getDataManager().get(IS_AGGRESSIVE)).booleanValue();
+    return (Boolean) getDataManager().get(IS_AGGRESSIVE);
   }
   
   protected void applyEntityAttributes() {
@@ -182,20 +182,19 @@ public class EntityWitch extends EntityTameBase implements IRangedAttackMob, Lig
   
   public void onLivingUpdate() {
     if (isHero() && getSpecialAttackTimer() == 1180) {
-      List<EntityLiving> list = this.world.getEntitiesWithinAABB(EntityLiving.class, getEntityBoundingBox().grow(24.0D, 24.0D, 24.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE }));
+      List<EntityLiving> list = this.world.getEntitiesWithinAABB(EntityLiving.class, getEntityBoundingBox().grow(24.0D, 24.0D, 24.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityLiving entity = list.get(i1);
-          if (entity != null && entity.isNonBoss() && !(entity instanceof EntityTameBase) && !false) {
-            EntityPig entityzombie = new EntityPig(this.world);
-            entityzombie.copyLocationAndAnglesFrom((Entity)entity);
-            this.world.removeEntity((Entity)entity);
-            entityzombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityzombie)), null);
-            entityzombie.spawnExplosionParticle();
-            if (!this.world.isRemote)
-              this.world.spawnEntity((Entity)entityzombie); 
-          } 
-        }  
+          for (EntityLiving entity : list) {
+              if (entity != null && entity.isNonBoss() && !(entity instanceof EntityTameBase) && !false) {
+                  EntityPig entityzombie = new EntityPig(this.world);
+                  entityzombie.copyLocationAndAnglesFrom((Entity) entity);
+                  this.world.removeEntity((Entity) entity);
+                  entityzombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity) entityzombie)), null);
+                  entityzombie.spawnExplosionParticle();
+                  if (!this.world.isRemote)
+                      this.world.spawnEntity((Entity) entityzombie);
+              }
+          }
     } 
     if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 256.0D && getSpecialAttackTimer() <= 0 && isHero())
       performSpecialAttack(); 
@@ -260,7 +259,7 @@ public class EntityWitch extends EntityTameBase implements IRangedAttackMob, Lig
   public void handleStatusUpdate(byte id) {
     if (id == 15) {
       for (int i = 0; i < 50; i++)
-        this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX + this.rand.nextGaussian() * 0.12999999523162842D, (getEntityBoundingBox()).maxY + 0.5D + this.rand.nextGaussian() * 0.12999999523162842D, this.posZ + this.rand.nextGaussian() * 0.12999999523162842D, 0.0D, 0.0D, 0.0D, new int[0]); 
+        this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX + this.rand.nextGaussian() * 0.12999999523162842D, (getEntityBoundingBox()).maxY + 0.5D + this.rand.nextGaussian() * 0.12999999523162842D, this.posZ + this.rand.nextGaussian() * 0.12999999523162842D, 0.0D, 0.0D, 0.0D);
     } else {
       super.handleStatusUpdate(id);
     } 

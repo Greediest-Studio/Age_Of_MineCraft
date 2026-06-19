@@ -153,14 +153,12 @@ public class ModelCMMBlaze extends ModelBase implements ICappedModel {
     if (this.isChild) {
       GlStateManager.scale(0.5F, 0.5F, 0.5F);
       GlStateManager.translate(0.0F, 24.0F * scale, 0.0F);
-      for (int i = 0; i < this.BlazeRods.length; i++)
-        this.BlazeRods[i].render(scale); 
+        for (ModelRenderer blazeRod : this.BlazeRods) blazeRod.render(scale);
       this.Chest.render(scale);
       this.LArm.render(scale);
       this.RArm.render(scale);
     } else {
-      for (int i = 0; i < this.BlazeRods.length; i++)
-        this.BlazeRods[i].render(scale); 
+        for (ModelRenderer blazeRod : this.BlazeRods) blazeRod.render(scale);
       this.Chest.render(scale);
       this.LArm.render(scale);
       this.RArm.render(scale);
@@ -184,11 +182,11 @@ public class ModelCMMBlaze extends ModelBase implements ICappedModel {
     } else {
       this.BustFront.isHidden = false;
       this.BHair1.isHidden = false;
-    } 
-    for (int i = 0; i < this.BlazeRods.length; i++) {
-      setRotateAngle(this.BlazeRods[i], 0.0F, 0.0F, 0.0F);
-      this.BlazeRods[i].setRotationPoint(0.0F, 0.0F, 0.0F);
-    } 
+    }
+      for (ModelRenderer rod : this.BlazeRods) {
+          setRotateAngle(rod, 0.0F, 0.0F, 0.0F);
+          rod.setRotationPoint(0.0F, 0.0F, 0.0F);
+      }
     float swing = MathHelper.sin(this.swingProgress * 3.1415927F);
     float f = ageInTicks * 3.1415927F * -0.1F;
     for (int m = 0; m < 4; m++) {
@@ -411,8 +409,8 @@ public class ModelCMMBlaze extends ModelBase implements ICappedModel {
       } 
     } 
     if (entity.getJukeboxToDanceTo() != null) {
-      for (int n = 0; n < this.BlazeRods.length; n++)
-        setRotateAngle(this.BlazeRods[n], MathHelper.sin(ageInTicks * 0.125F) * 6.2831855F, 0.0F, 0.0F); 
+        for (ModelRenderer blazeRod : this.BlazeRods)
+            setRotateAngle(blazeRod, MathHelper.sin(ageInTicks * 0.125F) * 6.2831855F, 0.0F, 0.0F);
       this.RArm.setRotationPoint(-4.0F + MathHelper.sin(ageInTicks * 0.125F) * 1.0F, 3.0F - MathHelper.cos(ageInTicks * 0.125F) * 1.0F, 0.0F + MathHelper.cos(ageInTicks * 0.125F) * 1.0F);
       this.LArm.setRotationPoint(4.0F + MathHelper.sin(ageInTicks * 0.125F) * 1.0F, 3.0F - MathHelper.cos(ageInTicks * 0.125F) * 1.0F, 0.0F + MathHelper.cos(ageInTicks * 0.125F) * 1.0F);
       this.Chest.setRotationPoint(0.0F + MathHelper.sin(ageInTicks * 0.125F) * 1.0F, 0.0F - MathHelper.cos(ageInTicks * 0.125F) * 1.0F, 0.0F + MathHelper.cos(ageInTicks * 0.125F) * 1.0F);

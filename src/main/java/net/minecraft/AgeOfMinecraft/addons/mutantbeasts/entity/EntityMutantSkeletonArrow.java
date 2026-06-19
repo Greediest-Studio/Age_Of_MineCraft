@@ -66,51 +66,51 @@ public class EntityMutantSkeletonArrow extends Entity {
   }
   
   protected void entityInit() {
-    this.dataManager.register(TARGET_X, Integer.valueOf(0));
-    this.dataManager.register(TARGET_Y, Integer.valueOf(0));
-    this.dataManager.register(TARGET_Z, Integer.valueOf(0));
-    this.dataManager.register(SPEED, Float.valueOf(12.0F));
-    this.dataManager.register(CLONES, Integer.valueOf(10));
+    this.dataManager.register(TARGET_X, 0);
+    this.dataManager.register(TARGET_Y, 0);
+    this.dataManager.register(TARGET_Z, 0);
+    this.dataManager.register(SPEED, 12.0F);
+    this.dataManager.register(CLONES, 10);
   }
   
   public double getTargetX() {
-    return ((Integer)this.dataManager.get(TARGET_X)).intValue() / 10000.0D;
+    return (Integer) this.dataManager.get(TARGET_X) / 10000.0D;
   }
   
   public void setTargetX(double x) {
-    this.dataManager.set(TARGET_X, Integer.valueOf((int)(x * 10000.0D)));
+    this.dataManager.set(TARGET_X, (int) (x * 10000.0D));
   }
   
   public double getTargetY() {
-    return ((Integer)this.dataManager.get(TARGET_Y)).intValue() / 10000.0D;
+    return (Integer) this.dataManager.get(TARGET_Y) / 10000.0D;
   }
   
   public void setTargetY(double y) {
-    this.dataManager.set(TARGET_Y, Integer.valueOf((int)(y * 10000.0D)));
+    this.dataManager.set(TARGET_Y, (int) (y * 10000.0D));
   }
   
   public double getTargetZ() {
-    return ((Integer)this.dataManager.get(TARGET_Z)).intValue() / 10000.0D;
+    return (Integer) this.dataManager.get(TARGET_Z) / 10000.0D;
   }
   
   public void setTargetZ(double z) {
-    this.dataManager.set(TARGET_Z, Integer.valueOf((int)(z * 10000.0D)));
+    this.dataManager.set(TARGET_Z, (int) (z * 10000.0D));
   }
   
   public float getSpeed() {
-    return ((Float)this.dataManager.get(SPEED)).floatValue() / 10.0F;
+    return (Float) this.dataManager.get(SPEED) / 10.0F;
   }
   
   public void setSpeed(float speed) {
-    this.dataManager.set(SPEED, Float.valueOf(speed * 10.0F));
+    this.dataManager.set(SPEED, speed * 10.0F);
   }
   
   public int getClones() {
-    return ((Integer)this.dataManager.get(CLONES)).intValue();
+    return (Integer) this.dataManager.get(CLONES);
   }
   
   public void setClones(int clones) {
-    this.dataManager.set(CLONES, Integer.valueOf(clones));
+    this.dataManager.set(CLONES, clones);
   }
   
   public void randomize(float scale) {

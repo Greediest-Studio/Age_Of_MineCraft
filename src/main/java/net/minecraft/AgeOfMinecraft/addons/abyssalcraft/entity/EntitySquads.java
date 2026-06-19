@@ -35,22 +35,21 @@ public class EntitySquads extends EntityThrowable {
   
   protected void onImpact(RayTraceResult result) {
     if (getThrower() != null) {
-      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+      List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
       if (list != null && !list.isEmpty())
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityLivingBase entity1 = list.get(i1);
-          if (entity1 != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart) {
-            getThrower().attackEntityAsMob((Entity)entity1);
-            if (this.rand.nextBoolean() && !EntityUtil.isEntityCoralium(entity1))
-              entity1.addPotionEffect(new PotionEffect(AbyssalCraftAPI.coralium_plague, 200)); 
-            if (this.rand.nextInt(2) == 0)
-              entity1.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 100)); 
-            if (this.rand.nextInt(2) == 0)
-              entity1.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100)); 
-            applyEnchantments(getThrower(), (Entity)entity1);
-            setDead();
-          } 
-        }  
+          for (EntityLivingBase entity1 : list) {
+              if (entity1 != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart) {
+                  getThrower().attackEntityAsMob((Entity) entity1);
+                  if (this.rand.nextBoolean() && !EntityUtil.isEntityCoralium(entity1))
+                      entity1.addPotionEffect(new PotionEffect(AbyssalCraftAPI.coralium_plague, 200));
+                  if (this.rand.nextInt(2) == 0)
+                      entity1.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 100));
+                  if (this.rand.nextInt(2) == 0)
+                      entity1.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100));
+                  applyEnchantments(getThrower(), (Entity) entity1);
+                  setDead();
+              }
+          }
     } 
     if (!this.world.isRemote && result.entityHit != null)
       if (result.entityHit instanceof EntityLivingBase && !this.world.isRemote && getThrower() != null && getThrower() instanceof EntityTameBase && !false) {
@@ -69,7 +68,7 @@ public class EntitySquads extends EntityThrowable {
   
   public void onUpdate() {
     super.onUpdate();
-    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+    List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive())

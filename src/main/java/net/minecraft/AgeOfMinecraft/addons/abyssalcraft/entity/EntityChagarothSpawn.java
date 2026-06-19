@@ -104,13 +104,13 @@ public class EntityChagarothSpawn extends EntityTameBase implements Light {
       par1Entity instanceof EntityLivingBase)
       ((EntityLivingBase)par1Entity).addPotionEffect(new PotionEffect(AbyssalCraftAPI.dread_plague, 100)); 
     if (ACConfig.hardcoreMode && par1Entity instanceof net.minecraft.entity.player.EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)((ACConfig.damageAmpl > 1.0D) ? ACConfig.damageAmpl : 1.0D)); 
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(CLIMBING, Byte.valueOf((byte)0));
+    this.dataManager.register(CLIMBING, (byte) 0);
   }
   
   public void onUpdate() {
@@ -144,17 +144,17 @@ public class EntityChagarothSpawn extends EntityTameBase implements Light {
   }
   
   public boolean isBesideClimbableBlock() {
-    return ((((Byte)this.dataManager.get(CLIMBING)).byteValue() & 0x1) != 0);
+    return (((Byte) this.dataManager.get(CLIMBING) & 0x1) != 0);
   }
   
   public void setBesideClimbableBlock(boolean par1) {
-    byte b0 = ((Byte)this.dataManager.get(CLIMBING)).byteValue();
+    byte b0 = (Byte) this.dataManager.get(CLIMBING);
     if (par1) {
       b0 = (byte)(b0 | 0x1);
     } else {
       b0 = (byte)(b0 & 0xFFFFFFFE);
     } 
-    this.dataManager.set(CLIMBING, Byte.valueOf(b0));
+    this.dataManager.set(CLIMBING, b0);
   }
   
   public EnumTier getTier() {

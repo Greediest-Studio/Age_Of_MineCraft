@@ -72,7 +72,7 @@ public class EntityMiniBlackHole extends EntityFireball {
       EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 3.0F, false, false);
       setDead();
     } 
-    this.world.spawnParticle(getParticleType(), this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D, new int[0]);
+    this.world.spawnParticle(getParticleType(), this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
     List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(8.0D));
     if (list != null && !list.isEmpty())
       for (int i = 0; i < list.size(); i++) {

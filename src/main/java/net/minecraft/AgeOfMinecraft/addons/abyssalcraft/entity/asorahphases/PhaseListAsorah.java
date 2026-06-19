@@ -44,14 +44,14 @@ public class PhaseListAsorah<T extends IPhaseAsorah> {
   public IPhaseAsorah createPhase(EntityDragonBoss dragon) {
     try {
       Constructor<? extends IPhaseAsorah> constructor = getConstructor();
-      return constructor.newInstance(new Object[] { dragon });
+      return constructor.newInstance(dragon);
     } catch (Exception exception) {
       throw new Error(exception);
     } 
   }
   
   protected Constructor<? extends IPhaseAsorah> getConstructor() throws NoSuchMethodException {
-    return this.clazz.getConstructor(new Class[] { EntityDragonBoss.class });
+    return this.clazz.getConstructor(EntityDragonBoss.class);
   }
   
   public int getId() {
@@ -72,7 +72,7 @@ public class PhaseListAsorah<T extends IPhaseAsorah> {
   
   private static <T extends IPhaseAsorah> PhaseListAsorah<T> create(Class<T> phaseIn, String nameIn) {
     PhaseListAsorah<T> phaselist = new PhaseListAsorah<>(phases.length, phaseIn, nameIn);
-    phases = (PhaseListAsorah<?>[])Arrays.<PhaseListAsorah>copyOf((PhaseListAsorah[])phases, phases.length + 1);
+    phases = (PhaseListAsorah<?>[])Arrays.copyOf((PhaseListAsorah[])phases, phases.length + 1);
     phases[phaselist.getId()] = phaselist;
     return phaselist;
   }

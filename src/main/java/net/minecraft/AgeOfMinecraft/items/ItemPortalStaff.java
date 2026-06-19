@@ -79,7 +79,7 @@ public class ItemPortalStaff extends ItemBEItem {
       return !flag ? new ActionResult(EnumActionResult.FAIL, itemStackIn) : new ActionResult(EnumActionResult.PASS, itemStackIn); 
     playerIn.setActiveHand(hand);
     playerIn.world.playSound(playerIn, new BlockPos((Entity)playerIn), SoundEvents.BLOCK_ANVIL_DESTROY, SoundCategory.PLAYERS, 100.0F, 0.5F);
-    return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
+    return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
   }
   
   private ItemStack findAmmo(EntityPlayer player) {

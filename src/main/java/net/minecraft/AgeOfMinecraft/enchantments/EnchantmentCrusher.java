@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 
 public class EnchantmentCrusher extends EnchantmentDamage {
   public EnchantmentCrusher() {
-    super(Enchantment.Rarity.RARE, 3, new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND });
+    super(Enchantment.Rarity.RARE, 3, EntityEquipmentSlot.MAINHAND);
   }
   
   public int getMinEnchantability(int par1) {

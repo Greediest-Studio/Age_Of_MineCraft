@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
 import net.minecraft.AgeOfMinecraft.registry.ESound;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -61,7 +60,7 @@ public class ItemMoralHorn extends ItemBEItem {
     if (!playerIn.capabilities.isCreativeMode && !flag)
       return !flag ? new ActionResult(EnumActionResult.FAIL, itemStackIn) : new ActionResult(EnumActionResult.PASS, itemStackIn); 
     playerIn.setActiveHand(hand);
-    return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
+    return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
   }
   
   private ItemStack findAmmo(EntityPlayer player) {
@@ -75,13 +74,12 @@ public class ItemMoralHorn extends ItemBEItem {
   public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityPlayer playerIn) {
     playerIn.rotationPitch = -45.0F;
     playerIn.world.playSound(playerIn.posX, playerIn.posY + playerIn.getDefaultEyeHeight(), playerIn.posZ, getHornSound(), SoundCategory.PLAYERS, 1.0E9F, 1.0F, false);
-    List<EntityLivingBase> list = playerIn.world.getEntitiesWithinAABB(EntityLivingBase.class, playerIn.getEntityBoundingBox().grow(256.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+    List<EntityLivingBase> list = playerIn.world.getEntitiesWithinAABB(EntityLivingBase.class, playerIn.getEntityBoundingBox().grow(256.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
     if (list != null && !list.isEmpty())
-      for (int i1 = 0; i1 < list.size(); i1++) {
-        EntityLivingBase entity = list.get(i1);
-        if (entity instanceof EntityTameBase && entity.isEntityAlive())
-          ((EntityTameBase)entity).moralRaisedTimer = 600; 
-      }  
+        for (EntityLivingBase entity : list) {
+            if (entity instanceof EntityTameBase && entity.isEntityAlive())
+                ((EntityTameBase) entity).moralRaisedTimer = 600;
+        }
     playerIn.playSound(ESound.battlecry, 10.0F, 1.0F);
     playerIn.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 600, 0));
     playerIn.addPotionEffect(new PotionEffect(MobEffects.SPEED, 600, 1));

@@ -32,7 +32,7 @@ public class ChunkLoadingEvent implements ForgeChunkManager.LoadingCallback {
       for (int zz = (int)mob.posZ / 16 - 2; zz <= (int)mob.posZ / 16 + 2; zz++)
         dragonChunks.add(new ChunkPos(xx, zz)); 
     } 
-    if (chunkList.containsKey(mob) && dragonChunks.hashCode() == ((ArrayList)chunkList.get(mob)).hashCode())
+    if (chunkList.containsKey(mob) && dragonChunks.hashCode() == chunkList.get(mob).hashCode())
       return; 
     if (ticketList.containsKey(mob)) {
       ForgeChunkManager.Ticket ticket1 = ticketList.get(mob);

@@ -113,7 +113,7 @@ public class EntitySkeletonGoliath extends EntityTameBase implements Armored, Ma
   
   public boolean attackEntityAsMob(Entity par1Entity) {
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)((ACConfig.damageAmpl > 1.0D) ? ACConfig.damageAmpl : 1.0D)); 
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return super.attackEntityAsMob(par1Entity);
   }
   
@@ -235,11 +235,10 @@ public class EntitySkeletonGoliath extends EntityTameBase implements Armored, Ma
         this.motionZ = 0.0D;
       } 
       List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(1.0D));
-      for (int i = 0; i < list.size(); i++) {
-        Entity entity = list.get(i);
-        if (entity instanceof EntityLivingBase && !false && !this.world.isRemote && this.ticksExisted % 10 == 0)
-          attackEntityAsMob(entity); 
-      } 
+        for (Entity entity : list) {
+            if (entity instanceof EntityLivingBase && !false && !this.world.isRemote && this.ticksExisted % 10 == 0)
+                attackEntityAsMob(entity);
+        }
       this.prevLimbSwingAmount = this.limbSwingAmount;
       double d5 = this.posX - this.prevPosX;
       double d7 = this.posZ - this.prevPosZ;
