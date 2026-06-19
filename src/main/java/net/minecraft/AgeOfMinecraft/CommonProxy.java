@@ -7,7 +7,6 @@ import net.minecraft.AgeOfMinecraft.gui.GuiEngenderFusionCrafter;
 import net.minecraft.AgeOfMinecraft.gui.GuiEngenderMobInventory;
 import net.minecraft.AgeOfMinecraft.items.ItemEngenderStatChecker;
 import net.minecraft.AgeOfMinecraft.registry.EBlock;
-import net.minecraft.AgeOfMinecraft.registry.EEffect;
 import net.minecraft.AgeOfMinecraft.registry.EEntity;
 import net.minecraft.AgeOfMinecraft.registry.EItem;
 import net.minecraft.AgeOfMinecraft.registry.ELoot;
@@ -62,7 +61,6 @@ public class CommonProxy implements IGuiHandler {
     ChunkLoadingEvent.init();
     EBlock.init();
     EItem.ENMO();
-    EEffect.registerPotions();
     ELoot.registerAllModdedLootTables();
     ESound.registerSounds();
     GameRegistry.registerTileEntity(TileEntityMonsterSpawnerSPC.class, new ResourceLocation("ageofminecraft", "mob_spawner_spc"));
