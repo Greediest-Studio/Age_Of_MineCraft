@@ -78,12 +78,12 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
   
   public EntityDepthsGhoul(World par1World) {
     super(par1World);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.1D, 32.0F, 6.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIFleeSun((EntityCreature)this, 1.0D));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 1.0D));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 1.0D));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.1D, 32.0F, 6.0F));
+    this.tasks.addTask(3, new EntityAIFleeSun(this, 1.0D));
+    this.tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 1.0D));
+    this.tasks.addTask(5, new EntityAIWander(this, 1.0D));
+    this.tasks.addTask(7, new EntityAILookIdle(this));
     setSize(0.75F, 2.9F);
     this.isOffensive = true;
   }
@@ -153,7 +153,7 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
   }
   
   public int getGhoulType() {
-    return (Integer) this.dataManager.get(TYPE);
+    return this.dataManager.get(TYPE);
   }
   
   public void setGhoulType(int par1) {
@@ -171,24 +171,24 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
   public void onLivingUpdate() {
     this.isOffensive = true;
     if (getGhoulType() == 3) {
-      if (getAttackTarget() != null && (getDistanceSq((Entity)getAttackTarget()) > 36.0D || getAttackTarget() instanceof net.minecraft.entity.EntityFlying || (getAttackTarget()).posY > this.posY + 4.0D)) {
-        this.tasks.addTask(2, (EntityAIBase)this.aiArrowAttack);
-        this.tasks.removeTask((EntityAIBase)this.aiAttackOnCollide);
+      if (getAttackTarget() != null && (getDistanceSq(getAttackTarget()) > 36.0D || getAttackTarget() instanceof net.minecraft.entity.EntityFlying || (getAttackTarget()).posY > this.posY + 4.0D)) {
+        this.tasks.addTask(2, this.aiArrowAttack);
+        this.tasks.removeTask(this.aiAttackOnCollide);
       } else {
-        this.tasks.addTask(2, (EntityAIBase)this.aiAttackOnCollide);
-        this.tasks.removeTask((EntityAIBase)this.aiArrowAttack);
+        this.tasks.addTask(2, this.aiAttackOnCollide);
+        this.tasks.removeTask(this.aiArrowAttack);
       } 
     } else {
-      this.tasks.addTask(2, (EntityAIBase)this.aiAttackOnCollide);
-      this.tasks.removeTask((EntityAIBase)this.aiArrowAttack);
+      this.tasks.addTask(2, this.aiAttackOnCollide);
+      this.tasks.removeTask(this.aiArrowAttack);
     } 
     if (getGhoulType() != 3)
-      this.tasks.addTask(2, (EntityAIBase)this.aiAttackOnCollide); 
+      this.tasks.addTask(2, this.aiAttackOnCollide);
     if (this.helmetCount < 0)
       this.helmetCount = 0; 
     if ((isChild() || isHero()) && this.helmetCount != 0) {
       if (!this.world.isRemote)
-        dropItem((Item)Items.LEATHER_HELMET, 1); 
+        dropItem(Items.LEATHER_HELMET, 1);
       this.helmetCount--;
     } 
     if (this.world.isDaytime() && !this.world.isRemote && !isChild() && !isImmuneToFire() && !isHero()) {
@@ -211,7 +211,7 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
             swingArm(EnumHand.MAIN_HAND);
             swingArm(EnumHand.OFF_HAND);
             this.helmetCount--;
-            setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack((Item)Items.LEATHER_HELMET));
+            setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
             playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
           } else {
             setFire(8);
@@ -225,7 +225,7 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
     super.onDeath(par1DamageSource);
     if (!this.world.isRemote)
       if (this.helmetCount > 0)
-        dropItem((Item)Items.LEATHER_HELMET, this.helmetCount);  
+        dropItem(Items.LEATHER_HELMET, this.helmetCount);
   }
   
   public boolean attackEntityAsMob(Entity par1Entity) {
@@ -233,7 +233,7 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
     swingArm(EnumHand.OFF_HAND);
     boolean flag = super.attackEntityAsMob(par1Entity);
     if (flag) {
-      float f = this.world.getDifficultyForLocation(new BlockPos((Entity)this)).getAdditionalDifficulty();
+      float f = this.world.getDifficultyForLocation(new BlockPos(this)).getAdditionalDifficulty();
       if (getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) != null && (getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() == Items.FLINT_AND_STEEL || getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() == Items.FIRE_CHARGE))
         par1Entity.setFire(12); 
       if (isBurning() && this.rand.nextFloat() < f * 0.5F)
@@ -244,7 +244,7 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
           ((EntityLivingBase)par1Entity).addPotionEffect(new PotionEffect(AbyssalCraftAPI.coralium_plague, 100));  
     } 
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -385,13 +385,13 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
   public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
     playSound(ACSounds.ghoul_orange_ambient, getSoundVolume(), getSoundPitch());
     for (int i = 0; i < (isHero() ? 5 : 1); i++) {
-      EntitySquads squads = new EntitySquads(this.world, (EntityLivingBase)this);
+      EntitySquads squads = new EntitySquads(this.world, this);
       double d1 = target.posX + (isHero() ? (this.rand.nextDouble() * 2.0D - 1.0D) : 0.0D) - this.posX;
       double d2 = target.posY + (isHero() ? (this.rand.nextDouble() * 2.0D - 1.0D) : 0.0D) - 0.5D - this.posY + 2.25D;
       double d3 = target.posZ + (isHero() ? (this.rand.nextDouble() * 2.0D - 1.0D) : 0.0D) - this.posZ;
       float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
       squads.shoot(d1, d2 + f, d3, 1.6F, 1.0F);
-      this.world.spawnEntity((Entity)squads);
+      this.world.spawnEntity(squads);
       float f2 = MathHelper.sqrt(d1 * d1 + d2 * d2 + d3 * d3);
       squads.motionX = d1 / f2 * 0.8D * 0.8D + squads.motionX;
       squads.motionY = d2 / f2 * 0.8D * 0.8D + squads.motionY;

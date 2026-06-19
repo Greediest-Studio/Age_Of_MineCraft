@@ -28,11 +28,11 @@ public class EntityChagarothFist extends EntityTameBase implements Armored {
   public EntityChagarothFist(World par1World) {
     super(par1World);
     setSize(0.4F, 1.5F);
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.1D, 32.0F, 9.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.0D, true));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 0.8D));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.8D));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.1D, 32.0F, 9.0F));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    this.tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 0.8D));
+    this.tasks.addTask(4, new EntityAIWander(this, 0.8D));
+    this.tasks.addTask(5, new EntityAILookIdle(this));
     this.isImmuneToFire = true;
     this.isOffensive = true;
   }
@@ -71,7 +71,7 @@ public class EntityChagarothFist extends EntityTameBase implements Armored {
   
   public boolean attackEntityAsMob(Entity par1Entity) {
     if (ACConfig.hardcoreMode && par1Entity instanceof net.minecraft.entity.player.EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return super.attackEntityAsMob(par1Entity);
   }
   

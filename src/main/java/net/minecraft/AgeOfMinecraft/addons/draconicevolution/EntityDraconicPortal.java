@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.addons.draconicevolution;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -149,7 +148,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
   }
   
   public int getMetaData() {
-    return (Integer) this.dataManager.get(METADATA);
+    return this.dataManager.get(METADATA);
   }
   
   public void setMetaData(int p_82215_1_) {
@@ -186,7 +185,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
   }
   
   public int getWatchedTargetId(int p_82203_1_) {
-    return (Integer) this.dataManager.get(TARGETS[p_82203_1_]);
+    return this.dataManager.get(TARGETS[p_82203_1_]);
   }
   
   public void updateWatchedTargetId(int targetOffset, int newId) {
@@ -272,20 +271,20 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
     EntityLightningBolt shot = new EntityLightningBolt(this.world, entityLivingIn.posX - 0.5D, entityLivingIn.posY, entityLivingIn.posZ - 0.5D, true);
     float f = -((float)(MathHelper.atan2(shot.posZ - this.posZ, shot.posZ - this.posZ) * 57.29577951308232D)) - 90.0F;
     shot.rotationYaw = f;
-    this.world.addWeatherEffect((Entity)shot);
+    this.world.addWeatherEffect(shot);
     entityLivingIn.onStruckByLightning(shot);
     entityLivingIn.motionY += 4.0D;
     if (entityLivingIn instanceof net.minecraft.entity.monster.EntityCreeper || entityLivingIn instanceof net.minecraft.entity.monster.EntityZombie || entityLivingIn instanceof net.minecraft.entity.monster.AbstractSkeleton) {
       EntityCreeper creeper = new EntityCreeper(this.world);
       if (!this.world.isRemote)
-        this.world.spawnEntity((Entity)creeper); 
-      creeper.copyLocationAndAnglesFrom((Entity)entityLivingIn);
+        this.world.spawnEntity(creeper);
+      creeper.copyLocationAndAnglesFrom(entityLivingIn);
       creeper.onStruckByLightning(shot);
-      entityLivingIn.onDeath(DamageSource.causeMobDamage((EntityLivingBase)creeper).setDamageBypassesArmor());
+      entityLivingIn.onDeath(DamageSource.causeMobDamage(creeper).setDamageBypassesArmor());
       creeper.setDead();
       entityLivingIn.motionX = 0.0D;
       entityLivingIn.motionZ = 0.0D;
-      entityLivingIn.knockBack((Entity)shot, 2.0F, MathHelper.sin(shot.rotationYaw * 0.017453292F), -MathHelper.cos(shot.rotationYaw * 0.017453292F));
+      entityLivingIn.knockBack(shot, 2.0F, MathHelper.sin(shot.rotationYaw * 0.017453292F), -MathHelper.cos(shot.rotationYaw * 0.017453292F));
       entityLivingIn.motionY = 0.0D;
       if (entityLivingIn.isAirBorne) {
         entityLivingIn.motionY += this.rand.nextDouble() * 1.5D;
@@ -297,7 +296,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
       entityLivingIn.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 2.0F, 2.0F);
       entityLivingIn.playSound(SoundEvents.BLOCK_LAVA_EXTINGUISH, 2.0F, 2.0F);
       entityLivingIn.playSound(SoundEvents.BLOCK_LAVA_POP, 2.0F, 2.0F);
-      entityLivingIn.world.setEntityState((Entity)entityLivingIn, (byte)20);
+      entityLivingIn.world.setEntityState(entityLivingIn, (byte)20);
       entityLivingIn.setDead();
     } 
   }
@@ -326,7 +325,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                       entity.motionZ -= (-MathHelper.cos(this.rotationYaw * 0.017453292F) / f) * 1.0D;
                   }
                   if (EngenderConfig.general.useMessage && !entity.isEntityAlive() && !isWild())
-                      getOwner().sendMessage((ITextComponent) new TextComponentTranslation(entity.getName() + " was blown up by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
+                      getOwner().sendMessage(new TextComponentTranslation(entity.getName() + " was blown up by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
               }
           }
     } 
@@ -339,14 +338,14 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
     if (entityIn instanceof EntityLivingBase) {
       if (!entityIn.isEntityAlive() && !entityIn.isDead)
         onKillEntity((EntityLivingBase)entityIn); 
-      ((EntityLivingBase)entityIn).knockBack((Entity)this, 1.0F, MathHelper.sin(entityIn.rotationYaw * 0.017453292F), -MathHelper.cos(entityIn.rotationYaw * 0.017453292F));
+      ((EntityLivingBase)entityIn).knockBack(this, 1.0F, MathHelper.sin(entityIn.rotationYaw * 0.017453292F), -MathHelper.cos(entityIn.rotationYaw * 0.017453292F));
       if (!(entityIn instanceof EntityTameBase))
         entityIn.motionY += this.rand.nextDouble(); 
     } 
     entityIn.setFire(100);
     if (entityIn instanceof EntityLivingBase && entityIn instanceof IEntityMultiPart) {
-      ((EntityLivingBase)entityIn).motionX = 0.0D;
-      ((EntityLivingBase)entityIn).motionZ = 0.0D;
+      entityIn.motionX = 0.0D;
+      entityIn.motionZ = 0.0D;
     } 
     return true;
   }
@@ -394,7 +393,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
             BlockPos blockpos = new BlockPos(x + x1, y + y1, z + z1);
             IBlockState iblockstate = this.world.getBlockState(blockpos);
             Block block = iblockstate.getBlock();
-            if (!block.isAir(iblockstate, (IBlockAccess)this.world, blockpos) && block.getBlockHardness(iblockstate, this.world, blockpos) >= 0.0F)
+            if (!block.isAir(iblockstate, this.world, blockpos) && block.getBlockHardness(iblockstate, this.world, blockpos) >= 0.0F)
               this.world.destroyBlock(blockpos, true); 
           } 
         } 
@@ -450,7 +449,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
             List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()), Predicates.and(EntitySelectors.IS_ALIVE));
             for (int k1 = 0; k1 < 10 && !list1.isEmpty(); k1++) {
               EntityLivingBase entitylivingbase = list1.get(this.rand.nextInt(list1.size()));
-              if (entitylivingbase != this && entitylivingbase.isEntityAlive() && canEntityBeSeen((Entity)entitylivingbase) && !false) {
+              if (entitylivingbase != this && entitylivingbase.isEntityAlive() && canEntityBeSeen(entitylivingbase) && !false) {
                 if (entitylivingbase instanceof EntityPlayer) {
                   if (!((EntityPlayer)entitylivingbase).capabilities.disableDamage)
                     updateWatchedTargetId(i, entitylivingbase.getEntityId()); 
@@ -469,13 +468,13 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
       addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 2147483647, (getMetaData() > 2) ? 1 : 0));
       addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 2147483647, (getMetaData() > 2) ? 1 : 0));
     } 
-    List<Entity> list = this.world.getEntitiesInAABBexcluding((Entity)this, getEntityBoundingBox().grow(1.0D, 4.0D, 1.0D).offset(0.0D, 2.0D, 0.0D), EntitySelectors.IS_ALIVE);
+    List<Entity> list = this.world.getEntitiesInAABBexcluding(this, getEntityBoundingBox().grow(1.0D, 4.0D, 1.0D).offset(0.0D, 2.0D, 0.0D), EntitySelectors.IS_ALIVE);
     if (!list.isEmpty())
       for (int l = 0; l < list.size(); l++) {
         Entity[] aentity = getParts();
         if (aentity != null)
           for (Entity part : aentity) {
-            List<Entity> partlist = this.world.getEntitiesInAABBexcluding((Entity)this, part.getEntityBoundingBox(), EntitySelectors.IS_ALIVE);
+            List<Entity> partlist = this.world.getEntitiesInAABBexcluding(this, part.getEntityBoundingBox(), EntitySelectors.IS_ALIVE);
             if (!partlist.isEmpty())
                 for (Entity entity : partlist) {
                     if (entity instanceof EntityLivingBase && !entity.noClip && !(entity instanceof IEntityMultiPart)) {
@@ -598,81 +597,81 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 bat.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   bat.setOwnerId(getOwnerId()); 
-                bat.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)bat)), null);
+                bat.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(bat)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)bat); 
+                  this.world.spawnEntity(bat);
                 break;
               case 1:
                 chicken = new EntityChicken(this.world);
                 chicken.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   chicken.setOwnerId(getOwnerId()); 
-                chicken.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)chicken)), null);
+                chicken.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(chicken)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)chicken); 
+                  this.world.spawnEntity(chicken);
                 break;
               case 2:
                 cow = new EntityCow(this.world);
                 cow.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   cow.setOwnerId(getOwnerId()); 
-                cow.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)cow)), null);
+                cow.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(cow)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)cow); 
+                  this.world.spawnEntity(cow);
                 break;
               case 3:
                 mooshroom = new EntityMooshroom(this.world);
                 mooshroom.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   mooshroom.setOwnerId(getOwnerId()); 
-                mooshroom.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)mooshroom)), null);
+                mooshroom.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(mooshroom)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)mooshroom); 
+                  this.world.spawnEntity(mooshroom);
                 break;
               case 4:
                 ocelot = new EntityOcelot(this.world);
                 ocelot.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   ocelot.setOwnerId(getOwnerId()); 
-                ocelot.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)ocelot)), null);
+                ocelot.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(ocelot)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)ocelot); 
+                  this.world.spawnEntity(ocelot);
                 break;
               case 5:
                 pig = new EntityPig(this.world);
                 pig.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   pig.setOwnerId(getOwnerId()); 
-                pig.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)pig)), null);
+                pig.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(pig)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)pig); 
+                  this.world.spawnEntity(pig);
                 break;
               case 6:
                 rabbit = new EntityRabbit(this.world);
                 rabbit.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   rabbit.setOwnerId(getOwnerId()); 
-                rabbit.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)rabbit)), null);
+                rabbit.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(rabbit)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)rabbit); 
+                  this.world.spawnEntity(rabbit);
                 break;
               case 7:
                 sheep = new EntitySheep(this.world);
                 sheep.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   sheep.setOwnerId(getOwnerId()); 
-                sheep.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)sheep)), null);
+                sheep.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(sheep)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)sheep); 
+                  this.world.spawnEntity(sheep);
                 break;
               case 8:
                 parrot = new EntityParrot(this.world);
                 parrot.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   parrot.setOwnerId(getOwnerId()); 
-                parrot.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)parrot)), null);
+                parrot.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(parrot)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)parrot); 
+                  this.world.spawnEntity(parrot);
                 break;
             } 
             break;
@@ -683,63 +682,63 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 endermite.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   endermite.setOwnerId(getOwnerId()); 
-                endermite.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)endermite)), null);
+                endermite.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(endermite)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)endermite); 
+                  this.world.spawnEntity(endermite);
                 break;
               case 1:
                 silverfish = new EntitySilverfish(this.world);
                 silverfish.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   silverfish.setOwnerId(getOwnerId()); 
-                silverfish.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)silverfish)), null);
+                silverfish.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(silverfish)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)silverfish); 
+                  this.world.spawnEntity(silverfish);
                 break;
               case 2:
                 snowgolem = new EntitySnowman(this.world);
                 snowgolem.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   snowgolem.setOwnerId(getOwnerId()); 
-                snowgolem.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)snowgolem)), null);
+                snowgolem.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(snowgolem)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)snowgolem); 
+                  this.world.spawnEntity(snowgolem);
                 break;
               case 3:
                 squid = new EntitySquid(this.world);
                 squid.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   squid.setOwnerId(getOwnerId()); 
-                squid.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)squid)), null);
+                squid.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(squid)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)squid); 
+                  this.world.spawnEntity(squid);
                 break;
               case 4:
                 villager = new EntityVillager(this.world);
                 villager.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   villager.setOwnerId(getOwnerId()); 
-                villager.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)villager)), null);
+                villager.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(villager)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)villager); 
+                  this.world.spawnEntity(villager);
                 break;
               case 5:
                 wolf = new EntityWolf(this.world);
                 wolf.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   wolf.setOwnerId(getOwnerId()); 
-                wolf.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)wolf)), null);
+                wolf.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(wolf)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)wolf); 
+                  this.world.spawnEntity(wolf);
                 break;
               case 6:
                 llama = new EntityLlama(this.world);
                 llama.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   llama.setOwnerId(getOwnerId()); 
-                llama.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)llama)), null);
+                llama.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(llama)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)llama); 
+                  this.world.spawnEntity(llama);
                 break;
             } 
             break;
@@ -750,63 +749,63 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 creeper.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   creeper.setOwnerId(getOwnerId()); 
-                creeper.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)creeper)), null);
+                creeper.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(creeper)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)creeper); 
+                  this.world.spawnEntity(creeper);
                 break;
               case 1:
                 magmacube = new EntityMagmaCube(this.world);
                 magmacube.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   magmacube.setOwnerId(getOwnerId()); 
-                magmacube.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)magmacube)), null);
+                magmacube.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(magmacube)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)magmacube); 
+                  this.world.spawnEntity(magmacube);
                 break;
               case 2:
                 skeleton = new EntitySkeleton(this.world);
                 skeleton.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   skeleton.setOwnerId(getOwnerId()); 
-                skeleton.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)skeleton)), null);
+                skeleton.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(skeleton)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)skeleton); 
+                  this.world.spawnEntity(skeleton);
                 break;
               case 3:
                 slime = new EntitySlime(this.world);
                 slime.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   slime.setOwnerId(getOwnerId()); 
-                slime.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)slime)), null);
+                slime.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(slime)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)slime); 
+                  this.world.spawnEntity(slime);
                 break;
               case 4:
                 spider = new EntitySpider(this.world);
                 spider.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   spider.setOwnerId(getOwnerId()); 
-                spider.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)spider)), null);
+                spider.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(spider)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)spider); 
+                  this.world.spawnEntity(spider);
                 break;
               case 5:
                 zombie = new EntityZombie(this.world);
                 zombie.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   zombie.setOwnerId(getOwnerId()); 
-                zombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)zombie)), null);
+                zombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(zombie)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)zombie); 
+                  this.world.spawnEntity(zombie);
                 break;
               case 6:
                 vex = new EntityVex(this.world);
                 vex.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   vex.setOwnerId(getOwnerId()); 
-                vex.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)vex)), null);
+                vex.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(vex)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)vex); 
+                  this.world.spawnEntity(vex);
                 break;
             } 
             break;
@@ -817,54 +816,54 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 blaze.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   blaze.setOwnerId(getOwnerId()); 
-                blaze.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)blaze)), null);
+                blaze.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(blaze)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)blaze); 
+                  this.world.spawnEntity(blaze);
                 break;
               case 1:
                 cavespider = new EntityCaveSpider(this.world);
                 cavespider.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   cavespider.setOwnerId(getOwnerId()); 
-                cavespider.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)cavespider)), null);
+                cavespider.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(cavespider)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)cavespider); 
+                  this.world.spawnEntity(cavespider);
                 break;
               case 2:
                 enderman = new EntityEnderman(this.world);
                 enderman.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   enderman.setOwnerId(getOwnerId()); 
-                enderman.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)enderman)), null);
+                enderman.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(enderman)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)enderman); 
+                  this.world.spawnEntity(enderman);
                 break;
               case 3:
                 ghast = new EntityGhast(this.world);
                 ghast.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   ghast.setOwnerId(getOwnerId()); 
-                ghast.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)ghast)), null);
+                ghast.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(ghast)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)ghast); 
+                  this.world.spawnEntity(ghast);
                 break;
               case 4:
                 guardian = new EntityGuardian(this.world);
                 guardian.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   guardian.setOwnerId(getOwnerId()); 
-                guardian.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)guardian)), null);
+                guardian.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(guardian)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)guardian); 
+                  this.world.spawnEntity(guardian);
                 break;
               case 5:
                 pigzombie = new EntityPigZombie(this.world);
                 pigzombie.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   pigzombie.setOwnerId(getOwnerId()); 
-                pigzombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)pigzombie)), null);
+                pigzombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(pigzombie)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)pigzombie); 
+                  this.world.spawnEntity(pigzombie);
                 break;
               case 6:
                 killerrabbit = new EntityRabbit(this.world);
@@ -872,9 +871,9 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   killerrabbit.setOwnerId(getOwnerId()); 
                 killerrabbit.setRabbitType(99);
-                killerrabbit.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)killerrabbit)), null);
+                killerrabbit.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(killerrabbit)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)killerrabbit); 
+                  this.world.spawnEntity(killerrabbit);
                 break;
               case 7:
                 witherskeleton = new EntitySkeleton(this.world);
@@ -885,28 +884,28 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 witherskeleton.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
                 if (getRNG().nextInt(2) > 0)
                   witherskeleton.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Items.STONE_SWORD)); 
-                witherskeleton.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)witherskeleton)), null);
+                witherskeleton.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(witherskeleton)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)witherskeleton); 
+                  this.world.spawnEntity(witherskeleton);
                 break;
               case 8:
                 shulker = new EntityShulker(this.world);
                 shulker.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   shulker.setOwnerId(getOwnerId()); 
-                shulker.applyEntityCollision((Entity)this);
-                shulker.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)shulker)), null);
+                shulker.applyEntityCollision(this);
+                shulker.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(shulker)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)shulker); 
+                  this.world.spawnEntity(shulker);
                 break;
               case 9:
                 witch = new EntityWitch(this.world);
                 witch.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   witch.setOwnerId(getOwnerId()); 
-                witch.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)witch)), null);
+                witch.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(witch)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)witch); 
+                  this.world.spawnEntity(witch);
                 break;
               case 10:
                 entityZombie1 = new EntityZombie(this.world);
@@ -914,9 +913,9 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   entityZombie1.setOwnerId(getOwnerId()); 
                 entityZombie1.setZombieType(1);
-                entityZombie1.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityZombie1)), null);
+                entityZombie1.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityZombie1)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)entityZombie1); 
+                  this.world.spawnEntity(entityZombie1);
                 break;
               case 11:
                 stray = new EntitySkeleton(this.world);
@@ -924,18 +923,18 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   stray.setOwnerId(getOwnerId()); 
                 stray.setSkeletonType(2);
-                stray.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)stray)), null);
+                stray.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(stray)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)stray); 
+                  this.world.spawnEntity(stray);
                 break;
               case 12:
                 vindicator = new EntityVindicator(this.world);
                 vindicator.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   vindicator.setOwnerId(getOwnerId()); 
-                vindicator.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)vindicator)), null);
+                vindicator.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(vindicator)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)vindicator); 
+                  this.world.spawnEntity(vindicator);
                 break;
             } 
             break;
@@ -946,63 +945,63 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 elderguardian.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   elderguardian.setOwnerId(getOwnerId()); 
-                elderguardian.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)elderguardian)), null);
+                elderguardian.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(elderguardian)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)elderguardian); 
+                  this.world.spawnEntity(elderguardian);
                 break;
               case 1:
                 giant = new EntityGiant(this.world);
                 giant.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   giant.setOwnerId(getOwnerId()); 
-                giant.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)giant)), null);
+                giant.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(giant)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)giant); 
+                  this.world.spawnEntity(giant);
                 break;
               case 2:
                 irongolem = new EntityIronGolem(this.world);
                 irongolem.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   irongolem.setOwnerId(getOwnerId()); 
-                irongolem.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)irongolem)), null);
+                irongolem.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(irongolem)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)irongolem); 
+                  this.world.spawnEntity(irongolem);
                 break;
               case 3:
                 wither = new EntityWither(this.world);
                 wither.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   wither.setOwnerId(getOwnerId()); 
-                wither.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)wither)), null);
+                wither.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(wither)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)wither); 
+                  this.world.spawnEntity(wither);
                 break;
               case 4:
                 evoker = new EntityEvoker(this.world);
                 evoker.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   evoker.setOwnerId(getOwnerId()); 
-                evoker.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)evoker)), null);
+                evoker.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(evoker)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)evoker); 
+                  this.world.spawnEntity(evoker);
                 break;
               case 5:
                 enderdragon = new EntityEnderDragon(this.world);
                 enderdragon.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   enderdragon.setOwnerId(getOwnerId()); 
-                enderdragon.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)enderdragon)), null);
+                enderdragon.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(enderdragon)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)enderdragon); 
+                  this.world.spawnEntity(enderdragon);
                 break;
               case 6:
                 illusioner = new EntityIllusioner(this.world);
                 illusioner.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   illusioner.setOwnerId(getOwnerId()); 
-                illusioner.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)illusioner)), null);
+                illusioner.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(illusioner)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)illusioner); 
+                  this.world.spawnEntity(illusioner);
                 break;
             } 
             break;
@@ -1019,17 +1018,17 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
       if (entity != null && entity.isEntityAlive()) {
         EntityGuardianProjectile entityGuardianProjectile1;
         int i;
-        this.world.playEvent((EntityPlayer)null, 1016, new BlockPos((Entity)this), 0);
+        this.world.playEvent(null, 1016, new BlockPos(this), 0);
         switch (this.rand.nextInt(7)) {
           case 0:
           case 1:
-            entityGuardianProjectile1 = new EntityGuardianProjectile(this.world, 1, (EntityLivingBase)entity, 5.0F + this.rand.nextFloat() * 8.0F, (Entity)this);
-            entityGuardianProjectile1.copyLocationAndAnglesFrom((Entity)this);
+            entityGuardianProjectile1 = new EntityGuardianProjectile(this.world, 1, (EntityLivingBase)entity, 5.0F + this.rand.nextFloat() * 8.0F, this);
+            entityGuardianProjectile1.copyLocationAndAnglesFrom(this);
             entityGuardianProjectile1.posX = x;
             entityGuardianProjectile1.posY = y;
             entityGuardianProjectile1.posZ = z;
             entityGuardianProjectile1.setLocationAndAngles(x, y, z, this.rotationYaw, this.rotationPitch);
-            entityGuardianProjectile1.shooter = (Entity)this;
+            entityGuardianProjectile1.shooter = this;
             entityGuardianProjectile1.target = (EntityLivingBase)entity;
             entityGuardianProjectile1.motionX = d6 / d9 * 5.0D;
             entityGuardianProjectile1.motionY = d7 / d9 * 5.0D;
@@ -1037,13 +1036,13 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
             this.world.spawnEntity(entityGuardianProjectile1);
             return;
           case 2:
-            entityGuardianProjectile1 = new EntityGuardianProjectile(this.world, 3, (EntityLivingBase)entity, 5.0F + this.rand.nextFloat() * 2.0F, (Entity)this);
-            entityGuardianProjectile1.copyLocationAndAnglesFrom((Entity)this);
+            entityGuardianProjectile1 = new EntityGuardianProjectile(this.world, 3, (EntityLivingBase)entity, 5.0F + this.rand.nextFloat() * 2.0F, this);
+            entityGuardianProjectile1.copyLocationAndAnglesFrom(this);
             entityGuardianProjectile1.posX = x;
             entityGuardianProjectile1.posY = y;
             entityGuardianProjectile1.posZ = z;
             entityGuardianProjectile1.setLocationAndAngles(x, y, z, this.rotationYaw, this.rotationPitch);
-            entityGuardianProjectile1.shooter = (Entity)this;
+            entityGuardianProjectile1.shooter = this;
             entityGuardianProjectile1.target = (EntityLivingBase)entity;
             entityGuardianProjectile1.motionX = d6 / d9 * 5.0D;
             entityGuardianProjectile1.motionY = d7 / d9 * 5.0D;
@@ -1051,13 +1050,13 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
             this.world.spawnEntity(entityGuardianProjectile1);
             return;
           case 3:
-            entityGuardianProjectile1 = new EntityGuardianProjectile(this.world, 4, (EntityLivingBase)entity, 5.0F + this.rand.nextFloat() * 10.0F, (Entity)this);
-            entityGuardianProjectile1.copyLocationAndAnglesFrom((Entity)this);
+            entityGuardianProjectile1 = new EntityGuardianProjectile(this.world, 4, (EntityLivingBase)entity, 5.0F + this.rand.nextFloat() * 10.0F, this);
+            entityGuardianProjectile1.copyLocationAndAnglesFrom(this);
             entityGuardianProjectile1.posX = x;
             entityGuardianProjectile1.posY = y;
             entityGuardianProjectile1.posZ = z;
             entityGuardianProjectile1.setLocationAndAngles(x, y, z, this.rotationYaw, this.rotationPitch);
-            entityGuardianProjectile1.shooter = (Entity)this;
+            entityGuardianProjectile1.shooter = this;
             entityGuardianProjectile1.target = (EntityLivingBase)entity;
             entityGuardianProjectile1.motionX = d6 / d9 * 5.0D;
             entityGuardianProjectile1.motionY = d7 / d9 * 5.0D;
@@ -1065,13 +1064,13 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
             this.world.spawnEntity(entityGuardianProjectile1);
             return;
           case 4:
-            entityGuardianProjectile1 = new EntityGuardianProjectile(this.world, 5, (EntityLivingBase)entity, 5.0F + this.rand.nextFloat() * 10.0F, (Entity)this);
-            entityGuardianProjectile1.copyLocationAndAnglesFrom((Entity)this);
+            entityGuardianProjectile1 = new EntityGuardianProjectile(this.world, 5, (EntityLivingBase)entity, 5.0F + this.rand.nextFloat() * 10.0F, this);
+            entityGuardianProjectile1.copyLocationAndAnglesFrom(this);
             entityGuardianProjectile1.posX = x;
             entityGuardianProjectile1.posY = y;
             entityGuardianProjectile1.posZ = z;
             entityGuardianProjectile1.setLocationAndAngles(x, y, z, this.rotationYaw, this.rotationPitch);
-            entityGuardianProjectile1.shooter = (Entity)this;
+            entityGuardianProjectile1.shooter = this;
             entityGuardianProjectile1.target = (EntityLivingBase)entity;
             entityGuardianProjectile1.motionX = d6 / d9 * 5.0D;
             entityGuardianProjectile1.motionY = d7 / d9 * 5.0D;
@@ -1080,27 +1079,27 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
             return;
           case 5:
             for (i = 10; i > 0; i--) {
-              EntityGuardianProjectile entityGuardianProjectile = new EntityGuardianProjectile(this.world, 6, (EntityLivingBase)entity, (5.0F + this.rand.nextFloat() * 10.0F) / 2.0F, (Entity)this);
-              entityGuardianProjectile.copyLocationAndAnglesFrom((Entity)this);
+              EntityGuardianProjectile entityGuardianProjectile = new EntityGuardianProjectile(this.world, 6, (EntityLivingBase)entity, (5.0F + this.rand.nextFloat() * 10.0F) / 2.0F, this);
+              entityGuardianProjectile.copyLocationAndAnglesFrom(this);
               entityGuardianProjectile.motionY = 0.0D;
               int randDir = this.rand.nextInt();
               double speed = 1.0D + this.rand.nextDouble() * 5.0D;
               entityGuardianProjectile.motionX = Math.sin(randDir) * speed;
               entityGuardianProjectile.motionZ = Math.cos(randDir) * speed;
               entityGuardianProjectile.setLocationAndAngles(x, y, z, this.rotationYaw, this.rotationPitch);
-              entityGuardianProjectile.shooter = (Entity)this;
+              entityGuardianProjectile.shooter = this;
               entityGuardianProjectile.target = (EntityLivingBase)entity;
               this.world.spawnEntity(entityGuardianProjectile);
             } 
             return;
         } 
-        EntityGuardianProjectile projectile = new EntityGuardianProjectile(this.world, 6, (EntityLivingBase)entity, (5.0F + this.rand.nextFloat() * 10.0F) / 2.0F, (Entity)this);
-        projectile.copyLocationAndAnglesFrom((Entity)this);
+        EntityGuardianProjectile projectile = new EntityGuardianProjectile(this.world, 6, (EntityLivingBase)entity, (5.0F + this.rand.nextFloat() * 10.0F) / 2.0F, this);
+        projectile.copyLocationAndAnglesFrom(this);
         projectile.posX = x;
         projectile.posY = y;
         projectile.posZ = z;
         projectile.setLocationAndAngles(x, y, z, this.rotationYaw, this.rotationPitch);
-        projectile.shooter = (Entity)this;
+        projectile.shooter = this;
         projectile.target = (EntityLivingBase)entity;
         projectile.motionX = d6 / d9 * 5.0D;
         projectile.motionY = d7 / d9 * 5.0D;
@@ -1128,11 +1127,11 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
     } 
     if (!this.world.isRemote && (isPlayer() || (this.recentlyHit > 0 && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")))) {
       int i = getExperiencePoints(this.attackingPlayer) / 60;
-      i = ForgeEventFactory.getExperienceDrop((EntityLivingBase)this, this.attackingPlayer, i);
+      i = ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
       while (i > 0) {
         int j = EntityXPOrb.getXPSplit(i);
         i -= j;
-        this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+        this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
       } 
     } 
     if (this.deathTime == 60)
@@ -1194,7 +1193,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
         player.changeDimension(1);
         return true;
       } 
-      player.world.playSound(player, new BlockPos((Entity)player), SoundEvents.BLOCK_ANVIL_USE, SoundCategory.PLAYERS, 100.0F, 0.5F);
+      player.world.playSound(player, new BlockPos(player), SoundEvents.BLOCK_ANVIL_USE, SoundCategory.PLAYERS, 100.0F, 0.5F);
       setHealth(0.0F);
       return true;
     } 
@@ -1224,7 +1223,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
   }
   
   public Entity[] getParts() {
-    return (Entity[])this.partArray;
+    return this.partArray;
   }
   
   public AxisAlignedBB getCollisionBoundingBox() {

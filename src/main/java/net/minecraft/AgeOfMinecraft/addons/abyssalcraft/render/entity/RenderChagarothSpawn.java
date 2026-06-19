@@ -3,7 +3,6 @@ package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 import com.shinoow.abyssalcraft.client.model.entity.ModelChagarothSpawn;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityChagarothSpawn;
 import net.minecraft.AgeOfMinecraft.renders.LayerArrowCustomSized;
-import net.minecraft.AgeOfMinecraft.renders.LayerLearningBook;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -20,9 +19,9 @@ public class RenderChagarothSpawn extends RenderLiving<EntityChagarothSpawn> {
   private static final ResourceLocation mobTexture = new ResourceLocation("abyssalcraft:textures/model/spawn_of_chagaroth.png");
   
   public RenderChagarothSpawn(RenderManager manager) {
-    super(manager, (ModelBase)new ModelChagarothSpawn(), 0.5F);
-    addLayer((LayerRenderer)new LayerArrowCustomSized((RenderLivingBase)this, 1.0F));
-    addLayer((LayerRenderer)new LayerLearningBook(this));
+    super(manager, new ModelChagarothSpawn(), 0.5F);
+    addLayer((LayerRenderer)new LayerArrowCustomSized(this, 1.0F));
+    
   }
   
   protected ResourceLocation getEntityTexture(EntityChagarothSpawn entity) {

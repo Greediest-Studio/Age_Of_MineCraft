@@ -94,8 +94,8 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
   public EntityChagaroth(World par1World) {
     super(par1World);
     setSize(2.25F, 4.5F);
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 0.0D, true));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 0.0D, true));
+    this.tasks.addTask(3, new EntityAILookIdle(this));
     this.ignoreFrustumCheck = true;
     this.isImmuneToFire = true;
     this.isOffensive = true;
@@ -189,7 +189,7 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
   }
   
   public int getFlameTime() {
-    return (Integer) this.dataManager.get(FLAMETIMER);
+    return this.dataManager.get(FLAMETIMER);
   }
   
   public void setFlameTime(int time) {
@@ -206,7 +206,7 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
       par1Entity instanceof EntityLivingBase)
       ((EntityLivingBase)par1Entity).addPotionEffect(new PotionEffect(AbyssalCraftAPI.dread_plague, 400, 1)); 
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 4.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor().setDamageIsAbsolute(), 4.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -279,7 +279,7 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
           List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(48.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
           for (int j2 = 0; j2 < 10 && !list.isEmpty(); j2++) {
             EntityLivingBase entitylivingbase = list.get(this.rand.nextInt(list.size()));
-            if (entitylivingbase != this && !false && entitylivingbase.isEntityAlive() && entitylivingbase.getHealth() > 0.0F && canEntityBeSeen((Entity)entitylivingbase)) {
+            if (entitylivingbase != this && !false && entitylivingbase.isEntityAlive() && entitylivingbase.getHealth() > 0.0F && canEntityBeSeen(entitylivingbase)) {
               if (entitylivingbase instanceof EntityPlayer) {
                 if (!((EntityPlayer)entitylivingbase).capabilities.disableDamage)
                   updateWatchedTargetId(i, entitylivingbase.getEntityId()); 
@@ -320,98 +320,98 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
     double d5 = z - d2;
     float f1 = MathHelper.sqrt(d3 * d3 + d5 * d5) * 0.2F;
     float f2 = MathHelper.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
-    EntityDreadSlugOther entitydreadslug = new EntityDreadSlugOther(this.world, (EntityLivingBase)this);
+    EntityDreadSlugOther entitydreadslug = new EntityDreadSlugOther(this.world, this);
     entitydreadslug.posY = d1;
     entitydreadslug.posX = d0;
     entitydreadslug.posZ = d2;
     entitydreadslug.shoot(d3, d4 + f1, d5, 1.75F, 1.0F);
     playSound(ESound.amalgamate, 2.0F, 1.25F);
     if (!this.world.isRemote)
-      this.world.spawnEntity((Entity)entitydreadslug); 
+      this.world.spawnEntity(entitydreadslug);
     entitydreadslug.motionX = d3 / f2 * 0.8D * 0.8D + entitydreadslug.motionX;
     entitydreadslug.motionY = d4 / f2 * 0.8D * 0.8D + entitydreadslug.motionY;
     entitydreadslug.motionZ = d5 / f2 * 0.8D * 0.8D + entitydreadslug.motionZ;
     switch (this.rand.nextInt(5)) {
       case 0:
-        entitydreadslug1 = new EntityDreadSlugOther(this.world, (EntityLivingBase)this);
+        entitydreadslug1 = new EntityDreadSlugOther(this.world, this);
         entitydreadslug1.posY = d1;
         entitydreadslug1.posX = d0;
         entitydreadslug1.posZ = d2;
         entitydreadslug1.shoot(d3, d4 + f1, d5, 1.75F, 1.0F);
         playSound(ESound.amalgamate, 2.0F, 1.25F);
         if (!this.world.isRemote)
-          this.world.spawnEntity((Entity)entitydreadslug1); 
+          this.world.spawnEntity(entitydreadslug1);
         entitydreadslug1.motionX = d3 / f2 * 0.8D * 0.8D + entitydreadslug1.motionX;
         entitydreadslug1.motionY = d4 / f2 * 0.8D * 0.8D + entitydreadslug1.motionY;
         entitydreadslug1.motionZ = d5 / f2 * 0.8D * 0.8D + entitydreadslug1.motionZ;
         this.nextHeadUpdate[p_82209_1_ - 2] = this.ticksExisted + 10;
         break;
       case 1:
-        entitydreadslug11 = new EntityDreadSlugOther(this.world, (EntityLivingBase)this);
+        entitydreadslug11 = new EntityDreadSlugOther(this.world, this);
         entitydreadslug11.posY = d1;
         entitydreadslug11.posX = d0;
         entitydreadslug11.posZ = d2;
         mob = new EntityDreadSpawn(this.world);
-        mob.copyLocationAndAnglesFrom((Entity)entitydreadslug11);
+        mob.copyLocationAndAnglesFrom(entitydreadslug11);
         entitydreadslug11.shoot(d3, d4 + f1 + this.rand.nextDouble() * 150.0D, d5, 1.3F, 1.0F);
         playSound(ESound.amalgamate, 2.0F, 1.25F);
         if (!this.world.isRemote)
-          this.world.spawnEntity((Entity)entitydreadslug11); 
+          this.world.spawnEntity(entitydreadslug11);
         mob.setOwnerId(getOwnerId());
         if (!this.world.isRemote)
-          this.world.spawnEntity((Entity)mob); 
+          this.world.spawnEntity(mob);
         mob.attackEntityFrom(DamageSource.FLY_INTO_WALL, 2.0F);
-        mob.startRiding((Entity)entitydreadslug11);
+        mob.startRiding(entitydreadslug11);
         mob.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
         this.nextHeadUpdate[p_82209_1_ - 2] = this.ticksExisted + 20;
         break;
       case 2:
-        entitydreadslug111 = new EntityDreadSlugOther(this.world, (EntityLivingBase)this);
+        entitydreadslug111 = new EntityDreadSlugOther(this.world, this);
         entitydreadslug111.posY = d1;
         entitydreadslug111.posX = d0;
         entitydreadslug111.posZ = d2;
         spawn = new EntityChagarothSpawn(this.world);
-        spawn.copyLocationAndAnglesFrom((Entity)entitydreadslug111);
+        spawn.copyLocationAndAnglesFrom(entitydreadslug111);
         entitydreadslug111.shoot(d3, d4 + f1 + this.rand.nextDouble() * 150.0D, d5, 1.3F, 1.0F);
         playSound(ESound.amalgamate, 2.0F, 1.25F);
         if (!this.world.isRemote)
-          this.world.spawnEntity((Entity)entitydreadslug111); 
+          this.world.spawnEntity(entitydreadslug111);
         spawn.setOwnerId(getOwnerId());
         if (!this.world.isRemote)
-          this.world.spawnEntity((Entity)spawn); 
+          this.world.spawnEntity(spawn);
         spawn.attackEntityFrom(DamageSource.FLY_INTO_WALL, 2.0F);
-        spawn.startRiding((Entity)entitydreadslug111);
+        spawn.startRiding(entitydreadslug111);
         spawn.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
         this.nextHeadUpdate[p_82209_1_ - 2] = this.ticksExisted + 20;
         break;
       case 3:
-        entitydreadslug1111 = new EntityDreadSlugOther(this.world, (EntityLivingBase)this);
+        entitydreadslug1111 = new EntityDreadSlugOther(this.world, this);
         entitydreadslug1111.posY = d1;
         entitydreadslug1111.posX = d0;
         entitydreadslug1111.posZ = d2;
         fist = new EntityChagarothFist(this.world);
-        fist.copyLocationAndAnglesFrom((Entity)entitydreadslug1111);
+        fist.copyLocationAndAnglesFrom(entitydreadslug1111);
         entitydreadslug1111.shoot(d3, d4 + f1 + this.rand.nextDouble() * 150.0D, d5, 1.3F, 1.0F);
         playSound(ESound.amalgamate, 2.0F, 1.25F);
         if (!this.world.isRemote)
-          this.world.spawnEntity((Entity)entitydreadslug1111); 
+          this.world.spawnEntity(entitydreadslug1111);
         fist.setOwnerId(getOwnerId());
         if (!this.world.isRemote)
-          this.world.spawnEntity((Entity)fist); 
+          this.world.spawnEntity(fist);
         fist.attackEntityFrom(DamageSource.FLY_INTO_WALL, 2.0F);
-        fist.startRiding((Entity)entitydreadslug1111);
+        fist.startRiding(entitydreadslug1111);
         fist.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
         this.nextHeadUpdate[p_82209_1_ - 2] = this.ticksExisted + 20;
         break;
       case 4:
-        this.world.playEvent((EntityPlayer)null, 1016, new BlockPos((Entity)this), 0);
+        this.world.playEvent(null, 1016, new BlockPos(this), 0);
         d4 = y + 0.5D - d1;
-        entitydragonfireball = new EntityDreadedChargeOther(this.world, (EntityLivingBase)this, d3, d4, d5);
+        entitydragonfireball = new EntityDreadedChargeOther(this.world, this, d3, d4, d5);
         entitydragonfireball.posX = d0;
         entitydragonfireball.posY = d1;
         entitydragonfireball.posZ = d2;
         if (!this.world.isRemote)
-          this.world.spawnEntity((Entity)entitydragonfireball); 
+          this.world.spawnEntity(entitydragonfireball);
         this.nextHeadUpdate[p_82209_1_ - 2] = this.ticksExisted + 100;
         break;
     } 
@@ -467,7 +467,7 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
             Chunk c = this.world.getChunk(getPosition());
             c.getBiomeArray()[(z & 0xF) << 4 | x & 0xF] = (byte)Biome.getIdForBiome(b);
             c.setModified(true);
-            PacketDispatcher.sendToDimension((IMessage)new CleansingRitualMessage(x, z, Biome.getIdForBiome(b)), this.world.provider.getDimension());
+            PacketDispatcher.sendToDimension(new CleansingRitualMessage(x, z, Biome.getIdForBiome(b)), this.world.provider.getDimension());
           } 
         } 
       }  
@@ -516,17 +516,17 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
     List<EntityLivingBase> flamedetector = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(12.0D, 12.0D, 12.0D), Predicates.and(new Predicate[] { EntitySelectors.IS_ALIVE, EntitySelectors.CAN_AI_TARGET }));
     if (flamedetector != null && !flamedetector.isEmpty())
         for (EntityLivingBase entity : flamedetector) {
-            if (entity != null && !false && getDistanceSq((Entity) entity) <= 256.0D)
+            if (entity != null && !false && getDistanceSq(entity) <= 256.0D)
                 if (getFlameTime() <= (isHero() ? -100 : -200)) {
                     setFlameTime(150);
                     if (entity != getAttackTarget()) {
                         setAttackTarget(entity);
-                        faceEntity((Entity) entity, 180.0F, 40.0F);
+                        faceEntity(entity, 180.0F, 40.0F);
                     }
                 }
         }
     if (hasOpenMouth()) {
-      this.world.setEntityState((Entity)this, (byte)23);
+      this.world.setEntityState(this, (byte)23);
       if (this.ticksExisted % 3 == 0) {
         this.world.playSound(null, new BlockPos(this.posX + 0.5D, this.posY + getEyeHeight(), this.posZ + 0.5D), ACSounds.dreadguard_barf, getSoundCategory(), 2.0F + getRNG().nextFloat(), getRNG().nextFloat() * 0.6F + 0.2F);
         this.world.playSound(null, new BlockPos(this.posX + 0.5D, this.posY + getEyeHeight(), this.posZ + 0.5D), ACSounds.dreadguard_barf, getSoundCategory(), 2.0F + getRNG().nextFloat(), getRNG().nextFloat() * 0.5F + 0.2F);
@@ -538,12 +538,12 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
         if (list != null && !list.isEmpty())
             for (EntityLivingBase entity : list) {
                 if (entity != null && !false && this.rand.nextInt(3) == 0)
-                    if (entity.attackEntityFrom(AbyssalCraftAPI.dread, (float) (15.0D - getDistance((Entity) entity)) * 5.0F)) {
+                    if (entity.attackEntityFrom(AbyssalCraftAPI.dread, (float) (15.0D - getDistance(entity)) * 5.0F)) {
                         entity.addPotionEffect(new PotionEffect(AbyssalCraftAPI.dread_plague, 200, 1));
-                        entity.setFire((int) (30.0F - getDistance((Entity) entity)));
+                        entity.setFire((int) (30.0F - getDistance(entity)));
                     } else {
-                        attackEntityAsMob((Entity) entity);
-                        entity.setFire((int) (30.0F - getDistance((Entity) entity)));
+                        attackEntityAsMob(entity);
+                        entity.setFire((int) (30.0F - getDistance(entity)));
                     }
             }
         if (target.attackEntityFrom(AbyssalCraftAPI.dread, (float)(15.0D - getDistance(target)) * 5.0F)) {
@@ -557,53 +557,53 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
       } 
     } 
     if (getAttackTarget() != null)
-      faceEntity((Entity)getAttackTarget(), 10.0F, 180.0F); 
+      faceEntity(getAttackTarget(), 10.0F, 180.0F);
     setFlameTime(getFlameTime() - 1);
     if (!this.world.isRemote && isEntityAlive()) {
       if (this.rand.nextInt(isHero() ? 200 : 400) == 0) {
         EntityDreadSpawn mob = new EntityDreadSpawn(this.world);
-        mob.copyLocationAndAnglesFrom((Entity)this);
+        mob.copyLocationAndAnglesFrom(this);
         mob.setOwnerId(getOwnerId());
         mob.motionX++;
-        this.world.spawnEntity((Entity)mob);
+        this.world.spawnEntity(mob);
         mob.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
         EntityChagarothSpawn spawn = new EntityChagarothSpawn(this.world);
-        spawn.copyLocationAndAnglesFrom((Entity)this);
+        spawn.copyLocationAndAnglesFrom(this);
         spawn.setOwnerId(getOwnerId());
         spawn.motionX++;
-        this.world.spawnEntity((Entity)spawn);
+        this.world.spawnEntity(spawn);
         spawn.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
       } 
       if (this.rand.nextInt(isHero() ? 400 : 800) == 0) {
         EntityChagarothFist fist = new EntityChagarothFist(this.world);
-        fist.copyLocationAndAnglesFrom((Entity)this);
+        fist.copyLocationAndAnglesFrom(this);
         fist.setOwnerId(getOwnerId());
         fist.motionX++;
-        this.world.spawnEntity((Entity)fist);
+        this.world.spawnEntity(fist);
         fist.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
       } 
       if (this.rand.nextInt(isHero() ? 800 : 1600) == 0) {
         EntityDreadguard dreadGuard = new EntityDreadguard(this.world);
-        dreadGuard.copyLocationAndAnglesFrom((Entity)this);
+        dreadGuard.copyLocationAndAnglesFrom(this);
         dreadGuard.setOwnerId(getOwnerId());
         dreadGuard.motionX++;
-        this.world.spawnEntity((Entity)dreadGuard);
-        dreadGuard.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), (IEntityLivingData)null);
+        this.world.spawnEntity(dreadGuard);
+        dreadGuard.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
       } 
       if (this.rand.nextInt(isHero() ? 1600 : 3200) == 0) {
         EntityGreaterDreadSpawn dreadGuard = new EntityGreaterDreadSpawn(this.world);
-        dreadGuard.copyLocationAndAnglesFrom((Entity)this);
+        dreadGuard.copyLocationAndAnglesFrom(this);
         dreadGuard.setOwnerId(getOwnerId());
         dreadGuard.motionX++;
-        this.world.spawnEntity((Entity)dreadGuard);
+        this.world.spawnEntity(dreadGuard);
         dreadGuard.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
       } 
       if (this.rand.nextInt(isHero() ? 3200 : 6400) == 0) {
         EntityLesserDreadbeast dreadGuard = new EntityLesserDreadbeast(this.world);
-        dreadGuard.copyLocationAndAnglesFrom((Entity)this);
+        dreadGuard.copyLocationAndAnglesFrom(this);
         dreadGuard.setOwnerId(getOwnerId());
         dreadGuard.motionX++;
-        this.world.spawnEntity((Entity)dreadGuard);
+        this.world.spawnEntity(dreadGuard);
         dreadGuard.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
       } 
     } 
@@ -626,7 +626,7 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
     double rz = (hitpos == null) ? range : Math.min(range, Math.abs(this.posZ - hitpos.getZ()));
     Vec3d destVec = srcVec.add(lookVec.x * range, lookVec.y * range, lookVec.z * range);
     float var9 = 8.0F;
-    List<Entity> possibleList = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().offset(lookVec.x * rx, lookVec.y * ry, lookVec.z * rz).grow(var9, var9, var9));
+    List<Entity> possibleList = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().offset(lookVec.x * rx, lookVec.y * ry, lookVec.z * rz).grow(var9, var9, var9));
     double hitDist = 0.0D;
     for (Entity possibleEntity : possibleList) {
       if (possibleEntity != this && possibleEntity instanceof EntityLivingBase && !false) {
@@ -674,7 +674,7 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
         this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, px + getRNG().nextDouble() - 0.5D, py + getRNG().nextDouble() - 0.5D, pz + getRNG().nextDouble() - 0.5D, dx, dy, dz, Item.getIdFromItem(ACItems.dread_fragment));
       } 
     } else {
-      this.world.setEntityState((Entity)this, (byte)23);
+      this.world.setEntityState(this, (byte)23);
     } 
   }
   
@@ -701,7 +701,7 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
   }
   
   public int getWatchedTargetId(int head) {
-    return (Integer) this.dataManager.get(HEAD_TARGETS[head]);
+    return this.dataManager.get(HEAD_TARGETS[head]);
   }
   
   public void updateWatchedTargetId(int targetOffset, int newId) {
@@ -769,9 +769,9 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
         if (getOwner() != null) {
           for (EntityPlayer entityplayer : this.world.playerEntities) {
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
-            entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("§4" + getOwner().getName() + "'s Cha'garoth has been killed!!!", new Object[0]), true);
+            entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s Cha'garoth has been killed!!!", new Object[0]), true);
           } 
-          ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("Your Cha'garoth has been destroyed!", new Object[0]));
+          getOwner().sendMessage(new TextComponentTranslation("Your Cha'garoth has been destroyed!", new Object[0]));
         }   
     if (this.deathTicks <= 200) {
       float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
@@ -792,11 +792,11 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
       while (i > 0) {
         int j = EntityXPOrb.getXPSplit(i);
         i -= j;
-        this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
-        this.world.spawnEntity((Entity)new EntityItem(this.world, this.posX + posneg(3), this.posY + this.rand.nextInt(3), this.posZ + posneg(3), new ItemStack(ACItems.dread_fragment, 4)));
-        this.world.spawnEntity((Entity)new EntityItem(this.world, this.posX + posneg(3), this.posY + this.rand.nextInt(3), this.posZ + posneg(3), new ItemStack(ACItems.dreaded_chunk_of_abyssalnite, 2)));
-        this.world.spawnEntity((Entity)new EntityItem(this.world, this.posX + posneg(3), this.posY + this.rand.nextInt(3), this.posZ + posneg(3), new ItemStack(ACItems.dreaded_shard_of_abyssalnite)));
-        this.world.spawnEntity((Entity)new EntityItem(this.world, this.posX + posneg(3), this.posY + this.rand.nextInt(3), this.posZ + posneg(3), new ItemStack(ACItems.dreadium_ingot)));
+        this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+        this.world.spawnEntity(new EntityItem(this.world, this.posX + posneg(3), this.posY + this.rand.nextInt(3), this.posZ + posneg(3), new ItemStack(ACItems.dread_fragment, 4)));
+        this.world.spawnEntity(new EntityItem(this.world, this.posX + posneg(3), this.posY + this.rand.nextInt(3), this.posZ + posneg(3), new ItemStack(ACItems.dreaded_chunk_of_abyssalnite, 2)));
+        this.world.spawnEntity(new EntityItem(this.world, this.posX + posneg(3), this.posY + this.rand.nextInt(3), this.posZ + posneg(3), new ItemStack(ACItems.dreaded_shard_of_abyssalnite)));
+        this.world.spawnEntity(new EntityItem(this.world, this.posX + posneg(3), this.posY + this.rand.nextInt(3), this.posZ + posneg(3), new ItemStack(ACItems.dreadium_ingot)));
       } 
     } 
     if (this.deathTicks == 100 && !this.world.isRemote)
@@ -809,7 +809,7 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
                   SpecialTextUtil.JzaharGroup(this.world, false ? I18n.translateToLocal("message.jzaharhelpful.snidecomment.chagaroth") : I18n.translateToLocal("message.jzahar.snidecomment.chagaroth"));
           }
       setDead();
-      this.world.spawnEntity((Entity)new EntityItem(this.world, this.posX, this.posY, this.posZ, new ItemStack(ACItems.dread_plagued_gateway_key)));
+      this.world.spawnEntity(new EntityItem(this.world, this.posX, this.posY, this.posZ, new ItemStack(ACItems.dread_plagued_gateway_key)));
     } 
   }
   
@@ -833,7 +833,7 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
       if (hasOwner(player)) {
         player.swingArm(EnumHand.MAIN_HAND);
         if (getRidingEntity() == null) {
-          startRiding((Entity)player, true);
+          startRiding(player, true);
         } else {
           dismountRidingEntity();
         } 

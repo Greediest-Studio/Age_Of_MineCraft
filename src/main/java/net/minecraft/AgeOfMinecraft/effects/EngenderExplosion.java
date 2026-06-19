@@ -106,7 +106,7 @@ public class EngenderExplosion extends Explosion {
                 BlockPos blockpos = new BlockPos(d4, d6, d8);
                 IBlockState iblockstate = this.world.getBlockState(blockpos);
                 if (iblockstate.getMaterial() != Material.AIR) {
-                  float f2 = (this.exploder != null) ? this.exploder.getExplosionResistance(this, this.world, blockpos, iblockstate) : iblockstate.getBlock().getExplosionResistance(this.world, blockpos, (Entity)null, this);
+                  float f2 = (this.exploder != null) ? this.exploder.getExplosionResistance(this, this.world, blockpos, iblockstate) : iblockstate.getBlock().getExplosionResistance(this.world, blockpos, null, this);
                   f -= (f2 + 0.3F) * 0.3F;
                 } 
                 if (f > 0.0F && (this.exploder == null || this.exploder.canExplosionDestroyBlock(this, this.world, blockpos, iblockstate, f)))
@@ -127,7 +127,7 @@ public class EngenderExplosion extends Explosion {
       int i1 = MathHelper.floor(this.explosionY + f3 + 1.0D);
       int j2 = MathHelper.floor(this.explosionZ - f3 - 1.0D);
       int j1 = MathHelper.floor(this.explosionZ + f3 + 1.0D);
-      List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this.exploder, new AxisAlignedBB(k1, i2, j2, l1, i1, j1));
+      List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this.exploder, new AxisAlignedBB(k1, i2, j2, l1, i1, j1));
       ForgeEventFactory.onExplosionDetonate(this.world, this, list, f3);
       Vec3d vec3d = new Vec3d(this.explosionX, this.explosionY, this.explosionZ);
         for (Entity entity : list) {
@@ -156,7 +156,7 @@ public class EngenderExplosion extends Explosion {
                             entity.motionY += d7 * d11 + 1.0D;
                             entity.motionZ += d9 * d11;
                             if (entity instanceof EntityLivingBase) {
-                                ((EntityLivingBase) entity).renderYawOffset = ((EntityLivingBase) entity).rotationYaw = ((EntityLivingBase) entity).rotationYawHead = (float) MathHelper.atan2(entity.motionZ, entity.motionX) * 57.295776F - 90.0F;
+                                ((EntityLivingBase) entity).renderYawOffset = entity.rotationYaw = ((EntityLivingBase) entity).rotationYawHead = (float) MathHelper.atan2(entity.motionZ, entity.motionX) * 57.295776F - 90.0F;
                                 ((EntityLivingBase) entity).setRevengeTarget(null);
                                 if (entity instanceof EntityLiving)
                                     ((EntityLiving) entity).setAttackTarget(null);
@@ -175,7 +175,7 @@ public class EngenderExplosion extends Explosion {
   }
   
   public void doExplosionB(boolean spawnParticles) {
-    this.world.playEvent((EntityPlayer)null, 3000, new BlockPos(this.explosionX, this.explosionY, this.explosionZ), 0);
+    this.world.playEvent(null, 3000, new BlockPos(this.explosionX, this.explosionY, this.explosionZ), 0);
     if (this.isSmoking && this.explosionSize > 0.0F)
       for (BlockPos blockpos : this.affectedBlockPositions) {
         IBlockState iblockstate = this.world.getBlockState(blockpos);
@@ -196,8 +196,8 @@ public class EngenderExplosion extends Explosion {
         d4 *= d7;
         d5 *= d7;
         if (this.world instanceof WorldServer) {
-          ((WorldServer)this.world).spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
-          ((WorldServer)this.world).spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
+          this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
+          this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
         } 
         if (iblockstate.getMaterial() != Material.AIR) {
           if (block.canDropFromExplosion(this))
@@ -218,7 +218,7 @@ public class EngenderExplosion extends Explosion {
   
   @Nullable
   public EntityLivingBase getExplosivePlacedBy() {
-    return (this.exploder == null) ? null : ((this.exploder instanceof EntityLivingBase) ? (EntityLivingBase)this.exploder : null);
+    return (this.exploder == null) ? null : ((this.exploder instanceof EntityLivingBase) ? this.exploder : null);
   }
   
   public void clearAffectedBlockPositions() {

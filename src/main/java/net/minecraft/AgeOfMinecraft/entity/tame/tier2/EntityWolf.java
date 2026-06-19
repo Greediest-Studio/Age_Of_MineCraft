@@ -62,12 +62,12 @@ public class EntityWolf extends EntityTameBase implements IJumpingMount, Light, 
     super(worldIn);
     setSize(0.6F, 0.8F);
     this.isOffensive = true;
-    this.tasks.addTask(1, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.0D, 15.0F, 4.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAICustomLeapAttack((EntityLiving)this, 0.4F, 0.75F, 0.8F, 0.5F, 4.0D, 24.0D, 3));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.0D, true));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 1.0D, 80));
-    this.tasks.addTask(9, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(1, new EntityAISwimming(this));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.0D, 15.0F, 4.0F));
+    this.tasks.addTask(3, new EntityAICustomLeapAttack(this, 0.4F, 0.75F, 0.8F, 0.5F, 4.0D, 24.0D, 3));
+    this.tasks.addTask(4, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    this.tasks.addTask(5, new EntityAIWander(this, 1.0D, 80));
+    this.tasks.addTask(9, new EntityAILookIdle(this));
     this.experienceValue = 3;
   }
   
@@ -174,7 +174,7 @@ public class EntityWolf extends EntityTameBase implements IJumpingMount, Light, 
       this.isShaking = true;
       this.timeWolfIsShaking = 0.0F;
       this.prevTimeWolfIsShaking = 0.0F;
-      this.world.setEntityState((Entity)this, (byte)8);
+      this.world.setEntityState(this, (byte)8);
     } 
     if (!this.world.isRemote && getAttackTarget() == null && isAngry())
       setAngry(false); 
@@ -254,7 +254,7 @@ public class EntityWolf extends EntityTameBase implements IJumpingMount, Light, 
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -277,11 +277,11 @@ public class EntityWolf extends EntityTameBase implements IJumpingMount, Light, 
   }
   
   public boolean isAngry() {
-    return (((Byte) this.dataManager.get(ANGRY) & 0x2) != 0);
+    return ((this.dataManager.get(ANGRY) & 0x2) != 0);
   }
   
   public void setAngry(boolean angry) {
-    byte b0 = (Byte) this.dataManager.get(ANGRY);
+    byte b0 = this.dataManager.get(ANGRY);
     if (angry) {
       this.dataManager.set(ANGRY, (byte) (b0 | 0x2));
     } else {
@@ -340,7 +340,7 @@ public class EntityWolf extends EntityTameBase implements IJumpingMount, Light, 
         this.motionX = (-2.0F * f * this.jumpPower);
         this.motionZ = (2.0F * f1 * this.jumpPower);
         this.jumpPower = 0.0F;
-        ForgeHooks.onLivingJump((EntityLivingBase)this);
+        ForgeHooks.onLivingJump(this);
       } 
       this.prevLimbSwingAmount = this.limbSwingAmount;
       double d5 = this.posX - this.prevPosX;

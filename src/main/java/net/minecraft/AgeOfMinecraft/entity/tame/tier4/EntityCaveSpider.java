@@ -51,7 +51,7 @@ public class EntityCaveSpider extends EntitySpider {
   }
   
   public EntityTameBase spawnBaby(EntityTameBase par1idleTimeable) {
-    return (EntityTameBase)new EntityCaveSpider(this.world);
+    return new EntityCaveSpider(this.world);
   }
   
   public int timesToConvert() {
@@ -79,12 +79,12 @@ public class EntityCaveSpider extends EntitySpider {
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return I18n.translateToLocal("entity." + str + ".cmm.name");
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name");
@@ -95,7 +95,7 @@ public class EntityCaveSpider extends EntitySpider {
   }
   
   public boolean isNotColliding() {
-    if (this.world.checkNoEntityCollision(getEntityBoundingBox(), (Entity)this) && this.world.getCollisionBoxes((Entity)this, getEntityBoundingBox()).isEmpty() && !this.world.containsAnyLiquid(getEntityBoundingBox())) {
+    if (this.world.checkNoEntityCollision(getEntityBoundingBox(), this) && this.world.getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && !this.world.containsAnyLiquid(getEntityBoundingBox())) {
       BlockPos blockpos = new BlockPos(this.posX, (getEntityBoundingBox()).minY, this.posZ);
       if (this.world.canBlockSeeSky(blockpos.up()))
         return false; 

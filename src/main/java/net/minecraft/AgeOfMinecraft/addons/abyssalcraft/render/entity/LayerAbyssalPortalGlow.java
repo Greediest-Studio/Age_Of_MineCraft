@@ -53,7 +53,7 @@ public class LayerAbyssalPortalGlow implements LayerRenderer<EntityLivingBase> {
     int j = c0 / 65536;
     OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, i / 1.0F, j / 1.0F);
     GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-    this.spiderRenderer.getMainModel().render((Entity)p_177148_1_, p_177148_2_, p_177148_3_, p_177148_5_, p_177148_6_, p_177148_7_, p_177148_8_);
+    this.spiderRenderer.getMainModel().render(p_177148_1_, p_177148_2_, p_177148_3_, p_177148_5_, p_177148_6_, p_177148_7_, p_177148_8_);
     this.spiderRenderer.setLightmap(p_177148_1_);
     GlStateManager.disableBlend();
     GlStateManager.enableAlpha();

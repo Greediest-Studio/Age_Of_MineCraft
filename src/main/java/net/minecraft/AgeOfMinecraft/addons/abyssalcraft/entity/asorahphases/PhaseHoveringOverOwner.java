@@ -49,10 +49,10 @@ public class PhaseHoveringOverOwner extends PhaseBaseFriendly {
       if (this.dragon.getOwner() != null) {
         this.targetLocation = new Vec3d((this.dragon.getOwner()).posX, Flying.clampFlightY((this.dragon.getOwner()).posY + 4.0D), (this.dragon.getOwner()).posZ);
       } else {
-        this.targetLocation = new Vec3d((Vec3i)this.dragon.world.getTopSolidOrLiquidBlock(WorldGenEndPodium.END_PODIUM_LOCATION));
+        this.targetLocation = new Vec3d(this.dragon.world.getTopSolidOrLiquidBlock(WorldGenEndPodium.END_PODIUM_LOCATION));
       }  
     if (this.targetLocation.squareDistanceTo(this.dragon.posX, this.dragon.posY, this.dragon.posZ) < 9.0D) {
-      ((PhaseBreathing)this.dragon.getPhaseManager().getPhase(PhaseListAsorah.SITTING_FLAMING)).resetFlameCount();
+      this.dragon.getPhaseManager().getPhase(PhaseListAsorah.SITTING_FLAMING).resetFlameCount();
       this.dragon.getPhaseManager().setPhase(PhaseListAsorah.SITTING_SCANNING);
     } 
   }

@@ -18,7 +18,7 @@ public class EntityAICreeperSwell extends EntityAIBase {
   
   public boolean shouldExecute() {
     EntityLivingBase entitylivingbase = this.swellingCreeper.getAttackTarget();
-    return ((this.swellingCreeper.getCreeperState() > 0 || (entitylivingbase != null && this.swellingCreeper.getDistanceSq((Entity)entitylivingbase) < 9.0D)) && this.swellingCreeper.getHealth() <= this.swellingCreeper.getMaxHealth() / 2.0F);
+    return ((this.swellingCreeper.getCreeperState() > 0 || (entitylivingbase != null && this.swellingCreeper.getDistanceSq(entitylivingbase) < 9.0D)) && this.swellingCreeper.getHealth() <= this.swellingCreeper.getMaxHealth() / 2.0F);
   }
   
   public void startExecuting() {
@@ -33,9 +33,9 @@ public class EntityAICreeperSwell extends EntityAIBase {
   public void updateTask() {
     if (this.creeperAttackTarget == null || (this.creeperAttackTarget instanceof EntityTameBase && ((EntityTameBase)this.creeperAttackTarget).getOwnerId() == this.swellingCreeper.getOwnerId())) {
       this.swellingCreeper.setCreeperState(-1);
-    } else if (this.swellingCreeper.getDistanceSq((Entity)this.creeperAttackTarget) > 49.0D) {
+    } else if (this.swellingCreeper.getDistanceSq(this.creeperAttackTarget) > 49.0D) {
       this.swellingCreeper.setCreeperState(-1);
-    } else if (!this.swellingCreeper.getEntitySenses().canSee((Entity)this.creeperAttackTarget)) {
+    } else if (!this.swellingCreeper.getEntitySenses().canSee(this.creeperAttackTarget)) {
       this.swellingCreeper.setCreeperState(-1);
     } else {
       this.swellingCreeper.setCreeperState(1);

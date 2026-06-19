@@ -50,10 +50,10 @@ public class LayerCustomElytra implements LayerRenderer<EntityTameBase> {
       } 
       GlStateManager.pushMatrix();
       GlStateManager.translate(0.0F, 0.0F, 0.125F);
-      this.modelElytra.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, (Entity)entitylivingbaseIn);
-      this.modelElytra.render((Entity)entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+      this.modelElytra.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entitylivingbaseIn);
+      this.modelElytra.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
       if (itemstack.isItemEnchanted())
-        LayerArmorBase.renderEnchantedGlint(this.renderPlayer, (EntityLivingBase)entitylivingbaseIn, (ModelBase)this.modelElytra, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale); 
+        LayerArmorBase.renderEnchantedGlint(this.renderPlayer, entitylivingbaseIn, this.modelElytra, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
       GlStateManager.disableBlend();
       GlStateManager.popMatrix();
     } 

@@ -29,7 +29,7 @@ public class ItemChickenItem extends ItemVanillaTier {
     entityliving.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
     entityliving.rotationYawHead = entityliving.rotationYaw;
     entityliving.renderYawOffset = entityliving.rotationYaw;
-    entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos((Entity)entityliving)), null);
+    entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), null);
     if (!worldIn.isRemote) {
       worldIn.spawnEntity(entityliving);
       int i = 5;

@@ -93,7 +93,7 @@ public class EntityParrot extends EntityTameBase implements EntityFlying, Light,
   public EntityParrot(World worldIn) {
     super(worldIn);
     setSize(0.3F, 0.7F);
-    this.moveHelper = (EntityMoveHelper)new EntityFlyHelper((EntityLiving)this);
+    this.moveHelper = new EntityFlyHelper(this);
   }
   
   public String getDescName() {
@@ -107,10 +107,10 @@ public class EntityParrot extends EntityTameBase implements EntityFlying, Light,
   }
   
   protected void initEntityAI() {
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.33D, 15.0F, 4.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.0D, true));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIWanderAvoidWaterFlying((EntityCreature)this, 1.0D));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.33D, 15.0F, 4.0F));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    this.tasks.addTask(3, new EntityAIWanderAvoidWaterFlying(this, 1.0D));
   }
   
   protected void applyEntityAttributes() {
@@ -125,7 +125,7 @@ public class EntityParrot extends EntityTameBase implements EntityFlying, Light,
     pathnavigateflying.setCanOpenDoors(true);
     pathnavigateflying.setCanFloat(true);
     pathnavigateflying.setCanEnterDoors(true);
-    return (PathNavigate)pathnavigateflying;
+    return pathnavigateflying;
   }
   
   public float getEyeHeight() {
@@ -133,7 +133,7 @@ public class EntityParrot extends EntityTameBase implements EntityFlying, Light,
   }
   
   public void onLivingUpdate() {
-    playMimicSound(this.world, (Entity)this);
+    playMimicSound(this.world, this);
     super.onLivingUpdate();
     calculateFlapping();
   }
@@ -158,7 +158,7 @@ public class EntityParrot extends EntityTameBase implements EntityFlying, Light,
         EntityLiving entityliving = list.get(worldIn.rand.nextInt(list.size()));
         if (!entityliving.isSilent()) {
           SoundEvent soundevent = MIMIC_SOUNDS.get(entityliving.getClass());
-          worldIn.playSound((EntityPlayer)null, p_192006_1_.posX, p_192006_1_.posY, p_192006_1_.posZ, soundevent, p_192006_1_.getSoundCategory(), 0.7F, getPitch(worldIn.rand));
+          worldIn.playSound(null, p_192006_1_.posX, p_192006_1_.posY, p_192006_1_.posZ, soundevent, p_192006_1_.getSoundCategory(), 0.7F, getPitch(worldIn.rand));
           return true;
         } 
       } 
@@ -186,7 +186,7 @@ public class EntityParrot extends EntityTameBase implements EntityFlying, Light,
   
   public static void playAmbientSound(World worldIn, Entity p_192005_1_) {
     if (!p_192005_1_.isSilent() && !playMimicSound(worldIn, p_192005_1_) && worldIn.rand.nextInt(200) == 0)
-      worldIn.playSound((EntityPlayer)null, p_192005_1_.posX, p_192005_1_.posY, p_192005_1_.posZ, getAmbientSound(worldIn.rand), p_192005_1_.getSoundCategory(), 1.0F, getPitch(worldIn.rand)); 
+      worldIn.playSound(null, p_192005_1_.posX, p_192005_1_.posY, p_192005_1_.posZ, getAmbientSound(worldIn.rand), p_192005_1_.getSoundCategory(), 1.0F, getPitch(worldIn.rand));
   }
   
   @Nullable
@@ -246,7 +246,7 @@ public class EntityParrot extends EntityTameBase implements EntityFlying, Light,
   }
   
   public int getVariant() {
-    return MathHelper.clamp((Integer) this.dataManager.get(VARIANT), 0, 4);
+    return MathHelper.clamp(this.dataManager.get(VARIANT), 0, 4);
   }
   
   public void setVariant(int p_191997_1_) {
@@ -278,34 +278,34 @@ public class EntityParrot extends EntityTameBase implements EntityFlying, Light,
   }
   
   static {
-    registerMimicSound((Class)EntityBlaze.class, SoundEvents.E_PARROT_IM_BLAZE);
-    registerMimicSound((Class)EntityCaveSpider.class, SoundEvents.E_PARROT_IM_SPIDER);
-    registerMimicSound((Class)EntityCreeper.class, SoundEvents.E_PARROT_IM_CREEPER);
-    registerMimicSound((Class)EntityElderGuardian.class, SoundEvents.E_PARROT_IM_ELDER_GUARDIAN);
-    registerMimicSound((Class)EntityDragon.class, SoundEvents.E_PARROT_IM_ENDERDRAGON);
-    registerMimicSound((Class)EntityEnderman.class, SoundEvents.E_PARROT_IM_ENDERMAN);
-    registerMimicSound((Class)EntityEndermite.class, SoundEvents.E_PARROT_IM_ENDERMITE);
-    registerMimicSound((Class)EntityEvoker.class, SoundEvents.E_PARROT_IM_EVOCATION_ILLAGER);
-    registerMimicSound((Class)EntityGhast.class, SoundEvents.E_PARROT_IM_GHAST);
-    registerMimicSound((Class)EntityHusk.class, SoundEvents.E_PARROT_IM_HUSK);
-    registerMimicSound((Class)EntityIllusionIllager.class, SoundEvents.E_PARROT_IM_ILLUSION_ILLAGER);
-    registerMimicSound((Class)EntityMagmaCube.class, SoundEvents.E_PARROT_IM_MAGMACUBE);
-    registerMimicSound((Class)EntityPigZombie.class, SoundEvents.E_PARROT_IM_ZOMBIE_PIGMAN);
-    registerMimicSound((Class)EntityPolarBear.class, SoundEvents.E_PARROT_IM_POLAR_BEAR);
-    registerMimicSound((Class)EntityShulker.class, SoundEvents.E_PARROT_IM_SHULKER);
-    registerMimicSound((Class)EntitySilverfish.class, SoundEvents.E_PARROT_IM_SILVERFISH);
-    registerMimicSound((Class)EntitySkeleton.class, SoundEvents.E_PARROT_IM_SKELETON);
-    registerMimicSound((Class)EntitySlime.class, SoundEvents.E_PARROT_IM_SLIME);
-    registerMimicSound((Class)EntitySpider.class, SoundEvents.E_PARROT_IM_SPIDER);
-    registerMimicSound((Class)EntityStray.class, SoundEvents.E_PARROT_IM_STRAY);
-    registerMimicSound((Class)EntityVex.class, SoundEvents.E_PARROT_IM_VEX);
-    registerMimicSound((Class)EntityVindicator.class, SoundEvents.E_PARROT_IM_VINDICATION_ILLAGER);
-    registerMimicSound((Class)EntityWitch.class, SoundEvents.E_PARROT_IM_WITCH);
-    registerMimicSound((Class)EntityWither.class, SoundEvents.E_PARROT_IM_WITHER);
-    registerMimicSound((Class)EntityWitherSkeleton.class, SoundEvents.E_PARROT_IM_WITHER_SKELETON);
-    registerMimicSound((Class)EntityWolf.class, SoundEvents.E_PARROT_IM_WOLF);
-    registerMimicSound((Class)EntityZombie.class, SoundEvents.E_PARROT_IM_ZOMBIE);
-    registerMimicSound((Class)EntityZombieVillager.class, SoundEvents.E_PARROT_IM_ZOMBIE_VILLAGER);
+    registerMimicSound(EntityBlaze.class, SoundEvents.E_PARROT_IM_BLAZE);
+    registerMimicSound(EntityCaveSpider.class, SoundEvents.E_PARROT_IM_SPIDER);
+    registerMimicSound(EntityCreeper.class, SoundEvents.E_PARROT_IM_CREEPER);
+    registerMimicSound(EntityElderGuardian.class, SoundEvents.E_PARROT_IM_ELDER_GUARDIAN);
+    registerMimicSound(EntityDragon.class, SoundEvents.E_PARROT_IM_ENDERDRAGON);
+    registerMimicSound(EntityEnderman.class, SoundEvents.E_PARROT_IM_ENDERMAN);
+    registerMimicSound(EntityEndermite.class, SoundEvents.E_PARROT_IM_ENDERMITE);
+    registerMimicSound(EntityEvoker.class, SoundEvents.E_PARROT_IM_EVOCATION_ILLAGER);
+    registerMimicSound(EntityGhast.class, SoundEvents.E_PARROT_IM_GHAST);
+    registerMimicSound(EntityHusk.class, SoundEvents.E_PARROT_IM_HUSK);
+    registerMimicSound(EntityIllusionIllager.class, SoundEvents.E_PARROT_IM_ILLUSION_ILLAGER);
+    registerMimicSound(EntityMagmaCube.class, SoundEvents.E_PARROT_IM_MAGMACUBE);
+    registerMimicSound(EntityPigZombie.class, SoundEvents.E_PARROT_IM_ZOMBIE_PIGMAN);
+    registerMimicSound(EntityPolarBear.class, SoundEvents.E_PARROT_IM_POLAR_BEAR);
+    registerMimicSound(EntityShulker.class, SoundEvents.E_PARROT_IM_SHULKER);
+    registerMimicSound(EntitySilverfish.class, SoundEvents.E_PARROT_IM_SILVERFISH);
+    registerMimicSound(EntitySkeleton.class, SoundEvents.E_PARROT_IM_SKELETON);
+    registerMimicSound(EntitySlime.class, SoundEvents.E_PARROT_IM_SLIME);
+    registerMimicSound(EntitySpider.class, SoundEvents.E_PARROT_IM_SPIDER);
+    registerMimicSound(EntityStray.class, SoundEvents.E_PARROT_IM_STRAY);
+    registerMimicSound(EntityVex.class, SoundEvents.E_PARROT_IM_VEX);
+    registerMimicSound(EntityVindicator.class, SoundEvents.E_PARROT_IM_VINDICATION_ILLAGER);
+    registerMimicSound(EntityWitch.class, SoundEvents.E_PARROT_IM_WITCH);
+    registerMimicSound(EntityWither.class, SoundEvents.E_PARROT_IM_WITHER);
+    registerMimicSound(EntityWitherSkeleton.class, SoundEvents.E_PARROT_IM_WITHER_SKELETON);
+    registerMimicSound(EntityWolf.class, SoundEvents.E_PARROT_IM_WOLF);
+    registerMimicSound(EntityZombie.class, SoundEvents.E_PARROT_IM_ZOMBIE);
+    registerMimicSound(EntityZombieVillager.class, SoundEvents.E_PARROT_IM_ZOMBIE_VILLAGER);
   }
   
   public static void registerMimicSound(Class<? extends Entity> cls, SoundEvent sound) {

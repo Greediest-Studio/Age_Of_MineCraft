@@ -48,13 +48,13 @@ public class EntitySilverfish extends EntityTameBase implements Light, Tiny {
       setSize(0.4F, 0.3F);
     } 
     this.isOffensive = true;
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIOpenDoor((EntityLiving)this, true));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(0, new EntityAIOpenDoor(this, true));
     this.tasks.addTask(1, this.summonSilverfish = new AISummonSilverfish(this));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.2D, 24.0F, 6.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.2D, true));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 1.0D, 80));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.2D, 24.0F, 6.0F));
+    this.tasks.addTask(3, new EntityAIFriendlyAttackMelee(this, 1.2D, true));
+    this.tasks.addTask(5, new EntityAIWander(this, 1.0D, 80));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
     this.experienceValue = 1;
   }
   
@@ -98,12 +98,12 @@ public class EntitySilverfish extends EntityTameBase implements Light, Tiny {
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return I18n.translateToLocal("entity." + str + ".cmm.name");
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name");
@@ -181,7 +181,7 @@ public class EntitySilverfish extends EntityTameBase implements Light, Tiny {
         EntitySilverfish mob = new EntitySilverfish(this.world);
         mob.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
         mob.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
-        this.world.spawnEntity((Entity)mob);
+        this.world.spawnEntity(mob);
         mob.setOwnerId(getOwnerId());
       }  
   }
@@ -229,7 +229,7 @@ public class EntitySilverfish extends EntityTameBase implements Light, Tiny {
       if (this.lookForFriends <= 0) {
         World world = this.silverfish.world;
         Random random = this.silverfish.getRNG();
-        BlockPos blockpos = new BlockPos((Entity)this.silverfish);
+        BlockPos blockpos = new BlockPos(this.silverfish);
         int i;
         for (i = 0; i <= 5 && i >= -5; i = (i <= 0) ? (1 - i) : (0 - i)) {
           int j;

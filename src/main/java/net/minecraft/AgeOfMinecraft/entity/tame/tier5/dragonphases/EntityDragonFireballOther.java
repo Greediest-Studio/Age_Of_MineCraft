@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier5.dragonphases;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
@@ -41,8 +40,8 @@ public class EntityDragonFireballOther extends EntityDragonFireball {
     if (!this.world.isRemote && movingObject.entityHit != null && this.shootingEntity != null && movingObject.entityHit != this.shootingEntity) {
       if (movingObject.entityHit instanceof EntityLivingBase && this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase && !false) {
         copyLocationAndAnglesFrom(movingObject.entityHit);
-        ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)movingObject.entityHit, " was destroyed by ", DamageSource.causeFireballDamage((EntityFireball)this, (Entity)this.shootingEntity), (float)((EntityTameBase)this.shootingEntity).getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue());
-        EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false);
+        ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)movingObject.entityHit, " was destroyed by ", DamageSource.causeFireballDamage(this, this.shootingEntity), (float) this.shootingEntity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue());
+        EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false);
       } 
       if (this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase && movingObject.entityHit instanceof EntityLivingBase && false) {
         ((EntityLivingBase)movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 400, 3));
@@ -75,13 +74,13 @@ public class EntityDragonFireballOther extends EntityDragonFireball {
       entityareaeffectcloud.setRadiusPerTick((3.0F - entityareaeffectcloud.getRadius()) / entityareaeffectcloud.getDuration());
       if (!list.isEmpty())
         for (EntityLivingBase entitylivingbase : list) {
-          if (this.shootingEntity != null && getDistanceSq((Entity)entitylivingbase) < 64.0D)
+          if (this.shootingEntity != null && getDistanceSq(entitylivingbase) < 64.0D)
             entityareaeffectcloud.setPosition(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ); 
         }  
       this.world.playEvent(2006, new BlockPos(this.posX, this.posY, this.posZ), 0);
       this.world.spawnEntity(entityareaeffectcloud);
       if (this.shootingEntity != null)
-        EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false); 
+        EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false);
       setDead();
     } 
     if (!this.world.isRemote && movingObject.entityHit == null) {
@@ -109,13 +108,13 @@ public class EntityDragonFireballOther extends EntityDragonFireball {
       entityareaeffectcloud.setRadiusPerTick((3.0F - entityareaeffectcloud.getRadius()) / entityareaeffectcloud.getDuration());
       if (!list.isEmpty())
         for (EntityLivingBase entitylivingbase : list) {
-          if (this.shootingEntity != null && getDistanceSq((Entity)entitylivingbase) < 64.0D)
+          if (this.shootingEntity != null && getDistanceSq(entitylivingbase) < 64.0D)
             entityareaeffectcloud.setPosition(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ); 
         }  
       this.world.playEvent(2006, new BlockPos(this.posX, this.posY, this.posZ), 0);
       this.world.spawnEntity(entityareaeffectcloud);
       if (this.shootingEntity != null)
-        EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false); 
+        EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false);
       setDead();
     } 
   }
@@ -126,7 +125,7 @@ public class EntityDragonFireballOther extends EntityDragonFireball {
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (this.shootingEntity != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive() && !false)
-          onImpact(new RayTraceResult((Entity)entity1)); 
+          onImpact(new RayTraceResult(entity1));
       }  
   }
 }

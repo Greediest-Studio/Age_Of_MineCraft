@@ -131,11 +131,11 @@ public class EngenderMusicEvent extends MusicTicker {
     this.ticks++;
     if (this.mc.player.world.loadedEntityList.size() != this.entities || this.ticks % 160 == 0) {
       for (Entity entity : this.mc.player.world.loadedEntityList) {
-        if (!this.entityList.contains(entity) && (!entity.isNonBoss() || (entity instanceof EntityTameBase && ((EntityTameBase)entity).isABoss()) || (entity instanceof EntityBase && ((EntityBase)entity).playMusic() != 0)) && entity.ticksExisted > 10 && entity.isEntityAlive() && (!entity.isOnSameTeam((Entity)this.mc.player) || entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.cameos.EntitySans) && !entity.isSneaking() && !entity.isInvisibleToPlayer((EntityPlayer)this.mc.player)) {
+        if (!this.entityList.contains(entity) && (!entity.isNonBoss() || (entity instanceof EntityTameBase && ((EntityTameBase)entity).isABoss()) || (entity instanceof EntityBase && ((EntityBase)entity).playMusic() != 0)) && entity.ticksExisted > 10 && entity.isEntityAlive() && (!entity.isOnSameTeam(this.mc.player) || entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.cameos.EntitySans) && !entity.isSneaking() && !entity.isInvisibleToPlayer(this.mc.player)) {
           this.entityList.add(entity);
           continue;
         } 
-        if (this.entityList.contains(entity) && (entity.isDead || entity.isSneaking() || entity.isInvisibleToPlayer((EntityPlayer)this.mc.player)))
+        if (this.entityList.contains(entity) && (entity.isDead || entity.isSneaking() || entity.isInvisibleToPlayer(this.mc.player)))
           this.entityList.remove(entity); 
       } 
       if (this.entityList.isEmpty())
@@ -180,11 +180,11 @@ public class EngenderMusicEvent extends MusicTicker {
           EngenderMod.console("Music ID " + this.currentMusic.musicID + " was added to musicList");
         } else {
           EngenderMod.console("Music ID " + ((EngenderMusic)this.musicList.get(0)).musicID + " was removed from musicList");
-          this.mc.getSoundHandler().stopSound((ISound)this.musicList.get(0));
+          this.mc.getSoundHandler().stopSound(this.musicList.get(0));
           this.musicList.add(this.currentMusic);
           EngenderMod.console("Music ID " + this.currentMusic.musicID + " was added to musicList");
         } 
-        this.mc.getSoundHandler().playSound((ISound)this.currentMusic);
+        this.mc.getSoundHandler().playSound(this.currentMusic);
       } else {
         EngenderMod.console("Music ID " + this.currentMusic.musicID + " was resumed");
       } 
@@ -195,7 +195,7 @@ public class EngenderMusicEvent extends MusicTicker {
   public void stopMusic(EngenderMusic music) {
     if (music != null) {
       EngenderMod.console("Music ID " + music.musicID + " was removed from musicList");
-      this.mc.getSoundHandler().stopSound((ISound)music);
+      this.mc.getSoundHandler().stopSound(music);
     } 
   }
   

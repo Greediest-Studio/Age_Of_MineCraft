@@ -24,7 +24,7 @@ public abstract class EntityAbstractIllagers extends EntityTameBase {
   
   @SideOnly(Side.CLIENT)
   protected boolean isAggressive(int mask) {
-    int i = (Byte) this.dataManager.get(AGGRESSIVE);
+    int i = this.dataManager.get(AGGRESSIVE);
     return ((i & mask) != 0);
   }
   

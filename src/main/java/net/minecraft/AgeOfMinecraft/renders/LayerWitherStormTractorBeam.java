@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class LayerWitherStormTractorBeam implements LayerRenderer<EntityLivingBase> {
   private static final ResourceLocation witherTextures = new ResourceLocation("ageofminecraft", "textures/entities/tractor_beam.png");
   
-  private final ModelBase modelmatter = (ModelBase)new ModelTractorBeam();
+  private final ModelBase modelmatter = new ModelTractorBeam();
   
   private final RenderWitherStormHead witherRenderer;
   
@@ -44,7 +44,7 @@ public class LayerWitherStormTractorBeam implements LayerRenderer<EntityLivingBa
       GlStateManager.color(f1, f1, f1, 1.0F);
       GlStateManager.disableLighting();
       GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-      this.modelmatter.render((Entity)p_177214_1_, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+      this.modelmatter.render(p_177214_1_, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
       GlStateManager.matrixMode(5890);
       GlStateManager.loadIdentity();
       GlStateManager.matrixMode(5888);

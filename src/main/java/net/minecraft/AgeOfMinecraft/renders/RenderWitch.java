@@ -34,11 +34,11 @@ public class RenderWitch extends RenderLiving<EntityWitch> {
   
   public RenderWitch(RenderManager renderManagerIn) {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.5F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
     addLayer(new LayerCustomHeadEngender(regularmodel.villagerHead, cmmmodel.Head));
     addLayer(new LayerHeldItemWitch(this));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    
+    addLayer(new LayerMobCape(this));
     addLayer(this.helditems);
   }
   
@@ -74,7 +74,7 @@ public class RenderWitch extends RenderLiving<EntityWitch> {
   }
   
   protected void preRenderCallback(EntityWitch entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel;
+    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
     this.helditems = new LayerHeldItemCMM(EngenderConfig.mobs.useMobTalkerModels ? cmmmodel.RArm : null, EngenderConfig.mobs.useMobTalkerModels ? cmmmodel.LArm : null);
     float f = 0.9375F;
     if (!EngenderConfig.mobs.useMobTalkerModels) {

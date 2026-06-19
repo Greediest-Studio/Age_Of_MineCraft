@@ -28,8 +28,8 @@ public class RenderIllusioner extends RenderLiving<EntityIllusioner> {
   private static final ResourceLocation DISGUISE_EVOKER = new ResourceLocation("textures/entity/illager/evoker.png");
   
   public RenderIllusioner(RenderManager p_i47477_1_) {
-    super(p_i47477_1_, (ModelBase)new ModelIllager(0.0F, 0.0F, 64, 64), 0.5F);
-    addLayer((LayerRenderer)new LayerHeldItem((RenderLivingBase)this) {
+    super(p_i47477_1_, new ModelIllager(0.0F, 0.0F, 64, 64), 0.5F);
+    addLayer((LayerRenderer)new LayerHeldItem(this) {
           public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
             if (((EntityIllusioner)entitylivingbaseIn).isSpellcasting() || ((EntityIllusioner)entitylivingbaseIn).isArmsRaised())
               super.doRenderLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale); 

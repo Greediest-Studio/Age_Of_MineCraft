@@ -44,7 +44,7 @@ public class PhaseApproachOwner extends PhaseBaseFriendly {
       BlockPos blockpos = this.dragon.world.getTopSolidOrLiquidBlock(WorldGenEndPodium.END_PODIUM_LOCATION);
       EntityPlayer entityplayer = this.dragon.world.getNearestAttackablePlayer(blockpos, 128.0D, 128.0D);
       if (this.dragon.getOwner() != null)
-        blockpos = new BlockPos((Entity)this.dragon.getOwner()); 
+        blockpos = new BlockPos(this.dragon.getOwner());
       if (entityplayer != null && entityplayer != this.dragon.getOwner()) {
         Vec3d vec3d = (new Vec3d(entityplayer.posX, 0.0D, entityplayer.posZ)).normalize();
         j = this.dragon.getNearestPpIdx(-vec3d.x * 40.0D, 105.0D, -vec3d.z * 40.0D);

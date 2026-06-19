@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier3;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
@@ -47,9 +46,9 @@ public class EntityTippedArrowOther extends EntityTippedArrow {
       if (getIsCritical())
         i += this.rand.nextInt(i / 2 + 2); 
       if (this.shootingEntity == null) {
-        damagesource = DamageSource.causeArrowDamage((EntityArrow)this, (Entity)this);
+        damagesource = DamageSource.causeArrowDamage(this, this);
       } else {
-        damagesource = DamageSource.causeArrowDamage((EntityArrow)this, (Entity)this.shooter);
+        damagesource = DamageSource.causeArrowDamage(this, this.shooter);
       } 
       if (entity instanceof EntityLivingBase && this.shooter != null && entity.isEntityAlive() && this.shooter instanceof EntityTameBase) {
         ((EntityTameBase)this.shooter).inflictEngenderMobDamage((EntityLivingBase)entity, " was shot by ", damagesource, i);
@@ -87,7 +86,7 @@ public class EntityTippedArrowOther extends EntityTippedArrow {
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (this.shooter != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive())
-          onHit(new RayTraceResult((Entity)entity1)); 
+          onHit(new RayTraceResult(entity1));
       }  
   }
 }

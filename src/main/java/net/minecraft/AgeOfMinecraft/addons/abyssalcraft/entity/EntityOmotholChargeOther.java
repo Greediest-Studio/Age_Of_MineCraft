@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
@@ -62,8 +61,8 @@ public class EntityOmotholChargeOther extends EntityFireball {
         if (list != null && !list.isEmpty())
             for (EntityLivingBase entity1 : list) {
                 if (entity1 != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart) {
-                    this.shootingEntity.attackEntityAsMob((Entity) entity1);
-                    applyEnchantments(this.shootingEntity, (Entity) entity1);
+                    this.shootingEntity.attackEntityAsMob(entity1);
+                    applyEnchantments(this.shootingEntity, entity1);
                     setDead();
                 }
             }
@@ -73,9 +72,9 @@ public class EntityOmotholChargeOther extends EntityFireball {
           if (!result.entityHit.isImmuneToFire() && result.entityHit instanceof net.minecraft.entity.passive.EntityAnimal)
             result.entityHit.setFire(20); 
           if (!false) {
-            ((EntityTameBase)this.shootingEntity).attackEntityAsMob(result.entityHit);
+            this.shootingEntity.attackEntityAsMob(result.entityHit);
             applyEnchantments(this.shootingEntity, result.entityHit);
-            ((EntityLivingBase)result.entityHit).attackEntityFrom(DamageSource.causeFireballDamage(this, (Entity)this.shootingEntity).setDamageBypassesArmor(), 10.0F);
+            result.entityHit.attackEntityFrom(DamageSource.causeFireballDamage(this, this.shootingEntity).setDamageBypassesArmor(), 10.0F);
             if (!result.entityHit.isImmuneToFire())
               result.entityHit.setFire(20); 
             if (b0 > 0 && result.entityHit instanceof EntityLivingBase) {
@@ -87,7 +86,7 @@ public class EntityOmotholChargeOther extends EntityFireball {
           } 
         } 
         if (this.shootingEntity != null)
-          EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 3.0F, false, false); 
+          EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 3.0F, false, false);
         List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(8.0D));
         EntityAreaEffectCloudOther entityareaeffectcloud = new EntityAreaEffectCloudOther(this.world, this.posX, this.posY, this.posZ);
         if (this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase)
@@ -95,7 +94,7 @@ public class EntityOmotholChargeOther extends EntityFireball {
         entityareaeffectcloud.addEffect(new PotionEffect(MobEffects.SLOWNESS, 20 * b0, this.world.getDifficulty().getId()));
         entityareaeffectcloud.setRadius(2.0F);
         entityareaeffectcloud.setDuration(60);
-        this.world.spawnEntity((Entity)entityareaeffectcloud);
+        this.world.spawnEntity(entityareaeffectcloud);
       } 
     } 
   }
@@ -106,7 +105,7 @@ public class EntityOmotholChargeOther extends EntityFireball {
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive())
-          onImpact(new RayTraceResult((Entity)entity1)); 
+          onImpact(new RayTraceResult(entity1));
       }  
   }
 }

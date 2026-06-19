@@ -63,7 +63,7 @@ public class EntitySquid extends EntityTameBase implements Light, Animal {
     this.rand.setSeed((1 + getEntityId()));
     this.rotationVelocity = 1.0F / (this.rand.nextFloat() + 1.0F) * 0.2F;
     this.tasks.addTask(0, new AIMoveRandom(this));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
     this.experienceValue = 2;
   }
   
@@ -152,7 +152,7 @@ public class EntitySquid extends EntityTameBase implements Light, Animal {
         this.squidRotation = (float)(this.squidRotation - 6.283185307179586D);
         if (this.rand.nextInt(10) == 0)
           this.rotationVelocity = 1.0F / (this.rand.nextFloat() + 1.0F) * 0.2F; 
-        this.world.setEntityState((Entity)this, (byte)19);
+        this.world.setEntityState(this, (byte)19);
       }  
     if (isAIDisabled()) {
       this.motionX = 0.0D;
@@ -220,7 +220,7 @@ public class EntitySquid extends EntityTameBase implements Light, Animal {
           this.motionY += (0.05D * (getActivePotionEffect(MobEffects.LEVITATION).getAmplifier() + 1) - this.motionY) * 0.2D;
         } else {
           blockpos$pooledmutableblockpos.setPos(this.posX, 0.0D, this.posZ);
-          if (!this.world.isRemote || (this.world.isBlockLoaded((BlockPos)blockpos$pooledmutableblockpos) && this.world.getChunk((BlockPos)blockpos$pooledmutableblockpos).isLoaded())) {
+          if (!this.world.isRemote || (this.world.isBlockLoaded(blockpos$pooledmutableblockpos) && this.world.getChunk(blockpos$pooledmutableblockpos).isLoaded())) {
             if (!hasNoGravity())
               this.motionY -= 0.08D; 
           } else if (this.posY > 0.0D) {
@@ -260,7 +260,7 @@ public class EntitySquid extends EntityTameBase implements Light, Animal {
   }
   
   public boolean handleLavaMovement() {
-    return this.world.checkNoEntityCollision(getEntityBoundingBox(), (Entity)this);
+    return this.world.checkNoEntityCollision(getEntityBoundingBox(), this);
   }
   
   public int getTalkInterval() {
@@ -296,7 +296,7 @@ public class EntitySquid extends EntityTameBase implements Light, Animal {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -314,8 +314,8 @@ public class EntitySquid extends EntityTameBase implements Light, Animal {
     }
     
     public void updateTask() {
-      if (this.squid.isEntityAlive() && this.squid.getAttackTarget() != null && this.squid.getAttackTarget().isEntityAlive() && !this.squid.isChild() && !false && this.squid.getDistanceSq((Entity)this.squid.getAttackTarget()) < (this.squid.width * this.squid.width + (this.squid.getAttackTarget()).width * (this.squid.getAttackTarget()).width) + 4.0D && (this.squid.ticksExisted + this.squid.getEntityId()) % 20 == 0)
-        this.squid.attackEntityAsMob((Entity)this.squid.getAttackTarget()); 
+      if (this.squid.isEntityAlive() && this.squid.getAttackTarget() != null && this.squid.getAttackTarget().isEntityAlive() && !this.squid.isChild() && !false && this.squid.getDistanceSq(this.squid.getAttackTarget()) < (this.squid.width * this.squid.width + (this.squid.getAttackTarget()).width * (this.squid.getAttackTarget()).width) + 4.0D && (this.squid.ticksExisted + this.squid.getEntityId()) % 20 == 0)
+        this.squid.attackEntityAsMob(this.squid.getAttackTarget());
       int i = this.squid.getIdleTime();
       if (i > 100) {
         this.squid.setMovementVector(0.0F, 0.0F, 0.0F);
@@ -335,7 +335,7 @@ public class EntitySquid extends EntityTameBase implements Light, Animal {
         float f2 = (float)(d11 / fl2 * 0.2D + this.squid.motionY);
         float f3 = (float)(d21 / fl2 * 0.2D + this.squid.motionZ);
         this.squid.setMovementVector(f1, f2, f3);
-      } else if (this.squid.getOwner() != null && this.squid.getDistanceSq((Entity)this.squid.getOwner()) > 128.0D && this.squid.isInWater() && this.squid.hasMovementVector()) {
+      } else if (this.squid.getOwner() != null && this.squid.getDistanceSq(this.squid.getOwner()) > 128.0D && this.squid.isInWater() && this.squid.hasMovementVector()) {
         double d01 = (this.squid.getOwner()).posX - this.squid.posX;
         double d11 = (this.squid.getOwner()).posY - this.squid.posY;
         double d21 = (this.squid.getOwner()).posZ - this.squid.posZ;

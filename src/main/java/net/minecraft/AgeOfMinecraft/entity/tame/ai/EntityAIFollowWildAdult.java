@@ -31,7 +31,7 @@ public class EntityAIFollowWildAdult extends EntityAIBase {
     double d0 = Double.MAX_VALUE;
     for (EntityTameBase entityanimal1 : list) {
       if (entityanimal1.getGrowingAge() >= 0 && this.childAnimal.getClass() == entityanimal1.getClass() && entityanimal1.isWild() && entityanimal1.getOwnerId() == null) {
-        double d1 = this.childAnimal.getDistanceSq((Entity)entityanimal1);
+        double d1 = this.childAnimal.getDistanceSq(entityanimal1);
         if (d1 <= d0) {
           d0 = d1;
           entityanimal = entityanimal1;
@@ -55,7 +55,7 @@ public class EntityAIFollowWildAdult extends EntityAIBase {
       return false; 
     if (!this.parentAnimal.isEntityAlive())
       return false; 
-    double d0 = this.childAnimal.getDistanceSq((Entity)this.parentAnimal);
+    double d0 = this.childAnimal.getDistanceSq(this.parentAnimal);
     return (d0 >= 16.0D && d0 <= 256.0D);
   }
   
@@ -70,7 +70,7 @@ public class EntityAIFollowWildAdult extends EntityAIBase {
   public void updateTask() {
     if (--this.delayCounter <= 0) {
       this.delayCounter = 20;
-      this.childAnimal.getNavigator().tryMoveToEntityLiving((Entity)this.parentAnimal, this.moveSpeed);
+      this.childAnimal.getNavigator().tryMoveToEntityLiving(this.parentAnimal, this.moveSpeed);
     } 
   }
 }

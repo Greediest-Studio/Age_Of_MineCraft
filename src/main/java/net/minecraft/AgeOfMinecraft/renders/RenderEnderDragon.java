@@ -31,17 +31,17 @@ public class RenderEnderDragon extends RenderLiving<EntityEnderDragon> {
   
   private static final ResourceLocation DRAGON_TEXTURES = new ResourceLocation("textures/entity/enderdragon/dragon.png");
   
-  private final ModelBase modelEnderCrystalNoBase = (ModelBase)new ModelEnderCrystal(0.0F, false);
+  private final ModelBase modelEnderCrystalNoBase = new ModelEnderCrystal(0.0F, false);
   
   protected ModelEnderDragon modelDragon;
   
   public RenderEnderDragon(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)new ModelEnderDragon(0.0F), 8.0F);
+    super(renderManagerIn, new ModelEnderDragon(0.0F), 8.0F);
     this.modelDragon = (ModelEnderDragon)this.mainModel;
     addLayer(new LayerEnderDragonEyes(this));
     addLayer(new LayerEnderDragonDeath());
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
-    addLayer(new LayerLearningBook(this));
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
+    
   }
   
   protected void applyRotations(EntityEnderDragon bat, float p_77043_2_, float p_77043_3_, float partialTicks) {
@@ -54,7 +54,7 @@ public class RenderEnderDragon extends RenderLiving<EntityEnderDragon> {
   
   protected void renderModel(EntityEnderDragon entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
     boolean flag = isVisible(entitylivingbaseIn);
-    boolean flag1 = (!flag && !entitylivingbaseIn.isInvisibleToPlayer((EntityPlayer)(Minecraft.getMinecraft()).player));
+    boolean flag1 = (!flag && !entitylivingbaseIn.isInvisibleToPlayer((Minecraft.getMinecraft()).player));
     if (flag || flag1) {
       if (flag1)
         GlStateManager.enableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL); 
@@ -64,19 +64,19 @@ public class RenderEnderDragon extends RenderLiving<EntityEnderDragon> {
         GlStateManager.enableAlpha();
         GlStateManager.alphaFunc(516, f);
         bindTexture(DRAGON_EXPLODING_TEXTURES);
-        this.mainModel.render((Entity)entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+        this.mainModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
         GlStateManager.alphaFunc(516, 0.1F);
         GlStateManager.depthFunc(514);
       } 
       bindEntityTexture(entitylivingbaseIn);
-      this.mainModel.render((Entity)entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+      this.mainModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
       if (entitylivingbaseIn.hurtTime > 0) {
         GlStateManager.depthFunc(514);
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.color(1.0F, 0.0F, 0.0F, 0.5F);
-        this.mainModel.render((Entity)entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+        this.mainModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
         GlStateManager.depthFunc(515);
@@ -111,7 +111,7 @@ public class RenderEnderDragon extends RenderLiving<EntityEnderDragon> {
         GlStateManager.enableColorMaterial();
         GlStateManager.enableOutlineMode(getTeamColor(entity));
       } 
-      this.modelEnderCrystalNoBase.render((Entity)entity, 0.0F, f * 3.0F, f1 * 0.2F, 0.0F, 0.0F, 0.0625F);
+      this.modelEnderCrystalNoBase.render(entity, 0.0F, f * 3.0F, f1 * 0.2F, 0.0F, 0.0F, 0.0625F);
       if (this.renderOutlines) {
         GlStateManager.disableOutlineMode();
         GlStateManager.disableColorMaterial();

@@ -37,7 +37,7 @@ public class LayerWitherStormEyes implements LayerRenderer<EntityLivingBase> {
     OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, i / 1.0F, j / 1.0F);
     GlStateManager.enableLighting();
     GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-    this.endermanRenderer.getMainModel().render((Entity)p_177201_1_, p_177201_2_, p_177201_3_, p_177201_5_, p_177201_6_, p_177201_7_, p_177201_8_);
+    this.endermanRenderer.getMainModel().render(p_177201_1_, p_177201_2_, p_177201_3_, p_177201_5_, p_177201_6_, p_177201_7_, p_177201_8_);
     this.endermanRenderer.setLightmap(p_177201_1_);
     GlStateManager.disableBlend();
     GlStateManager.enableAlpha();

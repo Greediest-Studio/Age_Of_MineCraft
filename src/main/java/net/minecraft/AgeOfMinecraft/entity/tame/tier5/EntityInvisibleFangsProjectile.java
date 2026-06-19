@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier5;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
@@ -54,7 +53,7 @@ public class EntityInvisibleFangsProjectile extends EntitySmallFireball {
   protected void onImpact(RayTraceResult result) {
     if (this.ticksExisted > 40 && !this.world.isRemote && this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase && result.entityHit != null && result.entityHit instanceof EntityLivingBase)
       if (!false) {
-        ((EntityTameBase)this.shootingEntity).attackEntityAsMob(this.targetEntity);
+        this.shootingEntity.attackEntityAsMob(this.targetEntity);
         setDead();
       }  
   }
@@ -84,13 +83,13 @@ public class EntityInvisibleFangsProjectile extends EntitySmallFireball {
     setInvisible(true);
     if (!this.world.isRemote && this.shootingEntity != null && this.targetEntity != null && this.ticksExisted > 2) {
       EntityEvokerFangOther entityevokerfangs = new EntityEvokerFangOther(this.world, this.posX, this.posY, this.posZ, (float)MathHelper.atan2(this.targetEntity.posZ - this.posZ, this.targetEntity.posX - this.posX), 5, (this.shootingEntity != null) ? this.shootingEntity : null);
-      this.world.spawnEntity((Entity)entityevokerfangs);
+      this.world.spawnEntity(entityevokerfangs);
     } 
     if (this.shootingEntity != null) {
       List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox(), Predicates.and(EntitySelectors.NOT_SPECTATING));
       if (list1 != null && !list1.isEmpty())
           for (EntityLivingBase entity1 : list1) {
-              if (getDistanceSq((Entity) entity1) < 0.1D && entity1 != null && entity1.isEntityAlive() && entity1 == this.targetEntity)
+              if (getDistanceSq(entity1) < 0.1D && entity1 != null && entity1.isEntityAlive() && entity1 == this.targetEntity)
                   setDead();
           }
     } 

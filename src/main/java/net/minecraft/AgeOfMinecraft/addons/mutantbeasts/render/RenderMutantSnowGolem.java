@@ -30,7 +30,7 @@ public class RenderMutantSnowGolem extends RenderLiving<EntityMutantSnowGolem> {
   private static final ResourceLocation Anti_TEXTURE = new ResourceLocation("ageofminecraft", "textures/entities/mutant/anti/anti_mutant_snow_golem.png");
   
   public RenderMutantSnowGolem(RenderManager manager) {
-    super(manager, (ModelBase)new ModelMutantSnowGolem(), 0.7F);
+    super(manager, new ModelMutantSnowGolem(), 0.7F);
     addLayer(new GlowLayer());
     addLayer(new ThrownBlockLayer());
   }
@@ -62,7 +62,7 @@ public class RenderMutantSnowGolem extends RenderLiving<EntityMutantSnowGolem> {
     super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
     if (!entitylivingbaseIn.isInvisible() && entitylivingbaseIn.isPumpkinEquipped()) {
       bindTexture(PUMPKIN_TEXTURE);
-      this.mainModel.render((Entity)entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+      this.mainModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
     } 
   }
   
@@ -82,7 +82,7 @@ public class RenderMutantSnowGolem extends RenderLiving<EntityMutantSnowGolem> {
         float f2 = MathHelper.cos(f * 0.15F);
         GlStateManager.color(1.0F, 0.8F + 0.05F * f2, 0.15F + 0.2F * f1, 1.0F);
         (Minecraft.getMinecraft()).entityRenderer.setupFogColor(true);
-        RenderMutantSnowGolem.this.mainModel.render((Entity)entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+        RenderMutantSnowGolem.this.mainModel.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
         (Minecraft.getMinecraft()).entityRenderer.setupFogColor(false);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         RenderMutantSnowGolem.this.setLightmap(entityIn);

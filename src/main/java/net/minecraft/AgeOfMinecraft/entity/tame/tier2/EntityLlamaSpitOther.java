@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier2;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import java.util.UUID;
@@ -52,9 +51,9 @@ public class EntityLlamaSpitOther extends EntityLlamaSpit {
   public void onHit(RayTraceResult movingObject) {
     if (!this.world.isRemote && movingObject.entityHit != null)
       if (movingObject.entityHit != this.owner && movingObject.entityHit instanceof EntityLivingBase && (!false || (movingObject.entityHit instanceof net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase && false && this.owner.getFakeHealth() > 0.0F)) && movingObject.entityHit != null && this.owner != null && movingObject.entityHit != this.owner) {
-        this.owner.inflictEngenderMobDamage((EntityLivingBase)movingObject.entityHit, " was spat on by ", DamageSource.causeThrownDamage((Entity)this.owner, (Entity)this), 1.0F);
-        if (((EntityLivingBase)movingObject.entityHit).isNonBoss())
-          ((EntityLivingBase)movingObject.entityHit).knockBack((Entity)this, 0.75F, MathHelper.sin(this.owner.rotationYawHead * 0.017453292F), -MathHelper.cos(this.owner.rotationYawHead * 0.017453292F)); 
+        this.owner.inflictEngenderMobDamage((EntityLivingBase)movingObject.entityHit, " was spat on by ", DamageSource.causeThrownDamage(this.owner, this), 1.0F);
+        if (movingObject.entityHit.isNonBoss())
+          ((EntityLivingBase)movingObject.entityHit).knockBack(this, 0.75F, MathHelper.sin(this.owner.rotationYawHead * 0.017453292F), -MathHelper.cos(this.owner.rotationYawHead * 0.017453292F));
         if (!this.world.isRemote)
           setDead(); 
       }  
@@ -71,7 +70,7 @@ public class EntityLlamaSpitOther extends EntityLlamaSpit {
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (this.owner != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive() && !false)
-          onHit(new RayTraceResult((Entity)entity1)); 
+          onHit(new RayTraceResult(entity1));
       }  
   }
   
@@ -86,7 +85,7 @@ public class EntityLlamaSpitOther extends EntityLlamaSpit {
       NBTTagCompound nbttagcompound = new NBTTagCompound();
       UUID uuid = this.owner.getUniqueID();
       nbttagcompound.setUniqueId("OwnerUUID", uuid);
-      compound.setTag("Owner", (NBTBase)nbttagcompound);
+      compound.setTag("Owner", nbttagcompound);
     } 
     setSize(0.25F, 0.25F);
   }

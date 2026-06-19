@@ -95,7 +95,7 @@ public class EntityFrostRay extends EntityFireball {
     if (this.ticksExisted > 4 && this.shootingEntity != null && this.targetEntity != null) {
       this.targetEntity.hurtResistantTime = 0;
       if (!this.world.isRemote && this.shootingEntity instanceof EntityTameBase) {
-        ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)this.targetEntity, " was vaporized by ", (new EntityDamageSource("indirectMagic", (Entity)this.shootingEntity)).setMagicDamage().setDamageBypassesArmor().setDamageIsAbsolute(), this.targetEntity.isNonBoss() ? 80.0F : 20.0F);
+        ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)this.targetEntity, " was vaporized by ", (new EntityDamageSource("indirectMagic", this.shootingEntity)).setMagicDamage().setDamageBypassesArmor().setDamageIsAbsolute(), this.targetEntity.isNonBoss() ? 80.0F : 20.0F);
         ((EntityTameBase)this.shootingEntity).inflictCustomStatusEffect(this.world.getDifficulty(), (EntityLivingBase)this.targetEntity, MobEffects.WITHER, 100, 1);
       } 
       setDead();

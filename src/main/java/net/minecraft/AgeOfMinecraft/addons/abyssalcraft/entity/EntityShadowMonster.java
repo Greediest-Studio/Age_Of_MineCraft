@@ -40,14 +40,14 @@ import net.minecraft.world.World;
 public class EntityShadowMonster extends EntityTameBase implements Armored, Undead {
   public EntityShadowMonster(World par1World) {
     super(par1World);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.0D, 32.0F, 6.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.0D, true));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 0.9D));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.8D));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIFleeSun((EntityCreature)this, 0.8D));
-    this.tasks.addTask(6, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
-    this.tasks.addTask(6, (EntityAIBase)new EntityAIWatchClosest((EntityLiving)this, EntityPlayer.class, 8.0F));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.0D, 32.0F, 6.0F));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    this.tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 0.9D));
+    this.tasks.addTask(4, new EntityAIWander(this, 0.8D));
+    this.tasks.addTask(5, new EntityAIFleeSun(this, 0.8D));
+    this.tasks.addTask(6, new EntityAILookIdle(this));
+    this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
     this.isOffensive = true;
     this.isImmuneToFire = true;
   }
@@ -102,7 +102,7 @@ public class EntityShadowMonster extends EntityTameBase implements Armored, Unde
   
   public boolean attackEntityAsMob(Entity par1Entity) {
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return super.attackEntityAsMob(par1Entity);
   }
   

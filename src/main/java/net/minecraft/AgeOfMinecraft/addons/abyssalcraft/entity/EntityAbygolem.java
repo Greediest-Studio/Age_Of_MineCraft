@@ -15,7 +15,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -40,12 +39,12 @@ public class EntityAbygolem extends EntityTameBase implements Light {
   public EntityAbygolem(World par1World) {
     super(par1World);
     setSize(0.5F, 1.95F);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIOpenDoor((EntityLiving)this, true));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.1D, 32.0F, 9.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.0D, true));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 0.8D));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.8D));
-    this.tasks.addTask(6, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAIOpenDoor(this, true));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.1D, 32.0F, 9.0F));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    this.tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 0.8D));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.8D));
+    this.tasks.addTask(6, new EntityAILookIdle(this));
     this.isOffensive = true;
     this.timeUntilNextEgg = 200 + this.rand.nextInt(200);
   }

@@ -15,8 +15,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderSans extends RenderLiving<EntitySans> {
   public RenderSans(RenderManager p_i46128_1_) {
-    super(p_i46128_1_, (ModelBase)new ModelSans(), 0.5F);
-    addLayer(new LayerLearningBook(this));
+    super(p_i46128_1_, new ModelSans(), 0.5F);
+    
   }
   
   protected ResourceLocation getEntityTexture(EntitySans entity) {

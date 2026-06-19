@@ -3,12 +3,10 @@ package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityAbyssalZombie;
 import net.minecraft.AgeOfMinecraft.models.ModelZombie;
 import net.minecraft.AgeOfMinecraft.renders.LayerArrowCustomSized;
-import net.minecraft.AgeOfMinecraft.renders.LayerLearningBook;
 import net.minecraft.AgeOfMinecraft.renders.LayerMobCape;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderBiped;
-import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
@@ -27,16 +25,15 @@ public class RenderAbyssalZombie extends RenderBiped<EntityAbyssalZombie> {
   private static final ResourceLocation antizombieTexture = new ResourceLocation("abyssalcraft:textures/model/anti/abyssal_zombie.png");
   
   public RenderAbyssalZombie(RenderManager manager) {
-    super(manager, (ModelBiped)new ModelZombie(0.0F, true), 0.5F);
-    addLayer((LayerRenderer)new LayerBipedArmor((RenderLivingBase)this) {
+    super(manager, new ModelZombie(0.0F, true), 0.5F);
+    addLayer((LayerRenderer)new LayerBipedArmor(this) {
           protected void initArmor() {
             this.modelLeggings = new ModelZombie(0.5F, true);
             this.modelArmor = new ModelZombie(1.0F, true);
           }
         });
-    addLayer((LayerRenderer)new LayerArrowCustomSized((RenderLivingBase)this, 1.0F));
-    addLayer((LayerRenderer)new LayerLearningBook((RenderLiving)this));
-    addLayer((LayerRenderer)new LayerMobCape((RenderLivingBase)this));
+    addLayer((LayerRenderer)new LayerArrowCustomSized(this, 1.0F));
+    addLayer((LayerRenderer)new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityAbyssalZombie par1EntityLiving) {

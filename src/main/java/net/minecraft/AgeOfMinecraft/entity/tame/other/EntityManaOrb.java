@@ -68,7 +68,7 @@ public class EntityManaOrb extends Entity {
   }
   
   public boolean getEntropy() {
-    return (Boolean) this.dataManager.get(entropy);
+    return this.dataManager.get(entropy);
   }
   
   public void setMana(int mana) {
@@ -76,7 +76,7 @@ public class EntityManaOrb extends Entity {
   }
   
   public int getMana() {
-    return (Integer) this.dataManager.get(amount);
+    return this.dataManager.get(amount);
   }
   
   @SideOnly(Side.CLIENT)
@@ -103,7 +103,7 @@ public class EntityManaOrb extends Entity {
   
   public void onUpdate() {
     super.onUpdate();
-    if (this.magnet.isEmpty() || (!this.magnet.isEmpty() && !(this.magnet.getItem() instanceof ItemManaCollector)) || this.closestPlayer == null || (this.closestPlayer != null && getDistance((Entity)this.closestPlayer) > 24.0D)) {
+    if (this.magnet.isEmpty() || (!this.magnet.isEmpty() && !(this.magnet.getItem() instanceof ItemManaCollector)) || this.closestPlayer == null || (this.closestPlayer != null && getDistance(this.closestPlayer) > 24.0D)) {
       this.magnet = ItemStack.EMPTY;
       this.closestPlayer = null;
     } 
@@ -120,7 +120,7 @@ public class EntityManaOrb extends Entity {
     pushOutOfBlocks(this.posX, ((getEntityBoundingBox()).minY + (getEntityBoundingBox()).maxY) / 2.0D, this.posZ);
     if (this.xpTargetColor < this.xpColor - 20 + getEntityId() % 100)
       this.xpTargetColor = this.xpColor; 
-    if (!this.world.isRemote && this.ticksExisted > 20 && !this.magnet.isEmpty() && this.closestPlayer != null && getDistance((Entity)this.closestPlayer) <= 16.0D) {
+    if (!this.world.isRemote && this.ticksExisted > 20 && !this.magnet.isEmpty() && this.closestPlayer != null && getDistance(this.closestPlayer) <= 16.0D) {
       ItemStack stack = this.magnet;
       Item item = stack.getItem();
       if (item instanceof ItemManaCollector && ((!getEntropy() && ((ItemManaCollector)item).getMana(stack) < ((ItemManaCollector)item).getMaxMana(stack)) || (getEntropy() && ((ItemManaCollector)item).getEntropy(stack) < ((ItemManaCollector)item).getMaxEntropy(stack)))) {
@@ -150,7 +150,7 @@ public class EntityManaOrb extends Entity {
     if (this.onGround) {
       BlockPos underPos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor((getEntityBoundingBox()).minY) - 1, MathHelper.floor(this.posZ));
       IBlockState underState = this.world.getBlockState(underPos);
-      f = underState.getBlock().getSlipperiness(underState, (IBlockAccess)this.world, underPos, this) * 0.99F;
+      f = underState.getBlock().getSlipperiness(underState, this.world, underPos, this) * 0.99F;
     } 
     this.motionX *= f;
     this.motionY *= 0.95D;

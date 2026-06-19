@@ -55,12 +55,12 @@ public class EntityThrowingBlock extends EntityThrowable {
   public EntityThrowingBlock(World worldIn, EntityMutantSnowGolem mutantSnowGolem) {
     super(worldIn, mutantSnowGolem.posX, mutantSnowGolem.posY + 1.855D, mutantSnowGolem.posZ);
     this.rotationYaw = mutantSnowGolem.rotationYaw;
-    setThrower((EntityLivingBase)mutantSnowGolem);
+    setThrower(mutantSnowGolem);
   }
   
   public EntityThrowingBlock(World world, EntityMutantEnderman enderman, int armID) {
     super(world, enderman.posX, enderman.posY + 4.7D, enderman.posZ);
-    setThrower((EntityLivingBase)enderman);
+    setThrower(enderman);
     setBlockState(Block.getStateById(enderman.heldBlock[armID]));
     boolean outer = (armID <= 2);
     boolean right = (armID == 1);
@@ -73,13 +73,13 @@ public class EntityThrowingBlock extends EntityThrowable {
     if (living != null) {
       shoot(living.posX - this.posX, living.posY - this.posY, living.posZ - this.posZ, 1.4F, 1.0F);
     } else {
-      throwBlock((EntityLivingBase)enderman);
+      throwBlock(enderman);
     } 
   }
   
   public EntityThrowingBlock(World world, EntityPlayer player, IBlockState blockState, BlockPos pos) {
-    super(world, (EntityLivingBase)player);
-    setThrower((EntityLivingBase)player);
+    super(world, player);
+    setThrower(player);
     setBlockState(blockState);
     setPosition(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
     setHeld(true);
@@ -118,7 +118,7 @@ public class EntityThrowingBlock extends EntityThrowable {
   }
   
   public EntityLivingBase getThrowerByID() {
-    int throwerId = (Integer) this.dataManager.get(THROWER_ENTITY_ID);
+    int throwerId = this.dataManager.get(THROWER_ENTITY_ID);
     if (throwerId >= 0) {
       Entity entity = this.world.getEntityByID(throwerId);
       if (entity instanceof EntityLivingBase)
@@ -128,7 +128,7 @@ public class EntityThrowingBlock extends EntityThrowable {
   }
   
   public boolean isHeld() {
-    return (Boolean) this.dataManager.get(HELD);
+    return this.dataManager.get(HELD);
   }
   
   private void setHeld(boolean held) {
@@ -205,19 +205,19 @@ public class EntityThrowingBlock extends EntityThrowable {
         move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
         if (!this.world.isRemote && thrower instanceof EntityPlayer) {
           EntityPlayer player = (EntityPlayer)thrower;
-          if (player == null || !player.isEntityAlive() || player.isSpectator() || !player.canEntityBeSeen((Entity)this) || (player.getHeldItemMainhand().getItem() != MBItems.ENDERSOUL_HAND && player.getHeldItemOffhand().getItem() != MBItems.ENDERSOUL_HAND))
+          if (player == null || !player.isEntityAlive() || player.isSpectator() || !player.canEntityBeSeen(this) || (player.getHeldItemMainhand().getItem() != MBItems.ENDERSOUL_HAND && player.getHeldItemOffhand().getItem() != MBItems.ENDERSOUL_HAND))
             setHeld(false); 
         } 
       } 
     } else {
       float f;
-      RayTraceResult raytraceresult = ProjectileHelper.forwardsRaycast((Entity)this, true, (this.ticksExisted >= 25), (Entity)this.thrower);
+      RayTraceResult raytraceresult = ProjectileHelper.forwardsRaycast(this, true, (this.ticksExisted >= 25), this.thrower);
       if (raytraceresult != null && !ForgeEventFactory.onProjectileImpact(this, raytraceresult))
         onImpact(raytraceresult); 
       this.posX += this.motionX;
       this.posY += this.motionY;
       this.posZ += this.motionZ;
-      ProjectileHelper.rotateTowardsMovement((Entity)this, 0.2F);
+      ProjectileHelper.rotateTowardsMovement(this, 0.2F);
       if (isInWater()) {
         for (int i = 0; i < 4; i++)
           this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
@@ -243,17 +243,17 @@ public class EntityThrowingBlock extends EntityThrowable {
       if (getThrower() == player) {
         if (!this.world.isRemote) {
           setHeld(false);
-          throwBlock((EntityLivingBase)player);
+          throwBlock(player);
         } 
         player.swingArm(hand);
-        player.getHeldItem(hand).damageItem(1, (EntityLivingBase)player);
+        player.getHeldItem(hand).damageItem(1, player);
         player.getCooldownTracker().setCooldown(MBItems.ENDERSOUL_HAND, 20);
         return true;
       } 
       return false;
     } 
     setHeld(true);
-    setThrower((EntityLivingBase)player);
+    setThrower(player);
     return true;
   }
   
@@ -271,26 +271,26 @@ public class EntityThrowingBlock extends EntityThrowable {
   protected void onImpact(RayTraceResult result) {
     EntityLivingBase thrower = getThrower();
     IBlockState blockState = getBlockState();
-    BlockPos pos = new BlockPos((Entity)this);
+    BlockPos pos = new BlockPos(this);
     if (result.typeOfHit == RayTraceResult.Type.ENTITY && thrower != null && thrower instanceof EntityTameBase) {
       if (((EntityTameBase)thrower).getAttackTarget() != null)
-        copyLocationAndAnglesFrom((Entity)((EntityTameBase)thrower).getAttackTarget()); 
-      float damage = blockState.getBlock().getExplosionResistance((Entity)this);
+        copyLocationAndAnglesFrom(((EntityTameBase)thrower).getAttackTarget());
+      float damage = blockState.getBlock().getExplosionResistance(this);
       if (damage <= 4.0F)
         damage = 4.0F; 
       if (damage > 50.0F)
         damage = 50.0F; 
       for (EntityLiving entity : this.world.getEntitiesWithinAABB(EntityLiving.class, getEntityBoundingBox().grow(2.5D, 2.0D, 2.5D), IMob.class::isInstance)) {
-        if (getDistanceSq((Entity)entity) <= 6.25D)
-          ((EntityTameBase)thrower).inflictEngenderMobDamage((EntityLivingBase)entity, " was pummeled by ", (DamageSource)new EntityDamageSource("thrown", (Entity)thrower), damage + this.rand.nextInt(3)); 
+        if (getDistanceSq(entity) <= 6.25D)
+          ((EntityTameBase)thrower).inflictEngenderMobDamage(entity, " was pummeled by ", new EntityDamageSource("thrown", thrower), damage + this.rand.nextInt(3));
       } 
       if (result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit instanceof EntityLivingBase)
-        ((EntityTameBase)thrower).inflictEngenderMobDamage((EntityLivingBase)result.entityHit, " was pummeled by ", (DamageSource)new EntityDamageSource("thrown", (Entity)thrower), damage); 
+        ((EntityTameBase)thrower).inflictEngenderMobDamage((EntityLivingBase)result.entityHit, " was pummeled by ", new EntityDamageSource("thrown", thrower), damage);
       if (!this.world.isRemote) {
-        this.world.setEntityState((Entity)this, (byte)3);
+        this.world.setEntityState(this, (byte)3);
         this.world.playEvent(2001, pos, Block.getStateId(blockState));
         if (blockState.getBlock() == Blocks.TNT && thrower instanceof EntityTameBase)
-          EntityTameBase.createEngenderModExplosionFireless((Entity)thrower, this.posX, this.posY + 1.0D, this.posZ, 4.0F, this.world.getGameRules().getBoolean("mobGriefing")); 
+          EntityTameBase.createEngenderModExplosionFireless(thrower, this.posX, this.posY + 1.0D, this.posZ, 4.0F, this.world.getGameRules().getBoolean("mobGriefing"));
         setDead();
       } 
     } else {
@@ -299,9 +299,9 @@ public class EntityThrowingBlock extends EntityThrowable {
           this.world.playEvent(2001, pos, Block.getStateId(blockState)); 
       } else if (result.typeOfHit == RayTraceResult.Type.ENTITY && !this.world.isRemote && result.entityHit != thrower) {
         this.world.playEvent(2001, pos, Block.getStateId(blockState));
-        result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage((Entity)this, (Entity)thrower), 4.0F);
+        result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, thrower), 4.0F);
       } 
-      for (Entity entity : this.world.getEntitiesInAABBexcluding((Entity)this, getEntityBoundingBox().grow(2.0D), EntitySelectors.CAN_AI_TARGET)) {
+      for (Entity entity : this.world.getEntitiesInAABBexcluding(this, getEntityBoundingBox().grow(2.0D), EntitySelectors.CAN_AI_TARGET)) {
         if (entity instanceof EntityLivingBase && entity.canBeCollidedWith() && getDistanceSq(entity) <= 4.0D && entity != thrower) {
           double x = entity.posX - this.posX;
           double z = entity.posZ - this.posZ;
@@ -309,7 +309,7 @@ public class EntityThrowingBlock extends EntityThrowable {
           entity.motionX = x / d * 0.6000000238418579D;
           entity.motionY = 0.20000000298023224D;
           entity.motionZ = z / d * 0.6000000238418579D;
-          entity.attackEntityFrom(DamageSource.causeIndirectDamage((Entity)this, thrower), (6 + this.rand.nextInt(3)));
+          entity.attackEntityFrom(DamageSource.causeIndirectDamage(this, thrower), (6 + this.rand.nextInt(3)));
         } 
       } 
       if (!this.world.isRemote)
@@ -320,7 +320,7 @@ public class EntityThrowingBlock extends EntityThrowable {
   public void writeEntityToNBT(NBTTagCompound compound) {
     compound.setBoolean("Held", isHeld());
     if (getBlockState() != null)
-      compound.setTag("BlockState", (NBTBase)NBTUtil.writeBlockState(new NBTTagCompound(), getBlockState())); 
+      compound.setTag("BlockState", NBTUtil.writeBlockState(new NBTTagCompound(), getBlockState()));
     if (this.ownerUUID != null)
       compound.setUniqueId("OwnerUUID", this.ownerUUID); 
   }

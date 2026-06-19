@@ -30,17 +30,17 @@ public class ItemChickenJockeyItem extends ItemVanillaTier {
     entityliving.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
     entityliving.rotationYawHead = entityliving.rotationYaw;
     entityliving.renderYawOffset = entityliving.rotationYaw;
-    entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos((Entity)entityliving)), null);
+    entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), null);
     entityliving.setChild(true);
     entityliving.setGrowingAge(-48000);
     if (!worldIn.isRemote) {
-      worldIn.spawnEntity((Entity)entityliving);
+      worldIn.spawnEntity(entityliving);
       int i = 60;
       while (i > 0) {
         int j = EntityXPOrb.getXPSplit(i);
         i -= j;
         if (!worldIn.getGameRules().getBoolean("disableExpItemDrops"))
-          entityliving.world.spawnEntity((Entity)new EntityXPOrb(entityliving.world, entityliving.posX, entityliving.posY + entityliving.getEyeHeight(), entityliving.posZ, j)); 
+          entityliving.world.spawnEntity(new EntityXPOrb(entityliving.world, entityliving.posX, entityliving.posY + entityliving.getEyeHeight(), entityliving.posZ, j));
       } 
     } 
     if (entityliving != null) {
@@ -49,14 +49,14 @@ public class ItemChickenJockeyItem extends ItemVanillaTier {
       entitymount.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
       entitymount.rotationYawHead = entitymount.rotationYaw;
       entitymount.renderYawOffset = entitymount.rotationYaw;
-      entitymount.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos((Entity)entityliving)), null);
+      entitymount.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), null);
       entitymount.setChickenJockey(true);
-      worldIn.spawnEntity((Entity)entitymount);
+      worldIn.spawnEntity(entitymount);
       entityliving.setOwnerId(playerIn.getUniqueID());
       entitymount.setOwnerId(playerIn.getUniqueID());
       entityliving.playLivingSound();
       entityliving.playSound(ESound.createMob, 5.0F, 1.0F);
-      entityliving.startRiding((Entity)entitymount);
+      entityliving.startRiding(entitymount);
       if (!playerIn.capabilities.isCreativeMode)
         stack.shrink(1); 
     } 

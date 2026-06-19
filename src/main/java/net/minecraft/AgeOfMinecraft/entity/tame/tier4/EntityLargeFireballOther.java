@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier4;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
@@ -45,17 +44,17 @@ public class EntityLargeFireballOther extends EntityLargeFireball {
           if (!((EntityTameBase)this.shootingEntity).isWild() && movingObject.entityHit instanceof net.minecraft.entity.monster.EntityGhast)
             this.damage = 1000.0F; 
           copyLocationAndAnglesFrom(movingObject.entityHit);
-          ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)movingObject.entityHit, " was fireballed by ", DamageSource.causeFireballDamage((EntityFireball)this, (Entity)this.shootingEntity), this.damage);
+          ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)movingObject.entityHit, " was fireballed by ", DamageSource.causeFireballDamage(this, this.shootingEntity), this.damage);
           applyEnchantments(this.shootingEntity, movingObject.entityHit);
           boolean flag = EngenderConfig.mobs.grief;
-          EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY, this.posZ, this.explosionPower, flag, flag);
+          EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, this.explosionPower, flag, flag);
           if (!movingObject.entityHit.isImmuneToFire())
             movingObject.entityHit.setFire(30); 
           setDead();
         } 
       } else if (movingObject.entityHit == null) {
         if (this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase)
-          EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY, this.posZ, this.explosionPower, false, false); 
+          EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, this.explosionPower, false, false);
         setDead();
       }  
   }
@@ -70,7 +69,7 @@ public class EntityLargeFireballOther extends EntityLargeFireball {
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (this.shootingEntity != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive())
-          onImpact(new RayTraceResult((Entity)entity1)); 
+          onImpact(new RayTraceResult(entity1));
       }  
   }
 }

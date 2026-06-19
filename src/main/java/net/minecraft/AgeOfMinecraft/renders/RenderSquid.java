@@ -21,9 +21,9 @@ public class RenderSquid extends RenderLiving<EntitySquid> {
   private static final ResourceLocation antisquidTextures = new ResourceLocation("textures/entity/squid.png");
   
   public RenderSquid(RenderManager p_i46138_1_) {
-    super(p_i46138_1_, (ModelBase)new ModelSquid(), 0.7F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
-    addLayer(new LayerLearningBook(this));
+    super(p_i46138_1_, new ModelSquid(), 0.7F);
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
+    
   }
   
   protected ResourceLocation getEntityTexture(EntitySquid entity) {

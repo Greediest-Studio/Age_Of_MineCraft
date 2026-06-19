@@ -22,10 +22,10 @@ public class RenderEndermite extends RenderLiving<EntityEndermite> {
   private static final ResourceLocation ENDERMITE_TEXTURES = new ResourceLocation("textures/entity/endermite.png");
   
   public RenderEndermite(RenderManager p_i46181_1_) {
-    super(p_i46181_1_, (ModelBase)new ModelEndermite(), 0.3F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
+    super(p_i46181_1_, new ModelEndermite(), 0.3F);
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
     addLayer(new LayerCustomHeadEngender(((ModelEndermite)this.mainModel).bodyParts[1], ((ModelEndermite)this.mainModel).bodyParts[1]));
-    addLayer(new LayerLearningBook(this));
+    
   }
   
   protected void preRenderCallback(EntityEndermite entitylivingbaseIn, float partialTickTime) {

@@ -80,7 +80,7 @@ public class EntityGasterBlaster extends EntityLiving {
             hitmob.hurtResistantTime = 0;
             hitmob.playSound(ESound.bonehit, 1.0F, 1.0F);
             this.shootingEntity.inflictEngenderMobDamage(hitmob, " was blasted by a Gaster Blaster shot by ", (new DamageSource("sans")).setDamageBypassesArmor().setDamageIsAbsolute().setMagicDamage(), 1.0F);
-            this.shootingEntity.attackWithAdditionalEffects((Entity)this.shootingEntity);
+            this.shootingEntity.attackWithAdditionalEffects(this.shootingEntity);
             this.shootingEntity.karmicRetribution(hitmob, 10);
           } 
         }  

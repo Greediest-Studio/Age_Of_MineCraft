@@ -67,7 +67,7 @@ public class EntityPigZombie extends EntityZombie implements IJumpingMount {
   }
   
   public boolean isOldPEPigman() {
-    return (Boolean) getDataManager().get(OLDPEPIGMAN);
+    return getDataManager().get(OLDPEPIGMAN);
   }
   
   public void setOldPEPigman(boolean childZombie) {
@@ -75,7 +75,7 @@ public class EntityPigZombie extends EntityZombie implements IJumpingMount {
   }
   
   public EntityTameBase spawnBaby(EntityTameBase par1idleTimeable) {
-    return (EntityTameBase)new EntityPigZombie(this.world);
+    return new EntityPigZombie(this.world);
   }
   
   public int getNextLevelRequirement() {
@@ -96,12 +96,12 @@ public class EntityPigZombie extends EntityZombie implements IJumpingMount {
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return I18n.translateToLocal("entity." + str + ".cmm.name");
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name");
@@ -119,15 +119,15 @@ public class EntityPigZombie extends EntityZombie implements IJumpingMount {
     if (!this.world.isRemote)
       for (i = 0; i < 1 + this.rand.nextInt(2); i++) {
         EntityPigZombie baby = new EntityPigZombie(this.world);
-        baby.copyLocationAndAnglesFrom((Entity)this);
-        baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), (IEntityLivingData)null);
+        baby.copyLocationAndAnglesFrom(this);
+        baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
         baby.setGrowingAge(-60000);
         baby.setChild(true);
         baby.setIsAntiMob(isAntiMob());
         baby.setIsHero(isHero());
         baby.setOwnerId(getOwnerId());
         baby.setToNotVillager();
-        this.world.spawnEntity((Entity)baby);
+        this.world.spawnEntity(baby);
       }  
   }
   
@@ -136,16 +136,16 @@ public class EntityPigZombie extends EntityZombie implements IJumpingMount {
   }
   
   public void performSpecialAttack() {
-    getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this), (float)getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 5.0F);
+    getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float)getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 5.0F);
     playSound(ESound.pigmanSpecial, getSoundVolume(), 1.0F);
     setSpecialAttackTimer(500);
   }
   
   public void onLivingUpdate() {
     super.onLivingUpdate();
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 4.0D && this.ticksExisted % 1 == 0 && this.moralRaisedTimer > 200)
-      attackEntityAsMob((Entity)getAttackTarget()); 
-    if (getAttackTarget() != null && getAttackTarget().isEntityAlive() && getDistanceSq((Entity)getAttackTarget()) < (getAttackTarget()).width + 9.0D && getSpecialAttackTimer() <= 0 && isHero()) {
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) < 4.0D && this.ticksExisted % 1 == 0 && this.moralRaisedTimer > 200)
+      attackEntityAsMob(getAttackTarget());
+    if (getAttackTarget() != null && getAttackTarget().isEntityAlive() && getDistanceSq(getAttackTarget()) < (getAttackTarget()).width + 9.0D && getSpecialAttackTimer() <= 0 && isHero()) {
       jump();
       (getAttackTarget()).motionY += 2.0D;
       playSound(ESound.pigmanSpecial, getSoundVolume(), 1.0F);
@@ -177,7 +177,7 @@ public class EntityPigZombie extends EntityZombie implements IJumpingMount {
   }
   
   public boolean isNotColliding() {
-    return (this.world.checkNoEntityCollision(getEntityBoundingBox(), (Entity)this) && this.world.getCollisionBoxes((Entity)this, getEntityBoundingBox()).isEmpty() && !this.world.containsAnyLiquid(getEntityBoundingBox()));
+    return (this.world.checkNoEntityCollision(getEntityBoundingBox(), this) && this.world.getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && !this.world.containsAnyLiquid(getEntityBoundingBox()));
   }
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {

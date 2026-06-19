@@ -40,7 +40,7 @@ public class RenderSlime extends RenderLiving<EntitySlime> {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.25F);
     addLayer(new LayerSlimeGel(this));
     addLayer(new LayerCustomHeadEngender(regularmodel.slimeBodies, cmmmodel.Head));
-    addLayer(new LayerLearningBook(this));
+    
   }
   
   public void doRender(EntitySlime entity, double x, double y, double z, float entityYaw, float partialTicks) {
@@ -53,7 +53,7 @@ public class RenderSlime extends RenderLiving<EntitySlime> {
   }
   
   protected void preRenderCallback(EntitySlime entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel;
+    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
     float f1 = entitylivingbaseIn.getSlimeSize();
     float f2 = (entitylivingbaseIn.prevSquishFactor + (entitylivingbaseIn.squishFactor - entitylivingbaseIn.prevSquishFactor) * partialTickTime) / (f1 * 0.5F + 1.0F);
     float f3 = 1.0F / (f2 + 1.0F);

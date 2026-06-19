@@ -45,12 +45,12 @@ public class RenderEnderman extends RenderLiving<EntityEnderman> {
     addLayer(new LayerEndermanEyes(this));
     addLayer(new LayerHeldBlock(this));
     addLayer(new LayerCustomHeadEngender(regularmodel.bipedHead, cmmmodel.Head));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    
+    addLayer(new LayerMobCape(this));
   }
   
   protected void preRenderCallback(EntityEnderman entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel;
+    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
     if (entitylivingbaseIn.isSneaking() && !EngenderConfig.mobs.useMobTalkerModels) {
       GlStateManager.translate(0.0F, -0.2F, -0.75F);
       if (entitylivingbaseIn.isChild())

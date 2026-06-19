@@ -53,15 +53,15 @@ public class ItemChaosGuardianItem extends ItemTierItem {
     entityliving.homeSet = true;
     entityliving.rotationYawHead = entityliving.rotationYaw;
     entityliving.renderYawOffset = entityliving.rotationYaw;
-    entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos((Entity)entityliving)), null);
+    entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), null);
     if (!worldIn.isRemote) {
-      worldIn.spawnEntity((Entity)entityliving);
+      worldIn.spawnEntity(entityliving);
       int i = 1600000;
       while (i > 0) {
         int j = EntityXPOrb.getXPSplit(i);
         i -= j;
         if (!worldIn.getGameRules().getBoolean("disableExpItemDrops"))
-          entityliving.world.spawnEntity((Entity)new EntityXPOrb(entityliving.world, entityliving.posX, entityliving.posY + entityliving.getEyeHeight() + 5.0D, entityliving.posZ, j)); 
+          entityliving.world.spawnEntity(new EntityXPOrb(entityliving.world, entityliving.posX, entityliving.posY + entityliving.getEyeHeight() + 5.0D, entityliving.posZ, j));
       } 
     } 
     if (entityliving != null) {

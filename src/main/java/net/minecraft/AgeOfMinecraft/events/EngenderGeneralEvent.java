@@ -86,62 +86,62 @@ public class EngenderGeneralEvent {
     if (event.getName().equals(LootTableList.CHESTS_SIMPLE_DUNGEON)) {
       LootPool main = event.getTable().getPool("main");
       if (main != null) {
-        main.addEntry(new LootEntryItem((Item)EItem.zombieItem, 1, 0, new LootFunction[] { (LootFunction)new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 2.0F)) }, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:zombie"));
-        main.addEntry(new LootEntryItem((Item)EItem.skeletonItem, 1, 0, new LootFunction[] { (LootFunction)new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 2.0F)) }, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:skeleton"));
-        main.addEntry(new LootEntryItem((Item)EItem.spiderItem, 1, 0, new LootFunction[] { (LootFunction)new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 3.0F)) }, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:spider"));
+        main.addEntry(new LootEntryItem(EItem.zombieItem, 1, 0, new LootFunction[] {new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 2.0F))}, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:zombie"));
+        main.addEntry(new LootEntryItem(EItem.skeletonItem, 1, 0, new LootFunction[] {new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 2.0F))}, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:skeleton"));
+        main.addEntry(new LootEntryItem(EItem.spiderItem, 1, 0, new LootFunction[] {new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 3.0F))}, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:spider"));
       } 
     } 
     if (event.getName().equals(LootTableList.CHESTS_DESERT_PYRAMID)) {
       LootPool main = event.getTable().getPool("main");
       if (main != null)
-        main.addEntry((LootEntry)new LootEntryItem((Item)EItem.huskItem, 1, 0, new LootFunction[] { (LootFunction)new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 2.0F)) }, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:husk")); 
+        main.addEntry(new LootEntryItem(EItem.huskItem, 1, 0, new LootFunction[] {new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 2.0F))}, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:husk"));
     } 
     if (event.getName().equals(LootTableList.CHESTS_IGLOO_CHEST)) {
       LootPool main = event.getTable().getPool("main");
       if (main != null)
-        main.addEntry((LootEntry)new LootEntryItem((Item)EItem.strayItem, 1, 0, new LootFunction[] { (LootFunction)new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 2.0F)) }, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:stray")); 
+        main.addEntry(new LootEntryItem(EItem.strayItem, 1, 0, new LootFunction[] {new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 2.0F))}, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:stray"));
     } 
     if (event.getName().equals(LootTableList.CHESTS_ABANDONED_MINESHAFT)) {
       LootPool main = event.getTable().getPool("main");
       if (main != null)
-        main.addEntry((LootEntry)new LootEntryItem((Item)EItem.cavespiderItem, 1, 0, new LootFunction[] { (LootFunction)new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(2.0F, 8.0F)) }, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:cavespider")); 
+        main.addEntry(new LootEntryItem(EItem.cavespiderItem, 1, 0, new LootFunction[] {new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(2.0F, 8.0F))}, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:cavespider"));
     } 
     if (event.getName().equals(LootTableList.CHESTS_VILLAGE_BLACKSMITH)) {
       LootPool main = event.getTable().getPool("main");
       if (main != null) {
-        main.addEntry((LootEntry)new LootEntryItem((Item)EItem.villagerItem, 10, 0, new LootFunction[] { (LootFunction)new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 4.0F)) }, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:villager"));
-        main.addEntry((LootEntry)new LootEntryItem((Item)EItem.villagergolemItem, 1, 0, new LootFunction[0], new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:irongolem"));
+        main.addEntry(new LootEntryItem(EItem.villagerItem, 10, 0, new LootFunction[] {new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 4.0F))}, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:villager"));
+        main.addEntry(new LootEntryItem(EItem.villagergolemItem, 1, 0, new LootFunction[0], new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:irongolem"));
       } 
     } 
     if (event.getName().equals(LootTableList.CHESTS_STRONGHOLD_CORRIDOR) || event.getName().equals(LootTableList.CHESTS_STRONGHOLD_CROSSING) || event.getName().equals(LootTableList.CHESTS_STRONGHOLD_LIBRARY)) {
       LootPool main = event.getTable().getPool("main");
       if (main != null) {
-        main.addEntry(new LootEntryItem((Item)EItem.silverfishItem, 10, 0, new LootFunction[] { (LootFunction)new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 4.0F)) }, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:silverfish"));
-        main.addEntry(new LootEntryItem((Item)EItem.spiderItem, 10, 0, new LootFunction[] { (LootFunction)new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 2.0F)) }, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:spider"));
-        main.addEntry(new LootEntryItem((Item)EItem.endermanItem, 1, 0, new LootFunction[0], new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:endermanItem"));
+        main.addEntry(new LootEntryItem(EItem.silverfishItem, 10, 0, new LootFunction[] {new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 4.0F))}, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:silverfish"));
+        main.addEntry(new LootEntryItem(EItem.spiderItem, 10, 0, new LootFunction[] {new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 2.0F))}, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:spider"));
+        main.addEntry(new LootEntryItem(EItem.endermanItem, 1, 0, new LootFunction[0], new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:endermanItem"));
       } 
     } 
     if (event.getName().equals(LootTableList.CHESTS_JUNGLE_TEMPLE)) {
       LootPool main = event.getTable().getPool("main");
       if (main != null) {
-        main.addEntry((LootEntry)new LootEntryItem((Item)EItem.zombieItem, 1, 0, new LootFunction[] { (LootFunction)new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 2.0F)) }, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:zombie"));
-        main.addEntry((LootEntry)new LootEntryItem((Item)EItem.ozelotItem, 1, 0, new LootFunction[] { (LootFunction)new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(2.0F, 8.0F)) }, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:ozelot"));
+        main.addEntry(new LootEntryItem(EItem.zombieItem, 1, 0, new LootFunction[] {new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 2.0F))}, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:zombie"));
+        main.addEntry(new LootEntryItem(EItem.ozelotItem, 1, 0, new LootFunction[] {new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(2.0F, 8.0F))}, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:ozelot"));
       } 
     } 
     if (event.getName().equals(LootTableList.CHESTS_WOODLAND_MANSION)) {
       LootPool main = event.getTable().getPool("main");
       if (main != null) {
-        main.addEntry((LootEntry)new LootEntryItem((Item)EItem.vindicatorItem, 5, 0, new LootFunction[] { (LootFunction)new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 2.0F)) }, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:vindicator"));
-        main.addEntry((LootEntry)new LootEntryItem((Item)EItem.vexItem, 10, 0, new LootFunction[] { (LootFunction)new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(2.0F, 8.0F)) }, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:vex"));
-        main.addEntry((LootEntry)new LootEntryItem((Item)EItem.evokerItem, 1, 0, new LootFunction[0], new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:evoker"));
+        main.addEntry(new LootEntryItem(EItem.vindicatorItem, 5, 0, new LootFunction[] {new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 2.0F))}, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:vindicator"));
+        main.addEntry(new LootEntryItem(EItem.vexItem, 10, 0, new LootFunction[] {new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(2.0F, 8.0F))}, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:vex"));
+        main.addEntry(new LootEntryItem(EItem.evokerItem, 1, 0, new LootFunction[0], new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:evoker"));
       } 
     } 
     if (event.getName().equals(LootTableList.CHESTS_END_CITY_TREASURE)) {
       LootPool main = event.getTable().getPool("main");
       if (main != null) {
-        main.addEntry((LootEntry)new LootEntryItem((Item)EItem.shulkerItem, 5, 0, new LootFunction[] { (LootFunction)new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 2.0F)) }, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:shulker"));
-        main.addEntry((LootEntry)new LootEntryItem((Item)EItem.endermiteItem, 10, 0, new LootFunction[] { (LootFunction)new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(2.0F, 8.0F)) }, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:endermite"));
-        main.addEntry((LootEntry)new LootEntryItem((Item)EItem.endermanItem, 5, 0, new LootFunction[0], new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:enderman"));
+        main.addEntry(new LootEntryItem(EItem.shulkerItem, 5, 0, new LootFunction[] {new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(1.0F, 2.0F))}, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:shulker"));
+        main.addEntry(new LootEntryItem(EItem.endermiteItem, 10, 0, new LootFunction[] {new SetCount(new net.minecraft.world.storage.loot.conditions.LootCondition[0], new RandomValueRange(2.0F, 8.0F))}, new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:endermite"));
+        main.addEntry(new LootEntryItem(EItem.endermanItem, 5, 0, new LootFunction[0], new net.minecraft.world.storage.loot.conditions.LootCondition[0], "ageofminecraft:enderman"));
       } 
     } 
   }
@@ -154,7 +154,7 @@ public class EngenderGeneralEvent {
         ReflectionHelper.setPrivateValue(DragonFightManager.class, mob.getFightManager(), Boolean.FALSE, new String[] { "previouslyKilled", "previouslyKilled" });
         for (EntityPlayer entityplayer : mob.world.playerEntities) {
           if (EngenderConfig.general.useMessage)
-            entityplayer.sendStatusMessage(new TextComponentTranslation(TextFormatting.BOLD + "The respawned dragon will drop another egg now.", new Object[0]), true);
+            entityplayer.sendStatusMessage(new TextComponentTranslation(TextFormatting.BOLD + "The respawned dragon will drop another egg now."), true);
         } 
       } 
     } 
@@ -220,23 +220,23 @@ public class EngenderGeneralEvent {
       final EntityLiving mob = (EntityLiving)event.getEntity();
       if (mob instanceof EntityCreature) {
         final EntityCreature cri = (EntityCreature)event.getEntity();
-        cri.targetTasks.addTask(3, (EntityAIBase)new EntityAINearestAttackableTarget(cri, net.minecraft.entity.passive.EntityVillager.class, false));
+        cri.targetTasks.addTask(3, new EntityAINearestAttackableTarget(cri, net.minecraft.entity.passive.EntityVillager.class, false));
       } else {
-        mob.targetTasks.addTask(3, (EntityAIBase)new EntityAIFindEntityNearest(mob, net.minecraft.entity.passive.EntityVillager.class));
+        mob.targetTasks.addTask(3, new EntityAIFindEntityNearest(mob, net.minecraft.entity.passive.EntityVillager.class));
       } 
     } 
     if (event.getEntity() instanceof EntityMob) {
       final EntityMob mob = (EntityMob)event.getEntity();
       mob.targetTasks.addTask(3, new EntityAINearestAttackableTarget(mob, EntityTameBase.class, 0, false, false, (Predicate<EntityTameBase>) engendermob -> (engendermob != null && engendermob.isEntityAlive() && !false)));
-      mob.targetTasks.addTask(3, (EntityAIBase)new EntityAINearestAttackableTarget((EntityCreature)mob, net.minecraft.entity.passive.EntityVillager.class, true));
+      mob.targetTasks.addTask(3, new EntityAINearestAttackableTarget(mob, net.minecraft.entity.passive.EntityVillager.class, true));
     } 
     if (event.getEntity() instanceof net.minecraft.entity.monster.EntityIronGolem) {
       net.minecraft.entity.monster.EntityIronGolem golems = (net.minecraft.entity.monster.EntityIronGolem)event.getEntity();
-      golems.targetTasks.addTask(3, (EntityAIBase)new EntityAINearestAttackableTarget((EntityCreature)golems, EntityLivingBase.class, 0, false, false, (Predicate<EntityLivingBase>) p_apply_1_ -> (p_apply_1_ != null && IMob.MOB_SELECTOR.apply(p_apply_1_))));
+      golems.targetTasks.addTask(3, new EntityAINearestAttackableTarget(golems, EntityLivingBase.class, 0, false, false, (Predicate<EntityLivingBase>) p_apply_1_ -> (p_apply_1_ != null && IMob.MOB_SELECTOR.apply(p_apply_1_))));
     } 
     if (event.getEntity() instanceof net.minecraft.entity.passive.EntityVillager) {
       net.minecraft.entity.passive.EntityVillager testificate = (net.minecraft.entity.passive.EntityVillager)event.getEntity();
-      testificate.tasks.addTask(1, (EntityAIBase)new EntityAIAvoidEntity((EntityCreature)testificate, EntityLivingBase.class, (Predicate<EntityLivingBase>) mob -> (mob.isEntityAlive() && mob instanceof IMob),  8.0F, 0.6D, 0.6D));
+      testificate.tasks.addTask(1, new EntityAIAvoidEntity(testificate, EntityLivingBase.class, (Predicate<EntityLivingBase>) mob -> (mob.isEntityAlive() && mob instanceof IMob),  8.0F, 0.6D, 0.6D));
     } 
     if (event.getEntity() instanceof EntityItem) {
       EntityItem item = (EntityItem)event.getEntity();

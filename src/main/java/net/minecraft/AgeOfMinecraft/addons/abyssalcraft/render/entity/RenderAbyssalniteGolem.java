@@ -3,12 +3,10 @@ package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityAbygolem;
 import net.minecraft.AgeOfMinecraft.models.ModelZombie;
 import net.minecraft.AgeOfMinecraft.renders.LayerArrowCustomSized;
-import net.minecraft.AgeOfMinecraft.renders.LayerLearningBook;
 import net.minecraft.AgeOfMinecraft.renders.LayerMobCape;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderBiped;
-import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -22,10 +20,9 @@ public class RenderAbyssalniteGolem extends RenderBiped<EntityAbygolem> {
   private static final ResourceLocation ZOMBIE_TEXTURES = new ResourceLocation("abyssalcraft:textures/model/aby_warden.png");
   
   public RenderAbyssalniteGolem(RenderManager manager) {
-    super(manager, (ModelBiped)new ModelZombie(0.0F, true), 0.5F);
-    addLayer((LayerRenderer)new LayerArrowCustomSized((RenderLivingBase)this, 1.0F));
-    addLayer((LayerRenderer)new LayerLearningBook((RenderLiving)this));
-    addLayer((LayerRenderer)new LayerMobCape((RenderLivingBase)this));
+    super(manager, new ModelZombie(0.0F, true), 0.5F);
+    addLayer((LayerRenderer)new LayerArrowCustomSized(this, 1.0F));
+    addLayer((LayerRenderer)new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityAbygolem entity) {

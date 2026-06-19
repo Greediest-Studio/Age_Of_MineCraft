@@ -33,8 +33,8 @@ public class RenderEvoker extends RenderLiving<EntityEvoker> {
   public RenderEvoker(RenderManager p_i47207_1_) {
     super(p_i47207_1_, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.5F);
     addLayer(new LayerCustomHeadEngender(regularmodel.head, cmmmodel.Head));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    
+    addLayer(new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityEvoker entity) {
@@ -65,7 +65,7 @@ public class RenderEvoker extends RenderLiving<EntityEvoker> {
   }
   
   protected void preRenderCallback(EntityEvoker entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel;
+    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
     float f = 0.9375F;
     if (!EngenderConfig.mobs.useMobTalkerModels) {
       GlStateManager.scale(f, f, f);

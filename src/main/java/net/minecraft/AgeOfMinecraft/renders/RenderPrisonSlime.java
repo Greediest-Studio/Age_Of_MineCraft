@@ -23,10 +23,10 @@ public class RenderPrisonSlime extends RenderLiving<EntityPrisonSlime> {
   private static ModelSlime regularmodel = new ModelSlime(16);
   
   public RenderPrisonSlime(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)regularmodel, 0.25F);
+    super(renderManagerIn, regularmodel, 0.25F);
     addLayer(new LayerSlimeGel(this));
     addLayer(new LayerCustomHeadEngender(regularmodel.slimeBodies, regularmodel.slimeBodies));
-    addLayer(new LayerLearningBook(this));
+    
   }
   
   protected void preRenderCallback(EntityPrisonSlime entitylivingbaseIn, float partialTickTime) {
@@ -99,7 +99,7 @@ public class RenderPrisonSlime extends RenderLiving<EntityPrisonSlime> {
     
     private final RenderPrisonSlime slimeRenderer;
     
-    private ModelBase slimeModel = (ModelBase)new ModelSlime(0);
+    private ModelBase slimeModel = new ModelSlime(0);
     
     public LayerSlimeGel(RenderPrisonSlime p_i46111_1_) {
       this.slimeRenderer = p_i46111_1_;
@@ -113,7 +113,7 @@ public class RenderPrisonSlime extends RenderLiving<EntityPrisonSlime> {
         GlStateManager.blendFunc(770, 771);
         this.slimeRenderer.bindTexture(this.slimeTextures);
         this.slimeModel.setModelAttributes(this.slimeRenderer.getMainModel());
-        this.slimeModel.render((Entity)p_177159_1_, p_177159_2_, p_177159_3_, p_177159_5_, p_177159_6_, p_177159_7_, p_177159_8_);
+        this.slimeModel.render(p_177159_1_, p_177159_2_, p_177159_3_, p_177159_5_, p_177159_6_, p_177159_7_, p_177159_8_);
         GlStateManager.disableBlend();
         GlStateManager.disableNormalize();
       } 

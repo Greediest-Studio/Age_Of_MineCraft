@@ -69,9 +69,9 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
     setSize(0.4F, 0.5F);
     this.jumpHelper = new RabbitJumpHelper(this);
     this.moveHelper = new RabbitMoveHelper(this);
-    this.tasks.addTask(5, (EntityAIBase)new AIRaidFarm(this));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.6D, 80));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.25D, 32.0F, 8.0F));
+    this.tasks.addTask(5, new AIRaidFarm(this));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.6D, 80));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.25D, 32.0F, 8.0F));
     setMovementSpeed(0.0D);
   }
   
@@ -119,7 +119,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
     if (!this.collidedHorizontally && (!this.moveHelper.isUpdating() || this.moveHelper.getY() <= this.posY + 0.5D)) {
       Path pathentity = this.navigator.getPath();
       if (pathentity != null && pathentity.getCurrentPathIndex() < pathentity.getCurrentPathLength()) {
-        Vec3d vec3d = pathentity.getPosition((Entity)this);
+        Vec3d vec3d = pathentity.getPosition(this);
         if (vec3d.y > this.posY)
           return 0.5F; 
       } 
@@ -139,8 +139,8 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
   
   public void updateAITasks() {
     super.updateAITasks();
-    if (isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getRabbitType() == 99 && !isChild() && !false && getDistanceSq((Entity)getAttackTarget()) < (this.width * this.width + (getAttackTarget()).width * (getAttackTarget()).width) + 4.0D && (this.ticksExisted + getEntityId()) % 10 == 0)
-      attackEntityAsMob((Entity)getAttackTarget()); 
+    if (isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getRabbitType() == 99 && !isChild() && !false && getDistanceSq(getAttackTarget()) < (this.width * this.width + (getAttackTarget()).width * (getAttackTarget()).width) + 4.0D && (this.ticksExisted + getEntityId()) % 10 == 0)
+      attackEntityAsMob(getAttackTarget());
     if (this.currentMoveTypeDuration > 0)
       this.currentMoveTypeDuration--; 
     if (this.carrotTicks > 0) {
@@ -155,7 +155,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
       } 
       if (getRabbitType() == 99 && this.currentMoveTypeDuration == 0) {
         EntityLivingBase entitylivingbase = getAttackTarget();
-        if (entitylivingbase != null && getDistanceSq((Entity)entitylivingbase) < 16.0D) {
+        if (entitylivingbase != null && getDistanceSq(entitylivingbase) < 16.0D) {
           calculateRotationYaw(entitylivingbase.posX, entitylivingbase.posZ);
           this.moveHelper.setMoveTo(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ, this.moveHelper.getSpeed());
           startJumping();
@@ -168,7 +168,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
           Path pathentity = this.navigator.getPath();
           Vec3d vec3d = new Vec3d(this.moveHelper.getX(), this.moveHelper.getY(), this.moveHelper.getZ());
           if (pathentity != null && pathentity.getCurrentPathIndex() < pathentity.getCurrentPathLength())
-            vec3d = pathentity.getPosition((Entity)this); 
+            vec3d = pathentity.getPosition(this);
           calculateRotationYaw(vec3d.x, vec3d.z);
           startJumping();
         } 
@@ -220,7 +220,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
     this.isOffensive = (getRabbitType() == 99);
     if (this.jumpTicks != this.jumpDuration) {
       if (this.jumpTicks == 0 && !this.world.isRemote)
-        this.world.setEntityState((Entity)this, (byte)1); 
+        this.world.setEntityState(this, (byte)1);
       this.jumpTicks++;
     } else if (this.jumpDuration != 0) {
       this.jumpTicks = 0;
@@ -282,16 +282,16 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
   }
   
   public int getRabbitType() {
-    return (Integer) this.dataManager.get(RABBIT_TYPE);
+    return this.dataManager.get(RABBIT_TYPE);
   }
   
   public void setRabbitType(int rabbitTypeId) {
     if (rabbitTypeId == 99) {
       getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(20.0D);
-      this.tasks.addTask(4, (EntityAIBase)new AIEvilAttack(this));
-      this.targetTasks.addTask(0, (EntityAIBase)new EntityAIHurtByTarget((EntityCreature)this, false, new Class[0]));
-      this.targetTasks.addTask(1, (EntityAIBase)new EntityAILeaderHurtByTarget(this));
-      this.targetTasks.addTask(2, (EntityAIBase)new EntityAILeaderHurtTarget(this));
+      this.tasks.addTask(4, new AIEvilAttack(this));
+      this.targetTasks.addTask(0, new EntityAIHurtByTarget(this, false, new Class[0]));
+      this.targetTasks.addTask(1, new EntityAILeaderHurtByTarget(this));
+      this.targetTasks.addTask(2, new EntityAILeaderHurtTarget(this));
       this.isOffensive = true;
       getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(8.0D);
       getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
@@ -314,7 +314,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
         moveRelative(0.0F, 0.0F, 1.0F, 0.1F); 
     } 
     if (!this.world.isRemote)
-      this.world.setEntityState((Entity)this, (byte)1); 
+      this.world.setEntityState(this, (byte)1);
   }
   
   @SideOnly(Side.CLIENT)
@@ -380,7 +380,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
     private EntityRabbit theEntity;
     
     public AIPanic(EntityRabbit rabbit, double speedIn) {
-      super((EntityCreature)rabbit, speedIn);
+      super(rabbit, speedIn);
       this.theEntity = rabbit;
     }
     
@@ -398,7 +398,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
     private boolean canRaid = false;
     
     public AIRaidFarm(EntityRabbit rabbitIn) {
-      super((EntityCreature)rabbitIn, 0.75D, 16);
+      super(rabbitIn, 0.75D, 16);
       this.rabbit = rabbitIn;
     }
     
@@ -439,7 +439,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
             world.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 2);
             world.destroyBlock(blockpos, true);
           } else {
-            world.setBlockState(blockpos, iblockstate.withProperty((IProperty)BlockCarrot.AGE, integer - 1), 2);
+            world.setBlockState(blockpos, iblockstate.withProperty(BlockCarrot.AGE, integer - 1), 2);
             world.playEvent(2001, blockpos, Block.getStateId(iblockstate));
           } 
           this.rabbit.createEatingParticles();
@@ -470,7 +470,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
     private boolean canJump = false;
     
     public RabbitJumpHelper(EntityRabbit rabbit) {
-      super((EntityLiving)rabbit);
+      super(rabbit);
       this.theEntity = rabbit;
     }
     
@@ -500,7 +500,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
     private double nextJumpSpeed;
     
     public RabbitMoveHelper(EntityRabbit rabbit) {
-      super((EntityLiving)rabbit);
+      super(rabbit);
       this.theEntity = rabbit;
     }
     

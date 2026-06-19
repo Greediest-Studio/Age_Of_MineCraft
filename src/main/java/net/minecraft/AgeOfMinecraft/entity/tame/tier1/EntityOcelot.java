@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier1;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -35,11 +34,11 @@ import net.minecraft.world.World;
 public class EntityOcelot extends EntityTameBase implements Light, Animal {
   public EntityOcelot(World worldIn) {
     super(worldIn);
-    this.tasks.addTask(1, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.33D, 15.0F, 4.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAICustomLeapAttack((EntityLiving)this, 0.3F, 0.6F, 0.8F, 0.5F, 3.0D, 20.0D, 6));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.33D, true));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.8D, 80));
+    this.tasks.addTask(1, new EntityAISwimming(this));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.33D, 15.0F, 4.0F));
+    this.tasks.addTask(3, new EntityAICustomLeapAttack(this, 0.3F, 0.6F, 0.8F, 0.5F, 3.0D, 20.0D, 6));
+    this.tasks.addTask(4, new EntityAIFriendlyAttackMelee(this, 1.33D, true));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.8D, 80));
     this.experienceValue = 1;
     setSize(0.6F, 0.7F);
   }
@@ -58,7 +57,7 @@ public class EntityOcelot extends EntityTameBase implements Light, Animal {
     if (list != null && !list.isEmpty() && this.ticksExisted % 40 == 0)
         for (EntityCreeper entity : list) {
             if (entity != null)
-                entity.tasks.addTask(0, (EntityAIBase) new EntityAIAvoidEntity((EntityCreature) entity, EntityOcelot.class, 6.0F, 1.75D, 1.25D));
+                entity.tasks.addTask(0, new EntityAIAvoidEntity(entity, EntityOcelot.class, 6.0F, 1.75D, 1.25D));
         }
   }
   
@@ -131,13 +130,13 @@ public class EntityOcelot extends EntityTameBase implements Light, Animal {
   }
   
   public boolean isNotColliding() {
-    if (this.world.checkNoEntityCollision(getEntityBoundingBox(), (Entity)this) && this.world.getCollisionBoxes((Entity)this, getEntityBoundingBox()).isEmpty() && !this.world.containsAnyLiquid(getEntityBoundingBox())) {
+    if (this.world.checkNoEntityCollision(getEntityBoundingBox(), this) && this.world.getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && !this.world.containsAnyLiquid(getEntityBoundingBox())) {
       BlockPos blockpos = new BlockPos(this.posX, (getEntityBoundingBox()).minY, this.posZ);
       if (blockpos.getY() < this.world.getSeaLevel())
         return false; 
       IBlockState iblockstate = this.world.getBlockState(blockpos.down());
       Block block = iblockstate.getBlock();
-      if (block == Blocks.GRASS || block.isLeaves(iblockstate, (IBlockAccess)this.world, blockpos.down()))
+      if (block == Blocks.GRASS || block.isLeaves(iblockstate, this.world, blockpos.down()))
         return true; 
     } 
     return false;

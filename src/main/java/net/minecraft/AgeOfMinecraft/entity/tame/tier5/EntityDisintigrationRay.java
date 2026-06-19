@@ -97,7 +97,7 @@ public class EntityDisintigrationRay extends EntityFireball {
       this.targetEntity.hurtResistantTime = 0;
       if (!this.world.isRemote)
         if (this.targetEntity instanceof EntityLiving && !(this.targetEntity instanceof EntityTameBase)) {
-          ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)this.targetEntity, " was vaporized by ", (new EntityDamageSource("indirectMagic", (Entity)this.shootingEntity)).setMagicDamage().setDamageBypassesArmor().setDamageIsAbsolute(), 20.0F);
+          ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)this.targetEntity, " was vaporized by ", (new EntityDamageSource("indirectMagic", this.shootingEntity)).setMagicDamage().setDamageBypassesArmor().setDamageIsAbsolute(), 20.0F);
           if (((EntityLiving)this.targetEntity).getHealth() <= 80.0F && this.targetEntity.isNonBoss())
             this.targetEntity.setDead(); 
           this.targetEntity.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 2.0F, 2.0F);
@@ -105,7 +105,7 @@ public class EntityDisintigrationRay extends EntityFireball {
           this.targetEntity.playSound(SoundEvents.BLOCK_LAVA_POP, 2.0F, 2.0F);
           this.targetEntity.world.setEntityState(this.targetEntity, (byte)20);
         } else {
-          ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)this.targetEntity, " was vaporized by ", (new EntityDamageSource("indirectMagic", (Entity)this.shootingEntity)).setMagicDamage().setDamageBypassesArmor().setDamageIsAbsolute(), 20.0F);
+          ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)this.targetEntity, " was vaporized by ", (new EntityDamageSource("indirectMagic", this.shootingEntity)).setMagicDamage().setDamageBypassesArmor().setDamageIsAbsolute(), 20.0F);
         }  
       setDead();
     } 

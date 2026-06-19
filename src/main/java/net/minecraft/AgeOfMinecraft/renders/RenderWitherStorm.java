@@ -15,7 +15,7 @@ public class RenderWitherStorm extends RenderLiving<EntityWitherStorm> {
   private static final ResourceLocation witherStormTextures = new ResourceLocation("ageofminecraft", "textures/entities/wither_storm.png");
   
   public RenderWitherStorm(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)new ModelWitherStorm(), 16.0F);
+    super(renderManagerIn, new ModelWitherStorm(), 16.0F);
     addLayer(new LayerWitherStormBody(this));
   }
   

@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier3;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -62,11 +61,11 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
   
   protected void initEntityAI() {
     super.initEntityAI();
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new AIMeleeAttack());
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.2D, 32.0F, 9.0F));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 1.0D, 80));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new AIMeleeAttack());
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.2D, 32.0F, 9.0F));
+    this.tasks.addTask(5, new EntityAIWander(this, 1.0D, 80));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
   }
   
   public int getNextLevelRequirement() {
@@ -146,8 +145,8 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
     if (this.warningSoundTicks > 0)
       this.warningSoundTicks--; 
     if (isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && this.isOffensive && !isChild() && !false)
-      if (getDistanceSq((Entity)getAttackTarget()) < (this.reachWidth * this.reachWidth + ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width) * ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width)) + 9.0D && (this.ticksExisted + getEntityId()) % 20 == 0) {
-        attackEntityAsMob((Entity)getAttackTarget());
+      if (getDistanceSq(getAttackTarget()) < (this.reachWidth * this.reachWidth + ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width) * ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width)) + 9.0D && (this.ticksExisted + getEntityId()) % 20 == 0) {
+        attackEntityAsMob(getAttackTarget());
         swingArm(EnumHand.MAIN_HAND);
         if (!getHeldItemOffhand().isEmpty())
           swingArm(EnumHand.OFF_HAND); 
@@ -157,7 +156,7 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
   public boolean attackEntityAsMob(Entity entityIn) {
     boolean flag = super.attackEntityAsMob(entityIn);
     if (flag) {
-      applyEnchantments((EntityLivingBase)this, entityIn);
+      applyEnchantments(this, entityIn);
       playSound(SoundEvents.ENTITY_POLAR_BEAR_WARNING, 1.0F, 1.25F);
     } 
     return flag;
@@ -167,7 +166,7 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -213,7 +212,7 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
         this.motionZ = 0.0D;
       } 
       if (entitylivingbase.moveForward > 0.0F && this.ticksExisted % 7 == 0)
-        playStepSound(new BlockPos((Entity)this), this.world.getBlockState(new BlockPos((Entity)this)).getBlock()); 
+        playStepSound(new BlockPos(this), this.world.getBlockState(new BlockPos(this)).getBlock());
       this.prevLimbSwingAmount = this.limbSwingAmount;
       double d5 = this.posX - this.prevPosX;
       double d7 = this.posZ - this.prevPosZ;
@@ -228,7 +227,7 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
   }
   
   public boolean isStanding() {
-    return ((Boolean) this.dataManager.get(IS_STANDING) || !isEntityAlive());
+    return (this.dataManager.get(IS_STANDING) || !isEntityAlive());
   }
   
   public void setStanding(boolean standing) {
@@ -246,7 +245,7 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
   
   class AIHurtByTarget extends EntityAIHurtByTarget {
     public AIHurtByTarget() {
-      super((EntityCreature)EntityPolarBear.this, false);
+      super(EntityPolarBear.this, false);
     }
     
     public void startExecuting() {
@@ -258,7 +257,7 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
     }
     
     protected void setEntityAttackTarget(EntityCreature creatureIn, EntityLivingBase entityLivingBaseIn) {
-      if (creatureIn instanceof EntityPolarBear && !((EntityPolarBear)creatureIn).isChild())
+      if (creatureIn instanceof EntityPolarBear && !creatureIn.isChild())
         super.setEntityAttackTarget(creatureIn, entityLivingBaseIn); 
     }
   }
@@ -272,13 +271,13 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
       double d0 = getAttackReachSqr(p_190102_1_);
       if (p_190102_2_ <= d0 && this.attackTick <= 0.0D) {
         this.attackTick = 20.0D;
-        EntityPolarBear.this.attackEntityAsMob((Entity)p_190102_1_);
+        EntityPolarBear.this.attackEntityAsMob(p_190102_1_);
         EntityPolarBear.this.setStanding(false);
         List<EntityLivingBase> list1 = EntityPolarBear.this.world.getEntitiesWithinAABB(EntityLivingBase.class, p_190102_1_.getEntityBoundingBox().grow(2.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
         if (list1 != null && !list1.isEmpty())
             for (EntityLivingBase entity1 : list1) {
                 if (!false)
-                    EntityPolarBear.this.attackEntityAsMob((Entity) entity1);
+                    EntityPolarBear.this.attackEntityAsMob(entity1);
             }
       } else if (p_190102_2_ <= d0 * 2.0D) {
         if (this.attackTick <= 0.0D) {
@@ -307,7 +306,7 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
   
   class AIPanic extends EntityAIPanic {
     public AIPanic() {
-      super((EntityCreature)EntityPolarBear.this, 2.0D);
+      super(EntityPolarBear.this, 2.0D);
     }
     
     public boolean shouldExecute() {

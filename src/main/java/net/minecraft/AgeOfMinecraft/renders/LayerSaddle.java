@@ -25,7 +25,7 @@ public class LayerSaddle implements LayerRenderer<EntityLivingBase> {
     if (p_177155_1_.getSaddled()) {
       this.pigRenderer.bindTexture(TEXTURE);
       this.pigModel.setModelAttributes(this.pigRenderer.getMainModel());
-      this.pigModel.render((Entity)p_177155_1_, p_177155_2_, p_177155_3_, p_177155_5_, p_177155_6_, p_177155_7_, p_177155_8_);
+      this.pigModel.render(p_177155_1_, p_177155_2_, p_177155_3_, p_177155_5_, p_177155_6_, p_177155_7_, p_177155_8_);
     } 
   }
   

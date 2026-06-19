@@ -2,7 +2,6 @@ package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
 import com.shinoow.abyssalcraft.client.model.entity.ModelShadowCreature;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityShadowCreature;
-import net.minecraft.AgeOfMinecraft.renders.LayerLearningBook;
 import net.minecraft.AgeOfMinecraft.renders.LayerMobCape;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -25,10 +24,10 @@ public class RenderShadowCreature extends RenderLiving<EntityShadowCreature> {
   }
   
   public RenderShadowCreature(RenderManager manager, ModelShadowCreature model) {
-    super(manager, (ModelBase)model, 0.0F);
+    super(manager, model, 0.0F);
     addLayer((LayerRenderer)new LayerCustomHead(model.Head1));
-    addLayer((LayerRenderer)new LayerLearningBook(this));
-    addLayer((LayerRenderer)new LayerMobCape((RenderLivingBase)this));
+    
+    addLayer((LayerRenderer)new LayerMobCape(this));
   }
   
   protected void renderModel(EntityShadowCreature entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {

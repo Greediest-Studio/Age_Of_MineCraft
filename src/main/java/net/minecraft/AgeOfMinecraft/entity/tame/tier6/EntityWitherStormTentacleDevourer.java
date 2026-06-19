@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier6;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -60,12 +59,12 @@ public class EntityWitherStormTentacleDevourer extends EntityTameBase implements
     this.forceSpawn = true;
     ((PathNavigateGround)getNavigator()).setBreakDoors(false);
     ((PathNavigateGround)getNavigator()).setEnterDoors(false);
-    this.tasks.removeTask((EntityAIBase)new EntityAIOpenDoor((EntityLiving)this, true));
-    this.tasks.removeTask((EntityAIBase)new EntityAIMobGirlMate(this, 1.2D));
-    this.tasks.removeTask((EntityAIBase)new EntityAIBabyMobGirlFollowParent(this, 1.2D));
-    this.tasks.removeTask((EntityAIBase)new EntityAIWatchClosest((EntityLiving)this, EntityLivingBase.class, 8.0F));
-    this.tasks.removeTask((EntityAIBase)new EntityAIWatchClosest2((EntityLiving)this, EntityGolem.class, 3.0F, 1.0F));
-    this.tasks.removeTask((EntityAIBase)new EntityAIWatchClosest2((EntityLiving)this, EntityVillager.class, 3.0F, 1.0F));
+    this.tasks.removeTask(new EntityAIOpenDoor(this, true));
+    this.tasks.removeTask(new EntityAIMobGirlMate(this, 1.2D));
+    this.tasks.removeTask(new EntityAIBabyMobGirlFollowParent(this, 1.2D));
+    this.tasks.removeTask(new EntityAIWatchClosest(this, EntityLivingBase.class, 8.0F));
+    this.tasks.removeTask(new EntityAIWatchClosest2(this, EntityGolem.class, 3.0F, 1.0F));
+    this.tasks.removeTask(new EntityAIWatchClosest2(this, EntityVillager.class, 3.0F, 1.0F));
   }
   
   public TextFormatting getTextFormat() {
@@ -120,7 +119,7 @@ public class EntityWitherStormTentacleDevourer extends EntityTameBase implements
       if (list1 != null && !list1.isEmpty())
           for (EntityLivingBase entity1 : list1) {
               if (!false)
-                  super.attackEntityAsMob((Entity) entity1);
+                  super.attackEntityAsMob(entity1);
           }
       this.world.playEvent(3000, entityIn.getPosition(), 0);
       return true;
@@ -334,9 +333,9 @@ public class EntityWitherStormTentacleDevourer extends EntityTameBase implements
   public void onLivingUpdate() {
     if (this.residentWitherStorm != null && !this.world.isRemote) {
       if (isEntityAlive()) {
-        ChunkLoadingEvent.updateLoaded((Entity)this);
+        ChunkLoadingEvent.updateLoaded(this);
       } else {
-        ChunkLoadingEvent.stopLoading((Entity)this);
+        ChunkLoadingEvent.stopLoading(this);
       } 
       setOwnerId(this.residentWitherStorm.getOwnerId());
     } 
@@ -384,8 +383,8 @@ public class EntityWitherStormTentacleDevourer extends EntityTameBase implements
       this.motionY += 0.25D; 
     this.renderYawOffset = this.rotationYaw = this.rotationYawHead;
     EntityLivingBase entity = getAttackTarget();
-    if (!isInvisible() && entity != null && entity instanceof EntityLivingBase && canEntityBeSeen((Entity)entity) && getDistanceSq((Entity)entity) < 2916.0D && (this.ticksExisted + getEntityId()) % (30 + this.rand.nextInt(10)) == 0)
-      attackEntityAsMob((Entity)entity); 
+    if (!isInvisible() && entity != null && entity instanceof EntityLivingBase && canEntityBeSeen(entity) && getDistanceSq(entity) < 2916.0D && (this.ticksExisted + getEntityId()) % (30 + this.rand.nextInt(10)) == 0)
+      attackEntityAsMob(entity);
     super.onLivingUpdate();
   }
   

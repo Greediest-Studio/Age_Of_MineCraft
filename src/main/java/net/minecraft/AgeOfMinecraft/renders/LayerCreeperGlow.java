@@ -37,7 +37,7 @@ public class LayerCreeperGlow implements LayerRenderer<EntityCreeper> {
       OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, i / 1.0F, j / 1.0F);
       GlStateManager.enableLighting();
       GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-      this.creeperRenderer.getMainModel().render((Entity)entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+      this.creeperRenderer.getMainModel().render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
       this.creeperRenderer.setLightmap(entitylivingbaseIn);
       GlStateManager.disableBlend();
       GlStateManager.enableAlpha();

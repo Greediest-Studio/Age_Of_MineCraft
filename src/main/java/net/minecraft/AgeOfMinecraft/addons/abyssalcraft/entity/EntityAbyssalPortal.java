@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.shinoow.abyssalcraft.api.AbyssalCraftAPI;
 import com.shinoow.abyssalcraft.lib.ACLib;
@@ -129,7 +128,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
   }
   
   public int getMetaData() {
-    return (Integer) this.dataManager.get(METADATA);
+    return this.dataManager.get(METADATA);
   }
   
   public void setMetaData(int p_82215_1_) {
@@ -150,7 +149,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
   }
   
   public int getWatchedTargetId(int p_82203_1_) {
-    return (Integer) this.dataManager.get(TARGETS[p_82203_1_]);
+    return this.dataManager.get(TARGETS[p_82203_1_]);
   }
   
   public void updateWatchedTargetId(int targetOffset, int newId) {
@@ -236,20 +235,20 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
     EntityLightningBolt shot = new EntityLightningBolt(this.world, entityLivingIn.posX - 0.5D, entityLivingIn.posY, entityLivingIn.posZ - 0.5D, true);
     float f = -((float)(MathHelper.atan2(shot.posZ - this.posZ, shot.posZ - this.posZ) * 57.29577951308232D)) - 90.0F;
     shot.rotationYaw = f;
-    this.world.addWeatherEffect((Entity)shot);
+    this.world.addWeatherEffect(shot);
     entityLivingIn.onStruckByLightning(shot);
     entityLivingIn.motionY += 4.0D;
     if (entityLivingIn instanceof EntityCreeper || entityLivingIn instanceof net.minecraft.entity.monster.EntityZombie || entityLivingIn instanceof net.minecraft.entity.monster.AbstractSkeleton) {
       EntityCreeper creeper = new EntityCreeper(this.world);
       if (!this.world.isRemote)
-        this.world.spawnEntity((Entity)creeper); 
-      creeper.copyLocationAndAnglesFrom((Entity)entityLivingIn);
+        this.world.spawnEntity(creeper);
+      creeper.copyLocationAndAnglesFrom(entityLivingIn);
       creeper.onStruckByLightning(shot);
-      entityLivingIn.onDeath(DamageSource.causeMobDamage((EntityLivingBase)creeper).setDamageBypassesArmor());
+      entityLivingIn.onDeath(DamageSource.causeMobDamage(creeper).setDamageBypassesArmor());
       creeper.setDead();
       entityLivingIn.motionX = 0.0D;
       entityLivingIn.motionZ = 0.0D;
-      entityLivingIn.knockBack((Entity)shot, 2.0F, MathHelper.sin(shot.rotationYaw * 0.017453292F), -MathHelper.cos(shot.rotationYaw * 0.017453292F));
+      entityLivingIn.knockBack(shot, 2.0F, MathHelper.sin(shot.rotationYaw * 0.017453292F), -MathHelper.cos(shot.rotationYaw * 0.017453292F));
       entityLivingIn.motionY = 0.0D;
       if (entityLivingIn.isAirBorne) {
         entityLivingIn.motionY += this.rand.nextDouble() * 1.5D;
@@ -261,7 +260,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
       entityLivingIn.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 2.0F, 2.0F);
       entityLivingIn.playSound(SoundEvents.BLOCK_LAVA_EXTINGUISH, 2.0F, 2.0F);
       entityLivingIn.playSound(SoundEvents.BLOCK_LAVA_POP, 2.0F, 2.0F);
-      entityLivingIn.world.setEntityState((Entity)entityLivingIn, (byte)20);
+      entityLivingIn.world.setEntityState(entityLivingIn, (byte)20);
       entityLivingIn.setDead();
     } 
   }
@@ -290,7 +289,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                       entity.motionZ -= (-MathHelper.cos(this.rotationYaw * 0.017453292F) / f) * 1.0D;
                   }
                   if (EngenderConfig.general.useMessage && !entity.isEntityAlive() && !isWild())
-                      getOwner().sendMessage((ITextComponent) new TextComponentTranslation(entity.getName() + " was blown up by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
+                      getOwner().sendMessage(new TextComponentTranslation(entity.getName() + " was blown up by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
               }
           }
     } 
@@ -339,7 +338,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
             BlockPos blockpos = new BlockPos(x + x1, y + y1, z + z1);
             IBlockState iblockstate = this.world.getBlockState(blockpos);
             Block block = iblockstate.getBlock();
-            if (!block.isAir(iblockstate, (IBlockAccess)this.world, blockpos) && block.getBlockHardness(iblockstate, this.world, blockpos) >= 0.0F)
+            if (!block.isAir(iblockstate, this.world, blockpos) && block.getBlockHardness(iblockstate, this.world, blockpos) >= 0.0F)
               this.world.destroyBlock(blockpos, true); 
           } 
         } 
@@ -395,7 +394,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
             List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue()), Predicates.and(EntitySelectors.IS_ALIVE));
             for (int k1 = 0; k1 < 10 && !list1.isEmpty(); k1++) {
               EntityLivingBase entitylivingbase = list1.get(this.rand.nextInt(list1.size()));
-              if (entitylivingbase != this && entitylivingbase.isEntityAlive() && canEntityBeSeen((Entity)entitylivingbase) && !false) {
+              if (entitylivingbase != this && entitylivingbase.isEntityAlive() && canEntityBeSeen(entitylivingbase) && !false) {
                 if (entitylivingbase instanceof EntityPlayer) {
                   if (!((EntityPlayer)entitylivingbase).capabilities.disableDamage)
                     updateWatchedTargetId(i, entitylivingbase.getEntityId()); 
@@ -414,13 +413,13 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
       addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 2147483647, (getMetaData() > 2) ? 1 : 0));
       addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 2147483647, (getMetaData() > 2) ? 1 : 0));
     } 
-    List<Entity> list = this.world.getEntitiesInAABBexcluding((Entity)this, getEntityBoundingBox().grow(1.0D, 4.0D, 1.0D).offset(0.0D, 2.0D, 0.0D), EntitySelectors.IS_ALIVE);
+    List<Entity> list = this.world.getEntitiesInAABBexcluding(this, getEntityBoundingBox().grow(1.0D, 4.0D, 1.0D).offset(0.0D, 2.0D, 0.0D), EntitySelectors.IS_ALIVE);
     if (!list.isEmpty())
       for (int l = 0; l < list.size(); l++) {
         Entity[] aentity = getParts();
         if (aentity != null)
           for (Entity part : aentity) {
-            List<Entity> partlist = this.world.getEntitiesInAABBexcluding((Entity)this, part.getEntityBoundingBox(), EntitySelectors.IS_ALIVE);
+            List<Entity> partlist = this.world.getEntitiesInAABBexcluding(this, part.getEntityBoundingBox(), EntitySelectors.IS_ALIVE);
             if (!partlist.isEmpty())
                 for (Entity entity : partlist) {
                     if (entity instanceof EntityLivingBase && !entity.noClip && !(entity instanceof IEntityMultiPart)) {
@@ -520,90 +519,90 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 entityAbygolem.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   entityAbygolem.setOwnerId(getOwnerId()); 
-                entityAbygolem.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityAbygolem)), (IEntityLivingData)null);
+                entityAbygolem.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityAbygolem)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)entityAbygolem); 
+                  this.world.spawnEntity(entityAbygolem);
                 break;
               case 1:
                 entityAbyssalZombie = new EntityAbyssalZombie(this.world);
                 entityAbyssalZombie.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   entityAbyssalZombie.setOwnerId(getOwnerId()); 
-                entityAbyssalZombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityAbyssalZombie)), (IEntityLivingData)null);
+                entityAbyssalZombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityAbyssalZombie)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)entityAbyssalZombie); 
+                  this.world.spawnEntity(entityAbyssalZombie);
                 break;
               case 2:
                 entityDepthsGhoul = new EntityDepthsGhoul(this.world);
                 entityDepthsGhoul.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   entityDepthsGhoul.setOwnerId(getOwnerId()); 
-                entityDepthsGhoul.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityDepthsGhoul)), (IEntityLivingData)null);
+                entityDepthsGhoul.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityDepthsGhoul)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)entityDepthsGhoul); 
+                  this.world.spawnEntity(entityDepthsGhoul);
                 break;
               case 3:
                 entityCoraliumSquid = new EntityCoraliumSquid(this.world);
                 entityCoraliumSquid.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   entityCoraliumSquid.setOwnerId(getOwnerId()); 
-                entityCoraliumSquid.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityCoraliumSquid)), null);
+                entityCoraliumSquid.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityCoraliumSquid)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)entityCoraliumSquid); 
+                  this.world.spawnEntity(entityCoraliumSquid);
                 break;
               case 4:
                 entityChagarothSpawn = new EntityChagarothSpawn(this.world);
                 entityChagarothSpawn.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   entityChagarothSpawn.setOwnerId(getOwnerId()); 
-                entityChagarothSpawn.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityChagarothSpawn)), null);
+                entityChagarothSpawn.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityChagarothSpawn)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)entityChagarothSpawn); 
+                  this.world.spawnEntity(entityChagarothSpawn);
                 break;
               case 5:
                 entityChagarothFist = new EntityChagarothFist(this.world);
                 entityChagarothFist.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   entityChagarothFist.setOwnerId(getOwnerId()); 
-                entityChagarothFist.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityChagarothFist)), null);
+                entityChagarothFist.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityChagarothFist)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)entityChagarothFist); 
+                  this.world.spawnEntity(entityChagarothFist);
                 break;
               case 6:
                 rabbit = new EntityDreadgolem(this.world);
                 rabbit.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   rabbit.setOwnerId(getOwnerId()); 
-                rabbit.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)rabbit)), (IEntityLivingData)null);
+                rabbit.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(rabbit)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)rabbit); 
+                  this.world.spawnEntity(rabbit);
                 break;
               case 7:
                 entityDreadling = new EntityDreadling(this.world);
                 entityDreadling.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   entityDreadling.setOwnerId(getOwnerId()); 
-                entityDreadling.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityDreadling)), (IEntityLivingData)null);
+                entityDreadling.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityDreadling)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)entityDreadling); 
+                  this.world.spawnEntity(entityDreadling);
                 break;
               case 8:
                 entityDreadSpawn = new EntityDreadSpawn(this.world);
                 entityDreadSpawn.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   entityDreadSpawn.setOwnerId(getOwnerId()); 
-                entityDreadSpawn.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityDreadSpawn)), null);
+                entityDreadSpawn.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityDreadSpawn)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)entityDreadSpawn); 
+                  this.world.spawnEntity(entityDreadSpawn);
                 break;
               case 9:
                 sheep = new EntityShadowCreature(this.world);
                 sheep.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   sheep.setOwnerId(getOwnerId()); 
-                sheep.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)sheep)), (IEntityLivingData)null);
+                sheep.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(sheep)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)sheep); 
+                  this.world.spawnEntity(sheep);
                 break;
             } 
             break;
@@ -614,54 +613,54 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 entityDragonMinion.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   entityDragonMinion.setOwnerId(getOwnerId()); 
-                entityDragonMinion.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityDragonMinion)), null);
+                entityDragonMinion.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityDragonMinion)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)entityDragonMinion); 
+                  this.world.spawnEntity(entityDragonMinion);
                 break;
               case 1:
                 entityGreaterDreadSpawn = new EntityGreaterDreadSpawn(this.world);
                 entityGreaterDreadSpawn.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   entityGreaterDreadSpawn.setOwnerId(getOwnerId()); 
-                entityGreaterDreadSpawn.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityGreaterDreadSpawn)), null);
+                entityGreaterDreadSpawn.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityGreaterDreadSpawn)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)entityGreaterDreadSpawn); 
+                  this.world.spawnEntity(entityGreaterDreadSpawn);
                 break;
               case 2:
                 entityLesserShoggoth = new EntityLesserShoggoth(this.world);
                 entityLesserShoggoth.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   entityLesserShoggoth.setOwnerId(getOwnerId()); 
-                entityLesserShoggoth.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityLesserShoggoth)), (IEntityLivingData)null);
+                entityLesserShoggoth.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityLesserShoggoth)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)entityLesserShoggoth); 
+                  this.world.spawnEntity(entityLesserShoggoth);
                 break;
               case 3:
                 entityOmotholGhoul = new EntityOmotholGhoul(this.world);
                 entityOmotholGhoul.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   entityOmotholGhoul.setOwnerId(getOwnerId()); 
-                entityOmotholGhoul.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityOmotholGhoul)), (IEntityLivingData)null);
+                entityOmotholGhoul.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityOmotholGhoul)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)entityOmotholGhoul); 
+                  this.world.spawnEntity(entityOmotholGhoul);
                 break;
               case 4:
                 entityRemnant = new EntityRemnant(this.world);
                 entityRemnant.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   entityRemnant.setOwnerId(getOwnerId()); 
-                entityRemnant.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityRemnant)), (IEntityLivingData)null);
+                entityRemnant.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityRemnant)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)entityRemnant); 
+                  this.world.spawnEntity(entityRemnant);
                 break;
               case 5:
                 entityShadowMonster = new EntityShadowMonster(this.world);
                 entityShadowMonster.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   entityShadowMonster.setOwnerId(getOwnerId()); 
-                entityShadowMonster.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityShadowMonster)), (IEntityLivingData)null);
+                entityShadowMonster.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityShadowMonster)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)entityShadowMonster); 
+                  this.world.spawnEntity(entityShadowMonster);
                 break;
             } 
             break;
@@ -672,63 +671,63 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 bat.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   bat.setOwnerId(getOwnerId()); 
-                bat.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)bat)), (IEntityLivingData)null);
+                bat.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(bat)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)bat); 
+                  this.world.spawnEntity(bat);
                 break;
               case 1:
                 chicken = new EntityGatekeeperMinion(this.world);
                 chicken.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   chicken.setOwnerId(getOwnerId()); 
-                chicken.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)chicken)), (IEntityLivingData)null);
+                chicken.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(chicken)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)chicken); 
+                  this.world.spawnEntity(chicken);
                 break;
               case 2:
                 cow = new EntityLesserDreadbeast(this.world);
                 cow.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   cow.setOwnerId(getOwnerId()); 
-                cow.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)cow)), null);
+                cow.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(cow)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)cow); 
+                  this.world.spawnEntity(cow);
                 break;
               case 3:
                 mooshroom = new EntityShadowBeast(this.world);
                 mooshroom.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   mooshroom.setOwnerId(getOwnerId()); 
-                mooshroom.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)mooshroom)), (IEntityLivingData)null);
+                mooshroom.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(mooshroom)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)mooshroom); 
+                  this.world.spawnEntity(mooshroom);
                 break;
               case 4:
                 ocelot = new EntitySkeletonGoliath(this.world);
                 ocelot.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   ocelot.setOwnerId(getOwnerId()); 
-                ocelot.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)ocelot)), (IEntityLivingData)null);
+                ocelot.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(ocelot)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)ocelot); 
+                  this.world.spawnEntity(ocelot);
                 break;
               case 5:
                 entityDragonBoss = new EntityDragonBoss(this.world);
                 entityDragonBoss.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   entityDragonBoss.setOwnerId(getOwnerId()); 
-                entityDragonBoss.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityDragonBoss)), null);
+                entityDragonBoss.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityDragonBoss)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)entityDragonBoss); 
+                  this.world.spawnEntity(entityDragonBoss);
                 break;
               case 6:
                 pig = new EntitySacthoth(this.world);
                 pig.setLocationAndAngles(this.posX + (this.rand.nextFloat() * 4.0F - 2.0F), this.posY + 1.5D, this.posZ + (this.rand.nextFloat() * 4.0F - 2.0F), 0.0F, 0.0F);
                 if (!isWild())
                   pig.setOwnerId(getOwnerId()); 
-                pig.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)pig)), (IEntityLivingData)null);
+                pig.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(pig)), null);
                 if (!this.world.isRemote)
-                  this.world.spawnEntity((Entity)pig); 
+                  this.world.spawnEntity(pig);
                 break;
             } 
             break;
@@ -742,12 +741,12 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
         double d6 = entity.posX - x;
         double d7 = entity.posY + this.rand.nextDouble() * 2.0D - y;
         double d8 = entity.posZ - z;
-        this.world.playEvent((EntityPlayer)null, 1016, new BlockPos((Entity)this), 0);
-        EntityMiniBlackHole entitydragonfireball = new EntityMiniBlackHole(this.world, (EntityLivingBase)this, d6, d7, d8);
+        this.world.playEvent(null, 1016, new BlockPos(this), 0);
+        EntityMiniBlackHole entitydragonfireball = new EntityMiniBlackHole(this.world, this, d6, d7, d8);
         entitydragonfireball.posX = x;
         entitydragonfireball.posY = y;
         entitydragonfireball.posZ = z;
-        this.world.spawnEntity((Entity)entitydragonfireball);
+        this.world.spawnEntity(entitydragonfireball);
       } 
     } else {
       super.fireLightning(entity, x, y, z);
@@ -771,11 +770,11 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
     } 
     if (!this.world.isRemote && (isPlayer() || (this.recentlyHit > 0 && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")))) {
       int i = getExperiencePoints(this.attackingPlayer) / 60;
-      i = ForgeEventFactory.getExperienceDrop((EntityLivingBase)this, this.attackingPlayer, i);
+      i = ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
       while (i > 0) {
         int j = EntityXPOrb.getXPSplit(i);
         i -= j;
-        this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+        this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
       } 
     } 
     if (this.deathTime == 60)
@@ -837,7 +836,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
         player.changeDimension(ACLib.omothol_id);
         return true;
       } 
-      player.world.playSound(player, new BlockPos((Entity)player), SoundEvents.BLOCK_ANVIL_USE, SoundCategory.PLAYERS, 100.0F, 0.5F);
+      player.world.playSound(player, new BlockPos(player), SoundEvents.BLOCK_ANVIL_USE, SoundCategory.PLAYERS, 100.0F, 0.5F);
       setHealth(0.0F);
       return true;
     } 
@@ -867,7 +866,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
   }
   
   public Entity[] getParts() {
-    return (Entity[])this.partArray;
+    return this.partArray;
   }
   
   public AxisAlignedBB getCollisionBoundingBox() {

@@ -31,19 +31,19 @@ public class PhaseFaceNearestEnemy extends PhaseBaseFriendly {
     if (this.dragon.getJukeboxToDanceTo() == null)
       this.scanningTime++; 
     EntityLivingBase entitylivingbase = this.dragon.getAttackTarget();
-    if (entitylivingbase != null && (this.dragon.getDistanceSq((Entity)entitylivingbase) < 1024.0D || (!this.dragon.isWild() && !this.dragon.getOwner().getHeldItemMainhand().isEmpty() && this.dragon.getOwner().getHeldItemMainhand().getItem() == Items.GLASS_BOTTLE))) {
+    if (entitylivingbase != null && (this.dragon.getDistanceSq(entitylivingbase) < 1024.0D || (!this.dragon.isWild() && !this.dragon.getOwner().getHeldItemMainhand().isEmpty() && this.dragon.getOwner().getHeldItemMainhand().getItem() == Items.GLASS_BOTTLE))) {
       if (this.scanningTime > 30) {
         this.dragon.getPhaseManager().setPhase(PhaseList.SITTING_ATTACKING);
       } else {
-        this.dragon.faceEntity((Entity)entitylivingbase, 10.0F, 90.0F);
+        this.dragon.faceEntity(entitylivingbase, 10.0F, 90.0F);
         this.dragon.renderYawOffset = this.dragon.rotationYaw = this.dragon.rotationYawHead + 180.0F;
       } 
     } else if (this.scanningTime >= 200) {
       entitylivingbase = this.dragon.getAttackTarget();
       this.dragon.getPhaseManager().setPhase(PhaseList.TAKEOFF);
-      if (entitylivingbase != null && this.dragon.getDistanceSq((Entity)entitylivingbase) > 1024.0D) {
+      if (entitylivingbase != null && this.dragon.getDistanceSq(entitylivingbase) > 1024.0D) {
         this.dragon.getPhaseManager().setPhase(PhaseList.CHARGING_PLAYER);
-        ((PhaseRamAttack)this.dragon.getPhaseManager().getPhase(PhaseList.CHARGING_PLAYER)).setTarget(new Vec3d(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ));
+        this.dragon.getPhaseManager().getPhase(PhaseList.CHARGING_PLAYER).setTarget(new Vec3d(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ));
       } 
     } else if (!this.dragon.isWild()) {
       this.dragon.rotationYaw = (this.dragon.getOwner()).rotationYaw - 180.0F;

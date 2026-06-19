@@ -68,10 +68,10 @@ public class EntityAIAttackRangedBowAlly<T extends EntityTameBase & IRangedAttac
     if (entitylivingbase != null) {
       this.entity.setSitResting(false);
       double d0 = this.entity.getDistanceSq(entitylivingbase.posX, (entitylivingbase.getEntityBoundingBox()).minY, entitylivingbase.posZ);
-      boolean flag = this.entity.getEntitySenses().canSee((Entity)entitylivingbase);
+      boolean flag = this.entity.getEntitySenses().canSee(entitylivingbase);
       boolean flag1 = (this.seeTime > 0);
       this.seeTime++;
-      if (((EntityTameBase)this.entity).moralRaisedTimer > 200)
+      if (this.entity.moralRaisedTimer > 200)
         this.seeTime++; 
       if (!flag) {
         this.seeTime++;
@@ -79,11 +79,11 @@ public class EntityAIAttackRangedBowAlly<T extends EntityTameBase & IRangedAttac
         this.seeTime++;
         this.seeTime++;
       } 
-      if ((d0 <= (this.maxAttackDistance + entitylivingbase.width) && this.seeTime >= 20) || !((EntityTameBase)this.entity).onGround || this.moveSpeedAmp == 0.0D) {
+      if ((d0 <= (this.maxAttackDistance + entitylivingbase.width) && this.seeTime >= 20) || !this.entity.onGround || this.moveSpeedAmp == 0.0D) {
         this.entity.getNavigator().clearPath();
         this.strafingTime++;
       } else {
-        this.entity.getNavigator().tryMoveToEntityLiving((Entity)entitylivingbase, this.moveSpeedAmp);
+        this.entity.getNavigator().tryMoveToEntityLiving(entitylivingbase, this.moveSpeedAmp);
         this.strafingTime = -1;
       } 
       if (this.strafingTime >= 20) {
@@ -100,12 +100,12 @@ public class EntityAIAttackRangedBowAlly<T extends EntityTameBase & IRangedAttac
           this.strafingBackwards = true;
         } 
         if (this.entity.getRidingEntity() != null && this.entity.getRidingEntity() instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntitySpider)
-          this.entity.getNavigator().setPath(((EntityLiving)this.entity.getRidingEntity()).getNavigator().getPathToEntityLiving((Entity)this.entity.getAttackTarget()), 1.2D); 
-        if (((EntityTameBase)this.entity).hurtResistantTime > 0 || this.entity.getDistance((Entity)entitylivingbase) <= this.maxAttackDistance / 2.0F)
+          this.entity.getNavigator().setPath(((EntityLiving)this.entity.getRidingEntity()).getNavigator().getPathToEntityLiving(this.entity.getAttackTarget()), 1.2D);
+        if (this.entity.hurtResistantTime > 0 || this.entity.getDistance(entitylivingbase) <= this.maxAttackDistance / 2.0F)
           this.entity.getMoveHelper().strafe(-1.0F, (entitylivingbase instanceof net.minecraft.AgeOfMinecraft.entity.tame.Flying || entitylivingbase instanceof IRangedAttackMob || entitylivingbase instanceof net.minecraft.entity.player.EntityPlayer) ? (this.strafingClockwise ? 1.0F : -1.0F) : 0.0F); 
-        this.entity.faceEntity((Entity)entitylivingbase, 30.0F, 30.0F);
+        this.entity.faceEntity(entitylivingbase, 30.0F, 30.0F);
       } else {
-        this.entity.getLookHelper().setLookPositionWithEntity((Entity)entitylivingbase, 30.0F, 30.0F);
+        this.entity.getLookHelper().setLookPositionWithEntity(entitylivingbase, 30.0F, 30.0F);
       } 
       if (this.entity.isHandActive()) {
         if (!flag && this.seeTime < -60) {
@@ -117,9 +117,9 @@ public class EntityAIAttackRangedBowAlly<T extends EntityTameBase & IRangedAttac
             this.entity.getNavigator().clearPath();
             this.entity.resetActiveHand();
             if (d0 < (this.maxAttackDistance * 0.1F)) {
-              this.entity.attackEntityAsMob((Entity)entitylivingbase);
+              this.entity.attackEntityAsMob(entitylivingbase);
             } else {
-              ((IRangedAttackMob)this.entity).attackEntityWithRangedAttack(entitylivingbase, ItemBow.getArrowVelocity(i));
+              this.entity.attackEntityWithRangedAttack(entitylivingbase, ItemBow.getArrowVelocity(i));
             } 
             this.attackTime = this.attackCooldown;
           } 

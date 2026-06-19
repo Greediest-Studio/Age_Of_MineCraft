@@ -61,10 +61,10 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
     this.attackSwitchTimer = 1;
     this.isOffensive = true;
     this.isImmuneToFire = true;
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIOpenDoor((EntityLiving)this, true));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 0.8D, 32.0F, 8.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIAttackRangedAlly(this, 0.0D, 10, 64.0F));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(0, new EntityAIOpenDoor(this, true));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 0.8D, 32.0F, 8.0F));
+    this.tasks.addTask(3, new EntityAIAttackRangedAlly(this, 0.0D, 10, 64.0F));
     setSize(0.5F, 1.65F);
   }
   
@@ -212,7 +212,7 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
           d13 = target.posY + 0.5D;
           d18 = target.posZ + MathHelper.cos(this.rand.nextFloat() * 360.0F) * 16.0D;
           entityGasterBlaster1 = new EntityGasterBlaster(this.world, d8, d13, d18, target.posX, target.posY, target.posZ);
-          this.world.spawnEntity((Entity)entityGasterBlaster1);
+          this.world.spawnEntity(entityGasterBlaster1);
           entityGasterBlaster1.targetpointx = target.posX;
           entityGasterBlaster1.targetpointy = entityGasterBlaster1.posY + entityGasterBlaster1.getEyeHeight() + target.motionY * 10.0D;
           entityGasterBlaster1.targetpointz = target.posZ;
@@ -236,7 +236,7 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
               target.motionZ = 0.0D;
               target.fallDistance += 10.0F;
               if (target instanceof EntityPlayerMP)
-                ((EntityPlayerMP)target).connection.sendPacket((Packet)new SPacketEntityVelocity((Entity)target)); 
+                ((EntityPlayerMP)target).connection.sendPacket(new SPacketEntityVelocity(target));
               break;
             case 2:
               setHandDirection(EnumFacing.NORTH);
@@ -244,7 +244,7 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
               target.motionX = -(f1 * 2.0F);
               target.motionZ = -(f2 * 2.0F);
               if (target instanceof EntityPlayerMP)
-                ((EntityPlayerMP)target).connection.sendPacket((Packet)new SPacketEntityVelocity((Entity)target)); 
+                ((EntityPlayerMP)target).connection.sendPacket(new SPacketEntityVelocity(target));
               break;
             case 3:
               setHandDirection(EnumFacing.SOUTH);
@@ -252,7 +252,7 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
               target.motionX = (f1 * 2.0F);
               target.motionZ = (f2 * 2.0F);
               if (target instanceof EntityPlayerMP)
-                ((EntityPlayerMP)target).connection.sendPacket((Packet)new SPacketEntityVelocity((Entity)target)); 
+                ((EntityPlayerMP)target).connection.sendPacket(new SPacketEntityVelocity(target));
               break;
             case 4:
               setHandDirection(EnumFacing.EAST);
@@ -260,7 +260,7 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
               target.motionX = (f2 * 2.0F);
               target.motionZ = (f1 * 2.0F);
               if (target instanceof EntityPlayerMP)
-                ((EntityPlayerMP)target).connection.sendPacket((Packet)new SPacketEntityVelocity((Entity)target)); 
+                ((EntityPlayerMP)target).connection.sendPacket(new SPacketEntityVelocity(target));
               break;
             case 5:
               setHandDirection(EnumFacing.WEST);
@@ -268,7 +268,7 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
               target.motionX = -(f2 * 2.0F);
               target.motionZ = -(f1 * 2.0F);
               if (target instanceof EntityPlayerMP)
-                ((EntityPlayerMP)target).connection.sendPacket((Packet)new SPacketEntityVelocity((Entity)target)); 
+                ((EntityPlayerMP)target).connection.sendPacket(new SPacketEntityVelocity(target));
               break;
           } 
           setHandDirection(EnumFacing.UP);
@@ -276,14 +276,14 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
           target.motionY = 2.0D;
           target.motionZ = 0.0D;
           if (target instanceof EntityPlayerMP)
-            ((EntityPlayerMP)target).connection.sendPacket((Packet)new SPacketEntityVelocity((Entity)target)); 
+            ((EntityPlayerMP)target).connection.sendPacket(new SPacketEntityVelocity(target));
           break;
         case 6:
           d7 = target.posX + MathHelper.sin(this.rand.nextFloat() * 360.0F) * 16.0D;
           d12 = target.posY + 0.5D;
           d18 = target.posZ + MathHelper.cos(this.rand.nextFloat() * 360.0F) * 16.0D;
           entityGasterBlaster1 = new EntityGasterBlaster(this.world, d7, d12, d18, target.posX, target.posY, target.posZ);
-          this.world.spawnEntity((Entity)entityGasterBlaster1);
+          this.world.spawnEntity(entityGasterBlaster1);
           entityGasterBlaster1.targetpointx = target.posX;
           entityGasterBlaster1.targetpointy = entityGasterBlaster1.posY + entityGasterBlaster1.getEyeHeight() + target.motionY * 10.0D;
           entityGasterBlaster1.targetpointz = target.posZ;
@@ -320,7 +320,7 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
           d1 = target.posY + 0.5D;
           d2 = target.posZ + MathHelper.sin(this.ticksExisted * 0.05F) * 8.0D;
           blaster = new EntityGasterBlaster(this.world, d0, d1, d2, target.posX, target.posY, target.posZ);
-          this.world.spawnEntity((Entity)blaster);
+          this.world.spawnEntity(blaster);
           blaster.targetpointx = target.posX;
           blaster.targetpointy = d1 + 0.5D + target.motionY * 10.0D;
           blaster.targetpointz = target.posZ;
@@ -485,7 +485,7 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
   }
   
   public int getAttackType() {
-    return (Integer) this.dataManager.get(ATTACKID);
+    return this.dataManager.get(ATTACKID);
   }
   
   public void setAttackType(int id) {
@@ -522,7 +522,7 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
   }
   
   public int getEyeType() {
-    return (Integer) this.dataManager.get(EYEID);
+    return this.dataManager.get(EYEID);
   }
   
   public void setEyeType(int age) {
@@ -530,7 +530,7 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
   }
   
   public EnumFacing getHandDirection() {
-    return (EnumFacing)this.dataManager.get(DIRECTION);
+    return this.dataManager.get(DIRECTION);
   }
   
   public void setHandDirection(EnumFacing direction) {
@@ -569,7 +569,7 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
     super.writeEntityToNBT(tagCompound);
     tagCompound.setInteger("Attack", getAttackType());
     tagCompound.setInteger("Eye", getEyeType());
-    tagCompound.setByte("Direction", (byte)((EnumFacing)this.dataManager.get(DIRECTION)).getIndex());
+    tagCompound.setByte("Direction", (byte) this.dataManager.get(DIRECTION).getIndex());
   }
   
   public EnumTier getTier() {
@@ -602,7 +602,7 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
     this.posY = y;
     this.posZ = z;
     boolean flag = false;
-    BlockPos blockpos = new BlockPos((Entity)this);
+    BlockPos blockpos = new BlockPos(this);
     World world = this.world;
     if (world.isBlockLoaded(blockpos)) {
       boolean flag1 = false;
@@ -620,7 +620,7 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
         setPositionAndUpdate(this.posX, this.posY, this.posZ);
         if (isBeingRidden())
           getControllingPassenger().setPositionAndUpdate(this.posX, this.posY, this.posZ); 
-        if (world.getCollisionBoxes((Entity)this, getEntityBoundingBox()).isEmpty())
+        if (world.getCollisionBoxes(this, getEntityBoundingBox()).isEmpty())
           flag = true; 
       } 
     } 
@@ -648,12 +648,12 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
   }
   
   protected boolean teleportTo(double x, double y, double z) {
-    EnderTeleportEvent event = new EnderTeleportEvent((EntityLivingBase)this, x, y, z, 0.0F);
-    if (MinecraftForge.EVENT_BUS.post((Event)event))
+    EnderTeleportEvent event = new EnderTeleportEvent(this, x, y, z, 0.0F);
+    if (MinecraftForge.EVENT_BUS.post(event))
       return false; 
     boolean flag = attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ());
     if (flag) {
-      this.world.playSound((EntityPlayer)null, this.prevPosX, this.prevPosY, this.prevPosZ, ESound.sansblink, getSoundCategory(), 1.0F, 1.0F);
+      this.world.playSound(null, this.prevPosX, this.prevPosY, this.prevPosZ, ESound.sansblink, getSoundCategory(), 1.0F, 1.0F);
       playSound(ESound.sansblink, 1.0F, 1.0F);
       this.motionX = this.motionY = this.motionZ = 0.0D;
       this.renderYawOffset = this.rotationYaw = this.rotationYawHead;
@@ -695,8 +695,8 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
       this.attackSwitchTimer--; 
     if (this.motionY > 1.5D)
       teleportRandomly(); 
-    if (getAttackTarget() != null && getDistance((Entity)getAttackTarget()) > 32.0D && this.rand.nextInt(500) == 0)
-      teleportToEntity((Entity)getAttackTarget()); 
+    if (getAttackTarget() != null && getDistance(getAttackTarget()) > 32.0D && this.rand.nextInt(500) == 0)
+      teleportToEntity(getAttackTarget());
     if (this.talker != null)
       if (this.talker.ended) {
         this.talker = null;
@@ -776,7 +776,7 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
       this.timer++;
       if (!this.sans.world.isRemote && this.timer >= this.delay && !this.ended) {
         for (EntityPlayer player : this.sans.world.playerEntities) {
-          player.sendStatusMessage((ITextComponent)new TextComponentTranslation("speech.sans." + this.name + "." + this.id, new Object[0]), true);
+          player.sendStatusMessage(new TextComponentTranslation("speech.sans." + this.name + "." + this.id, new Object[0]), true);
           if (this.soundbite != null)
             this.sans.world.playSound(null, player.getPosition(), this.soundbite, this.sans.getSoundCategory(), 1.0F, 1.0F); 
           this.timer = 0;

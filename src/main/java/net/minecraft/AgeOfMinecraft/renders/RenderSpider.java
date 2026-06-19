@@ -8,7 +8,6 @@ import net.minecraft.AgeOfMinecraft.models.ModelSpider;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -38,12 +37,12 @@ public class RenderSpider<T extends EntitySpider> extends RenderLiving<T> {
   private static ModelSpider regularmodel = new ModelSpider();
   
   public RenderSpider(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)regularmodel, EngenderConfig.mobs.useMobTalkerModels ? 0.5F : 1.0F);
+    super(renderManagerIn, regularmodel, EngenderConfig.mobs.useMobTalkerModels ? 0.5F : 1.0F);
     addLayer(new LayerSpiderEyes<>(this));
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
     addLayer(new LayerCustomHeadEngender(regularmodel.spiderHead, cmmmodel.Head));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    
+    addLayer(new LayerMobCape(this));
   }
   
   protected float getDeathMaxRotation(EntitySpider entityLiving) {
@@ -52,7 +51,7 @@ public class RenderSpider<T extends EntitySpider> extends RenderLiving<T> {
   
   protected void preRenderCallback(EntitySpider entitylivingbaseIn, float partialTickTime) {
     this.shadowSize = EngenderConfig.mobs.useMobTalkerModels ? 0.5F : 1.0F;
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? ((this instanceof RenderCaveSpider) ? (ModelBase)scmmmodel : (ModelBase)cmmmodel) : (ModelBase)regularmodel;
+    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? ((this instanceof RenderCaveSpider) ? scmmmodel : cmmmodel) : regularmodel;
     if (!EngenderConfig.mobs.useMobTalkerModels) {
       GlStateManager.translate(0.0F, 0.05F, 0.0F);
       if (entitylivingbaseIn.isChild())

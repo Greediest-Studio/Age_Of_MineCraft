@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.shinoow.abyssalcraft.common.entity.EntityInkProjectile;
 import java.util.List;
@@ -28,7 +27,7 @@ public class EntityInkProjectileOther extends EntityInkProjectile {
   protected void onImpact(RayTraceResult result) {
     if (!this.world.isRemote && result.entityHit != null)
       if ((result.entityHit instanceof EntityLivingBase && getThrower() instanceof EntityTameBase && !false) || (result.entityHit instanceof EntityTameBase && false && ((EntityTameBase)getThrower()).getFakeHealth() > 0.0F)) {
-        ((EntityTameBase)getThrower()).inflictEngenderMobDamage((EntityLivingBase)result.entityHit, " was pummeled by ", DamageSource.causeThrownDamage((Entity)this, (Entity)getThrower()), 1.0F);
+        ((EntityTameBase)getThrower()).inflictEngenderMobDamage((EntityLivingBase)result.entityHit, " was pummeled by ", DamageSource.causeThrownDamage(this, getThrower()), 1.0F);
         setDead();
       }  
     if (!this.world.isRemote && result.entityHit == null)
@@ -41,7 +40,7 @@ public class EntityInkProjectileOther extends EntityInkProjectile {
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive())
-          onImpact(new RayTraceResult((Entity)entity1)); 
+          onImpact(new RayTraceResult(entity1));
       }  
   }
 }

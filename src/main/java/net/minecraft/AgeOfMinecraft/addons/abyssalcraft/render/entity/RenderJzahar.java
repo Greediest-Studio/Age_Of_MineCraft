@@ -3,7 +3,6 @@ package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityJzahar;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.model.ModelJzahar;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity.layer.LayerJzaharDeath;
-import net.minecraft.AgeOfMinecraft.renders.LayerLearningBook;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -19,9 +18,9 @@ public class RenderJzahar extends RenderLiving<EntityJzahar> {
   private static final ResourceLocation mobTexture = new ResourceLocation("abyssalcraft:textures/model/boss/j'zahar.png");
   
   public RenderJzahar(RenderManager manager) {
-    super(manager, (ModelBase)new ModelJzahar(true), 1.0F);
+    super(manager, new ModelJzahar(true), 1.0F);
     addLayer((LayerRenderer)new LayerJzaharDeath());
-    addLayer((LayerRenderer)new LayerLearningBook(this));
+    
   }
   
   protected ResourceLocation getEntityTexture(EntityJzahar entity) {

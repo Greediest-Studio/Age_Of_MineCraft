@@ -87,8 +87,8 @@ public class LayerCustomHeadEngender implements LayerRenderer<EntityLivingBase> 
           } else if (nbttagcompound.hasKey("SkullOwner", 8)) {
             String s = nbttagcompound.getString("SkullOwner");
             if (!StringUtils.isBlank(s)) {
-              gameprofile = TileEntitySkull.updateGameProfile(new GameProfile((UUID)null, s));
-              nbttagcompound.setTag("SkullOwner", (NBTBase)NBTUtil.writeGameProfile(new NBTTagCompound(), gameprofile));
+              gameprofile = TileEntitySkull.updateGameProfile(new GameProfile(null, s));
+              nbttagcompound.setTag("SkullOwner", NBTUtil.writeGameProfile(new NBTTagCompound(), gameprofile));
             } 
           } 
         } 

@@ -1,7 +1,6 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier4;
 
 import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Sets;
 import java.util.List;
@@ -102,11 +101,11 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
     setPathPriority(PathNodeType.DANGER_CACTUS, -1.0F);
     this.tasks.addTask(0, new AIPlaceBlock(this));
     this.tasks.addTask(0, new AITakeBlock(this));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.5D, 48.0F, 12.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.5D, true));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.8D, 80));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.5D, 48.0F, 12.0F));
+    this.tasks.addTask(3, new EntityAIFriendlyAttackMelee(this, 1.5D, true));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.8D, 80));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
     this.experienceValue = 10;
   }
   
@@ -147,12 +146,12 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return I18n.translateToLocal("entity." + str + ".cmm.name") + (canDodgeAllAttacks() ? " (Ultra Instinct)" : "");
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name") + (canDodgeAllAttacks() ? " (Ultra Instinct)" : "");
@@ -187,7 +186,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
   
   public EntityTameBase getMutant() {
     if (Loader.isModLoaded("mutantbeasts"))
-      return (EntityTameBase)new EntityMutantEnderman(this.world); 
+      return new EntityMutantEnderman(this.world);
     return null;
   }
   
@@ -196,7 +195,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
     if (!this.world.isRemote)
       for (int i = 0; i < 1 + this.rand.nextInt(10); i++) {
         EntityEnderman baby = new EntityEnderman(this.world);
-        baby.copyLocationAndAnglesFrom((Entity)this);
+        baby.copyLocationAndAnglesFrom(this);
         baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
         baby.setGrowingAge(-100000);
         baby.setChild(true);
@@ -206,7 +205,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
         if (isMarried())
           for (int e = 0; e < 10 + this.rand.nextInt(10); e++)
             baby.levelUp();  
-        this.world.spawnEntity((Entity)baby);
+        this.world.spawnEntity(baby);
       }  
   }
   
@@ -238,7 +237,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
   public void readEntityFromNBT(NBTTagCompound tagCompund) {
     IBlockState iblockstate;
     super.readEntityFromNBT(tagCompund);
-    setDodgeAllAttacks(Boolean.valueOf(tagCompund.getBoolean("OmniDodge")));
+    setDodgeAllAttacks(tagCompund.getBoolean("OmniDodge"));
     this.andr = tagCompund.getBoolean("Andrea");
     if (tagCompund.hasKey("carried", 8)) {
       iblockstate = Block.getBlockFromName(tagCompund.getString("carried")).getStateFromMeta(tagCompund.getShort("carriedData") & 0xFFFF);
@@ -251,7 +250,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
   }
   
   public boolean canDodgeAllAttacks() {
-    return (Boolean) this.dataManager.get(OMNI_DODGE);
+    return this.dataManager.get(OMNI_DODGE);
   }
   
   public void setDodgeAllAttacks(boolean powered) {
@@ -274,7 +273,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
                 if (!false) {
                     teleportTo(entity.posX, entity.posY, entity.posZ);
                     teleportRandomly();
-                    attackEntityAsMob((Entity) entity);
+                    attackEntityAsMob(entity);
                 }
         }
     setSpecialAttackTimer(this.andr ? 20 : 1200);
@@ -300,12 +299,12 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
       ((EntityWitherStorm)getAttackTarget()).Grow(((EntityWitherStorm)getAttackTarget()).getSize() - 2);
       (getAttackTarget()).hurtResistantTime = 0;
       setHeldBlockState(Blocks.OBSIDIAN.getDefaultState());
-      attackEntityAsMob((Entity)getAttackTarget());
+      attackEntityAsMob(getAttackTarget());
     } 
     if (getLevel() >= 300 && getStrength() >= 100.0F && getStamina() >= 100.0F && getIntelligence() >= 100.0F && getDexterity() >= 100.0F && getAgility() >= 100.0F)
       setDodgeAllAttacks(true); 
     if (getAttackTarget() != null && canDodgeAllAttacks() && getNavigator().noPath())
-      teleportToEntity((Entity)getAttackTarget()); 
+      teleportToEntity(getAttackTarget());
     if (canDodgeAllAttacks()) {
       clearActivePotions();
       extinguish();
@@ -316,7 +315,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
     } 
     if (EngenderConfig.mobs.useMobTalkerModels && !isHero() && this.andr)
       becomeAHero(); 
-    if (getAttackTarget() != null && getAttackTarget().isEntityAlive() && getDistanceSq((Entity)getAttackTarget()) < 512.0D && getSpecialAttackTimer() <= 0 && isHero())
+    if (getAttackTarget() != null && getAttackTarget().isEntityAlive() && getDistanceSq(getAttackTarget()) < 512.0D && getSpecialAttackTimer() <= 0 && isHero())
       performSpecialAttack(); 
     if (isWet() && !this.andr && this.hurtResistantTime <= 10)
       attackEntityFrom((new DamageSource("waterburn")).setFireDamage().setDamageBypassesArmor(), 2.0F); 
@@ -324,10 +323,10 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
       if (this.ticksExisted % 400 == 0)
         playSound(SoundEvents.ENTITY_ENDERMEN_STARE, isSneaking() ? 1.0F : 2.5F, EngenderConfig.mobs.useMobTalkerModels ? 1.25F : 1.0F); 
       if ((getAttackTarget()).height <= 2.25F && getAttackTarget().isNonBoss() && getAttackTarget() instanceof EntityLiving && !(getAttackTarget() instanceof EntityTameBase)) {
-        ((EntityLiving)getAttackTarget()).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 60, 9));
-        ((EntityLiving)getAttackTarget()).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 0));
+        getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 60, 9));
+        getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 0));
         ((EntityLiving)getAttackTarget()).getLookHelper().setLookPosition((getAttackTarget()).posX + this.rand.nextDouble() * 60.0D - 30.0D, (getAttackTarget()).posY + this.rand.nextDouble() * 60.0D - 30.0D, (getAttackTarget()).posZ + this.rand.nextDouble() * 60.0D - 30.0D, 180.0F, 180.0F);
-        ((EntityLiving)getAttackTarget()).setAttackTarget((EntityLivingBase)null);
+        ((EntityLiving)getAttackTarget()).setAttackTarget(null);
         (getAttackTarget()).renderYawOffset = (getAttackTarget()).rotationYaw = (getAttackTarget()).rotationYawHead;
         ((EntityLiving)getAttackTarget()).targetTasks.taskEntries.clear();
       } 
@@ -336,7 +335,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
         teleportRandomly();
         this.motionX = this.motionY = this.motionZ = 0.0D;
         setEnergy(getEnergy() - 0.01F);
-        attackEntityAsMob((Entity)getAttackTarget());
+        attackEntityAsMob(getAttackTarget());
       } 
     } 
     if (this.world.isRemote && isEntityAlive()) {
@@ -362,16 +361,16 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
         this.world.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
       } 
     } 
-    if (isEntityAlive() && !isBeingRidden() && getGuardBlock() == null && getOwner() != null && (getDistanceSq((Entity)getOwner()) > 4096.0D || !canEntityBeSeen((Entity)getOwner())) && !this.world.isRemote) {
-      setAttackTarget((EntityLivingBase)null);
+    if (isEntityAlive() && !isBeingRidden() && getGuardBlock() == null && getOwner() != null && (getDistanceSq(getOwner()) > 4096.0D || !canEntityBeSeen(getOwner())) && !this.world.isRemote) {
+      setAttackTarget(null);
       getNavigator().clearPath();
       teleportTo((getOwner()).posX, (getOwner()).posY, (getOwner()).posZ);
     } 
     if (isEntityAlive() && !isBeingRidden() && getRevengeTarget() != null && getRNG().nextInt(20) == 0) {
-      if (getRevengeTarget().getDistanceSq((Entity)this) < 2.0D && !this.world.isRemote)
+      if (getRevengeTarget().getDistanceSq(this) < 2.0D && !this.world.isRemote)
         teleportRandomly(); 
-      if (getRevengeTarget().getDistanceSq((Entity)this) > 128.0D && !this.world.isRemote)
-        teleportToEntity((Entity)getRevengeTarget()); 
+      if (getRevengeTarget().getDistanceSq(this) > 128.0D && !this.world.isRemote)
+        teleportToEntity(getRevengeTarget());
     } 
     super.onLivingUpdate();
   }
@@ -406,18 +405,18 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
   }
   
   protected boolean teleportTo(double x, double y, double z) {
-    EnderTeleportEvent event = new EnderTeleportEvent((EntityLivingBase)this, x, y, z, 0.0F);
-    if (MinecraftForge.EVENT_BUS.post((Event)event))
+    EnderTeleportEvent event = new EnderTeleportEvent(this, x, y, z, 0.0F);
+    if (MinecraftForge.EVENT_BUS.post(event))
       return false; 
     boolean flag = (attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ()) && !isInLove() && !isRiding());
     if (flag || canDodgeAllAttacks()) {
-      this.world.playSound((EntityPlayer)null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
+      this.world.playSound(null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
       playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
       if (!this.world.isRemote && this.rand.nextFloat() < 0.01F) {
         EntityEndermite entityendermite = new EntityEndermite(this.world);
         entityendermite.setOwnerId(getOwnerId());
         entityendermite.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
-        this.world.spawnEntity((Entity)entityendermite);
+        this.world.spawnEntity(entityendermite);
       } 
       return true;
     } 
@@ -432,7 +431,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
     this.posY = y;
     this.posZ = z;
     boolean flag = false;
-    BlockPos blockpos = new BlockPos((Entity)this);
+    BlockPos blockpos = new BlockPos(this);
     World world = this.world;
     Random random = getRNG();
     if (world.isBlockLoaded(blockpos)) {
@@ -451,7 +450,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
         setPositionAndUpdate(this.posX, this.posY, this.posZ);
         if (isBeingRidden())
           getControllingPassenger().setPositionAndUpdate(this.posX, this.posY, this.posZ); 
-        if (world.getCollisionBoxes((Entity)this, getEntityBoundingBox()).isEmpty() && !world.containsAnyLiquid(getEntityBoundingBox()))
+        if (world.getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && !world.containsAnyLiquid(getEntityBoundingBox()))
           flag = true; 
       } 
     } 
@@ -502,9 +501,9 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
       if (hasOwner(player) && iblockstate != null) {
         if (!this.world.isRemote)
           entityDropItem(new ItemStack(iblockstate.getBlock(), 1, iblockstate.getBlock().getMetaFromState(iblockstate)), 0.0F); 
-        setHeldBlockState((IBlockState)null);
+        setHeldBlockState(null);
       } else if (!isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote) {
-        player.startRiding((Entity)this);
+        player.startRiding(this);
       } 
       return true;
     } 
@@ -514,12 +513,12 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
           for (EntityTameBase entity : list) {
               if (entity != null)
                   if (false) {
-                      this.world.playSound((EntityPlayer) null, entity.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
+                      this.world.playSound(null, entity.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
                       entity.changeDimension(1);
                   }
           }
-      this.world.playSound((EntityPlayer)null, getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
-      this.world.playSound((EntityPlayer)null, player.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
+      this.world.playSound(null, getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
+      this.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
       changeDimension(1);
       player.changeDimension(1);
       return true;
@@ -649,7 +648,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
     if (entity instanceof EntityLivingBase && EngenderConfig.mobs.useMobTalkerModels && this.andr && amount < 50.0F) {
       EntityLivingBase creature = (EntityLivingBase)entity;
       creature.attackEntityFrom(DamageSource.GENERIC.setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), amount);
-      creature.knockBack((Entity)this, amount * 0.1F, -MathHelper.sin(creature.rotationYawHead * 0.017453292F), MathHelper.cos(creature.rotationYawHead * 0.017453292F));
+      creature.knockBack(this, amount * 0.1F, -MathHelper.sin(creature.rotationYawHead * 0.017453292F), MathHelper.cos(creature.rotationYawHead * 0.017453292F));
     } 
     if (this.andr && (source.isFireDamage() || source.isExplosion() || source.isProjectile() || source.isMagicDamage() || amount < 50.0F))
       return false; 
@@ -757,7 +756,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
       if (iblockstate2 != null && canPlaceBlock(world, blockpos, iblockstate2.getBlock(), iblockstate, iblockstate1)) {
         this.enderman.world.playEvent(2001, blockpos, Block.getIdFromBlock(iblockstate2.getBlock()));
         world.setBlockState(blockpos, iblockstate2, 3);
-        this.enderman.setHeldBlockState((IBlockState)null);
+        this.enderman.setHeldBlockState(null);
       } 
     }
     

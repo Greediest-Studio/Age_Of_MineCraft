@@ -19,9 +19,9 @@ public class LayerWitherStormBody implements LayerRenderer<EntityLivingBase> {
   
   private static final ResourceLocation witherTextures = new ResourceLocation("ageofminecraft", "textures/entities/wither_storm_hue.png");
   
-  private final ModelBase modelmatter = (ModelBase)new ModelWitherStormBody();
+  private final ModelBase modelmatter = new ModelWitherStormBody();
   
-  private final ModelBase modelmaterial = (ModelBase)new ModelCommandBlockWitherBody();
+  private final ModelBase modelmaterial = new ModelCommandBlockWitherBody();
   
   private final RenderWitherStorm witherRenderer;
   
@@ -37,7 +37,7 @@ public class LayerWitherStormBody implements LayerRenderer<EntityLivingBase> {
       GlStateManager.translate(0.0F, 0.5F, 0.5F);
       GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
       this.witherRenderer.bindTexture(withersmallTextures);
-      this.modelmaterial.render((Entity)p_177214_1_, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+      this.modelmaterial.render(p_177214_1_, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
       GlStateManager.popMatrix();
     } else {
       float size = p_177214_1_.getMaxHealth() * 2.5E-5F;
@@ -51,7 +51,7 @@ public class LayerWitherStormBody implements LayerRenderer<EntityLivingBase> {
       if (p_177214_1_.getMaxHealth() >= 300000.0F)
         GlStateManager.scale(1.0F + MathHelper.cos(p_177214_1_.ticksExisted + p_177214_4_) * 0.01F, 1.0F + MathHelper.cos(p_177214_1_.ticksExisted + p_177214_4_) * 0.01F, 1.0F + MathHelper.sin(p_177214_1_.ticksExisted + p_177214_4_) * 0.01F); 
       this.witherRenderer.bindTexture(witherTextures);
-      this.modelmatter.render((Entity)p_177214_1_, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+      this.modelmatter.render(p_177214_1_, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
     } 
   }
   

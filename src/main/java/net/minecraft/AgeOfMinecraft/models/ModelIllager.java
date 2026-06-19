@@ -85,7 +85,7 @@ public class ModelIllager extends ModelBase {
   }
   
   public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
-    this.hat.showModel = ((EntityAbstractIllagers)entityIn instanceof EntityIllusioner && ((EntityIllusioner)entityIn).getDisguiseID() == 0);
+    this.hat.showModel = (entityIn instanceof EntityIllusioner && ((EntityIllusioner)entityIn).getDisguiseID() == 0);
     this.head.rotateAngleY = netHeadYaw * 0.017453292F;
     this.head.rotateAngleX = headPitch * 0.017453292F;
     this.arms.rotationPointY = 3.0F;
@@ -101,8 +101,8 @@ public class ModelIllager extends ModelBase {
       this.leftArm.rotateAngleY = -((EntityAbstractIllagers)entityIn).bookSpread + 1.0F;
       this.rightArm.rotateAngleZ = 0.0F;
       this.leftArm.rotateAngleZ = 0.0F;
-      this.rightArm.rotateAngleX = -1.5F + 0.1F + MathHelper.sin(((EntityAbstractIllagers)entityIn).ticksExisted * 0.1F) * 0.01F;
-      this.leftArm.rotateAngleX = -1.5F + 0.1F + MathHelper.sin(((EntityAbstractIllagers)entityIn).ticksExisted * 0.1F) * 0.01F;
+      this.rightArm.rotateAngleX = -1.5F + 0.1F + MathHelper.sin(entityIn.ticksExisted * 0.1F) * 0.01F;
+      this.leftArm.rotateAngleX = -1.5F + 0.1F + MathHelper.sin(entityIn.ticksExisted * 0.1F) * 0.01F;
     } else if (abstractillager$illagerarmpose == EntityAbstractIllagers.IllagerArmPose.ATTACKING) {
       float f = MathHelper.sin(this.swingProgress * 3.1415927F);
       float f1 = MathHelper.sin((1.0F - (1.0F - this.swingProgress) * (1.0F - this.swingProgress)) * 3.1415927F);

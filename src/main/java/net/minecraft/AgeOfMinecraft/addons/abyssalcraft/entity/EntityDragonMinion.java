@@ -5,7 +5,7 @@ import com.shinoow.abyssalcraft.api.entity.EntityUtil;
 import com.shinoow.abyssalcraft.api.item.ACItems;
 import com.shinoow.abyssalcraft.lib.ACConfig;
 import com.shinoow.abyssalcraft.lib.ACLoot;
-import java.util.Iterator;
+
 import java.util.List;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
 import net.minecraft.AgeOfMinecraft.entity.tame.EnumTier;
@@ -182,8 +182,8 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
       if (getHealth() > getMaxHealth() / 5.0F)
         this.targetTasks.onUpdateTasks(); 
       if (isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && this.isOffensive && !isChild() && !false)
-        if (getDistanceSq((Entity)getAttackTarget()) < (this.reachWidth * this.reachWidth + ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width) * ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width)) + 9.0D && (this.ticksExisted + getEntityId()) % 10 == 0)
-          attackEntityAsMob((Entity)getAttackTarget());  
+        if (getDistanceSq(getAttackTarget()) < (this.reachWidth * this.reachWidth + ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width) * ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width)) + 9.0D && (this.ticksExisted + getEntityId()) % 10 == 0)
+          attackEntityAsMob(getAttackTarget());
     } 
     setSilent(isAIDisabled());
     if (this.world.isRemote) {
@@ -200,12 +200,12 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
       if (ACConfig.particleEntity)
         this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX + f, this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
     } else if (!isAIDisabled()) {
-      if (!isWild() && getDistanceSq((Entity)getOwner()) > 4069.0D) {
-        this.target = (Entity)getOwner();
+      if (!isWild() && getDistanceSq(getOwner()) > 4069.0D) {
+        this.target = getOwner();
         setAttackTarget(null);
       } 
       if (getAttackTarget() != null && this.target == null && this.ticksExisted + getEntityId() % 40 == 0)
-        this.target = (Entity)getAttackTarget(); 
+        this.target = getAttackTarget();
       updateHealingCircle();
       float f = 0.2F / (MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ) * 10.0F + 1.0F);
       f *= (float)Math.pow(2.0D, this.motionY);
@@ -276,14 +276,14 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
         MultiPartEntityPart.setLocationAndAngles(this.posX - ((f19 * f23 + f22 * f24) * f16), this.posY + adouble1[1] - adouble[1] - ((f24 + f23) * f18) + 0.75D, this.posZ + ((f31 * f23 + f7 * f24) * f16), 0.0F, 0.0F);
       } 
       if (!this.world.isRemote) {
-        collideWithEntities(this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartBody.getEntityBoundingBox().grow(1.0D)));
-        collideWithEntities(this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartWing1.getEntityBoundingBox().grow(1.0D).offset(0.0D, -1.0D, 0.0D)));
-        collideWithEntities(this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartWing2.getEntityBoundingBox().grow(1.0D).offset(0.0D, -1.0D, 0.0D)));
-        collideWithEntities(this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartTail1.getEntityBoundingBox().grow(1.0D)));
-        collideWithEntities(this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartTail2.getEntityBoundingBox().grow(1.0D)));
-        collideWithEntities(this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartTail3.getEntityBoundingBox().grow(1.0D)));
-        attackEntitiesInList(this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartHead.getEntityBoundingBox().grow(3.0D).offset(0.0D, -1.0D, 0.0D)));
-        attackEntitiesInList(this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartNeck.getEntityBoundingBox().grow(3.0D).offset(0.0D, -1.0D, 0.0D)));
+        collideWithEntities(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartBody.getEntityBoundingBox().grow(1.0D)));
+        collideWithEntities(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartWing1.getEntityBoundingBox().grow(1.0D).offset(0.0D, -1.0D, 0.0D)));
+        collideWithEntities(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartWing2.getEntityBoundingBox().grow(1.0D).offset(0.0D, -1.0D, 0.0D)));
+        collideWithEntities(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartTail1.getEntityBoundingBox().grow(1.0D)));
+        collideWithEntities(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartTail2.getEntityBoundingBox().grow(1.0D)));
+        collideWithEntities(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartTail3.getEntityBoundingBox().grow(1.0D)));
+        attackEntitiesInList(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartHead.getEntityBoundingBox().grow(3.0D).offset(0.0D, -1.0D, 0.0D)));
+        attackEntitiesInList(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartNeck.getEntityBoundingBox().grow(3.0D).offset(0.0D, -1.0D, 0.0D)));
       } 
     } 
     if (this.world.isRemote) {
@@ -387,7 +387,7 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -411,12 +411,12 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
     BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain(axisalignedbb.minX + 0.001D, axisalignedbb.minY + 0.001D, axisalignedbb.minZ + 0.001D);
     BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos1 = BlockPos.PooledMutableBlockPos.retain(axisalignedbb.maxX - 0.001D, axisalignedbb.maxY - 0.001D, axisalignedbb.maxZ - 0.001D);
     BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos2 = BlockPos.PooledMutableBlockPos.retain();
-    if (this.world.isAreaLoaded((BlockPos)blockpos$pooledmutableblockpos, (BlockPos)blockpos$pooledmutableblockpos1))
+    if (this.world.isAreaLoaded(blockpos$pooledmutableblockpos, blockpos$pooledmutableblockpos1))
       for (int i = blockpos$pooledmutableblockpos.getX(); i <= blockpos$pooledmutableblockpos1.getX(); i++) {
         for (int j = blockpos$pooledmutableblockpos.getY(); j <= blockpos$pooledmutableblockpos1.getY(); j++) {
           for (int k = blockpos$pooledmutableblockpos.getZ(); k <= blockpos$pooledmutableblockpos1.getZ(); k++) {
             blockpos$pooledmutableblockpos2.setPos(i, j, k);
-            IBlockState iblockstate = this.world.getBlockState((BlockPos)blockpos$pooledmutableblockpos2);
+            IBlockState iblockstate = this.world.getBlockState(blockpos$pooledmutableblockpos2);
             if (iblockstate.getMaterial() == Material.PORTAL)
               addVelocity((this.motionX > 0.0D) ? -3.0D : 3.0D, (this.motionY > 0.0D) ? -3.0D : 3.0D, (this.motionZ > 0.0D) ? -3.0D : 3.0D); 
           } 
@@ -431,10 +431,10 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
     if (this.healingcircle != null)
       if (this.healingcircle.isDead) {
         if (!this.world.isRemote)
-          attackEntityFromPart((MultiPartEntityPart)this.dragonPartHead, DamageSource.causeExplosionDamage((Explosion)null), 1000.0F); 
+          attackEntityFromPart(this.dragonPartHead, DamageSource.causeExplosionDamage((Explosion)null), 1000.0F);
         this.healingcircle = null;
       } else if (!this.world.isRemote && this.ticksExisted % 10 == 0 && getHealth() <= getMaxHealth() && this.healingcircle.getHealth() < this.healingcircle.getMaxHealth()) {
-        attackEntityFromPart((MultiPartEntityPart)this.dragonPartHead, (new DamageSource("starve")).setDamageBypassesArmor().setDamageIsAbsolute(), 2.0F);
+        attackEntityFromPart(this.dragonPartHead, (new DamageSource("starve")).setDamageBypassesArmor().setDamageIsAbsolute(), 2.0F);
         this.healingcircle.heal(4.0F);
       }  
     if (this.rand.nextInt(10) == 0) {
@@ -444,7 +444,7 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
       double d0 = Double.MAX_VALUE;
         for (Object o : list) {
             EntityDragonBoss entitydragonboss1 = (EntityDragonBoss) o;
-            double d1 = entitydragonboss1.getDistanceSq((Entity) this);
+            double d1 = entitydragonboss1.getDistanceSq(this);
             if (d1 < d0) {
                 d0 = d1;
                 entitydragonboss = entitydragonboss1;
@@ -464,7 +464,7 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
               double d3 = entity.posZ - d1;
               double d4 = d2 * d2 + d3 * d3;
               entity.addVelocity(d2 / d4 * 1.25D, 0.1D, d3 / d4 * 1.25D);
-              entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase) this), 1.0F);
+              entity.attackEntityFrom(DamageSource.causeMobDamage(this), 1.0F);
               if (entity instanceof EntityLivingBase && !EntityUtil.isEntityCoralium((EntityLivingBase) entity))
                   ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(AbyssalCraftAPI.coralium_plague, 100));
           }
@@ -480,7 +480,7 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
               if (entity instanceof EntityLivingBase && !EntityUtil.isEntityCoralium((EntityLivingBase) entity))
                   ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(AbyssalCraftAPI.coralium_plague, 400));
               if (ACConfig.hardcoreMode && entity instanceof EntityPlayer)
-                  entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase) this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.0F);
+                  entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.0F);
           }
       }
   }
@@ -488,7 +488,7 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
   private void setNewTarget() {
     this.forceNewTarget = false;
     if (this.rand.nextBoolean() && getAttackTarget() != null) {
-      this.target = (Entity)getAttackTarget();
+      this.target = getAttackTarget();
     } else {
       boolean flag = false;
       do {
@@ -578,11 +578,11 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
   }
   
   public Entity[] getParts() {
-    return (Entity[])this.dragonPartArray;
+    return this.dragonPartArray;
   }
   
   public boolean canBeCollidedWith() {
-    return (this.world.getClosestPlayerToEntity((Entity)this, this.width) != null && isEntityAlive());
+    return (this.world.getClosestPlayerToEntity(this, this.width) != null && isEntityAlive());
   }
   
   public World getWorld() {

@@ -42,8 +42,8 @@ public class LayerSheepWool implements LayerRenderer<EntitySheep> {
         GlStateManager.color(afloat[0], afloat[1], afloat[2]);
       } 
       this.sheepModel.setModelAttributes(this.sheepRenderer.getMainModel());
-      this.sheepModel.setLivingAnimations((EntityLivingBase)entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks);
-      this.sheepModel.render((Entity)entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+      this.sheepModel.setLivingAnimations(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks);
+      this.sheepModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
     } 
   }
   

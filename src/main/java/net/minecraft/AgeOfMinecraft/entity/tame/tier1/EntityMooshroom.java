@@ -27,7 +27,7 @@ import net.minecraftforge.common.IShearable;
 public class EntityMooshroom extends EntityCow implements IShearable {
   public EntityMooshroom(World worldIn) {
     super(worldIn);
-    this.spawnableBlock = (Block)Blocks.MYCELIUM;
+    this.spawnableBlock = Blocks.MYCELIUM;
     this.experienceValue = 3;
   }
   
@@ -59,8 +59,8 @@ public class EntityMooshroom extends EntityCow implements IShearable {
       this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY + this.height, this.posZ, 0.0D, 0.0D, 0.0D);
       if (!this.world.isRemote) {
         for (int i = 0; i < 5; i++)
-          this.world.spawnEntity((Entity)new EntityItem(this.world, this.posX, this.posY + this.height, this.posZ, new ItemStack((Block)Blocks.RED_MUSHROOM))); 
-        stack.damageItem(16, (EntityLivingBase)player);
+          this.world.spawnEntity(new EntityItem(this.world, this.posX, this.posY + this.height, this.posZ, new ItemStack(Blocks.RED_MUSHROOM)));
+        stack.damageItem(16, player);
         playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 0.5F, 0.5F);
       } 
       return true;
@@ -81,7 +81,7 @@ public class EntityMooshroom extends EntityCow implements IShearable {
     this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY + (this.height / 2.0F), this.posZ, 0.0D, 0.0D, 0.0D);
     List<ItemStack> ret = new ArrayList<>();
     for (int i = 0; i < 5; i++)
-      ret.add(new ItemStack((Block)Blocks.RED_MUSHROOM)); 
+      ret.add(new ItemStack(Blocks.RED_MUSHROOM));
     playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0F, 0.7F);
     return ret;
   }

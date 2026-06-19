@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier5;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import java.util.UUID;
@@ -67,12 +66,12 @@ public class EntityPrisonGolem extends EntityTameBase implements Armored {
     setSize(1.25F, 2.68F);
     this.isOffensive = true;
     this.experienceValue = 20;
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIOpenDoor((EntityLiving)this, true));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.0D, 48.0F, 8.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.0D, true));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.55D, 80));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(0, new EntityAIOpenDoor(this, true));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.0D, 48.0F, 8.0F));
+    this.tasks.addTask(3, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.55D, 80));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
   }
   
   public String getDescName() {
@@ -105,7 +104,7 @@ public class EntityPrisonGolem extends EntityTameBase implements Armored {
   }
   
   public boolean isAlternateSkin() {
-    return (Boolean) getDataManager().get(ALTERNATE_SKIN);
+    return getDataManager().get(ALTERNATE_SKIN);
   }
   
   public void setAlternateSkin(boolean childZombie) {
@@ -119,7 +118,7 @@ public class EntityPrisonGolem extends EntityTameBase implements Armored {
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
     super.writeEntityToNBT(tagCompound);
-    if ((Boolean) this.dataManager.get(ALTERNATE_SKIN))
+    if (this.dataManager.get(ALTERNATE_SKIN))
       tagCompound.setBoolean("AltSkin", true); 
   }
   
@@ -162,7 +161,7 @@ public class EntityPrisonGolem extends EntityTameBase implements Armored {
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && !isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote) {
-      player.startRiding((Entity)this);
+      player.startRiding(this);
       return true;
     } 
     return false;
@@ -211,7 +210,7 @@ public class EntityPrisonGolem extends EntityTameBase implements Armored {
         this.motionY = 0.0D;
         this.motionZ = 0.0D;
       } 
-      List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(1.0D));
+      List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(1.0D));
         for (Entity entity : list) {
             if (entity instanceof EntityLivingBase && !false && !this.world.isRemote && this.ticksExisted % 10 == 0)
                 attackEntityAsMob(entity);
@@ -231,7 +230,7 @@ public class EntityPrisonGolem extends EntityTameBase implements Armored {
   
   public void onLivingUpdate() {
     super.onLivingUpdate();
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 64.0D && getSpecialAttackTimer() <= 0 && this.onGround && isHero())
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) < 64.0D && getSpecialAttackTimer() <= 0 && this.onGround && isHero())
       performSpecialAttack(); 
     if (this.motionX * this.motionX + this.motionZ * this.motionZ != 0.0D && this.rand.nextInt(5) == 0) {
       int i = MathHelper.floor(this.posX);
@@ -245,7 +244,7 @@ public class EntityPrisonGolem extends EntityTameBase implements Armored {
   
   public boolean attackEntityAsMob(Entity entityIn) {
     this.attackTimer = 10;
-    this.world.setEntityState((Entity)this, (byte)4);
+    this.world.setEntityState(this, (byte)4);
     playSound(SoundEvents.ENTITY_IRONGOLEM_ATTACK, 1.0F, 1.0F);
     AttributeModifier irongolemrandomizer = (new AttributeModifier(UUID.fromString("B9766B59-8566-4402-BC1F-3EE2A276D839"), "Iron Golem randomizer", this.rand.nextDouble() * 1.5D, 1)).setSaved(false);
     IAttributeInstance iattributeinstanceattack = getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
@@ -269,7 +268,7 @@ public class EntityPrisonGolem extends EntityTameBase implements Armored {
     if (this.world.getDifficulty() == EnumDifficulty.HARD)
       amount *= 1.5D; 
     if (!entity.isEntityAlive() && entity instanceof EntityLivingBase) {
-      ((EntityLivingBase)entity).prevRenderYawOffset = ((EntityLivingBase)entity).renderYawOffset = ((EntityLivingBase)entity).prevRotationYaw = ((EntityLivingBase)entity).rotationYaw = ((EntityLivingBase)entity).prevRotationYawHead = ((EntityLivingBase)entity).rotationYawHead = this.rotationYawHead;
+      ((EntityLivingBase)entity).prevRenderYawOffset = ((EntityLivingBase)entity).renderYawOffset = entity.prevRotationYaw = ((EntityLivingBase)entity).rotationYaw = ((EntityLivingBase)entity).prevRotationYawHead = ((EntityLivingBase)entity).rotationYawHead = this.rotationYawHead;
       float xRatio = MathHelper.sin(this.rotationYawHead * 0.017453292F);
       float zRatio = -MathHelper.cos(this.rotationYawHead * 0.017453292F);
       entity.isAirBorne = true;
@@ -281,7 +280,7 @@ public class EntityPrisonGolem extends EntityTameBase implements Armored {
       entity.motionY /= 2.0D;
       entity.motionY += amount;
       if (entity instanceof EntityPlayerMP)
-        ((EntityPlayerMP)entity).connection.sendPacket((Packet)new SPacketEntityVelocity(entity)); 
+        ((EntityPlayerMP)entity).connection.sendPacket(new SPacketEntityVelocity(entity));
     } 
     entity.motionY += amount;
     if (entity instanceof EntityLivingBase) {
@@ -309,7 +308,7 @@ public class EntityPrisonGolem extends EntityTameBase implements Armored {
     if (getSpecialAttackTimer() <= 0 && isHero()) {
       setSpecialAttackTimer(300);
       playSound(ESound.golemSmash, 10.0F, 1.0F);
-      createEngenderModExplosionFireless((Entity)this, this.posX, this.posY - 2.0D, this.posZ, 3.0F, false);
+      createEngenderModExplosionFireless(this, this.posX, this.posY - 2.0D, this.posZ, 3.0F, false);
       List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(24.0D, 3.0D, 24.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
           for (EntityLivingBase entity : list) {
@@ -317,9 +316,9 @@ public class EntityPrisonGolem extends EntityTameBase implements Armored {
                   if (!false) {
                       entity.motionY += 1.5D;
                       if (entity instanceof net.minecraft.entity.monster.IMob) {
-                          entity.attackEntityFrom(DamageSource.causeExplosionDamage((EntityLivingBase) this), 24.0F);
+                          entity.attackEntityFrom(DamageSource.causeExplosionDamage(this), 24.0F);
                       } else {
-                          entity.attackEntityFrom(DamageSource.causeExplosionDamage((EntityLivingBase) this), 12.0F);
+                          entity.attackEntityFrom(DamageSource.causeExplosionDamage(this), 12.0F);
                       }
                       entity.isAirBorne = true;
                       float f = MathHelper.sqrt(MathHelper.sin(this.rotationYaw * 0.017453292F) * MathHelper.sin(this.rotationYaw * 0.017453292F) + -MathHelper.cos(this.rotationYaw * 0.017453292F) * -MathHelper.cos(this.rotationYaw * 0.017453292F));
@@ -329,7 +328,7 @@ public class EntityPrisonGolem extends EntityTameBase implements Armored {
                       entity.motionZ -= (-MathHelper.cos(this.rotationYaw * 0.017453292F) / f) * 1.0D;
                   }
                   if (EngenderConfig.general.useMessage && !entity.isEntityAlive() && !isWild())
-                      getOwner().sendMessage((ITextComponent) new TextComponentTranslation(entity.getName() + " was blown up by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
+                      getOwner().sendMessage(new TextComponentTranslation(entity.getName() + " was blown up by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
               }
           }
     } 

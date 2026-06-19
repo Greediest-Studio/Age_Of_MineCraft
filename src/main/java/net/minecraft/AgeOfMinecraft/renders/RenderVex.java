@@ -5,7 +5,6 @@ import net.minecraft.AgeOfMinecraft.models.ModelVex;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderBiped;
-import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -25,10 +24,9 @@ public class RenderVex extends RenderBiped<EntityVex> {
   private static final ResourceLocation antiVEX_CHARGING_TEXTURE = new ResourceLocation("ageofminecraft", "textures/entities/anti/vex_charging.png");
   
   public RenderVex(RenderManager p_i47190_1_) {
-    super(p_i47190_1_, (ModelBiped)new ModelVex(), 0.3F);
+    super(p_i47190_1_, new ModelVex(), 0.3F);
     addLayer(new LayerCustomHeadEngender(((ModelVex)this.mainModel).bipedHead, ((ModelVex)this.mainModel).bipedHead));
-    addLayer(new LayerLearningBook((RenderLiving<?>)this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    addLayer(new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityVex entity) {

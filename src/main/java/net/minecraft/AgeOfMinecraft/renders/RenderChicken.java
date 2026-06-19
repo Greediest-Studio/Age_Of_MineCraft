@@ -21,10 +21,10 @@ public class RenderChicken extends RenderLiving<EntityChicken> {
   private static final ResourceLocation antiTextures = new ResourceLocation("ageofminecraft", "textures/entities/anti/chicken.png");
   
   public RenderChicken(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)new ModelChicken(), 0.3F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
+    super(renderManagerIn, new ModelChicken(), 0.3F);
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
     addLayer(new LayerCustomHeadEngender(((ModelChicken)this.mainModel).head, ((ModelChicken)this.mainModel).head));
-    addLayer(new LayerLearningBook(this));
+    
   }
   
   protected void preRenderCallback(EntityChicken entitylivingbaseIn, float partialTickTime) {

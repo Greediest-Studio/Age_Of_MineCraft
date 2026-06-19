@@ -23,11 +23,11 @@ public class RenderPrisonGolem extends RenderLiving<EntityPrisonGolem> {
   private static ModelIronGolem regularmodel = new ModelIronGolem();
   
   public RenderPrisonGolem(RenderManager p_i46133_1_) {
-    super(p_i46133_1_, (ModelBase)regularmodel, 0.75F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
+    super(p_i46133_1_, regularmodel, 0.75F);
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
     addLayer(new LayerCustomHeadEngender(regularmodel.ironGolemHead, regularmodel.ironGolemHead));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    
+    addLayer(new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityPrisonGolem entity) {

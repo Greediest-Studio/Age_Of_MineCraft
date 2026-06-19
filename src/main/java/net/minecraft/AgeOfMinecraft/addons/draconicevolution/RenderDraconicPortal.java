@@ -18,7 +18,7 @@ public class RenderDraconicPortal extends RenderLiving<EntityDraconicPortal> {
   private Random rnd = new Random();
   
   public RenderDraconicPortal(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)new ModelPortal(), 4.0F);
+    super(renderManagerIn, new ModelPortal(), 4.0F);
     addLayer(new LayerDraconicPortalGlow(this));
     addLayer(new LayerDraconicPortalOverlay(this));
   }

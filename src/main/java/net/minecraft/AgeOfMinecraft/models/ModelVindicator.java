@@ -18,7 +18,7 @@ public class ModelVindicator extends ModelIllager implements ICappedModel {
   
   public ModelVindicator(float scaleFactor) {
     this(scaleFactor, 0.0F, 64, 64);
-    this.bipedCape = new ModelRenderer((ModelBase)this, 0, 0);
+    this.bipedCape = new ModelRenderer(this, 0, 0);
     this.bipedCape.setTextureSize(64, 32);
     this.bipedCape.addBox(-5.0F, 0.0F, -1.0F, 10, 16, 1, scaleFactor);
   }
@@ -73,7 +73,7 @@ public class ModelVindicator extends ModelIllager implements ICappedModel {
     this.rightArm.rotateAngleX += MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
     this.leftArm.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
     this.arms.rotateAngleX = -0.75F;
-    if (((EntityVindicator)entityIn).isBurning() || (!((EntityVindicator)entityIn).isEntityAlive() && !((EntityVindicator)entityIn).onGround)) {
+    if (entityIn.isBurning() || (!entityIn.isEntityAlive() && !entityIn.onGround)) {
       this.head.rotateAngleX -= 0.5F;
       this.head.rotateAngleY += MathHelper.cos(ageInTicks * 0.6662F) * 0.5F;
       this.rightArm.rotationPointZ = 0.0F;

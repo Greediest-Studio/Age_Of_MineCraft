@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier2;
 
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Random;
 import javax.annotation.Nullable;
@@ -126,7 +125,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
               Item.getItemFromBlock(Blocks.MELON_BLOCK), new PriceInfo(1, 1)), new EmeraldForItems(Items.COAL, new PriceInfo(4, 8)), new EmeraldForItems(Items.REDSTONE, new PriceInfo(4, 8)), new EmeraldForItems(Items.IRON_INGOT, new PriceInfo(2, 4)), new EmeraldForItems(Items.GOLD_INGOT, new PriceInfo(1, 2)), 
             new EmeraldForItems(Items.DIAMOND, new PriceInfo(1, 1)), new EmeraldForItems(Items.ROTTEN_FLESH, new PriceInfo(8, 16)), new EmeraldForItems(Items.BONE, new PriceInfo(8, 16)), new EmeraldForItems(Items.STRING, new PriceInfo(8, 16)), new EmeraldForItems(Items.GUNPOWDER, new PriceInfo(8, 16)), new EmeraldForItems(Items.SPIDER_EYE, new PriceInfo(1, 4)), new EmeraldsForItem(Items.ENDER_PEARL, new PriceInfo(2, 4)), new EmeraldsForItem(Items.BLAZE_ROD, new PriceInfo(4, 8)), new EmeraldsForItem(Items.GHAST_TEAR, new PriceInfo(8, 8)), new EmeraldsForItem(Items.NETHER_STAR, new PriceInfo(64, 64)), 
             new ListItemForEmeralds(Items.BREAD, new PriceInfo(-16, -8)), new ListItemForEmeralds(Items.APPLE, new PriceInfo(-24, -16)), new ListItemForEmeralds(Items.GOLDEN_APPLE, new PriceInfo(4, 4)), new ListItemForEmeralds(new ItemStack(Items.GOLDEN_APPLE, 1, 1), new PriceInfo(24, 24)), new ListItemForEmeralds(Items.GOLDEN_CARROT, new PriceInfo(4, 4)), new ListItemForEmeralds(Items.COOKIE, new PriceInfo(-64, -64)), new ListItemForEmeralds(Items.BAKED_POTATO, new PriceInfo(-32, -16)), new ListItemForEmeralds(Items.COOKED_CHICKEN, new PriceInfo(-16, -8)), new ListItemForEmeralds(Items.COOKED_MUTTON, new PriceInfo(-16, -8)), new ListItemForEmeralds(Items.COOKED_PORKCHOP, new PriceInfo(-16, -8)), 
-            new ListItemForEmeralds(Items.COOKED_BEEF, new PriceInfo(-16, -8)), new ListItemForEmeralds(Items.CAKE, new PriceInfo(1, 1)), new ListItemForEmeralds(Items.DIAMOND_HOE, new PriceInfo(2, 2)), new ListItemForEmeralds(Items.DIAMOND_AXE, new PriceInfo(3, 3)), new ListItemForEmeralds(Items.DIAMOND_SWORD, new PriceInfo(2, 2)), new ListItemForEmeralds(Items.SHIELD, new PriceInfo(3, 3)), new ListItemForEmeralds((Item)Items.DIAMOND_HELMET, new PriceInfo(5, 5)), new ListItemForEmeralds((Item)Items.DIAMOND_CHESTPLATE, new PriceInfo(8, 8)), new ListItemForEmeralds((Item)Items.DIAMOND_LEGGINGS, new PriceInfo(7, 7)), new ListItemForEmeralds((Item)Items.DIAMOND_BOOTS, new PriceInfo(4, 4)), 
+            new ListItemForEmeralds(Items.COOKED_BEEF, new PriceInfo(-16, -8)), new ListItemForEmeralds(Items.CAKE, new PriceInfo(1, 1)), new ListItemForEmeralds(Items.DIAMOND_HOE, new PriceInfo(2, 2)), new ListItemForEmeralds(Items.DIAMOND_AXE, new PriceInfo(3, 3)), new ListItemForEmeralds(Items.DIAMOND_SWORD, new PriceInfo(2, 2)), new ListItemForEmeralds(Items.SHIELD, new PriceInfo(3, 3)), new ListItemForEmeralds(Items.DIAMOND_HELMET, new PriceInfo(5, 5)), new ListItemForEmeralds(Items.DIAMOND_CHESTPLATE, new PriceInfo(8, 8)), new ListItemForEmeralds(Items.DIAMOND_LEGGINGS, new PriceInfo(7, 7)), new ListItemForEmeralds(Items.DIAMOND_BOOTS, new PriceInfo(4, 4)),
             new ItemAndEmeraldToItem(Items.CHORUS_FRUIT, new PriceInfo(64, 64), Items.ELYTRA, new PriceInfo(1, 1)), new ItemAndEmeraldToItem(Items.DARK_OAK_DOOR, new PriceInfo(64, 64), Items.TOTEM_OF_UNDYING, new PriceInfo(1, 1)), new ListEnchantedBookForEmeralds() } } } };
   
   public EntityVillager(World worldIn) {
@@ -140,14 +139,14 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
     setSize(0.5F, 1.9F);
     ((PathNavigateGround)getNavigator()).setBreakDoors(true);
     setCanPickUpLoot(true);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAITradePlayer(this));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIFollowLeader(this, 1.5D, 24.0F, 9.0F));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 1.0D));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.5D, true));
-    this.tasks.addTask(6, (EntityAIBase)new EntityAIHarvestFarmland(this, 1.0D));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAIWander((EntityCreature)this, 1.0D, 80));
-    this.tasks.addTask(10, (EntityAIBase)new EntityAIWatchClosest((EntityLiving)this, EntityLiving.class, 8.0F));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAITradePlayer(this));
+    this.tasks.addTask(3, new EntityAIFollowLeader(this, 1.5D, 24.0F, 9.0F));
+    this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.5D, true));
+    this.tasks.addTask(6, new EntityAIHarvestFarmland(this, 1.0D));
+    this.tasks.addTask(7, new EntityAIWander(this, 1.0D, 80));
+    this.tasks.addTask(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
     setCanPickUpLoot(true);
     this.experienceValue = 5;
     populateBuyingList();
@@ -169,12 +168,12 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return I18n.translateToLocal("entity." + str + ".cmm.name");
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name");
@@ -192,15 +191,15 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
     super.createChild();
     if (!this.world.isRemote) {
       EntityVillager baby = new EntityVillager(this.world);
-      baby.copyLocationAndAnglesFrom((Entity)this);
-      baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), (IEntityLivingData)null);
+      baby.copyLocationAndAnglesFrom(this);
+      baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
       baby.setGrowingAge(-24000);
       baby.setChild(true);
       baby.setOwnerId(getOwnerId());
       if (isMarried())
         for (int e = 0; e < 10 + this.rand.nextInt(10); e++)
           baby.levelUp();  
-      this.world.spawnEntity((Entity)baby);
+      this.world.spawnEntity(baby);
     } 
   }
   
@@ -211,7 +210,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
   }
   
   public boolean isNotColliding() {
-    if (this.world.checkNoEntityCollision(getEntityBoundingBox(), (Entity)this) && this.world.getCollisionBoxes((Entity)this, getEntityBoundingBox()).isEmpty() && !this.world.containsAnyLiquid(getEntityBoundingBox())) {
+    if (this.world.checkNoEntityCollision(getEntityBoundingBox(), this) && this.world.getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && !this.world.containsAnyLiquid(getEntityBoundingBox())) {
       BlockPos blockpos = new BlockPos(this.posX, (getEntityBoundingBox()).minY, this.posZ);
       IBlockState iblockstate = this.world.getBlockState(blockpos.down());
       Block block = iblockstate.getBlock();
@@ -224,7 +223,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
   public void onLivingUpdate() {
     super.onLivingUpdate();
     if (isTrading())
-      getLookHelper().setLookPositionWithEntity((Entity)getCustomer(), 10.0F, 40.0F); 
+      getLookHelper().setLookPositionWithEntity(getCustomer(), 10.0F, 40.0F);
   }
   
   protected void updateAITasks() {
@@ -238,7 +237,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
           populateBuyingList();
           this.needsInitilization = false;
           if (this.villageObj != null && this.lastBuyingPlayer != null)
-            this.world.setEntityState((Entity)this, (byte)14); 
+            this.world.setEntityState(this, (byte)14);
         } 
         addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 200, 1));
       } 
@@ -281,14 +280,14 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
     tagCompound.setInteger("CareerLevel", this.careerLevel);
     tagCompound.setBoolean("Willing", this.isWillingToMate);
     if (this.buyingList != null)
-      tagCompound.setTag("Offers", (NBTBase)this.buyingList.getRecipiesAsTags()); 
+      tagCompound.setTag("Offers", this.buyingList.getRecipiesAsTags());
     NBTTagList nbttaglist = new NBTTagList();
     for (int i = 0; i < this.villagerInventory.getSizeInventory(); i++) {
       ItemStack itemstack = this.villagerInventory.getStackInSlot(i);
       if (!itemstack.isEmpty())
-        nbttaglist.appendTag((NBTBase)itemstack.writeToNBT(new NBTTagCompound())); 
+        nbttaglist.appendTag(itemstack.writeToNBT(new NBTTagCompound()));
     } 
-    tagCompound.setTag("Inventory", (NBTBase)nbttaglist);
+    tagCompound.setTag("Inventory", nbttaglist);
   }
   
   public void readEntityFromNBT(NBTTagCompound tagCompund) {
@@ -358,7 +357,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
   }
   
   public int getProfession() {
-    return Math.max((Integer) this.dataManager.get(PROFESSION) % 5, 0);
+    return Math.max(this.dataManager.get(PROFESSION) % 5, 0);
   }
   
   public void setCareer(int professionId) {
@@ -366,7 +365,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
   }
   
   public int getCareer() {
-    return Math.max((Integer) this.dataManager.get(CAREER) % 5, 0);
+    return Math.max(this.dataManager.get(CAREER) % 5, 0);
   }
   
   public boolean isMating() {
@@ -411,7 +410,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
             this.villagerInventory.decrStackSize(i, 12);
           }  
         if (flag1) {
-          this.world.setEntityState((Entity)this, (byte)18);
+          this.world.setEntityState(this, (byte)18);
           this.isWillingToMate = true;
           break;
         } 
@@ -442,7 +441,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
     if (p_70933_1_.getItemToBuy().getItem() == Items.EMERALD)
       this.wealth += p_70933_1_.getItemToBuy().getCount(); 
     if (p_70933_1_.getRewardsExp())
-      this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY + 0.5D, this.posZ, i)); 
+      this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + 0.5D, this.posZ, i));
   }
   
   public void verifySellingItem(ItemStack p_110297_1_) {
@@ -496,7 +495,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
       TextComponentString textcomponentstring = new TextComponentString(ScorePlayerTeam.formatPlayerName(team, s));
       textcomponentstring.getStyle().setHoverEvent(getHoverEvent());
       textcomponentstring.getStyle().setInsertion(getCachedUniqueIdString());
-      return (ITextComponent)textcomponentstring;
+      return textcomponentstring;
     } 
     if (this.buyingList == null)
       populateBuyingList(); 
@@ -558,7 +557,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
     textComponentTranslation.getStyle().setInsertion(getCachedUniqueIdString());
     if (team != null)
       textComponentTranslation.getStyle().setColor(team.getColor()); 
-    return (ITextComponent)textComponentTranslation;
+    return textComponentTranslation;
   }
   
   public float getEyeHeight() {
@@ -617,13 +616,13 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
     if (!this.world.isRemote && !this.isDead) {
       EntityWitch entitywitch = new EntityWitch(this.world);
       entitywitch.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
-      entitywitch.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entitywitch)), (IEntityLivingData)null);
+      entitywitch.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entitywitch)), null);
       entitywitch.setNoAI(isAIDisabled());
       if (hasCustomName())
         entitywitch.setCustomNameTag(getCustomNameTag()); 
       if (!isWild())
         entitywitch.setOwnerId(getOwnerId()); 
-      this.world.spawnEntity((Entity)entitywitch);
+      this.world.spawnEntity(entitywitch);
       setDead();
     } 
   }
@@ -767,7 +766,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
   
   public static class ListEnchantedBookForEmeralds implements ITradeList {
     public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
-      Enchantment enchantment = (Enchantment)Enchantment.REGISTRY.getRandomObject(random);
+      Enchantment enchantment = Enchantment.REGISTRY.getRandomObject(random);
       int i = MathHelper.getInt(random, enchantment.getMinLevel(), enchantment.getMaxLevel());
       ItemStack itemstack = ItemEnchantedBook.getEnchantedItemStack(new EnchantmentData(enchantment, i));
       int j = 1 + random.nextInt(1 + i) + 2 * i;
@@ -871,7 +870,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
   }
   
   public BlockPos getPos() {
-    return new BlockPos((Entity)this);
+    return new BlockPos(this);
   }
 }
 

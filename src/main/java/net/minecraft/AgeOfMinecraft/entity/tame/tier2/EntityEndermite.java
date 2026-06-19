@@ -34,11 +34,11 @@ public class EntityEndermite extends EntityTameBase implements Light, Tiny, Ende
     super(worldIn);
     setSize(0.4F, 0.3F);
     this.isOffensive = true;
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.2D, 24.0F, 6.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.2D, true));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIWander((EntityCreature)this, 1.0D, 80));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.2D, 24.0F, 6.0F));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.2D, true));
+    this.tasks.addTask(3, new EntityAIWander(this, 1.0D, 80));
+    this.tasks.addTask(7, new EntityAILookIdle(this));
     this.experienceValue = 1;
   }
   
@@ -103,7 +103,7 @@ public class EntityEndermite extends EntityTameBase implements Light, Tiny, Ende
         EntityEndermite mob = new EntityEndermite(this.world);
         mob.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
         mob.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
-        this.world.spawnEntity((Entity)mob);
+        this.world.spawnEntity(mob);
         mob.setOwnerId(getOwnerId());
       }  
   }

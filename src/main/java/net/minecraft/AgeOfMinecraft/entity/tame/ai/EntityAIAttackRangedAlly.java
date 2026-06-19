@@ -75,7 +75,7 @@ public class EntityAIAttackRangedAlly extends EntityAIBase {
   
   public void updateTask() {
     double d0 = this.entityHost.getDistanceSq(this.attackTarget.posX, (this.attackTarget.getEntityBoundingBox()).minY, this.attackTarget.posZ);
-    boolean flag = this.entityHost.getEntitySenses().canSee((Entity)this.attackTarget);
+    boolean flag = this.entityHost.getEntitySenses().canSee(this.attackTarget);
     if (flag) {
       this.seeTime++;
     } else {
@@ -84,9 +84,9 @@ public class EntityAIAttackRangedAlly extends EntityAIBase {
     if ((d0 <= this.maxAttackDistance + this.attackTarget.width && this.seeTime >= 20) || !this.entityHost.onGround || this.entityMoveSpeed == 0.0D) {
       this.entityHost.getNavigator().clearPath();
     } else {
-      this.entityHost.getNavigator().tryMoveToEntityLiving((Entity)this.attackTarget, this.entityMoveSpeed);
+      this.entityHost.getNavigator().tryMoveToEntityLiving(this.attackTarget, this.entityMoveSpeed);
     } 
-    this.entityHost.getLookHelper().setLookPositionWithEntity((Entity)this.attackTarget, 30.0F, 30.0F);
+    this.entityHost.getLookHelper().setLookPositionWithEntity(this.attackTarget, 30.0F, 30.0F);
     if (--this.rangedAttackTime == 0) {
       if (!flag)
         return; 

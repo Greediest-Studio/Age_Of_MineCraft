@@ -25,10 +25,10 @@ public class NecronomiconMobGirlBreedingRitual extends NecronomiconRitual {
   }
   
   protected void completeRitualServer(World world, BlockPos pos, EntityPlayer player) {
-    world.addWeatherEffect((Entity)new EntityLightningBolt(world, pos.getX(), (pos.getY() + 1), pos.getZ(), false));
-    world.createExplosion((Entity)player, pos.getX(), (pos.getY() + 1), pos.getZ(), 40.0F, false);
+    world.addWeatherEffect(new EntityLightningBolt(world, pos.getX(), (pos.getY() + 1), pos.getZ(), false));
+    world.createExplosion(player, pos.getX(), (pos.getY() + 1), pos.getZ(), 40.0F, false);
     List<EntityTameBase> girlList = Lists.newArrayList();
-    List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity((Entity)player, (new AxisAlignedBB(pos)).grow(128.0D));
+    List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(player, (new AxisAlignedBB(pos)).grow(128.0D));
     for (Entity entity : entities) {
       if (entity instanceof EntityTameBase && ((EntityTameBase)entity).canBeMatedWith())
         girlList.add((EntityTameBase)entity); 

@@ -27,7 +27,7 @@ public class PhaseFaceNearestEnemy extends PhaseBaseFriendly {
     if (this.dragon.getJukeboxToDanceTo() == null)
       this.scanningTime++; 
     EntityLivingBase entitylivingbase = this.dragon.getAttackTarget();
-    if (entitylivingbase != null && this.dragon.getDistanceSq((Entity)entitylivingbase) < 10000.0D) {
+    if (entitylivingbase != null && this.dragon.getDistanceSq(entitylivingbase) < 10000.0D) {
       if (this.scanningTime > 30) {
         this.dragon.getPhaseManager().setPhase(PhaseListAsorah.SITTING_ATTACKING);
       } else {
@@ -52,9 +52,9 @@ public class PhaseFaceNearestEnemy extends PhaseBaseFriendly {
     } else if (this.scanningTime >= 200) {
       entitylivingbase = this.dragon.getAttackTarget();
       this.dragon.getPhaseManager().setPhase(PhaseListAsorah.TAKEOFF);
-      if (entitylivingbase != null && this.dragon.getDistanceSq((Entity)entitylivingbase) > 1024.0D) {
+      if (entitylivingbase != null && this.dragon.getDistanceSq(entitylivingbase) > 1024.0D) {
         this.dragon.getPhaseManager().setPhase(PhaseListAsorah.CHARGING_PLAYER);
-        ((PhaseRamAttack)this.dragon.getPhaseManager().getPhase(PhaseListAsorah.CHARGING_PLAYER)).setTarget(new Vec3d(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ));
+        this.dragon.getPhaseManager().getPhase(PhaseListAsorah.CHARGING_PLAYER).setTarget(new Vec3d(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ));
       } 
     } else if (this.dragon.getOwner() != null) {
       this.dragon.rotationYaw = (this.dragon.getOwner()).rotationYaw - 180.0F;

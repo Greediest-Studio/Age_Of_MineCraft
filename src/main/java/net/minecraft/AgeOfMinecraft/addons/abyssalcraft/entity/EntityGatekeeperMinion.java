@@ -5,7 +5,6 @@ import com.shinoow.abyssalcraft.lib.ACConfig;
 import com.shinoow.abyssalcraft.lib.ACLoot;
 import com.shinoow.abyssalcraft.lib.ACSounds;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import net.minecraft.AgeOfMinecraft.entity.tame.Armored;
@@ -49,12 +48,12 @@ public class EntityGatekeeperMinion extends EntityTameBase implements Armored, U
   
   public EntityGatekeeperMinion(World par1World) {
     super(par1World);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.0D, 48.0F, 8.0F));
-    this.tasks.addTask(2, (EntityAIBase)new AIFireballAttack(this));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 0.8D));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.8D));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.0D, 48.0F, 8.0F));
+    this.tasks.addTask(2, new AIFireballAttack(this));
+    this.tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 0.8D));
+    this.tasks.addTask(4, new EntityAIWander(this, 0.8D));
+    this.tasks.addTask(7, new EntityAILookIdle(this));
     setSize(0.9F, 2.7F);
     this.isOffensive = true;
     this.isImmuneToFire = true;
@@ -129,7 +128,7 @@ public class EntityGatekeeperMinion extends EntityTameBase implements Armored, U
     swingArm(EnumHand.OFF_HAND);
     boolean flag = super.attackEntityAsMob(par1Entity);
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -228,11 +227,11 @@ public class EntityGatekeeperMinion extends EntityTameBase implements Armored, U
       this.attackTime--;
       EntityLivingBase entitylivingbase = this.blaze.getAttackTarget();
       if (entitylivingbase != null) {
-        double d0 = this.blaze.getDistanceSq((Entity)entitylivingbase);
+        double d0 = this.blaze.getDistanceSq(entitylivingbase);
         if (d0 < getAttackReachSqr(entitylivingbase)) {
           if (this.attackTime <= 0) {
             this.attackTime = 20;
-            this.blaze.attackEntityAsMob((Entity)entitylivingbase);
+            this.blaze.attackEntityAsMob(entitylivingbase);
           } 
         } else if (d0 < getFollowDistance() * getFollowDistance()) {
           double d1 = entitylivingbase.posX - this.blaze.posX;
@@ -250,17 +249,17 @@ public class EntityGatekeeperMinion extends EntityTameBase implements Armored, U
             } 
             if (this.attackStep > 1) {
               float f = MathHelper.sqrt(MathHelper.sqrt(d0)) * 0.5F;
-              this.blaze.world.playEvent((EntityPlayer)null, 1018, new BlockPos((int)this.blaze.posX, (int)this.blaze.posY, (int)this.blaze.posZ), 0);
+              this.blaze.world.playEvent(null, 1018, new BlockPos((int)this.blaze.posX, (int)this.blaze.posY, (int)this.blaze.posZ), 0);
               this.blaze.swingArm(EnumHand.OFF_HAND);
               for (int i = 0; i < 1; i++) {
-                EntityOmotholChargeOther entitysmallfireball = new EntityOmotholChargeOther(this.blaze.world, (EntityLivingBase)this.blaze, d1, d2, d3);
+                EntityOmotholChargeOther entitysmallfireball = new EntityOmotholChargeOther(this.blaze.world, this.blaze, d1, d2, d3);
                 entitysmallfireball.posY = this.blaze.posY + (this.blaze.height / 2.0F) + 0.5D;
                 entitysmallfireball.playSound(ACSounds.remnant_scream, 1.0F, 1.0F);
-                this.blaze.world.spawnEntity((Entity)entitysmallfireball);
+                this.blaze.world.spawnEntity(entitysmallfireball);
               } 
             } 
           } 
-          this.blaze.getLookHelper().setLookPositionWithEntity((Entity)entitylivingbase, this.blaze.getHorizontalFaceSpeed(), this.blaze.getVerticalFaceSpeed());
+          this.blaze.getLookHelper().setLookPositionWithEntity(entitylivingbase, this.blaze.getHorizontalFaceSpeed(), this.blaze.getVerticalFaceSpeed());
         } 
       } 
       super.updateTask();

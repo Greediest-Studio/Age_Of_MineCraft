@@ -23,7 +23,7 @@ public class RenderGasterBlaster extends RenderLivingBase<EntityGasterBlaster> {
   private static final ResourceLocation BEAM_TEXTURE = new ResourceLocation("textures/entity/beacon_beam.png");
   
   public RenderGasterBlaster(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)new ModelGasterBlaster(), 0.5F);
+    super(renderManagerIn, new ModelGasterBlaster(), 0.5F);
   }
   
   protected boolean canRenderName(EntityGasterBlaster entity) {

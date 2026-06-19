@@ -136,9 +136,9 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
     this.tasks.addTask(1, new ScreamGoal());
     this.tasks.addTask(1, new CloneGoal());
     this.tasks.addTask(1, new TeleSmashGoal());
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.2D, 64.0F, 12.0F));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAIWanderAvoidWater((EntityCreature)this, 0.83D, 0.0F));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.2D, 64.0F, 12.0F));
+    this.tasks.addTask(7, new EntityAIWanderAvoidWater(this, 0.83D, 0.0F));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
   }
   
   public TextFormatting getTextFormat() {
@@ -208,7 +208,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -221,7 +221,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
   }
   
   public int getActiveArm() {
-    return (Byte) this.dataManager.get(ACTIVE_ARM);
+    return this.dataManager.get(ACTIVE_ARM);
   }
   
   private void setActiveArm(int armID) {
@@ -229,15 +229,15 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
   }
   
   public boolean isClone() {
-    return ((Byte) this.dataManager.get(CLONE_STATE) > 0);
+    return (this.dataManager.get(CLONE_STATE) > 0);
   }
   
   private boolean isDecoyClone() {
-    return ((Byte) this.dataManager.get(CLONE_STATE) > 1);
+    return (this.dataManager.get(CLONE_STATE) > 1);
   }
   
   private void setCloneState(int newState) {
-    byte currentState = (Byte) this.dataManager.get(CLONE_STATE);
+    byte currentState = this.dataManager.get(CLONE_STATE);
     if (currentState == newState)
       return; 
     if (currentState == 1 && newState == 0) {
@@ -258,7 +258,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
   
   private void setAttackID(int attackID) {
     this.attackID = attackID;
-    this.world.setEntityState((Entity)this, (byte)attackID);
+    this.world.setEntityState(this, (byte)attackID);
   }
   
   public int getAttackTick() {
@@ -270,7 +270,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
   }
   
   protected PathNavigate createNavigator(World worldIn) {
-    return (PathNavigate)new MBGroundPathNavigator((EntityLiving)this, worldIn);
+    return new MBGroundPathNavigator(this, worldIn);
   }
   
   public int getMaxSpawnedInChunk() {
@@ -315,19 +315,19 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
   }
   
   protected boolean teleportTo(double x, double y, double z) {
-    EnderTeleportEvent event = new EnderTeleportEvent((EntityLivingBase)this, x, y, z, 0.0F);
-    if (MinecraftForge.EVENT_BUS.post((Event)event))
+    EnderTeleportEvent event = new EnderTeleportEvent(this, x, y, z, 0.0F);
+    if (MinecraftForge.EVENT_BUS.post(event))
       return false; 
     boolean flag = (attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ()) && !isInLove() && !isRiding());
     if (flag) {
-      this.world.playSound((EntityPlayer)null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
+      this.world.playSound(null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
       playSound(MBSoundEvents.ENTITY_MUTANT_ENDERMAN_TELEPORT, 1.0F, 1.0F);
-      teleportAttack((EntityLivingBase)this);
+      teleportAttack(this);
       if (!this.world.isRemote && this.rand.nextFloat() < 0.01F) {
         EntityEndermite entityendermite = new EntityEndermite(this.world);
         entityendermite.setOwnerId(getOwnerId());
         entityendermite.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
-        this.world.spawnEntity((Entity)entityendermite);
+        this.world.spawnEntity(entityendermite);
       } 
       return true;
     } 
@@ -336,7 +336,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
   
   public boolean attemptTeleport(double x, double y, double z) {
     spawnTeleportParticles(false);
-    teleportAttack((EntityLivingBase)this);
+    teleportAttack(this);
     double d0 = this.posX;
     double d1 = this.posY;
     double d2 = this.posZ;
@@ -344,7 +344,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
     this.posY = y;
     this.posZ = z;
     boolean flag = false;
-    BlockPos blockpos = new BlockPos((Entity)this);
+    BlockPos blockpos = new BlockPos(this);
     World world = this.world;
     Random random = getRNG();
     if (world.isBlockLoaded(blockpos)) {
@@ -362,10 +362,10 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
       if (flag1) {
         setPositionAndUpdate(this.posX, this.posY, this.posZ);
         spawnTeleportParticles(false);
-        teleportAttack((EntityLivingBase)this);
+        teleportAttack(this);
         if (isBeingRidden())
           getControllingPassenger().setPositionAndUpdate(this.posX, this.posY, this.posZ); 
-        if (world.getCollisionBoxes((Entity)this, getEntityBoundingBox()).isEmpty() && !world.containsAnyLiquid(getEntityBoundingBox()))
+        if (world.getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && !world.containsAnyLiquid(getEntityBoundingBox()))
           flag = true; 
       } 
     } 
@@ -426,10 +426,10 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
       for (i = 1; i < this.heldBlock.length; i++) {
         if (this.heldBlock[i] != 0 && this.heldBlockTick[i] == 0) {
           BlockPos pos = new BlockPos(this.posX - 1.5D + this.rand.nextDouble() * 4.0D, this.posY - 0.5D + this.rand.nextDouble() * 2.5D, this.posZ - 1.5D + this.rand.nextDouble() * 4.0D);
-          if (this.world.isAirBlock(pos) && !this.world.isAirBlock(pos.down()) && this.world.isBlockFullCube(pos.down()) && ForgeEventFactory.getMobGriefingEvent(this.world, (Entity)this)) {
+          if (this.world.isAirBlock(pos) && !this.world.isAirBlock(pos.down()) && this.world.isBlockFullCube(pos.down()) && ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
             this.world.setBlockState(pos, Block.getStateById(this.heldBlock[i]));
             Block block = Block.getBlockById(this.heldBlock[i]);
-            SoundType soundType = block.getSoundType(block.getDefaultState(), this.world, pos, (Entity)this);
+            SoundType soundType = block.getSoundType(block.getDefaultState(), this.world, pos, this);
             playSound(soundType.getPlaceSound(), (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
             sendHoldBlock(i, 0, 0);
           } else {
@@ -453,7 +453,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
   private void spawnTeleportParticles(boolean clone) {
     if (clone && !isSilent())
       this.world.playSound(null, this.posX, this.posY + this.height / 2.0D, this.posZ, MBSoundEvents.ENTITY_MUTANT_ENDERMAN_TELEPORT, getSoundCategory(), 1.0F, 1.0F); 
-    this.world.setEntityState((Entity)this, (byte)(clone ? 12 : 1));
+    this.world.setEntityState(this, (byte)(clone ? 12 : 1));
   }
   
   @SideOnly(Side.CLIENT)
@@ -461,7 +461,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
     if (id == 1) {
       spawnBigParticles();
     } else if (id == 12) {
-      EntityUtil.spawnEndersoulParticles((Entity)this, 256, 1.8F);
+      EntityUtil.spawnEndersoulParticles(this, 256, 1.8F);
     } else if (id == 0 || (id >= 4 && id <= 11)) {
       this.attackID = id;
       this.attackTick = 0;
@@ -475,8 +475,8 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
     if (this.attackID != 0)
       this.attackTick++; 
     getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
-    if (this.attackID == 0 && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && !false && getDistanceSq((Entity)getAttackTarget()) < (this.width * this.width + (getAttackTarget()).width * (getAttackTarget()).width) + 9.0D)
-      attackEntityAsMob((Entity)getAttackTarget()); 
+    if (this.attackID == 0 && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && !false && getDistanceSq(getAttackTarget()) < (this.width * this.width + (getAttackTarget()).width * (getAttackTarget()).width) + 9.0D)
+      attackEntityAsMob(getAttackTarget());
     updateTargetTick();
     updateScreamEntities();
     double h = (this.attackID != 11) ? this.height : (this.height + 1.0F);
@@ -491,15 +491,15 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
       } 
       if (getAttackTarget() != null) {
         if ((getAttackTarget() instanceof net.minecraft.entity.EntityFlying || (getAttackTarget()).posY > this.posY + this.height) && !isClone() && !isDecoyClone()) {
-          this.tasks.addTask(3, (EntityAIBase)this.aiArrowAttack);
-          this.tasks.removeTask((EntityAIBase)this.aiAttackOnCollide);
+          this.tasks.addTask(3, this.aiArrowAttack);
+          this.tasks.removeTask(this.aiAttackOnCollide);
         } else {
-          this.tasks.addTask(3, (EntityAIBase)this.aiAttackOnCollide);
-          this.tasks.removeTask((EntityAIBase)this.aiArrowAttack);
+          this.tasks.addTask(3, this.aiAttackOnCollide);
+          this.tasks.removeTask(this.aiArrowAttack);
         } 
       } else {
-        this.tasks.removeTask((EntityAIBase)this.aiAttackOnCollide);
-        this.tasks.removeTask((EntityAIBase)this.aiArrowAttack);
+        this.tasks.removeTask(this.aiAttackOnCollide);
+        this.tasks.removeTask(this.aiArrowAttack);
       } 
     } 
   }
@@ -523,22 +523,22 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
   
   private void updateTeleport() {
     EntityLivingBase entityLivingBase = getAttackTarget();
-    teleportByChance((entityLivingBase == null) ? 1600 : 800, (Entity)entityLivingBase);
+    teleportByChance((entityLivingBase == null) ? 1600 : 800, entityLivingBase);
     if (entityLivingBase != null) {
-      double d = getDistanceSq((Entity)entityLivingBase);
-      if (isRidingSameEntity((Entity)entityLivingBase) || d > 1024.0D || (d > 36.0D && !hasPath()))
-        teleportByChance(10, (Entity)entityLivingBase); 
+      double d = getDistanceSq(entityLivingBase);
+      if (isRidingSameEntity(entityLivingBase) || d > 1024.0D || (d > 36.0D && !hasPath()))
+        teleportByChance(10, entityLivingBase);
     } 
   }
   
   protected void updateAITasks() {
     super.updateAITasks();
     if (isDecoyClone() && this.cloner != null && this.cloner.getAttackTarget() != null) {
-      faceEntity((Entity)this.cloner.getAttackTarget(), 10.0F, 40.0F);
+      faceEntity(this.cloner.getAttackTarget(), 10.0F, 40.0F);
       if (this.ticksExisted % 10 == 0)
-        getNavigator().tryMoveToEntityLiving((Entity)this.cloner.getAttackTarget(), 1.2D); 
+        getNavigator().tryMoveToEntityLiving(this.cloner.getAttackTarget(), 1.2D);
       if (this.ticksExisted % 20 == 0)
-        attackEntityAsMob((Entity)this.cloner.getAttackTarget()); 
+        attackEntityAsMob(this.cloner.getAttackTarget());
     } 
     if (isWet() && this.ticksExisted % 40 == 0 && !isClone())
       attackEntityFrom(DamageSource.ON_FIRE, 2.0F); 
@@ -563,7 +563,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
     } 
     if (list.isEmpty())
       return -1; 
-    return (Integer) list.get(this.rand.nextInt(list.size()));
+    return list.get(this.rand.nextInt(list.size()));
   }
   
   private int getFavorableHand() {
@@ -580,8 +580,8 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
     if (outer.isEmpty() && inner.isEmpty())
       return -1; 
     if (!outer.isEmpty())
-      return (Integer) outer.get(this.rand.nextInt(outer.size()));
-    return (Integer) inner.get(this.rand.nextInt(inner.size()));
+      return outer.get(this.rand.nextInt(outer.size()));
+    return inner.get(this.rand.nextInt(inner.size()));
   }
   
   private int getThrowingHand() {
@@ -598,8 +598,8 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
     if (outer.isEmpty() && inner.isEmpty())
       return -1; 
     if (!inner.isEmpty())
-      return (Integer) inner.get(this.rand.nextInt(inner.size()));
-    return (Integer) outer.get(this.rand.nextInt(outer.size()));
+      return inner.get(this.rand.nextInt(inner.size()));
+    return outer.get(this.rand.nextInt(outer.size()));
   }
   
   public boolean attackEntityAsMob(Entity entityIn) {
@@ -676,7 +676,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
       duration = 100;
       damageSource = DamageSource.causePlayerDamage((EntityPlayer)attacker);
     } 
-    for (Entity entity : attacker.world.getEntitiesInAABBexcluding((Entity)attacker, attacker.getEntityBoundingBox().grow(r), EntityEndersoulFragment.IS_VALID_TARGET)) {
+    for (Entity entity : attacker.world.getEntitiesInAABBexcluding(attacker, attacker.getEntityBoundingBox().grow(r), EntityEndersoulFragment.IS_VALID_TARGET)) {
       if (entity instanceof EntityLivingBase && !false) {
         EntityLivingBase living = (EntityLivingBase)entity;
         inflictEngenderMobDamage((EntityLivingBase)entity, " was splattered by ", damageSource, 4.0F);
@@ -690,7 +690,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
           living.motionX = (r * signX * 2.0D - x) * 0.20000000298023224D;
           living.motionY = 0.20000000298023224D;
           living.motionZ = (r * signZ * 2.0D - z) * 0.20000000298023224D;
-          EntityUtil.knockBackBlockingPlayer((Entity)attacker);
+          EntityUtil.knockBackBlockingPlayer(attacker);
         } 
       } 
     } 
@@ -708,7 +708,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
     clone.setHealth(getHealth());
     clone.setAttackTarget(getAttackTarget());
     if (clone.teleportTo(x, y, z)) {
-      this.world.spawnEntity((Entity)clone);
+      this.world.spawnEntity(clone);
       this.cloneList.add(clone);
     } 
   }
@@ -754,7 +754,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
           betterDodge = true; 
         if (betterDodge) {
           if (!isWild())
-            teleportToEntity((Entity)getOwner()); 
+            teleportToEntity(getOwner());
           teleportRandomly();
           return false;
         } 
@@ -779,7 +779,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
       this.attackID = 11;
       if (!this.world.isRemote) {
         if (this.deathTime >= 60 && this.deathTime < 80 && this.deathEntities == null)
-          this.deathEntities = this.world.getEntitiesInAABBexcluding((Entity)this, getEntityBoundingBox().grow(16.0D), EntityEndersoulFragment.IS_VALID_TARGET); 
+          this.deathEntities = this.world.getEntitiesInAABBexcluding(this, getEntityBoundingBox().grow(16.0D), EntityEndersoulFragment.IS_VALID_TARGET);
         if (this.deathTime >= 60 && this.rand.nextInt(3) != 0) {
           EntityEndersoulFragment orb = new EntityEndersoulFragment(this.world, this);
           orb.setPosition(this.posX, this.posY + 3.8D, this.posZ);
@@ -809,7 +809,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
             } 
           }  
         if (this.deathTime >= 280) {
-          EntityUtil.dropExperience((EntityLiving)this, this.recentlyHit, this::getExperiencePoints, this.attackingPlayer);
+          EntityUtil.dropExperience(this, this.recentlyHit, this::getExperiencePoints, this.attackingPlayer);
           setDead();
         } 
       } 
@@ -830,7 +830,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
   
   public void writeEntityToNBT(NBTTagCompound compound) {
     super.writeEntityToNBT(compound);
-    compound.setByte("CloneState", (Byte) this.dataManager.get(CLONE_STATE));
+    compound.setByte("CloneState", this.dataManager.get(CLONE_STATE));
     compound.setShort("ScreamDelay", (short)this.screamDelayTick);
   }
   
@@ -916,7 +916,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
     
     public void updateTask() {
       if (this.attackTarget != null)
-        EntityMutantEnderman.this.getLookHelper().setLookPositionWithEntity((Entity)this.attackTarget, 45.0F, 45.0F); 
+        EntityMutantEnderman.this.getLookHelper().setLookPositionWithEntity(this.attackTarget, 45.0F, 45.0F);
     }
     
     public void resetTask() {
@@ -943,13 +943,13 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
     public void updateTask() {
       if (EntityMutantEnderman.this.attackTick == 3) {
         EntityMutantEnderman.this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 0.8F);
-        for (Entity entity : EntityMutantEnderman.this.world.getEntitiesInAABBexcluding((Entity)EntityMutantEnderman.this, EntityMutantEnderman.this.getEntityBoundingBox().grow(6.0D), EntityEndersoulFragment.IS_VALID_TARGET)) {
+        for (Entity entity : EntityMutantEnderman.this.world.getEntitiesInAABBexcluding(EntityMutantEnderman.this, EntityMutantEnderman.this.getEntityBoundingBox().grow(6.0D), EntityEndersoulFragment.IS_VALID_TARGET)) {
           double dist = EntityMutantEnderman.this.getDistance(entity);
           double x = EntityMutantEnderman.this.posX - entity.posX;
           double z = EntityMutantEnderman.this.posZ - entity.posZ;
           boolean lower = (EntityMutantEnderman.this.getActiveArm() >= 3);
-          if ((EntityMutantEnderman.this.getEntityBoundingBox()).minY <= (entity.getEntityBoundingBox()).maxY && dist <= (lower ? 4.0D : 6.0D) && EntityUtil.getHeadAngle((EntityLivingBase)EntityMutantEnderman.this, x, z) <= 3.0F + (1.0F - (float)dist / 4.0F) * 40.0F) {
-            DamageSource damageSource = DamageSource.causeMobDamage((EntityLivingBase)EntityMutantEnderman.this);
+          if ((EntityMutantEnderman.this.getEntityBoundingBox()).minY <= (entity.getEntityBoundingBox()).maxY && dist <= (lower ? 4.0D : 6.0D) && EntityUtil.getHeadAngle(EntityMutantEnderman.this, x, z) <= 3.0F + (1.0F - (float)dist / 4.0F) * 40.0F) {
+            DamageSource damageSource = DamageSource.causeMobDamage(EntityMutantEnderman.this);
             float attackDamage = (float)EntityMutantEnderman.this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
             float damage = (attackDamage > 0.0F) ? (attackDamage * (lower ? 1.5F : 3.0F)) : 0.0F;
             if (entity instanceof EntityLivingBase)
@@ -960,7 +960,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
             entity.motionX = -x / dist * power;
             entity.motionY = (power * 0.6F);
             entity.motionZ = -z / dist * power;
-            EntityUtil.knockBackBlockingPlayer((Entity)EntityMutantEnderman.this);
+            EntityUtil.knockBackBlockingPlayer(EntityMutantEnderman.this);
           } 
         } 
       } 
@@ -1001,7 +1001,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
       } 
       EntityMutantEnderman.this.teleportTo(x, y, z);
       EntityMutantEnderman.this.createClone(EntityMutantEnderman.this.prevPosX, EntityMutantEnderman.this.prevPosY, EntityMutantEnderman.this.prevPosZ);
-      EntityUtil.divertAttackers((EntityLiving)EntityMutantEnderman.this, (EntityLivingBase)EntityMutantEnderman.this.getRandomClone());
+      EntityUtil.divertAttackers(EntityMutantEnderman.this, EntityMutantEnderman.this.getRandomClone());
     }
     
     public boolean shouldContinueExecuting() {
@@ -1013,7 +1013,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
         EntityMutantEnderman clone = EntityMutantEnderman.this.cloneList.get(i);
         if (!clone.isEntityAlive()) {
           EntityMutantEnderman.this.cloneList.remove(i);
-          EntityUtil.divertAttackers((EntityLiving)clone, (EntityLivingBase)EntityMutantEnderman.this.getRandomClone());
+          EntityUtil.divertAttackers(clone, EntityMutantEnderman.this.getRandomClone());
         } else {
           clone.setAttackTarget(this.attackTarget);
         } 
@@ -1056,7 +1056,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
           EntityMutantEnderman.this.spawnTeleportParticles(false);
           EntityMutantEnderman.this.playSound(MBSoundEvents.ENTITY_MUTANT_ENDERMAN_SCREAM, 5.0F, 0.7F + EntityMutantEnderman.this.rand.nextFloat() * 0.1F);
         } 
-        List<Entity> screamEntities = EntityMutantEnderman.this.world.getEntitiesInAABBexcluding((Entity)EntityMutantEnderman.this, EntityMutantEnderman.this.getEntityBoundingBox().grow(48.0D), EntityEndersoulFragment.IS_VALID_TARGET);
+        List<Entity> screamEntities = EntityMutantEnderman.this.world.getEntitiesInAABBexcluding(EntityMutantEnderman.this, EntityMutantEnderman.this.getEntityBoundingBox().grow(48.0D), EntityEndersoulFragment.IS_VALID_TARGET);
         for (int i = 0; i < screamEntities.size(); i++) {
           Entity entity = screamEntities.get(i);
           if (entity instanceof EntityLivingBase)
@@ -1064,7 +1064,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
               screamEntities.remove(i);
               i--;
             } else {
-              EntityMutantEnderman.this.inflictEngenderMobDamage((EntityLivingBase)entity, " died from a heartattack caused by ", DamageSource.causeMobDamage((EntityLivingBase)EntityMutantEnderman.this).setDamageBypassesArmor().setDamageIsAbsolute(), 4.0F);
+              EntityMutantEnderman.this.inflictEngenderMobDamage((EntityLivingBase)entity, " died from a heartattack caused by ", DamageSource.causeMobDamage(EntityMutantEnderman.this).setDamageBypassesArmor().setDamageIsAbsolute(), 4.0F);
               if (entity instanceof EntityLivingBase) {
                 EntityLivingBase living = (EntityLivingBase)entity;
                 living.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 120, 3));
@@ -1108,12 +1108,12 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
     
     public void updateTask() {
       if (EntityMutantEnderman.this.attackTick < 20)
-        EntityMutantEnderman.this.getLookHelper().setLookPositionWithEntity((Entity)this.attackTarget, 30.0F, 30.0F); 
+        EntityMutantEnderman.this.getLookHelper().setLookPositionWithEntity(this.attackTarget, 30.0F, 30.0F);
       if (EntityMutantEnderman.this.attackTick == 17)
         this.attackTarget.dismountRidingEntity(); 
       if (EntityMutantEnderman.this.attackTick == 18 && this.attackTarget != null) {
         this.attackTarget.world.playSound(null, this.attackTarget.getPosition(), SoundEvents.ENTITY_GENERIC_EXPLODE, this.attackTarget.getSoundCategory(), 1.2F, 0.9F + this.attackTarget.getRNG().nextFloat() * 0.2F);
-        if (EntityMutantEnderman.this.getDistance((Entity)this.attackTarget) > 24.0F) {
+        if (EntityMutantEnderman.this.getDistance(this.attackTarget) > 24.0F) {
           double x = EntityMutantEnderman.this.posX;
           double y = EntityMutantEnderman.this.posY;
           double z = EntityMutantEnderman.this.posZ;
@@ -1126,7 +1126,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
         } 
         this.attackTarget.world.playSound(null, this.attackTarget.getPosition(), SoundEvents.ENTITY_GENERIC_EXPLODE, this.attackTarget.getSoundCategory(), 1.2F, 0.9F + this.attackTarget.getRNG().nextFloat() * 0.2F);
         this.attackTarget.stopActiveHand();
-        EntityMutantEnderman.this.inflictEngenderMobDamage(this.attackTarget, " died from a heartattack caused by ", DamageSource.causeMobDamage((EntityLivingBase)EntityMutantEnderman.this).setDamageBypassesArmor(), (float)EntityMutantEnderman.this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+        EntityMutantEnderman.this.inflictEngenderMobDamage(this.attackTarget, " died from a heartattack caused by ", DamageSource.causeMobDamage(EntityMutantEnderman.this).setDamageBypassesArmor(), (float)EntityMutantEnderman.this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
         EntityMutantEnderman.this.spawnTeleportParticles(false);
       } 
     }
@@ -1143,7 +1143,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
         return false; 
       if (!EntityMutantEnderman.this.triggerThrowBlock)
         return false; 
-      if (EntityMutantEnderman.this.getAttackTarget() != null && !EntityMutantEnderman.this.canEntityBeSeen((Entity)EntityMutantEnderman.this.getAttackTarget()))
+      if (EntityMutantEnderman.this.getAttackTarget() != null && !EntityMutantEnderman.this.canEntityBeSeen(EntityMutantEnderman.this.getAttackTarget()))
         return false; 
       int id = EntityMutantEnderman.this.getThrowingHand();
       if (id == -1)
@@ -1156,7 +1156,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
       EntityMutantEnderman.this.attackTick = 0;
       EntityMutantEnderman.this.setAttackID(5);
       int id = EntityMutantEnderman.this.getActiveArm();
-      EntityMutantEnderman.this.world.spawnEntity((Entity)new EntityThrowingBlock(EntityMutantEnderman.this.world, EntityMutantEnderman.this, id));
+      EntityMutantEnderman.this.world.spawnEntity(new EntityThrowingBlock(EntityMutantEnderman.this.world, EntityMutantEnderman.this, id));
       EntityMutantEnderman.this.sendHoldBlock(id, 0, 0);
     }
     

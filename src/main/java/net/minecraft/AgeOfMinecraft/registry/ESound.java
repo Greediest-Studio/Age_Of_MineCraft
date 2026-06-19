@@ -280,6 +280,6 @@ public class ESound {
   
   public static SoundEvent registerSound(String soundName) {
     ResourceLocation soundID = new ResourceLocation("ageofminecraft", soundName);
-    return (SoundEvent)GameData.register_impl((new SoundEvent(soundID)).setRegistryName(soundID));
+    return GameData.register_impl((new SoundEvent(soundID)).setRegistryName(soundID));
   }
 }

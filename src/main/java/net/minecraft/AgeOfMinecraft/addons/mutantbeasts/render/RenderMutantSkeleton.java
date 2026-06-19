@@ -18,7 +18,7 @@ public class RenderMutantSkeleton extends RenderLiving<EntityMutantSkeleton> {
   private static final ResourceLocation Anti_TEXTURE = new ResourceLocation("ageofminecraft", "textures/entities/mutant/anti/anti_mutant_skeleton.png");
   
   public RenderMutantSkeleton(RenderManager manager) {
-    super(manager, (ModelBase)new ModelMutantSkeleton(), 0.7F);
+    super(manager, new ModelMutantSkeleton(), 0.7F);
   }
   
   protected void preRenderCallback(EntityMutantSkeleton entitylivingbaseIn, float partialTickTime) {

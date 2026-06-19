@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier3;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import java.util.Random;
@@ -71,12 +70,12 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
       setSize(1.5F, 0.78F);
     } 
     this.isOffensive = true;
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.1D, 32.0F, 6.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAICustomLeapAttack((EntityLiving)this, 0.6F, 0.6F, 0.8F, 0.5F, 4.0D, 16.0D, 6));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.1D, true));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.8D, 80));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.1D, 32.0F, 6.0F));
+    this.tasks.addTask(2, new EntityAICustomLeapAttack(this, 0.6F, 0.6F, 0.8F, 0.5F, 4.0D, 16.0D, 6));
+    this.tasks.addTask(3, new EntityAIFriendlyAttackMelee(this, 1.1D, true));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.8D, 80));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
     this.experienceValue = 3;
   }
   
@@ -113,7 +112,7 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
   }
   
   protected PathNavigate getNewNavigator(World worldIn) {
-    return (PathNavigate)new PathNavigateClimber((EntityLiving)this, worldIn);
+    return new PathNavigateClimber(this, worldIn);
   }
   
   protected void entityInit() {
@@ -123,7 +122,7 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
   }
   
   public boolean isSurvivalTestSkin() {
-    return (Boolean) getDataManager().get(SURVIVAL_TEST_SKIN);
+    return getDataManager().get(SURVIVAL_TEST_SKIN);
   }
   
   public void setSurvivalTestSkin(boolean childZombie) {
@@ -137,7 +136,7 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
     super.writeEntityToNBT(tagCompound);
-    if ((Boolean) this.dataManager.get(SURVIVAL_TEST_SKIN))
+    if (this.dataManager.get(SURVIVAL_TEST_SKIN))
       tagCompound.setBoolean("EasterEgg", true); 
   }
   
@@ -149,12 +148,12 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return I18n.translateToLocal("entity." + str + ".cmm.name");
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name");
@@ -170,7 +169,7 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
         if (list != null && !list.isEmpty() && this.jumpPower >= 1.0F)
             for (EntityLivingBase entity1 : list) {
                 if (entity1 != null && entity1.isEntityAlive())
-                    attackEntityAsMob((Entity) entity1);
+                    attackEntityAsMob(entity1);
             }
       } 
     } 
@@ -219,7 +218,7 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
       for (int i = 0; i < 2 + this.rand.nextInt(3); i++) {
         if (this instanceof EntityCaveSpider) {
           EntityCaveSpider baby = new EntityCaveSpider(this.world);
-          baby.copyLocationAndAnglesFrom((Entity)this);
+          baby.copyLocationAndAnglesFrom(this);
           baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
           baby.setGrowingAge(-24000);
           baby.setChild(true);
@@ -229,18 +228,18 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
           if (isMarried())
             for (int e = 0; e < 10 + this.rand.nextInt(10); e++)
               baby.levelUp();  
-          this.world.spawnEntity((Entity)baby);
+          this.world.spawnEntity(baby);
         } else {
           EntitySpider baby = new EntitySpider(this.world);
-          baby.copyLocationAndAnglesFrom((Entity)this);
+          baby.copyLocationAndAnglesFrom(this);
           baby.setGrowingAge(-32000);
           baby.setChild(true);
           baby.setOwnerId(getOwnerId());
-          baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), (IEntityLivingData)null);
+          baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
           if (isMarried())
             for (int e = 0; e < 10 + this.rand.nextInt(10); e++)
               baby.levelUp();  
-          this.world.spawnEntity((Entity)baby);
+          this.world.spawnEntity(baby);
         } 
       }  
   }
@@ -256,11 +255,11 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
   }
   
   public boolean isBesideClimbableBlock() {
-    return (((Byte) this.dataManager.get(CLIMBING) & 0x1) != 0);
+    return ((this.dataManager.get(CLIMBING) & 0x1) != 0);
   }
   
   public void setBesideClimbableBlock(boolean climbing) {
-    byte b0 = (Byte) this.dataManager.get(CLIMBING);
+    byte b0 = this.dataManager.get(CLIMBING);
     if (climbing) {
       b0 = (byte)(b0 | 0x1);
     } else {
@@ -277,9 +276,9 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
     if (this.world.rand.nextInt(100) == 0 && getGrowingAge() >= 0) {
       EntitySkeleton entityskeleton = new EntitySkeleton(this.world);
       entityskeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-      entityskeleton.onInitialSpawn(difficulty, (IEntityLivingData)null);
-      this.world.spawnEntity((Entity)entityskeleton);
-      entityskeleton.startRiding((Entity)this);
+      entityskeleton.onInitialSpawn(difficulty, null);
+      this.world.spawnEntity(entityskeleton);
+      entityskeleton.startRiding(this);
       if (!isWild())
         entityskeleton.setOwnerId(getOwnerId()); 
     } 
@@ -309,7 +308,7 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
               if (entity != null)
                   if (false && !entity.isRiding() && !this.world.isRemote) {
                       player.swingArm(EnumHand.MAIN_HAND);
-                      entity.startRiding((Entity) this);
+                      entity.startRiding(this);
                       playSound(SoundEvents.ENTITY_SPIDER_AMBIENT, 1.0F, 1.5F);
                       break;
                   }
@@ -318,7 +317,7 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
     } 
     if (!player.isSneaking() && stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -352,10 +351,10 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
     super.onLivingUpdate();
     if (isOnLadder() || (isRiding() && getRidingEntity() instanceof EntityPlayer && ((EntityPlayer)getRidingEntity()).limbSwingAmount != 0.0F))
       this.limbSwingAmount++; 
-    if (getAttackTarget() != null && (!getAttackTarget().canEntityBeSeen((Entity)this) || !this.onGround || this.posY < (getAttackTarget()).posY))
+    if (getAttackTarget() != null && (!getAttackTarget().canEntityBeSeen(this) || !this.onGround || this.posY < (getAttackTarget()).posY))
       getMoveHelper().setMoveTo((getAttackTarget()).posX, (getAttackTarget()).posY, (getAttackTarget()).posZ, 1.0D); 
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 1024.0D && getDistanceSq((Entity)getAttackTarget()) > 64.0D && getSpecialAttackTimer() <= 0 && this.onGround && isHero()) {
-      faceEntity((Entity)getAttackTarget(), 180.0F, 30.0F);
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) < 1024.0D && getDistanceSq(getAttackTarget()) > 64.0D && getSpecialAttackTimer() <= 0 && this.onGround && isHero()) {
+      faceEntity(getAttackTarget(), 180.0F, 30.0F);
       performSpecialAttack();
     } 
   }
@@ -434,7 +433,7 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
         this.motionX = (((this instanceof EntityCaveSpider) ? -2.5F : -2.0F) * f * this.jumpPower);
         this.motionZ = (((this instanceof EntityCaveSpider) ? 2.5F : 2.0F) * f1 * this.jumpPower);
         this.jumpPower = 0.0F;
-        ForgeHooks.onLivingJump((EntityLivingBase)this);
+        ForgeHooks.onLivingJump(this);
       } 
       this.prevLimbSwingAmount = this.limbSwingAmount;
       double d5 = this.posX - this.prevPosX;

@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.shinoow.abyssalcraft.api.AbyssalCraftAPI;
 import com.shinoow.abyssalcraft.api.item.ACItems;
@@ -65,13 +64,13 @@ public class EntityDreadguard extends EntityTameBase implements Armored {
     super(par1World);
     setSize(0.75F, 2.9F);
     this.isImmuneToFire = true;
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIOpenDoor((EntityLiving)this, true));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.1D, 32.0F, 12.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.0D, true));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 1.0D));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIWander((EntityCreature)this, 1.0D));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(0, new EntityAIOpenDoor(this, true));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.1D, 32.0F, 12.0F));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    this.tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 1.0D));
+    this.tasks.addTask(4, new EntityAIWander(this, 1.0D));
+    this.tasks.addTask(7, new EntityAILookIdle(this));
     this.isOffensive = true;
   }
   
@@ -146,7 +145,7 @@ public class EntityDreadguard extends EntityTameBase implements Armored {
       par1Entity instanceof EntityLivingBase)
       ((EntityLivingBase)par1Entity).addPotionEffect(new PotionEffect(AbyssalCraftAPI.dread_plague, 100)); 
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -209,13 +208,13 @@ public class EntityDreadguard extends EntityTameBase implements Armored {
   public void onLivingUpdate() {
     if (this.ticksExisted == 1)
       playSound(ESound.amalgamate, 1.0F, 1.0F); 
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) <= 64.0D && this.flameShootTimer <= (isHero() ? -100 : -200))
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) <= 64.0D && this.flameShootTimer <= (isHero() ? -100 : -200))
       this.flameShootTimer = 60; 
     if (this.flameShootTimer > 0) {
       this.motionX *= 0.0D;
       this.motionZ *= 0.0D;
       setAIMoveSpeed(0.0F);
-      this.world.setEntityState((Entity)this, (byte)23);
+      this.world.setEntityState(this, (byte)23);
       if (this.ticksExisted % 5 == 0)
         this.world.playSound(null, new BlockPos(this.posX + 0.5D, this.posY + getEyeHeight(), this.posZ + 0.5D), ACSounds.dreadguard_barf, getSoundCategory(), 0.5F + getRNG().nextFloat(), getRNG().nextFloat() * 0.5F + 0.2F); 
       Entity target = getHeadLookTarget();
@@ -224,12 +223,12 @@ public class EntityDreadguard extends EntityTameBase implements Armored {
         if (list != null && !list.isEmpty())
             for (EntityLivingBase entity : list) {
                 if (entity != null && !false && this.rand.nextInt(3) == 0)
-                    if (entity.attackEntityFrom(AbyssalCraftAPI.dread, (float) (15.0D - getDistance((Entity) entity)))) {
+                    if (entity.attackEntityFrom(AbyssalCraftAPI.dread, (float) (15.0D - getDistance(entity)))) {
                         entity.addPotionEffect(new PotionEffect(AbyssalCraftAPI.dread_plague, 100));
-                        entity.setFire((int) (15.0F - getDistance((Entity) entity)));
+                        entity.setFire((int) (15.0F - getDistance(entity)));
                     } else {
-                        attackEntityAsMob((Entity) entity);
-                        entity.setFire((int) (15.0F - getDistance((Entity) entity)));
+                        attackEntityAsMob(entity);
+                        entity.setFire((int) (15.0F - getDistance(entity)));
                     }
             }
         if (target.attackEntityFrom(AbyssalCraftAPI.dread, (float)(15.0D - getDistance(target)))) {
@@ -258,7 +257,7 @@ public class EntityDreadguard extends EntityTameBase implements Armored {
     double rz = (hitpos == null) ? range : Math.min(range, Math.abs(this.posZ - hitpos.getZ()));
     Vec3d destVec = srcVec.add(lookVec.x * range, lookVec.y * range, lookVec.z * range);
     float var9 = 4.0F;
-    List<Entity> possibleList = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().offset(lookVec.x * rx, lookVec.y * ry, lookVec.z * rz).grow(var9, var9, var9));
+    List<Entity> possibleList = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().offset(lookVec.x * rx, lookVec.y * ry, lookVec.z * rz).grow(var9, var9, var9));
     double hitDist = 0.0D;
     for (Entity possibleEntity : possibleList) {
       if (possibleEntity != this && possibleEntity instanceof EntityLivingBase && !false) {
@@ -306,7 +305,7 @@ public class EntityDreadguard extends EntityTameBase implements Armored {
         this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, px + getRNG().nextDouble() - 0.5D, py + getRNG().nextDouble() - 0.5D, pz + getRNG().nextDouble() - 0.5D, dx, dy, dz, Item.getIdFromItem(ACItems.dread_fragment));
       } 
     } else {
-      this.world.setEntityState((Entity)this, (byte)23);
+      this.world.setEntityState(this, (byte)23);
     } 
   }
   
@@ -338,7 +337,7 @@ public class EntityDreadguard extends EntityTameBase implements Armored {
       if (hasOwner(player)) {
         player.swingArm(EnumHand.MAIN_HAND);
         if (getRidingEntity() == null) {
-          startRiding((Entity)player, true);
+          startRiding(player, true);
         } else {
           dismountRidingEntity();
         } 
@@ -347,7 +346,7 @@ public class EntityDreadguard extends EntityTameBase implements Armored {
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -390,7 +389,7 @@ public class EntityDreadguard extends EntityTameBase implements Armored {
         this.motionZ = 0.0D;
       } 
       if (entitylivingbase.moveForward > 0.0F && this.ticksExisted % 7 == 0)
-        playStepSound(new BlockPos((Entity)this), this.world.getBlockState(new BlockPos((Entity)this)).getBlock()); 
+        playStepSound(new BlockPos(this), this.world.getBlockState(new BlockPos(this)).getBlock());
       this.prevLimbSwingAmount = this.limbSwingAmount;
       double d5 = this.posX - this.prevPosX;
       double d7 = this.posZ - this.prevPosZ;

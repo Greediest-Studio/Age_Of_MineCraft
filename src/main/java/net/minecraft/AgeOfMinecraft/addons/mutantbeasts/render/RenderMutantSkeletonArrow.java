@@ -45,7 +45,7 @@ public class RenderMutantSkeletonArrow extends Render<EntityMutantSkeletonArrow>
       GlStateManager.rotate(entity.rotationPitch, 1.0F, 0.0F, 0.0F);
       GlStateManager.scale(1.2F, 1.2F, 1.2F);
       GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F - i * 0.08F);
-      this.arrowModel.render((Entity)entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+      this.arrowModel.render(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
       GlStateManager.popMatrix();
     } 
     GlStateManager.disableBlend();

@@ -27,14 +27,14 @@ public class EntityAIBabyMobGirlFollowParent extends EntityAIBase {
     if (this.childAnimal.world.provider != (this.childAnimal.getOwner()).world.provider)
       return false; 
     this.parentAnimal = (EntityPlayer)this.childAnimal.getOwner();
-    double d0 = this.childAnimal.getDistanceSq((Entity)this.parentAnimal);
-    return ((d0 >= 64.0D || !this.childAnimal.canEntityBeSeen((Entity)this.parentAnimal)) && (this.childAnimal.isChild() || this.childAnimal.isMarried()));
+    double d0 = this.childAnimal.getDistanceSq(this.parentAnimal);
+    return ((d0 >= 64.0D || !this.childAnimal.canEntityBeSeen(this.parentAnimal)) && (this.childAnimal.isChild() || this.childAnimal.isMarried()));
   }
   
   public boolean shouldContinueExecuting() {
     if (!this.parentAnimal.isEntityAlive())
       return false; 
-    double d0 = this.childAnimal.getDistanceSq((Entity)this.parentAnimal);
+    double d0 = this.childAnimal.getDistanceSq(this.parentAnimal);
     return (d0 > 9.0D && (this.childAnimal.isChild() || this.childAnimal.isMarried()));
   }
   
@@ -49,8 +49,8 @@ public class EntityAIBabyMobGirlFollowParent extends EntityAIBase {
   public void updateTask() {
     if (--this.delayCounter <= 0) {
       this.delayCounter = 10;
-      this.childAnimal.getLookHelper().setLookPositionWithEntity((Entity)this.parentAnimal, 10.0F, 40.0F);
-      this.childAnimal.getNavigator().tryMoveToEntityLiving((Entity)this.parentAnimal, this.moveSpeed);
+      this.childAnimal.getLookHelper().setLookPositionWithEntity(this.parentAnimal, 10.0F, 40.0F);
+      this.childAnimal.getNavigator().tryMoveToEntityLiving(this.parentAnimal, this.moveSpeed);
     } 
   }
 }

@@ -51,10 +51,10 @@ public class RenderGuardian extends RenderLiving<EntityGuardian> {
   
   public RenderGuardian(RenderManager renderManagerIn) {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.5F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 0.5F));
+    addLayer(new LayerArrowCustomSized(this, 0.5F));
     addLayer(new LayerCustomHeadEngender(regularmodel.guardianBody, cmmmodel.Head));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    
+    addLayer(new LayerMobCape(this));
   }
   
   public boolean shouldRender(EntityGuardian livingEntity, ICamera camera, double camX, double camY, double camZ) {
@@ -64,7 +64,7 @@ public class RenderGuardian extends RenderLiving<EntityGuardian> {
       EntityLivingBase entitylivingbase = livingEntity.getTargetedEntity();
       if (entitylivingbase != null) {
         Vec3d vec3d = getPosition(entitylivingbase, entitylivingbase.height * 0.5D, 1.0F);
-        Vec3d vec3d1 = getPosition((EntityLivingBase)livingEntity, livingEntity.getEyeHeight(), 1.0F);
+        Vec3d vec3d1 = getPosition(livingEntity, livingEntity.getEyeHeight(), 1.0F);
         if (camera.isBoundingBoxInFrustum(new AxisAlignedBB(vec3d1.x, vec3d1.y, vec3d1.z, vec3d.x, vec3d.y, vec3d.z)))
           return true; 
       } 
@@ -100,7 +100,7 @@ public class RenderGuardian extends RenderLiving<EntityGuardian> {
       GlStateManager.pushMatrix();
       GlStateManager.translate((float)x, (float)y + f4, (float)z);
       Vec3d vec3d = getPosition(entitylivingbase, entitylivingbase.getEyeHeight(), partialTicks);
-      Vec3d vec3d1 = getPosition((EntityLivingBase)entity, f4, partialTicks);
+      Vec3d vec3d1 = getPosition(entity, f4, partialTicks);
       Vec3d vec3d2 = vec3d.subtract(vec3d1);
       double d0 = vec3d2.length() + 1.0D;
       vec3d2 = vec3d2.normalize();
@@ -182,7 +182,7 @@ public class RenderGuardian extends RenderLiving<EntityGuardian> {
   }
   
   protected void preRenderCallback(EntityGuardian entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel;
+    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
     if (EngenderConfig.mobs.useMobTalkerModels) {
       GlStateManager.scale(0.85F, 0.85F, 0.85F);
       if (entitylivingbaseIn.isElder()) {

@@ -87,12 +87,12 @@ public class EntitySheep extends EntityTameBase implements Light, Animal, IShear
     setSize(0.9F, 1.3F);
     this.inventoryCrafting.setInventorySlotContents(0, new ItemStack(Items.DYE));
     this.inventoryCrafting.setInventorySlotContents(1, new ItemStack(Items.DYE));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.2D, 16.0F, 4.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.2D, true));
-    this.tasks.addTask(4, (EntityAIBase)(this.entityAIEatGrass = new EntityAIEatGrass((EntityLiving)this)));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 1.0D, 80));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.2D, 16.0F, 4.0F));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.2D, true));
+    this.tasks.addTask(4, this.entityAIEatGrass = new EntityAIEatGrass(this));
+    this.tasks.addTask(5, new EntityAIWander(this, 1.0D, 80));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
     this.experienceValue = 1;
   }
   
@@ -151,7 +151,7 @@ public class EntitySheep extends EntityTameBase implements Light, Animal, IShear
           this.world.spawnParticle(EnumParticleTypes.END_ROD, d6, d7, d8, 0.0D, 0.01D, 0.0D);
         } 
         playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, getSoundVolume(), this.rand.nextFloat() - this.rand.nextFloat() * 0.4F + 1.0F);
-        getAttackTarget().attackEntityFrom(DamageSource.causeExplosionDamage((EntityLivingBase)this), 12.0F);
+        getAttackTarget().attackEntityFrom(DamageSource.causeExplosionDamage(this), 12.0F);
         this.shootTimer = -200;
       } 
     } 
@@ -234,7 +234,7 @@ public class EntitySheep extends EntityTameBase implements Light, Animal, IShear
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       playSound(getAmbientSound(), getSoundVolume(), getSoundPitch());
       this.world.playEvent(2001, getPosition(), Block.getStateId(Blocks.CARPET.getDefaultState().withProperty((IProperty)BlockCarpet.COLOR, (Comparable)getFleeceColor())));
       return true;
@@ -354,20 +354,20 @@ public class EntitySheep extends EntityTameBase implements Light, Animal, IShear
   }
   
   public EnumDyeColor getFleeceColor() {
-    return EnumDyeColor.byMetadata((Byte) this.dataManager.get(DYE_COLOR) & 0xF);
+    return EnumDyeColor.byMetadata(this.dataManager.get(DYE_COLOR) & 0xF);
   }
   
   public void setFleeceColor(EnumDyeColor color) {
-    byte b0 = (Byte) this.dataManager.get(DYE_COLOR);
+    byte b0 = this.dataManager.get(DYE_COLOR);
     this.dataManager.set(DYE_COLOR, (byte) (b0 & 0xF0 | color.getMetadata() & 0xF));
   }
   
   public boolean getSheared() {
-    return (((Byte) this.dataManager.get(DYE_COLOR) & 0x10) != 0);
+    return ((this.dataManager.get(DYE_COLOR) & 0x10) != 0);
   }
   
   public void setSheared(boolean sheared) {
-    byte b0 = (Byte) this.dataManager.get(DYE_COLOR);
+    byte b0 = this.dataManager.get(DYE_COLOR);
     if (sheared) {
       this.dataManager.set(DYE_COLOR, (byte) (b0 | 0x10));
     } else {

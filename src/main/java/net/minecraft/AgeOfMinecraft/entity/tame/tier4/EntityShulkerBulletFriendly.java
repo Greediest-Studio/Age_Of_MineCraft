@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier4;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
@@ -40,7 +39,7 @@ public class EntityShulkerBulletFriendly extends EntityShulkerBullet {
   }
   
   public EntityShulkerBulletFriendly(World worldIn, EntityTameBase p_i46772_2_, Entity p_i46772_3_, EnumFacing.Axis p_i46772_4_) {
-    super(worldIn, (EntityLivingBase)p_i46772_2_, p_i46772_3_, p_i46772_4_);
+    super(worldIn, p_i46772_2_, p_i46772_3_, p_i46772_4_);
     this.owner = p_i46772_2_;
     this.target = p_i46772_3_;
   }
@@ -51,9 +50,9 @@ public class EntityShulkerBulletFriendly extends EntityShulkerBullet {
       ((WorldServer)this.world).spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY, this.posZ, 2, 0.2D, 0.2D, 0.2D, 0.0D);
       playSound(SoundEvents.ENTITY_SHULKER_BULLET_HIT, 1.0F, 1.0F);
       if (!this.world.isRemote)
-        this.world.spawnEntity((Entity)entityfireworkrocket); 
+        this.world.spawnEntity(entityfireworkrocket);
       if (this.target != null && this.target instanceof EntityLivingBase && ((EntityLivingBase)this.target).getHealth() <= 5.0F)
-        this.target.startRiding((Entity)entityfireworkrocket); 
+        this.target.startRiding(entityfireworkrocket);
     } 
     super.setDead();
   }
@@ -83,7 +82,7 @@ public class EntityShulkerBulletFriendly extends EntityShulkerBullet {
           for (EntityLivingBase entity1 : list) {
             if (entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive()) {
               this.owner.attackEntityAsMob(this.target);
-              applyEnchantments((EntityLivingBase)this.owner, this.target);
+              applyEnchantments(this.owner, this.target);
               playSound(SoundEvents.ENTITY_SHULKER_BULLET_HIT, 1.0F, 1.0F);
               if (!this.world.isRemote)
                 setDead(); 
@@ -96,9 +95,9 @@ public class EntityShulkerBulletFriendly extends EntityShulkerBullet {
   protected void bulletHit(RayTraceResult result) {
     if (result.entityHit != null && this.target != null && result.entityHit == this.target && result.entityHit instanceof EntityLivingBase)
       if ((!false || (this.owner instanceof EntityShulker && ((EntityShulker)this.owner).isPositiveShulker() && false)) && this.owner != null) {
-        this.owner.inflictEngenderMobDamage((EntityLivingBase)result.entityHit, " was shot by ", DamageSource.causeThrownDamage((Entity)this, (Entity)this.owner), (float)this.owner.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue());
+        this.owner.inflictEngenderMobDamage((EntityLivingBase)result.entityHit, " was shot by ", DamageSource.causeThrownDamage(this, this.owner), (float)this.owner.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue());
         ((EntityShulker)this.owner).inflictShulkerEffects((EntityLivingBase)result.entityHit);
-        applyEnchantments((EntityLivingBase)this.owner, result.entityHit);
+        applyEnchantments(this.owner, result.entityHit);
         ((WorldServer)this.world).spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY, this.posZ, 2, 0.2D, 0.2D, 0.2D, 0.0D);
         playSound(SoundEvents.ENTITY_SHULKER_BULLET_HIT, 1.0F, 1.0F);
         if (!this.world.isRemote)

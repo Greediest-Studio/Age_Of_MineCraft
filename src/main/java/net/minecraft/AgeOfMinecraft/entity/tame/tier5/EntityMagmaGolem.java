@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier5;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import java.util.UUID;
@@ -61,12 +60,12 @@ public class EntityMagmaGolem extends EntityTameBase implements Armored, Element
     this.isOffensive = true;
     this.experienceValue = 20;
     this.isImmuneToFire = true;
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIOpenDoor((EntityLiving)this, true));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.0D, 48.0F, 8.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.0D, true));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.67D, 80));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(0, new EntityAIOpenDoor(this, true));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.0D, 48.0F, 8.0F));
+    this.tasks.addTask(3, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.67D, 80));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
   }
   
   public String getDescName() {
@@ -132,7 +131,7 @@ public class EntityMagmaGolem extends EntityTameBase implements Armored, Element
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && !isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote) {
-      player.startRiding((Entity)this);
+      player.startRiding(this);
       return true;
     } 
     return false;
@@ -181,7 +180,7 @@ public class EntityMagmaGolem extends EntityTameBase implements Armored, Element
         this.motionY = 0.0D;
         this.motionZ = 0.0D;
       } 
-      List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(1.0D));
+      List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(1.0D));
         for (Entity entity : list) {
             if (entity instanceof EntityLivingBase && !false && !this.world.isRemote && this.ticksExisted % 10 == 0)
                 attackEntityAsMob(entity);
@@ -205,7 +204,7 @@ public class EntityMagmaGolem extends EntityTameBase implements Armored, Element
       playSound(SoundEvents.ENTITY_GENERIC_BURN, 1.0F, 1.0F);
       attackEntityFrom((new DamageSource("cooler")).setDamageBypassesArmor().setDamageIsAbsolute().setDifficultyScaled(), 8.0F);
     } 
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 64.0D && getSpecialAttackTimer() <= 0 && this.onGround && isHero())
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) < 64.0D && getSpecialAttackTimer() <= 0 && this.onGround && isHero())
       performSpecialAttack(); 
     if (this.motionX * this.motionX + this.motionZ * this.motionZ != 0.0D && this.rand.nextInt(5) == 0) {
       int i = MathHelper.floor(this.posX);
@@ -219,7 +218,7 @@ public class EntityMagmaGolem extends EntityTameBase implements Armored, Element
   
   public boolean attackEntityAsMob(Entity entityIn) {
     this.attackTimer = 10;
-    this.world.setEntityState((Entity)this, (byte)4);
+    this.world.setEntityState(this, (byte)4);
     playSound(SoundEvents.ENTITY_IRONGOLEM_ATTACK, 1.0F, 1.0F);
     AttributeModifier irongolemrandomizer = (new AttributeModifier(UUID.fromString("B9766B59-8566-4402-BC1F-3EE2A276D839"), "Iron Golem randomizer", this.rand.nextDouble() * 0.5D, 1)).setSaved(false);
     IAttributeInstance iattributeinstanceattack = getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
@@ -240,7 +239,7 @@ public class EntityMagmaGolem extends EntityTameBase implements Armored, Element
     if (this.world.getDifficulty() == EnumDifficulty.HARD)
       amount *= 1.5D; 
     if (!entity.isEntityAlive() && entity instanceof EntityLivingBase) {
-      ((EntityLivingBase)entity).prevRenderYawOffset = ((EntityLivingBase)entity).renderYawOffset = ((EntityLivingBase)entity).prevRotationYaw = ((EntityLivingBase)entity).rotationYaw = ((EntityLivingBase)entity).prevRotationYawHead = ((EntityLivingBase)entity).rotationYawHead = this.rotationYawHead;
+      ((EntityLivingBase)entity).prevRenderYawOffset = ((EntityLivingBase)entity).renderYawOffset = entity.prevRotationYaw = ((EntityLivingBase)entity).rotationYaw = ((EntityLivingBase)entity).prevRotationYawHead = ((EntityLivingBase)entity).rotationYawHead = this.rotationYawHead;
       float xRatio = MathHelper.sin(this.rotationYawHead * 0.017453292F);
       float zRatio = -MathHelper.cos(this.rotationYawHead * 0.017453292F);
       entity.isAirBorne = true;
@@ -252,7 +251,7 @@ public class EntityMagmaGolem extends EntityTameBase implements Armored, Element
       entity.motionY /= 2.0D;
       entity.motionY += amount;
       if (entity instanceof EntityPlayerMP)
-        ((EntityPlayerMP)entity).connection.sendPacket((Packet)new SPacketEntityVelocity(entity)); 
+        ((EntityPlayerMP)entity).connection.sendPacket(new SPacketEntityVelocity(entity));
     } 
     entity.motionY += amount;
     entity.setFire(15);
@@ -263,7 +262,7 @@ public class EntityMagmaGolem extends EntityTameBase implements Armored, Element
       if (!source.isMagicDamage() && source.getTrueSource() instanceof EntityLivingBase) {
         EntityLivingBase entitylivingbase = (EntityLivingBase)source.getTrueSource();
         if (!entitylivingbase.isImmuneToFire() && !source.isExplosion() && (!false || (getOwner() != null && entitylivingbase == getOwner()))) {
-          entitylivingbase.attackEntityFrom((new EntityDamageSource("litOnFire", (Entity)this)).setIsThornsDamage().setDamageBypassesArmor().setFireDamage(), 2.0F);
+          entitylivingbase.attackEntityFrom((new EntityDamageSource("litOnFire", this)).setIsThornsDamage().setDamageBypassesArmor().setFireDamage(), 2.0F);
           playSound(SoundEvents.ENTITY_GENERIC_BURN, getSoundVolume(), getSoundPitch());
           if (this.rand.nextInt(3) == 0)
             entitylivingbase.setFire(5 + this.rand.nextInt(5)); 
@@ -299,7 +298,7 @@ public class EntityMagmaGolem extends EntityTameBase implements Armored, Element
   
   public void setHoldingRose(boolean p_70851_1_) {
     this.holdRoseTick = p_70851_1_ ? 100 : 0;
-    this.world.setEntityState((Entity)this, (byte)(p_70851_1_ ? 11 : 12));
+    this.world.setEntityState(this, (byte)(p_70851_1_ ? 11 : 12));
   }
   
   public boolean takesFallDamage() {
@@ -310,7 +309,7 @@ public class EntityMagmaGolem extends EntityTameBase implements Armored, Element
     if (getSpecialAttackTimer() <= 0 && isHero()) {
       setSpecialAttackTimer(300);
       playSound(ESound.golemSmash, 10.0F, 1.0F);
-      createEngenderModExplosionFireless((Entity)this, this.posX, this.posY - 2.0D, this.posZ, 3.0F, false);
+      createEngenderModExplosionFireless(this, this.posX, this.posY - 2.0D, this.posZ, 3.0F, false);
       List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(24.0D, 3.0D, 24.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
           for (EntityLivingBase entity : list) {
@@ -318,9 +317,9 @@ public class EntityMagmaGolem extends EntityTameBase implements Armored, Element
                   if (!false) {
                       entity.motionY += 1.5D;
                       if (entity instanceof net.minecraft.entity.monster.IMob) {
-                          entity.attackEntityFrom(DamageSource.causeExplosionDamage((EntityLivingBase) this), 24.0F);
+                          entity.attackEntityFrom(DamageSource.causeExplosionDamage(this), 24.0F);
                       } else {
-                          entity.attackEntityFrom(DamageSource.causeExplosionDamage((EntityLivingBase) this), 12.0F);
+                          entity.attackEntityFrom(DamageSource.causeExplosionDamage(this), 12.0F);
                       }
                       entity.isAirBorne = true;
                       float f = MathHelper.sqrt(MathHelper.sin(this.rotationYaw * 0.017453292F) * MathHelper.sin(this.rotationYaw * 0.017453292F) + -MathHelper.cos(this.rotationYaw * 0.017453292F) * -MathHelper.cos(this.rotationYaw * 0.017453292F));
@@ -330,7 +329,7 @@ public class EntityMagmaGolem extends EntityTameBase implements Armored, Element
                       entity.motionZ -= (-MathHelper.cos(this.rotationYaw * 0.017453292F) / f) * 1.0D;
                   }
                   if (EngenderConfig.general.useMessage && !entity.isEntityAlive() && !isWild())
-                      getOwner().sendMessage((ITextComponent) new TextComponentTranslation(entity.getName() + " was blown up by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
+                      getOwner().sendMessage(new TextComponentTranslation(entity.getName() + " was blown up by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
               }
           }
     } 

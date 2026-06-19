@@ -62,11 +62,11 @@ public class EntityMutantSnowGolem extends EntityTameBase implements IRangedAtta
     super(worldIn);
     setSize(0.9F, 2.2F);
     this.tasks.addTask(0, new SwimJumpGoal());
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIAttackRanged(this, 1.2D, 30, 24.0F));
+    this.tasks.addTask(3, new EntityAIAttackRanged(this, 1.2D, 30, 24.0F));
     this.tasks.addTask(4, new ThrowIceGoal());
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIFollowLeader(this, 1.2D, 64.0F, 12.0F));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAIWanderAvoidWater((EntityCreature)this, 0.75D));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(5, new EntityAIFollowLeader(this, 1.2D, 64.0F, 12.0F));
+    this.tasks.addTask(7, new EntityAIWanderAvoidWater(this, 0.75D));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
   }
   
   public String getDescName() {
@@ -118,7 +118,7 @@ public class EntityMutantSnowGolem extends EntityTameBase implements IRangedAtta
     ItemStack heldItem = new ItemStack(stack.getItem());
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     if (false && !stack.isEmpty() && getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty() && stack.getItem() instanceof net.minecraft.item.ItemBlock) {
@@ -141,7 +141,7 @@ public class EntityMutantSnowGolem extends EntityTameBase implements IRangedAtta
   }
   
   public boolean isPumpkinEquipped() {
-    return (Boolean) this.dataManager.get(PUMPKIN_EQUIPPED);
+    return this.dataManager.get(PUMPKIN_EQUIPPED);
   }
   
   private void setPumpkinEquipped(boolean pumpkinEquipped) {
@@ -161,7 +161,7 @@ public class EntityMutantSnowGolem extends EntityTameBase implements IRangedAtta
   }
   
   protected PathNavigate createNavigator(World worldIn) {
-    return (PathNavigate)(new MBGroundPathNavigator((EntityLiving)this, worldIn)).setAvoidRain(true);
+    return (new MBGroundPathNavigator(this, worldIn)).setAvoidRain(true);
   }
   
   public float getEyeHeight() {
@@ -243,13 +243,13 @@ public class EntityMutantSnowGolem extends EntityTameBase implements IRangedAtta
       attackEntityFrom(DamageSource.DROWN, 1.0F); 
     if (biomeTemp > 1.2F && !isPotionActive(MobEffects.FIRE_RESISTANCE)) {
       if (this.rand.nextFloat() > Math.min(80.0F, getHealth()) * 0.01F)
-        this.world.setEntityState((Entity)this, (byte)4); 
+        this.world.setEntityState(this, (byte)4);
       if (this.ticksExisted % 60 == 0)
         attackEntityFrom(DamageSource.ON_FIRE, 1.0F); 
     } 
     if (getHealth() > 0.0F && biomeTemp < 0.5F && this.ticksExisted % 200 == 0)
       heal(1.0F); 
-    if (!this.world.isRemote && ForgeEventFactory.getMobGriefingEvent(this.world, (Entity)this)) {
+    if (!this.world.isRemote && ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
       int x = MathHelper.floor(this.posX);
       int y = MathHelper.floor((getEntityBoundingBox()).minY);
       int z = MathHelper.floor(this.posZ);
@@ -291,7 +291,7 @@ public class EntityMutantSnowGolem extends EntityTameBase implements IRangedAtta
   private void setThrowing(boolean isThrowing) {
     this.isThrowing = isThrowing;
     this.throwingTick = 0;
-    this.world.setEntityState((Entity)this, (byte)(isThrowing ? 1 : 0));
+    this.world.setEntityState(this, (byte)(isThrowing ? 1 : 0));
   }
   
   @SideOnly(Side.CLIENT)
@@ -327,14 +327,14 @@ public class EntityMutantSnowGolem extends EntityTameBase implements IRangedAtta
     if (source.getImmediateSource() instanceof net.minecraft.entity.projectile.EntitySnowball) {
       if (getHealth() < getMaxHealth()) {
         heal(1.0F);
-        this.world.setEntityState((Entity)this, (byte)7);
-        this.world.setEntityState((Entity)this, (byte)5);
+        this.world.setEntityState(this, (byte)7);
+        this.world.setEntityState(this, (byte)5);
       } 
       return false;
     } 
     boolean flag = super.attackEntityFrom(source, amount);
     if (flag && amount > 0.0F)
-      this.world.setEntityState((Entity)this, (byte)6); 
+      this.world.setEntityState(this, (byte)6);
     return flag;
   }
   
@@ -403,7 +403,7 @@ public class EntityMutantSnowGolem extends EntityTameBase implements IRangedAtta
       EntityMutantSnowGolem.this.motionY = 1.5D;
       EntityMutantSnowGolem.this.motionZ = ((EntityMutantSnowGolem.this.rand.nextFloat() - EntityMutantSnowGolem.this.rand.nextFloat()) * 0.9F);
       EntityMutantSnowGolem.this.attackEntityFrom(DamageSource.DROWN, 16.0F);
-      EntityMutantSnowGolem.this.world.setEntityState((Entity)EntityMutantSnowGolem.this, (byte)6);
+      EntityMutantSnowGolem.this.world.setEntityState(EntityMutantSnowGolem.this, (byte)6);
     }
     
     public boolean shouldContinueExecuting() {
@@ -412,7 +412,7 @@ public class EntityMutantSnowGolem extends EntityTameBase implements IRangedAtta
     
     public void updateTask() {
       this.jumpTick--;
-      if (!this.waterReplaced && !EntityMutantSnowGolem.this.isInWater() && this.jumpTick < 17 && ForgeEventFactory.getMobGriefingEvent(EntityMutantSnowGolem.this.world, (Entity)EntityMutantSnowGolem.this)) {
+      if (!this.waterReplaced && !EntityMutantSnowGolem.this.isInWater() && this.jumpTick < 17 && ForgeEventFactory.getMobGriefingEvent(EntityMutantSnowGolem.this.world, EntityMutantSnowGolem.this)) {
         int i = this.prevPos.getY();
         i = getWaterSurfaceHeight(EntityMutantSnowGolem.this.world, this.prevPos);
         if (i > EntityMutantSnowGolem.this.posY)
@@ -488,7 +488,7 @@ public class EntityMutantSnowGolem extends EntityTameBase implements IRangedAtta
         double xz = Math.sqrt(x * x + z * z);
         block.shoot(x, y + xz * 0.5D, z, 1.2F, 1.0F);
         block.setBlockState((!EntityMutantSnowGolem.this.getHeldItemMainhand().isEmpty() && EntityMutantSnowGolem.this.getHeldItemMainhand().getItem() instanceof net.minecraft.item.ItemBlock) ? Block.getBlockFromItem(EntityMutantSnowGolem.this.getHeldItemMainhand().getItem()).getDefaultState() : Blocks.ICE.getDefaultState());
-        EntityMutantSnowGolem.this.world.spawnEntity((Entity)block);
+        EntityMutantSnowGolem.this.world.spawnEntity(block);
         EntityMutantSnowGolem.this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, EntityMutantSnowGolem.this.getSoundVolume(), EntityMutantSnowGolem.this.getSoundPitch());
       } 
     }

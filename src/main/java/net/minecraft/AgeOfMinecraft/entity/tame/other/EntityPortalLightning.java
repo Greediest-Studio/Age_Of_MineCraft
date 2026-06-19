@@ -87,9 +87,9 @@ public class EntityPortalLightning extends EntityFireball {
     if (!this.world.isRemote) {
       setFlag(6, isGlowing());
       if (!this.isDead) {
-        ChunkLoadingEvent.updateLoaded((Entity)this);
+        ChunkLoadingEvent.updateLoaded(this);
       } else {
-        ChunkLoadingEvent.stopLoading((Entity)this);
+        ChunkLoadingEvent.stopLoading(this);
       } 
     } 
     setSize(0.25F, 0.25F);
@@ -125,17 +125,17 @@ public class EntityPortalLightning extends EntityFireball {
       this.targetEntity.onStruckByLightning(null);
       this.targetEntity.hurtResistantTime = 0;
       if (this.shootingEntity instanceof EntityTameBase) {
-        this.world.addWeatherEffect((Entity)new EntityLightningBolt(this.world, this.accelerationX - 0.5D, this.accelerationY, this.accelerationZ - 0.5D, true));
-        List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, (new AxisAlignedBB(getPosition())).grow(2.0D));
+        this.world.addWeatherEffect(new EntityLightningBolt(this.world, this.accelerationX - 0.5D, this.accelerationY, this.accelerationZ - 0.5D, true));
+        List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, (new AxisAlignedBB(getPosition())).grow(2.0D));
         for (Entity entity : entities) {
           if (entity instanceof EntityLivingBase) {
-            ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)this.targetEntity, " was electrocuted by ", (new EntityDamageSource("indirectMagic", (Entity)this.shootingEntity)).setMagicDamage().setDamageBypassesArmor().setDamageIsAbsolute(), 10.0F);
+            ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)this.targetEntity, " was electrocuted by ", (new EntityDamageSource("indirectMagic", this.shootingEntity)).setMagicDamage().setDamageBypassesArmor().setDamageIsAbsolute(), 10.0F);
             if (entity.isEntityAlive())
-              ((EntityTameBase)this.shootingEntity).attackEntityAsMob(this.targetEntity); 
+              this.shootingEntity.attackEntityAsMob(this.targetEntity);
           } 
         } 
-        this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
-        this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_IMPACT, SoundCategory.WEATHER, 2.0F, 0.5F + this.rand.nextFloat() * 0.2F);
+        this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
+        this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_IMPACT, SoundCategory.WEATHER, 2.0F, 0.5F + this.rand.nextFloat() * 0.2F);
         if (this.targetEntity instanceof EntityLivingBase && !(this.targetEntity instanceof EntityPlayer) && !(this.targetEntity instanceof net.minecraft.entity.EntityLiving)) {
           this.targetEntity.motionY++;
           if (this.targetEntity instanceof EntityLivingBase)

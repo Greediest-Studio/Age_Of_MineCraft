@@ -48,11 +48,11 @@ public class EntityLlama extends EntityTameBase implements IRangedAttackMob, Lig
   public EntityLlama(World worldIn) {
     super(worldIn);
     setSize(0.9F, 1.87F);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.2D, 32.0F, 6.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIAttackRangedAlly(this, 1.2D, 20, 50, 12.0F));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.8D, 80));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.2D, 32.0F, 6.0F));
+    this.tasks.addTask(3, new EntityAIAttackRangedAlly(this, 1.2D, 20, 50, 12.0F));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.8D, 80));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
     this.experienceValue = 3;
   }
   
@@ -110,7 +110,7 @@ public class EntityLlama extends EntityTameBase implements IRangedAttackMob, Lig
   }
   
   public int getVariant() {
-    return MathHelper.clamp((Integer) this.dataManager.get(DATA_VARIANT_ID), 0, 3);
+    return MathHelper.clamp(this.dataManager.get(DATA_VARIANT_ID), 0, 3);
   }
   
   public void setVariant(int variantIn) {
@@ -146,7 +146,7 @@ public class EntityLlama extends EntityTameBase implements IRangedAttackMob, Lig
       flag = true;
     } 
     if (flag && !isSilent())
-      this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LLAMA_EAT, getSoundCategory(), 1.0F, 1.0F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F); 
+      this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LLAMA_EAT, getSoundCategory(), 1.0F, 1.0F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
     return flag;
   }
   
@@ -204,7 +204,7 @@ public class EntityLlama extends EntityTameBase implements IRangedAttackMob, Lig
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -237,7 +237,7 @@ public class EntityLlama extends EntityTameBase implements IRangedAttackMob, Lig
         this.motionZ = 0.0D;
       } 
       if (entitylivingbase.moveForward > 0.0F && this.ticksExisted % 7 == 0)
-        playStepSound(new BlockPos((Entity)this), this.world.getBlockState(new BlockPos((Entity)this)).getBlock()); 
+        playStepSound(new BlockPos(this), this.world.getBlockState(new BlockPos(this)).getBlock());
       this.prevLimbSwingAmount = this.limbSwingAmount;
       double d1 = this.posX - this.prevPosX;
       double d0 = this.posZ - this.prevPosZ;
@@ -265,7 +265,7 @@ public class EntityLlama extends EntityTameBase implements IRangedAttackMob, Lig
   
   @Nullable
   public EnumDyeColor getColor() {
-    int i = (Integer) this.dataManager.get(DATA_COLOR_ID);
+    int i = this.dataManager.get(DATA_COLOR_ID);
     return (i == -1) ? null : EnumDyeColor.byMetadata(i);
   }
   
@@ -280,14 +280,14 @@ public class EntityLlama extends EntityTameBase implements IRangedAttackMob, Lig
     double d2 = target.posZ - this.posZ;
     float f = MathHelper.sqrt(d0 * d0 + d2 * d2) * 0.25F;
     entityllamaspit.shoot(d0, d1 + f, d2, 2.0F, 4.0F);
-    this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LLAMA_SPIT, getSoundCategory(), getSoundVolume(), getSoundPitch());
-    this.world.spawnEntity((Entity)entityllamaspit);
+    this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LLAMA_SPIT, getSoundCategory(), getSoundVolume(), getSoundPitch());
+    this.world.spawnEntity(entityllamaspit);
   }
   
   public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
-    if (getDistance((Entity)target) <= (target.width + this.width)) {
-      attackEntityAsMob((Entity)target);
-      getNavigator().tryMoveToEntityLiving((Entity)target, 1.2D);
+    if (getDistance(target) <= (target.width + this.width)) {
+      attackEntityAsMob(target);
+      getNavigator().tryMoveToEntityLiving(target, 1.2D);
     } else {
       spit(target);
     } 

@@ -102,12 +102,12 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
     super(par1World);
     this.speed = 0.05D;
     setSize(1.5F, 6.0F);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.0D, 64.0F, 16.0F));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 0.6D));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.6D));
-    this.tasks.addTask(6, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
-    this.tasks.addTask(6, (EntityAIBase)new EntityAIWatchClosest((EntityLiving)this, EntityPlayer.class, 8.0F));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.0D, 64.0F, 16.0F));
+    this.tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 0.6D));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.6D));
+    this.tasks.addTask(6, new EntityAILookIdle(this));
+    this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
     this.isImmuneToFire = true;
     this.ignoreFrustumCheck = true;
     this.isOffensive = true;
@@ -197,15 +197,15 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
   public int getTimer(int timer) {
     switch (timer) {
       case 0:
-        return (Integer) this.dataManager.get(EARTHQUAKETIMER);
+        return this.dataManager.get(EARTHQUAKETIMER);
       case 1:
-        return (Integer) this.dataManager.get(BLACKHOLETIMER);
+        return this.dataManager.get(BLACKHOLETIMER);
       case 2:
-        return (Integer) this.dataManager.get(IMPLOSIONTIMER);
+        return this.dataManager.get(IMPLOSIONTIMER);
       case 3:
-        return (Integer) this.dataManager.get(SHOUTTIMER);
+        return this.dataManager.get(SHOUTTIMER);
       case 4:
-        return (Integer) this.dataManager.get(COOLDOWNTIMER);
+        return this.dataManager.get(COOLDOWNTIMER);
     } 
     return 0;
   }
@@ -288,8 +288,8 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
   
   protected void updateAITasks() {
     super.updateAITasks();
-    if (isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && this.isOffensive && !isChild() && !false && getDistanceSq((Entity)getAttackTarget()) < (this.width * this.width + (getAttackTarget()).width * (getAttackTarget()).width) + 36.0D && (this.ticksExisted + getEntityId()) % 10 == 0)
-      attackEntityAsMob((Entity)getAttackTarget()); 
+    if (isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && this.isOffensive && !isChild() && !false && getDistanceSq(getAttackTarget()) < (this.width * this.width + (getAttackTarget()).width * (getAttackTarget()).width) + 36.0D && (this.ticksExisted + getEntityId()) % 10 == 0)
+      attackEntityAsMob(getAttackTarget());
     if (this.ticksExisted % 5 == 0)
       heal(2.0F); 
   }
@@ -303,7 +303,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
     ItemStack heldItem = new ItemStack(stack.getItem());
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -344,7 +344,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         this.motionZ = 0.0D;
       } 
       if (entitylivingbase.moveForward > 0.0F && this.ticksExisted % 7 == 0)
-        playStepSound(new BlockPos((Entity)this), this.world.getBlockState(new BlockPos((Entity)this)).getBlock()); 
+        playStepSound(new BlockPos(this), this.world.getBlockState(new BlockPos(this)).getBlock());
       this.prevLimbSwingAmount = this.limbSwingAmount;
       double d5 = this.posX - this.prevPosX;
       double d7 = this.posZ - this.prevPosZ;
@@ -386,7 +386,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
   public boolean attackEntityAsMob(Entity par1Entity) {
     boolean flag = super.attackEntityAsMob(par1Entity);
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 4.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor().setDamageIsAbsolute(), 4.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -442,9 +442,9 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
   public void onLivingUpdate() {
     if (!this.world.isRemote)
       if (isEntityAlive()) {
-        ChunkLoadingEvent.updateLoaded((Entity)this);
+        ChunkLoadingEvent.updateLoaded(this);
       } else {
-        ChunkLoadingEvent.stopLoading((Entity)this);
+        ChunkLoadingEvent.stopLoading(this);
       }  
     if (this.posY <= 0.0D) {
       setPosition(this.posX, 0.01D, this.posZ);
@@ -461,7 +461,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
     float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
     float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
     float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
-    List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(100.0D));
+    List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(100.0D));
     if (list != null && this.ticksExisted > 20)
       for (int k2 = 0; k2 < list.size(); k2++) {
         Entity entity = list.get(k2);
@@ -479,7 +479,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
                 this.world.spawnEntity(entitywitherskull);
                 entitywitherskull.startRiding(entity);
                 if (EngenderConfig.general.useMessage && !isWild())
-                  getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + " was super-banished by " + getName() + " (" + getOwner().getName() + ")", new Object[0])); 
+                  getOwner().sendMessage(new TextComponentTranslation(entity.getName() + " was super-banished by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
                 list.remove(entity);
                 SpecialTextUtil.JzaharGroup(this.world, !isWild() ? I18n.translateToLocal("message.jzaharhelpful.banish.vanilla") : I18n.translateToLocal("message.jzahar.banish.vanilla"));
               } 
@@ -499,7 +499,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
                 this.world.spawnEntity(entitywitherskull);
                 entitywitherskull.startRiding(entity);
                 if (EngenderConfig.general.useMessage && !isWild())
-                  getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + " was super-banished by " + getName() + " (" + getOwner().getName() + ")", new Object[0])); 
+                  getOwner().sendMessage(new TextComponentTranslation(entity.getName() + " was super-banished by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
                 SpecialTextUtil.JzaharGroup(this.world, !isWild() ? I18n.translateToLocal("message.jzaharhelpful.banish.ac") : I18n.translateToLocal("message.jzahar.banish.ac"));
               } 
             } else if (ACConfig.particleEntity) {
@@ -518,7 +518,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
                 this.world.spawnEntity(entitywitherskull);
                 entitywitherskull.startRiding(entity);
                 if (EngenderConfig.general.useMessage && !isWild())
-                  getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + " was super-banished by " + getName() + " (" + getOwner().getName() + ")", new Object[0])); 
+                  getOwner().sendMessage(new TextComponentTranslation(entity.getName() + " was super-banished by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
                 SpecialTextUtil.JzaharGroup(this.world, !isWild() ? I18n.translateToLocal("message.jzaharhelpful.banish.jzh") : I18n.translateToLocal("message.jzahar.banish.jzh"));
               } 
             } else if (ACConfig.particleEntity) {
@@ -539,7 +539,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
                 this.world.spawnEntity(entitywitherskull);
                 entitywitherskull.startRiding(entity);
                 if (EngenderConfig.general.useMessage && !isWild())
-                  getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + " was super-banished by " + getName() + " (" + getOwner().getName() + ")", new Object[0])); 
+                  getOwner().sendMessage(new TextComponentTranslation(entity.getName() + " was super-banished by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
                 SpecialTextUtil.JzaharGroup(this.world, !isWild() ? I18n.translateToLocal("message.jzaharhelpful.banish.other") : I18n.translateToLocal("message.jzahar.banish.other"));
               } 
             } else if (ACConfig.particleEntity) {
@@ -560,25 +560,25 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
           }  
       }  
     if (getAttackTarget() != null)
-      if (getDistanceSq((Entity)getAttackTarget()) > 200.0D || getAttackTarget() instanceof net.minecraft.entity.EntityFlying || (getAttackTarget()).posY > this.posY + 4.0D) {
-        this.tasks.addTask(2, (EntityAIBase)this.aiArrowAttack);
-        this.tasks.removeTask((EntityAIBase)this.aiAttackOnCollide);
+      if (getDistanceSq(getAttackTarget()) > 200.0D || getAttackTarget() instanceof net.minecraft.entity.EntityFlying || (getAttackTarget()).posY > this.posY + 4.0D) {
+        this.tasks.addTask(2, this.aiArrowAttack);
+        this.tasks.removeTask(this.aiAttackOnCollide);
       } else {
-        this.tasks.addTask(2, (EntityAIBase)this.aiAttackOnCollide);
-        this.tasks.removeTask((EntityAIBase)this.aiArrowAttack);
+        this.tasks.addTask(2, this.aiAttackOnCollide);
+        this.tasks.removeTask(this.aiArrowAttack);
       }  
     super.onLivingUpdate();
-    if (!this.world.isRemote && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen((Entity)this) && this.rand.nextInt(100) == 0) {
+    if (!this.world.isRemote && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && this.rand.nextInt(100) == 0) {
       double d1 = getHeadX(1);
       double d2 = getHeadY(1);
       double d3 = getHeadZ(1);
-      fireLightning((Entity)getAttackTarget(), d1, d2, d3);
+      fireLightning(getAttackTarget(), d1, d2, d3);
     } 
-    if (!this.world.isRemote && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen((Entity)this) && this.rand.nextInt(100) == 0) {
+    if (!this.world.isRemote && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && this.rand.nextInt(100) == 0) {
       double d1 = getHeadX(2);
       double d2 = getHeadY(2);
       double d3 = getHeadZ(2);
-      fireLightning((Entity)getAttackTarget(), d1, d2, d3);
+      fireLightning(getAttackTarget(), d1, d2, d3);
     } 
     if (this.deathTicks == 0) {
       decrementTimer(0);
@@ -604,7 +604,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
             } 
           } 
         }  
-      if (getTimer(3) < 0 && this.rand.nextInt(20) == 0 && getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) <= 9216.0D && !this.doShout && getTimer(4) < 0) {
+      if (getTimer(3) < 0 && this.rand.nextInt(20) == 0 && getAttackTarget() != null && getDistanceSq(getAttackTarget()) <= 9216.0D && !this.doShout && getTimer(4) < 0) {
         playSound(ACSounds.jzahar_shout, 5.0F, 1.0F);
         if (!this.world.isRemote)
           SpecialTextUtil.JzaharGroup(this.world, "Uftoin...");
@@ -614,7 +614,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
       } 
       if (getTimer(3) < this.shoutTicks && this.doShout) {
         this.doShout = false;
-        this.world.setEntityState((Entity)this, (byte)23);
+        this.world.setEntityState(this, (byte)23);
         setTimer(3, 400);
         playSound(ACSounds.jzahar_blast, 5.0F, 1.0F);
         if (!this.world.isRemote)
@@ -671,7 +671,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         if (!this.world.isRemote)
           SpecialTextUtil.JzaharGroup(this.world, "Ph'nilgh'ri n'ghft!");
         EntityBlackHole entitywitherskull = new EntityBlackHole(this.world, this);
-        entitywitherskull.copyLocationAndAnglesFrom((Entity)getAttackTarget());
+        entitywitherskull.copyLocationAndAnglesFrom(getAttackTarget());
         BlockPos targetpos = getAttackTarget().getPosition();
         entitywitherskull.setPosition((targetpos.getX() + (5 + this.rand.nextInt(10)) * (this.rand.nextBoolean() ? 1 : -1)), (targetpos.getY() + 2), (targetpos.getZ() + (5 + this.rand.nextInt(10)) * (this.rand.nextBoolean() ? 1 : -1)));
         this.world.playEvent(3000, entitywitherskull.getPosition(), 0);
@@ -703,7 +703,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, true, px + getRNG().nextDouble() - 0.5D, py + getRNG().nextDouble() - 0.5D, pz + getRNG().nextDouble() - 0.5D, dx, dy, dz);
       } 
     } else {
-      this.world.setEntityState((Entity)this, (byte)23);
+      this.world.setEntityState(this, (byte)23);
     } 
   }
   
@@ -751,9 +751,9 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         if (getOwner() != null) {
           for (EntityPlayer entityplayer : this.world.playerEntities) {
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
-            entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("§4" + getOwner().getName() + "'s Jz'ahar has been destroyed!!!", new Object[0]), true);
+            entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s Jz'ahar has been destroyed!!!", new Object[0]), true);
           } 
-          ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("Your Jz'ahar has been destroyed!", new Object[0]));
+          getOwner().sendMessage(new TextComponentTranslation("Your Jz'ahar has been destroyed!", new Object[0]));
         } 
       }  
     if (this.deathTicks <= 800) {
@@ -798,7 +798,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
       while (i > 0) {
         int j = EntityXPOrb.getXPSplit(i);
         i -= j;
-        this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+        this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
       } 
     } 
     if (this.deathTicks == 790 && !this.world.isRemote) {
@@ -830,7 +830,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
           this.world.setBlockToAir(pos); 
       } 
       if (!this.world.getEntitiesWithinAABB(Entity.class, getEntityBoundingBox().grow(3.0D, 1.0D, 3.0D)).isEmpty()) {
-        List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(3.0D, 1.0D, 3.0D));
+        List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(3.0D, 1.0D, 3.0D));
         for (Entity entity : entities) {
           if (entity instanceof EntityPlayer && !false) {
             EntityPlayer player = (EntityPlayer)entity;
@@ -847,7 +847,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
               WorldServer worldServer = (WorldServer)player.world;
               EntityPlayerMP mp = (EntityPlayerMP)player;
               mp.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 80, 255));
-              mp.server.getPlayerList().transferPlayerToDimension(mp, ACLib.dark_realm_id, (Teleporter)new TeleporterDarkRealm(worldServer));
+              mp.server.getPlayerList().transferPlayerToDimension(mp, ACLib.dark_realm_id, new TeleporterDarkRealm(worldServer));
             } 
             continue;
           } 
@@ -878,11 +878,11 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
       if (this.deathTicks == 800 && !this.world.isRemote) {
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.10"));
         int i = 60000;
-        this.world.spawnEntity((Entity)new EntityGatekeeperEssence(this.world, this.posX, this.posY, this.posZ));
+        this.world.spawnEntity(new EntityGatekeeperEssence(this.world, this.posX, this.posY, this.posZ));
         while (i > 0) {
           int j = EntityXPOrb.getXPSplit(i);
           i -= j;
-          this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+          this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
         } 
         setDead();
       } 
@@ -908,11 +908,11 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
       if (this.deathTicks == 800 && !this.world.isRemote) {
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.10"));
         int i = 60000;
-        this.world.spawnEntity((Entity)new EntityGatekeeperEssence(this.world, this.posX, this.posY, this.posZ));
+        this.world.spawnEntity(new EntityGatekeeperEssence(this.world, this.posX, this.posY, this.posZ));
         while (i > 0) {
           int j = EntityXPOrb.getXPSplit(i);
           i -= j;
-          this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+          this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
         } 
         setDead();
       } 
@@ -924,18 +924,18 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
   }
   
   private void launchWitherSkullToCoords(int par1, double par2, double par4, double par6, boolean par8) {
-    this.world.playEvent((EntityPlayer)null, 1024, new BlockPos(this.posX, this.posY, this.posZ), 0);
+    this.world.playEvent(null, 1024, new BlockPos(this.posX, this.posY, this.posZ), 0);
     double d3 = getHeadX(par1);
     double d4 = getHeadY(par1);
     double d5 = getHeadZ(par1);
     double d6 = par2 - d3;
     double d7 = par4 - d4;
     double d8 = par6 - d5;
-    EntityMiniBlackHole entitywitherskull = new EntityMiniBlackHole(this.world, (EntityLivingBase)this, d6, d7, d8);
+    EntityMiniBlackHole entitywitherskull = new EntityMiniBlackHole(this.world, this, d6, d7, d8);
     entitywitherskull.posY = d4;
     entitywitherskull.posX = d3;
     entitywitherskull.posZ = d5;
-    this.world.spawnEntity((Entity)entitywitherskull);
+    this.world.spawnEntity(entitywitherskull);
   }
   
   public void attackEntityWithRangedAttack(EntityLivingBase par1EntityLivingBase, float par2) {

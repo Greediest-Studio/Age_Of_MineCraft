@@ -62,37 +62,37 @@ public class EntityIllusioner extends EntitySpellcasterIllager implements IRange
   
   private static final DataParameter<Integer> DISGUSE_TIMER = EntityDataManager.createKey(EntityIllusioner.class, DataSerializers.VARINT);
   
-  private final EntityAIAttackRangedBowAlly<EntityIllusioner> aiArrowAttack = new EntityAIAttackRangedBowAlly((EntityTameBase)this, 0.5D, 20, 15.0F);
+  private final EntityAIAttackRangedBowAlly<EntityIllusioner> aiArrowAttack = new EntityAIAttackRangedBowAlly(this, 0.5D, 20, 15.0F);
   
-  private final EntityAIFriendlyAttackMelee aiAttackOnCollide = new EntityAIFriendlyAttackMelee((EntityTameBase)this, 1.0D, true);
+  private final EntityAIFriendlyAttackMelee aiAttackOnCollide = new EntityAIFriendlyAttackMelee(this, 1.0D, true);
   
   public EntityIllusioner(World worldIn) {
     super(worldIn);
     this.experienceValue = 50;
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader((EntityTameBase)this, 0.75D, 32.0F, 6.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntitySpellcasterIllager.AICastingSpell());
-    this.tasks.addTask(3, (EntityAIBase)new AIIllusionFormSpell());
-    this.tasks.addTask(3, (EntityAIBase)new AIDisguiseSpell());
-    this.tasks.addTask(4, (EntityAIBase)new AIMirriorSpell());
-    this.tasks.addTask(4, (EntityAIBase)new AIFearSpell());
-    this.tasks.addTask(4, (EntityAIBase)new AIBlindnessSpell());
-    this.tasks.addTask(4, (EntityAIBase)new AIReinforcingSpell());
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 0.5D));
-    this.tasks.addTask(6, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.5D, 80));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 0.75D, 32.0F, 6.0F));
+    this.tasks.addTask(2, new AICastingSpell());
+    this.tasks.addTask(3, new AIIllusionFormSpell());
+    this.tasks.addTask(3, new AIDisguiseSpell());
+    this.tasks.addTask(4, new AIMirriorSpell());
+    this.tasks.addTask(4, new AIFearSpell());
+    this.tasks.addTask(4, new AIBlindnessSpell());
+    this.tasks.addTask(4, new AIReinforcingSpell());
+    this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 0.5D));
+    this.tasks.addTask(6, new EntityAIWander(this, 0.5D, 80));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
     setCombatTask();
   }
   
   public void setCombatTask() {
     if (this.world != null && !this.world.isRemote) {
-      this.tasks.removeTask((EntityAIBase)this.aiAttackOnCollide);
-      this.tasks.removeTask((EntityAIBase)this.aiArrowAttack);
+      this.tasks.removeTask(this.aiAttackOnCollide);
+      this.tasks.removeTask(this.aiArrowAttack);
       ItemStack itemstack = getHeldItemMainhand();
       if (itemstack != null && itemstack.getItem() instanceof net.minecraft.item.ItemBow) {
-        this.tasks.addTask(4, (EntityAIBase)this.aiArrowAttack);
+        this.tasks.addTask(4, this.aiArrowAttack);
       } else {
-        this.tasks.addTask(4, (EntityAIBase)this.aiAttackOnCollide);
+        this.tasks.addTask(4, this.aiAttackOnCollide);
       } 
     } 
   }
@@ -116,7 +116,7 @@ public class EntityIllusioner extends EntitySpellcasterIllager implements IRange
   }
   
   public int getDisguiseTime() {
-    return (Integer) this.dataManager.get(DISGUSE_TIMER);
+    return this.dataManager.get(DISGUSE_TIMER);
   }
   
   public void setDisguiseTime(int age) {
@@ -124,7 +124,7 @@ public class EntityIllusioner extends EntitySpellcasterIllager implements IRange
   }
   
   public int getDisguiseID() {
-    return (Integer) this.dataManager.get(DISGUISE_ID);
+    return this.dataManager.get(DISGUISE_ID);
   }
   
   public void setDisguiseID(int age) {
@@ -159,7 +159,7 @@ public class EntityIllusioner extends EntitySpellcasterIllager implements IRange
   }
   
   public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
-    setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack((Item)Items.BOW));
+    setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
     setCombatTask();
     return super.onInitialSpawn(difficulty, livingdata);
   }
@@ -204,13 +204,13 @@ public class EntityIllusioner extends EntitySpellcasterIllager implements IRange
         double d2 = target.posX - this.posX + f * 0.35D + vec3.x;
         double d3 = target.posY + 0.5D - this.posY + getEyeHeight() - 0.10000000149011612D + vec3.y;
         double d4 = target.posZ - this.posZ + f1 * 0.35D + vec3.z;
-        EntityPEGunPellet entitywitherskull = new EntityPEGunPellet(this.world, (EntityLivingBase)this, d2, d3, d4);
+        EntityPEGunPellet entitywitherskull = new EntityPEGunPellet(this.world, this, d2, d3, d4);
         entitywitherskull.posX = this.posX + f * 0.35D + vec3.x;
         entitywitherskull.posY = this.posY + getEyeHeight() - 0.10000000149011612D + vec3.y;
         entitywitherskull.posZ = this.posZ + f1 * 0.35D + vec3.z;
         entitywitherskull.damage = ((ItemPEGun)getHeldItemMainhand().getItem()).getProjectileDamage(getHeldItemMainhand());
         if (!this.world.isRemote)
-          this.world.spawnEntity((Entity)entitywitherskull); 
+          this.world.spawnEntity(entitywitherskull);
         playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 0.5F, 0.5F + getRNG().nextFloat() * 0.25F);
         playSound(ESound.pegunfire, 0.5F, 0.6F + getRNG().nextFloat() * 0.2F + entitywitherskull.damage / 100.0F);
       } else {
@@ -219,14 +219,14 @@ public class EntityIllusioner extends EntitySpellcasterIllager implements IRange
         setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
       } 
     } else {
-      EntityTippedArrowOther entityarrow = new EntityTippedArrowOther(this.world, (EntityLivingBase)this);
+      EntityTippedArrowOther entityarrow = new EntityTippedArrowOther(this.world, this);
       double d0 = target.posX - this.posX;
       double d1 = target.posY + target.getEyeHeight() - 0.5D - this.posY + getEyeHeight() - 0.10000000149011612D;
       double d2 = target.posZ - this.posZ;
       double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
-      entityarrow.shoot(d0, d1 + d3 * getDistance((Entity)target) * 0.013D, d2, 1.4F, 1.0F);
-      int i = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, (EntityLivingBase)this);
-      int j = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.PUNCH, (EntityLivingBase)this);
+      entityarrow.shoot(d0, d1 + d3 * getDistance(target) * 0.013D, d2, 1.4F, 1.0F);
+      int i = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, this);
+      int j = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.PUNCH, this);
       if (getRidingEntity() != null) {
         entityarrow.setDamage((distanceFactor * 3.0F) + this.rand.nextGaussian() * 0.25D + 0.5D);
       } else {
@@ -246,19 +246,19 @@ public class EntityIllusioner extends EntitySpellcasterIllager implements IRange
       } 
       if (j > 0)
         entityarrow.setKnockbackStrength(j); 
-      if (EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FLAME, (EntityLivingBase)this) > 0)
+      if (EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FLAME, this) > 0)
         entityarrow.setFire(100); 
       if (getHeldItemOffhand() != null && getHeldItemOffhand().getItem() == Items.TIPPED_ARROW)
         entityarrow.setPotionEffect(getHeldItemOffhand()); 
       playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
-      this.world.spawnEntity((Entity)entityarrow);
+      this.world.spawnEntity(entityarrow);
     } 
   }
   
   protected EntityArrow createArrowEntity(float p_193097_1_) {
-    EntityTippedArrow entitytippedarrow = new EntityTippedArrow(this.world, (EntityLivingBase)this);
-    entitytippedarrow.setEnchantmentEffectsFromEntity((EntityLivingBase)this, p_193097_1_);
-    return (EntityArrow)entitytippedarrow;
+    EntityTippedArrow entitytippedarrow = new EntityTippedArrow(this.world, this);
+    entitytippedarrow.setEnchantmentEffectsFromEntity(this, p_193097_1_);
+    return entitytippedarrow;
   }
   
   @SideOnly(Side.CLIENT)
@@ -374,8 +374,8 @@ public class EntityIllusioner extends EntitySpellcasterIllager implements IRange
     
     protected void castSpell() {
       List<EntityCreature> list = EntityIllusioner.this.world.getEntitiesWithinAABB(EntityCreature.class, EntityIllusioner.this.getAttackTarget().getEntityBoundingBox().grow(8.0D), Predicates.and(EntitySelectors.IS_ALIVE));
-      EntityIllusioner.this.world.playBroadcastSound(1023, new BlockPos((Entity)EntityIllusioner.this.getAttackTarget()), 0);
-      ((EntityCreature)EntityIllusioner.this.getAttackTarget()).playSound(SoundEvents.ENTITY_WITHER_AMBIENT, 2.0F, 1.0F);
+      EntityIllusioner.this.world.playBroadcastSound(1023, new BlockPos(EntityIllusioner.this.getAttackTarget()), 0);
+      EntityIllusioner.this.getAttackTarget().playSound(SoundEvents.ENTITY_WITHER_AMBIENT, 2.0F, 1.0F);
       for (EntityCreature entity : list) {
         this.fear = new EntityIllusioner.EntityAIPanicFear(entity, 1.5D);
         if (!entity.tasks.taskEntries.contains(this.fear) && !false)
@@ -556,7 +556,7 @@ public class EntityIllusioner extends EntitySpellcasterIllager implements IRange
     
     public void resetTask() {
       super.resetTask();
-      EntityIllusioner.this.setAllyTarget((EntityTameBase)null);
+      EntityIllusioner.this.setAllyTarget(null);
     }
     
     protected void castSpell() {
@@ -623,7 +623,7 @@ public class EntityIllusioner extends EntitySpellcasterIllager implements IRange
     
     public void resetTask() {
       super.resetTask();
-      EntityIllusioner.this.setAllyTarget((EntityTameBase)null);
+      EntityIllusioner.this.setAllyTarget(null);
     }
     
     protected void castSpell() {

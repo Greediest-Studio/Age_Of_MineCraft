@@ -24,7 +24,7 @@ public class EntityAIHarvestFarmland extends EntityAIMoveToBlock {
   private int currentTask;
   
   public EntityAIHarvestFarmland(EntityVillager theVillagerIn, double speedIn) {
-    super((EntityCreature)theVillagerIn, speedIn, 16);
+    super(theVillagerIn, speedIn, 16);
     this.theVillager = theVillagerIn;
   }
   

@@ -20,11 +20,11 @@ public class RenderPig extends RenderLiving<EntityPig> {
   private static final ResourceLocation antipigTextures = new ResourceLocation("ageofminecraft", "textures/entities/anti/pig.png");
   
   public RenderPig(RenderManager p_i46149_1_) {
-    super(p_i46149_1_, (ModelBase)new ModelPig(0.0F), 0.75F);
+    super(p_i46149_1_, new ModelPig(0.0F), 0.75F);
     addLayer(new LayerSaddle(this));
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
     addLayer(new LayerCustomHeadEngender(((ModelPig)this.mainModel).head, ((ModelPig)this.mainModel).head));
-    addLayer(new LayerLearningBook(this));
+    
   }
   
   protected ResourceLocation getEntityTexture(EntityPig entity) {

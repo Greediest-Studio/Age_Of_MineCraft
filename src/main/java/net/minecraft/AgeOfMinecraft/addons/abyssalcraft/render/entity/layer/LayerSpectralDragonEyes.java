@@ -33,7 +33,7 @@ public class LayerSpectralDragonEyes implements LayerRenderer<EntityDragonMinion
     OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j / 1.0F, k / 1.0F);
     GlStateManager.enableLighting();
     GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-    this.dragonRenderer.getMainModel().render((Entity)entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+    this.dragonRenderer.getMainModel().render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
     this.dragonRenderer.setLightmap(entitylivingbaseIn);
     GlStateManager.disableBlend();
     GlStateManager.enableAlpha();

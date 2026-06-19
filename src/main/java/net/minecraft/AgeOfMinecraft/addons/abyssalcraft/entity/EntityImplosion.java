@@ -37,7 +37,7 @@ public class EntityImplosion extends Entity {
   public EntityImplosion(World worldIn, EntityTameBase entity) {
     this(worldIn);
     this.shootingEntity = entity;
-    copyLocationAndAnglesFrom((Entity)entity);
+    copyLocationAndAnglesFrom(entity);
   }
   
   protected boolean canTriggerWalking() {
@@ -49,7 +49,7 @@ public class EntityImplosion extends Entity {
   }
   
   public int getImplosionTime() {
-    return (Integer) this.dataManager.get(IMPLOSIONTIMER);
+    return this.dataManager.get(IMPLOSIONTIMER);
   }
   
   public void setImplosionTime(int time) {
@@ -75,7 +75,7 @@ public class EntityImplosion extends Entity {
                     entity.hurtResistantTime = 0;
                     entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 100.0F);
                     if (EngenderConfig.general.useMessage && this.shootingEntity != null && entity instanceof EntityLivingBase && !entity.isEntityAlive() && !this.shootingEntity.isWild())
-                        this.shootingEntity.getOwner().sendMessage((ITextComponent) new TextComponentTranslation(entity.getName() + " was blasted apart by an Implosion thanks to " + this.shootingEntity.getName() + " (" + this.shootingEntity.getOwner().getName() + ")", new Object[0]));
+                        this.shootingEntity.getOwner().sendMessage(new TextComponentTranslation(entity.getName() + " was blasted apart by an Implosion thanks to " + this.shootingEntity.getName() + " (" + this.shootingEntity.getOwner().getName() + ")", new Object[0]));
                 }
                 entity.addVelocity(dir.x * 10.0D * scale, 2.0D + this.rand.nextDouble(), dir.z * 10.0D * scale);
             }
@@ -108,7 +108,7 @@ public class EntityImplosion extends Entity {
                 if (entity.getDistanceSq(this) <= 4.0D) {
                     entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 4.0F);
                     if (EngenderConfig.general.useMessage && entity instanceof EntityLivingBase && !entity.isEntityAlive() && this.shootingEntity != null && !this.shootingEntity.isWild())
-                        this.shootingEntity.getOwner().sendMessage((ITextComponent) new TextComponentTranslation(entity.getName() + " was electricuted by " + this.shootingEntity.getName() + " (" + this.shootingEntity.getOwner().getName() + ")", new Object[0]));
+                        this.shootingEntity.getOwner().sendMessage(new TextComponentTranslation(entity.getName() + " was electricuted by " + this.shootingEntity.getName() + " (" + this.shootingEntity.getOwner().getName() + ")", new Object[0]));
                 }
             }
         }

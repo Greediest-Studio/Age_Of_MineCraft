@@ -36,7 +36,7 @@ public class ItemSkeletonTrapItem extends ItemVanillaTier {
     if (!worldIn.isRemote) {
       pos = pos.offset(facing);
       DifficultyInstance difficultyinstance = worldIn.getDifficultyForLocation(pos);
-      worldIn.addWeatherEffect((Entity)new EntityLightningBolt(worldIn, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, true));
+      worldIn.addWeatherEffect(new EntityLightningBolt(worldIn, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, true));
       for (int i = 0; i < 4; i++) {
         EntitySkeletonHorse entityhorse = createHorse(difficultyinstance, worldIn, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
         EntitySkeleton entityskeleton1 = createSkeleton(difficultyinstance, entityhorse);
@@ -47,7 +47,7 @@ public class ItemSkeletonTrapItem extends ItemVanillaTier {
           int j = EntityXPOrb.getXPSplit(i1);
           i1 -= j;
           if (!worldIn.getGameRules().getBoolean("disableExpItemDrops"))
-            entityskeleton1.world.spawnEntity((Entity)new EntityXPOrb(worldIn, pos.getX() + 0.5D, (pos.getY() + entityskeleton1.getEyeHeight()), pos.getZ() + 0.5D, j)); 
+            entityskeleton1.world.spawnEntity(new EntityXPOrb(worldIn, pos.getX() + 0.5D, (pos.getY() + entityskeleton1.getEyeHeight()), pos.getZ() + 0.5D, j));
         } 
       } 
       worldIn.playSound(null, pos, ESound.createBossMob, SoundCategory.MASTER, 10.0F, 1.25F);
@@ -59,13 +59,13 @@ public class ItemSkeletonTrapItem extends ItemVanillaTier {
   
   private EntitySkeletonHorse createHorse(DifficultyInstance p_188515_1_, World world, double x, double y, double z) {
     EntitySkeletonHorse entityhorse = new EntitySkeletonHorse(world);
-    entityhorse.onInitialSpawn(p_188515_1_, (IEntityLivingData)null);
+    entityhorse.onInitialSpawn(p_188515_1_, null);
     entityhorse.setPosition(x, y, z);
     entityhorse.hurtResistantTime = 200;
     entityhorse.enablePersistence();
     entityhorse.setHorseTamed(true);
     entityhorse.setGrowingAge(0);
-    entityhorse.world.spawnEntity((Entity)entityhorse);
+    entityhorse.world.spawnEntity(entityhorse);
     entityhorse.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(53.0D);
     entityhorse.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(12.0D);
     entityhorse.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3375D);
@@ -75,15 +75,15 @@ public class ItemSkeletonTrapItem extends ItemVanillaTier {
   
   private EntitySkeleton createSkeleton(DifficultyInstance p_188514_1_, EntitySkeletonHorse p_188514_2_) {
     EntitySkeleton entityskeleton = new EntitySkeleton(p_188514_2_.world);
-    entityskeleton.onInitialSpawn(p_188514_1_, (IEntityLivingData)null);
+    entityskeleton.onInitialSpawn(p_188514_1_, null);
     entityskeleton.setPosition(p_188514_2_.posX, p_188514_2_.posY, p_188514_2_.posZ);
     entityskeleton.hurtResistantTime = 200;
     entityskeleton.enablePersistence();
-    entityskeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack((Item)Items.IRON_HELMET));
+    entityskeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
     EnchantmentHelper.addRandomEnchantment(entityskeleton.getRNG(), entityskeleton.getHeldItemMainhand(), 30, true);
     EnchantmentHelper.addRandomEnchantment(entityskeleton.getRNG(), entityskeleton.getItemStackFromSlot(EntityEquipmentSlot.HEAD), 30, true);
-    entityskeleton.world.spawnEntity((Entity)entityskeleton);
-    entityskeleton.startRiding((Entity)p_188514_2_);
+    entityskeleton.world.spawnEntity(entityskeleton);
+    entityskeleton.startRiding(p_188514_2_);
     return entityskeleton;
   }
 }

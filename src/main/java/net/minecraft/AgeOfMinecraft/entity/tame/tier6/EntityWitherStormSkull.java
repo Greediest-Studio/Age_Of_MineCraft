@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier6;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
@@ -77,9 +76,9 @@ public class EntityWitherStormSkull extends EntityFireball {
             for (EntityLivingBase entity1 : list) {
                 if (entity1 != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart) {
                     if (this.shootingEntity != null)
-                        EntityTameBase.createEngenderModExplosion((Entity) this.shootingEntity, this.posX, this.posY, this.posZ, 1.0F, false, false);
-                    this.shootingEntity.attackEntityAsMob((Entity) entity1);
-                    applyEnchantments(this.shootingEntity, (Entity) entity1);
+                        EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, 1.0F, false, false);
+                    this.shootingEntity.attackEntityAsMob(entity1);
+                    applyEnchantments(this.shootingEntity, entity1);
                     setDead();
                 }
             }
@@ -105,7 +104,7 @@ public class EntityWitherStormSkull extends EntityFireball {
           if (list1 != null && !list1.isEmpty())
               for (EntityLivingBase entity1 : list1) {
                   if (!false) {
-                      this.shootingEntity.attackEntityAsMob((Entity) entity1);
+                      this.shootingEntity.attackEntityAsMob(entity1);
                       if (b0 > 0 && movingObject.entityHit instanceof EntityLivingBase) {
                           ((EntityLivingBase) movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 20 * b0));
                           ((EntityLivingBase) movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 20 * b0, this.world.getDifficulty().getId()));
@@ -134,8 +133,8 @@ public class EntityWitherStormSkull extends EntityFireball {
             entityareaeffectcloud.addEffect(new PotionEffect(MobEffects.BLINDNESS, 20 * b0));
             entityareaeffectcloud.setRadius(4.0F);
             entityareaeffectcloud.setDuration(120);
-            this.world.spawnEntity((Entity)entityareaeffectcloud);
-            EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY, this.posZ, (this.shootingEntity instanceof EntityWitherStormHead) ? 6.0F : 2.0F, EngenderConfig.mobs.grief, EngenderConfig.mobs.grief);
+            this.world.spawnEntity(entityareaeffectcloud);
+            EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, (this.shootingEntity instanceof EntityWitherStormHead) ? 6.0F : 2.0F, EngenderConfig.mobs.grief, EngenderConfig.mobs.grief);
             setDead();
           } 
           setDead();
@@ -147,7 +146,7 @@ public class EntityWitherStormSkull extends EntityFireball {
         }  
     } else {
       if (this.shootingEntity != null)
-        EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY, this.posZ, (this.shootingEntity instanceof EntityWitherStormHead) ? 6.0F : 2.0F, EngenderConfig.mobs.grief, EngenderConfig.mobs.grief); 
+        EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, (this.shootingEntity instanceof EntityWitherStormHead) ? 6.0F : 2.0F, EngenderConfig.mobs.grief, EngenderConfig.mobs.grief);
       setDead();
     } 
   }
@@ -165,7 +164,7 @@ public class EntityWitherStormSkull extends EntityFireball {
   }
   
   public boolean isInvulnerable() {
-    return (Boolean) this.dataManager.get(INVULNERABLE);
+    return this.dataManager.get(INVULNERABLE);
   }
   
   public void setInvulnerable(boolean invulnerable) {
@@ -182,7 +181,7 @@ public class EntityWitherStormSkull extends EntityFireball {
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (this.shootingEntity != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive() && !false)
-          onImpact(new RayTraceResult((Entity)entity1)); 
+          onImpact(new RayTraceResult(entity1));
       }  
   }
 }

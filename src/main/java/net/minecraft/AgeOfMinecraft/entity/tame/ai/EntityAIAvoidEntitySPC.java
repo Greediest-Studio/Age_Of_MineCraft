@@ -3,7 +3,7 @@ package net.minecraft.AgeOfMinecraft.entity.tame.ai;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
-import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -55,21 +55,21 @@ public class EntityAIAvoidEntitySPC<T extends Entity> extends EntityAIBase {
     if (list.isEmpty())
       return false; 
     this.closestLivingEntity = list.get(0);
-    Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.theEntity, 16, 7, new Vec3d(((Entity)this.closestLivingEntity).posX, ((Entity)this.closestLivingEntity).posY, ((Entity)this.closestLivingEntity).posZ));
+    Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.theEntity, 16, 7, new Vec3d(this.closestLivingEntity.posX, ((Entity)this.closestLivingEntity).posY, ((Entity)this.closestLivingEntity).posZ));
     if (vec3d == null)
       return false; 
     if (!this.entityPathNavigate.noPath())
       return false; 
-    if (((Entity)this.closestLivingEntity).isDead)
+    if (this.closestLivingEntity.isDead)
       return false; 
-    if (this.closestLivingEntity.getDistanceSq(vec3d.x, vec3d.y, vec3d.z) < this.closestLivingEntity.getDistanceSq((Entity)this.theEntity))
+    if (this.closestLivingEntity.getDistanceSq(vec3d.x, vec3d.y, vec3d.z) < this.closestLivingEntity.getDistanceSq(this.theEntity))
       return false; 
     this.entityPathEntity = this.entityPathNavigate.getPathToXYZ(vec3d.x, vec3d.y, vec3d.z);
     return (this.entityPathEntity != null);
   }
   
   public boolean shouldContinueExecuting() {
-    return (!this.entityPathNavigate.noPath() && !((Entity)this.closestLivingEntity).isDead);
+    return (!this.entityPathNavigate.noPath() && !this.closestLivingEntity.isDead);
   }
   
   public void startExecuting() {
@@ -81,7 +81,7 @@ public class EntityAIAvoidEntitySPC<T extends Entity> extends EntityAIBase {
   }
   
   public void updateTask() {
-    if (this.theEntity.getDistanceSq((Entity)this.closestLivingEntity) < 49.0D) {
+    if (this.theEntity.getDistanceSq(this.closestLivingEntity) < 49.0D) {
       this.theEntity.getNavigator().setSpeed(this.nearSpeed);
     } else {
       this.theEntity.getNavigator().setSpeed(this.farSpeed);

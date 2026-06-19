@@ -39,7 +39,7 @@ public class RenderStormSkull extends Render<EntityWitherStormSkull> {
       GlStateManager.enableColorMaterial();
       GlStateManager.enableOutlineMode(getTeamColor(entity));
     } 
-    this.skeletonHeadModel.render((Entity)entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, f2);
+    this.skeletonHeadModel.render(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, f2);
     if (this.renderOutlines) {
       GlStateManager.disableOutlineMode();
       GlStateManager.disableColorMaterial();

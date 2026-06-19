@@ -15,7 +15,7 @@ public class EntityAILeaderHurtTarget extends EntityAITarget {
   private int timestamp;
   
   public EntityAILeaderHurtTarget(EntityTameBase p_i1668_1_) {
-    super((EntityCreature)p_i1668_1_, false);
+    super(p_i1668_1_, false);
     this.theEntityTameable = p_i1668_1_;
     setMutexBits(1);
   }
@@ -38,7 +38,7 @@ public class EntityAILeaderHurtTarget extends EntityAITarget {
     if (entitylivingbase != null)
       this.timestamp = entitylivingbase.getLastAttackedEntityTime(); 
     if (this.theEntityTameable instanceof EntityPigZombie)
-      ((EntityPigZombie)this.theEntityTameable).becomeAngryAt((Entity)this.theTarget); 
+      ((EntityPigZombie)this.theEntityTameable).becomeAngryAt(this.theTarget);
     super.startExecuting();
   }
 }

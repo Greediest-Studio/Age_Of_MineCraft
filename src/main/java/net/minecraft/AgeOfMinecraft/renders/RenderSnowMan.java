@@ -31,10 +31,10 @@ public class RenderSnowMan extends RenderLiving<EntitySnowman> {
   
   public RenderSnowMan(RenderManager renderManagerIn) {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.5F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
     addLayer(new LayerSnowmanHead(regularmodel.head));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    
+    addLayer(new LayerMobCape(this));
   }
   
   protected void applyRotations(EntitySnowman entityLiving, float p_77043_2_, float p_77043_3_, float partialTicks) {
@@ -64,7 +64,7 @@ public class RenderSnowMan extends RenderLiving<EntitySnowman> {
   }
   
   protected void preRenderCallback(EntitySnowman entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel;
+    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
     if (!EngenderConfig.mobs.useMobTalkerModels && !entitylivingbaseIn.getCurrentBook().isEmpty()) {
       regularmodel.rightHand.rotateAngleY = entitylivingbaseIn.bookSpread - 1.0F;
       regularmodel.leftHand.rotateAngleY = -entitylivingbaseIn.bookSpread + 1.0F;

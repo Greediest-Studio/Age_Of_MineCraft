@@ -71,7 +71,7 @@ public class EntityAIFriendlyAttackMelee extends EntityAIBase {
   public void resetTask() {
     EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
     if (entitylivingbase instanceof EntityPlayer && (((EntityPlayer)entitylivingbase).isSpectator() || ((EntityPlayer)entitylivingbase).isCreative()))
-      this.attacker.setAttackTarget((EntityLivingBase)null); 
+      this.attacker.setAttackTarget(null);
     this.attacker.getNavigator().clearPath();
     this.attacker.setArmsRaised(false);
   }
@@ -80,10 +80,10 @@ public class EntityAIFriendlyAttackMelee extends EntityAIBase {
     this.attacker.setSitResting(false);
     EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
     if (entitylivingbase != null) {
-      this.attacker.getLookHelper().setLookPositionWithEntity((Entity)entitylivingbase, this.attacker.getHorizontalFaceSpeed(), this.attacker.getVerticalFaceSpeed());
-      double d0 = this.attacker.getDistanceSq((Entity)entitylivingbase);
+      this.attacker.getLookHelper().setLookPositionWithEntity(entitylivingbase, this.attacker.getHorizontalFaceSpeed(), this.attacker.getVerticalFaceSpeed());
+      double d0 = this.attacker.getDistanceSq(entitylivingbase);
       this.delayCounter--;
-      if ((this.longMemory || this.attacker.getEntitySenses().canSee((Entity)entitylivingbase)) && this.delayCounter <= 0) {
+      if ((this.longMemory || this.attacker.getEntitySenses().canSee(entitylivingbase)) && this.delayCounter <= 0) {
         this.targetX = entitylivingbase.posX;
         this.targetY = (entitylivingbase.getEntityBoundingBox()).minY;
         this.targetZ = entitylivingbase.posZ;
@@ -109,7 +109,7 @@ public class EntityAIFriendlyAttackMelee extends EntityAIBase {
         this.attacker.getNavigator().tryMoveToXYZ(this.attacker.getGuardBlock().getX(), this.attacker.getGuardBlock().getY(), this.attacker.getGuardBlock().getZ(), this.speedTowardsTarget);
       } 
       if (this.speedTowardsTarget != 0.0D && !(this.attacker instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEvoker) && d0 > getAttackReachSqr(entitylivingbase)) {
-        this.attacker.getNavigator().tryMoveToEntityLiving((Entity)entitylivingbase, this.speedTowardsTarget);
+        this.attacker.getNavigator().tryMoveToEntityLiving(entitylivingbase, this.speedTowardsTarget);
       } else {
         this.attacker.renderYawOffset = this.attacker.rotationYaw = this.attacker.rotationYawHead;
       } 
@@ -125,8 +125,8 @@ public class EntityAIFriendlyAttackMelee extends EntityAIBase {
     double d0 = getAttackReachSqr(attackTarget);
     if (p_190102_2_ <= d0 && this.attackTick <= 0.0D && this.attacker.posY + this.attacker.height > attackTarget.posY) {
       this.attackTick = 20.0D - this.attacker.getEntityAttribute(EntityTameBase.DEXTERITY).getBaseValue() * 0.1D;
-      this.attacker.attackEntityAsMob((Entity)attackTarget);
-      this.attacker.attackWithAdditionalEffects((Entity)attackTarget);
+      this.attacker.attackEntityAsMob(attackTarget);
+      this.attacker.attackWithAdditionalEffects(attackTarget);
     } 
   }
   

@@ -40,8 +40,8 @@ public class RenderMagmaCube extends RenderLiving<EntityMagmaCube> {
   
   public RenderMagmaCube(RenderManager p_i46159_1_) {
     super(p_i46159_1_, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.25F);
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    
+    addLayer(new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityMagmaCube entity) {
@@ -54,7 +54,7 @@ public class RenderMagmaCube extends RenderLiving<EntityMagmaCube> {
     } else {
       this.shadowSize = 0.25F * entitylivingbaseIn.getSlimeSize();
     } 
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel;
+    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
     float f1 = entitylivingbaseIn.getSlimeSize();
     float f2 = (entitylivingbaseIn.prevSquishFactor + (entitylivingbaseIn.squishFactor - entitylivingbaseIn.prevSquishFactor) * partialTickTime) / (f1 * 0.5F + 1.0F);
     float f3 = 1.0F / (f2 + 1.0F);

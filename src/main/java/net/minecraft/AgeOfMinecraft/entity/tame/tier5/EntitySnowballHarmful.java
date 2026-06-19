@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier5;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
@@ -44,13 +43,13 @@ public class EntitySnowballHarmful extends EntitySnowball {
     } 
     if (!this.world.isRemote && result.entityHit != null)
       if ((result.entityHit instanceof EntityLivingBase && getThrower() != null && getThrower() instanceof EntityTameBase && !false) || (result.entityHit instanceof EntityTameBase && false && ((EntityTameBase)getThrower()).getFakeHealth() > 0.0F)) {
-        ((EntityLivingBase)result.entityHit).hurtResistantTime = 0;
-        ((EntityTameBase)getThrower()).inflictEngenderMobDamage((EntityLivingBase)result.entityHit, " was pummeled by ", DamageSource.causeThrownDamage((Entity)this, (Entity)getThrower()), this.damage);
-        this.world.setEntityState((Entity)this, (byte)3);
+        result.entityHit.hurtResistantTime = 0;
+        ((EntityTameBase)getThrower()).inflictEngenderMobDamage((EntityLivingBase)result.entityHit, " was pummeled by ", DamageSource.causeThrownDamage(this, getThrower()), this.damage);
+        this.world.setEntityState(this, (byte)3);
         setDead();
       }  
     if (!this.world.isRemote && result.entityHit == null) {
-      this.world.setEntityState((Entity)this, (byte)3);
+      this.world.setEntityState(this, (byte)3);
       setDead();
     } 
   }
@@ -61,7 +60,7 @@ public class EntitySnowballHarmful extends EntitySnowball {
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (getThrower() != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive() && !false)
-          onImpact(new RayTraceResult((Entity)entity1)); 
+          onImpact(new RayTraceResult(entity1));
       }  
   }
 }

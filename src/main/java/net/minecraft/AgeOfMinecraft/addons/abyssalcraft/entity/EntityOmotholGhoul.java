@@ -54,13 +54,13 @@ public class EntityOmotholGhoul extends EntityTameBase implements Armored, Undea
   
   public EntityOmotholGhoul(World par1World) {
     super(par1World);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.1D, 48.0F, 12.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.0D, false));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIFleeSun((EntityCreature)this, 1.0D));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 1.0D));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 1.0D));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.1D, 48.0F, 12.0F));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.0D, false));
+    this.tasks.addTask(3, new EntityAIFleeSun(this, 1.0D));
+    this.tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 1.0D));
+    this.tasks.addTask(5, new EntityAIWander(this, 1.0D));
+    this.tasks.addTask(7, new EntityAILookIdle(this));
     setSize(0.9F, 3.9F);
     this.isOffensive = true;
   }
@@ -131,7 +131,7 @@ public class EntityOmotholGhoul extends EntityTameBase implements Armored, Undea
       ((EntityLivingBase)par1Entity).addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 20));
     } 
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return super.attackEntityAsMob(par1Entity);
   }
   
@@ -197,7 +197,7 @@ public class EntityOmotholGhoul extends EntityTameBase implements Armored, Undea
     switch (slotIn) {
       case HEAD:
         if (chance == 0)
-          return (Item)Items.DIAMOND_HELMET; 
+          return Items.DIAMOND_HELMET;
         if (chance == 1)
           return ACItems.dreaded_abyssalnite_helmet; 
         if (chance == 2)
@@ -208,7 +208,7 @@ public class EntityOmotholGhoul extends EntityTameBase implements Armored, Undea
           return ACItems.ethaxium_helmet; 
       case CHEST:
         if (chance == 0)
-          return (Item)Items.DIAMOND_CHESTPLATE; 
+          return Items.DIAMOND_CHESTPLATE;
         if (chance == 1)
           return ACItems.dreaded_abyssalnite_chestplate; 
         if (chance == 2)
@@ -219,7 +219,7 @@ public class EntityOmotholGhoul extends EntityTameBase implements Armored, Undea
           return ACItems.ethaxium_chestplate; 
       case LEGS:
         if (chance == 0)
-          return (Item)Items.DIAMOND_LEGGINGS; 
+          return Items.DIAMOND_LEGGINGS;
         if (chance == 1)
           return ACItems.dreaded_abyssalnite_leggings; 
         if (chance == 2)
@@ -230,7 +230,7 @@ public class EntityOmotholGhoul extends EntityTameBase implements Armored, Undea
           return ACItems.ethaxium_leggings; 
       case FEET:
         if (chance == 0)
-          return (Item)Items.DIAMOND_BOOTS; 
+          return Items.DIAMOND_BOOTS;
         if (chance == 1)
           return ACItems.dreaded_abyssalnite_boots; 
         if (chance == 2)

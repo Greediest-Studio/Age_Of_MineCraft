@@ -70,7 +70,7 @@ public class EntityGuardianProjectile extends Entity {
   public static final int MINI_CHAOS_CHASER = 6;
   
   public EntityGuardianProjectile(World world) {
-    this(world, 0, (EntityLivingBase)null, 10.0F, (Entity)null);
+    this(world, 0, null, 10.0F, null);
   }
   
   public EntityGuardianProjectile(World world, int type, EntityLivingBase target, float power, Entity shooter) {
@@ -128,21 +128,21 @@ public class EntityGuardianProjectile extends Entity {
   public void onUpdate() {
     super.onUpdate();
     if (this.target instanceof EntityWitherStormHead && ((EntityWitherStormHead)this.target).residentWitherStorm != null)
-      this.target = (EntityLivingBase)((EntityWitherStormHead)this.target).residentWitherStorm; 
+      this.target = ((EntityWitherStormHead)this.target).residentWitherStorm;
     if (this.target instanceof EntityWitherStormTentacle && ((EntityWitherStormTentacle)this.target).residentWitherStorm != null)
-      this.target = (EntityLivingBase)((EntityWitherStormTentacle)this.target).residentWitherStorm; 
+      this.target = ((EntityWitherStormTentacle)this.target).residentWitherStorm;
     if (this.target instanceof EntityWitherStormTentacleDevourer && ((EntityWitherStormTentacleDevourer)this.target).residentWitherStorm != null)
-      this.target = (EntityLivingBase)((EntityWitherStormTentacleDevourer)this.target).residentWitherStorm; 
+      this.target = ((EntityWitherStormTentacleDevourer)this.target).residentWitherStorm;
     if (!this.world.isRemote && this.ticksExisted == 1)
       this.dataManager.set(TYPE, (byte) this.type);
     if (this.world.isRemote) {
       if (this.type == 0)
-        this.type = (Byte) this.dataManager.get(TYPE);
+        this.type = this.dataManager.get(TYPE);
       spawnParticle();
     } 
     if (this.shooter != null && this.shooter instanceof EntityTameBase && !((EntityTameBase)this.shooter).isWild() && ((EntityTameBase)this.shooter).getOwner().getHealth() <= ((EntityTameBase)this.shooter).getOwner().getMaxHealth() / 2.0F)
       this.target = ((EntityTameBase)this.shooter).getOwner(); 
-    if (this.shooter != null && this.target != null && this.target == this.shooter && getDistance((Entity)this.target) <= 6.0D)
+    if (this.shooter != null && this.target != null && this.target == this.shooter && getDistance(this.target) <= 6.0D)
       setDead(); 
     if ((this.target == null || (this.target != null && !this.target.isEntityAlive())) && this.shooter != null && this.shooter instanceof EntityTameBase) {
       List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(100.0D));
@@ -197,10 +197,10 @@ public class EntityGuardianProjectile extends Entity {
           int r = this.rand.nextInt();
           if (this.shooter != null && this.shooter instanceof EntityTameBase && entityLivingBase instanceof EntityLivingBase && !false)
             if (entityLivingBase1 instanceof EntityTameBase && ((EntityTameBase)entityLivingBase1).getTier() == EnumTier.TIER6) {
-              (new Teleporter.TeleportLocation(this.shooter.posX + Math.cos(r) * 60.0D, this.rand.nextInt(255), this.shooter.posZ + Math.sin(r) * 60.0D, ((Entity)entityLivingBase1).dimension)).teleport((Entity)entityLivingBase1);
+              (new Teleporter.TeleportLocation(this.shooter.posX + Math.cos(r) * 60.0D, this.rand.nextInt(255), this.shooter.posZ + Math.sin(r) * 60.0D, entityLivingBase1.dimension)).teleport(entityLivingBase1);
               damageEntitiesInRadius(this.damageFireball, this.power, this.power);
             } else {
-              (new Teleporter.TeleportLocation(this.shooter.posX + Math.cos(r) * 600.0D, this.rand.nextInt(255), this.shooter.posZ + Math.sin(r) * 600.0D, ((Entity)entityLivingBase1).dimension)).teleport((Entity)entityLivingBase1);
+              (new Teleporter.TeleportLocation(this.shooter.posX + Math.cos(r) * 600.0D, this.rand.nextInt(255), this.shooter.posZ + Math.sin(r) * 600.0D, entityLivingBase1.dimension)).teleport(entityLivingBase1);
               damageEntitiesInRadius(this.damageFireball, this.power, this.power * 2.0F);
             }  
           setDead();
@@ -319,7 +319,7 @@ public class EntityGuardianProjectile extends Entity {
             entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 2000));
             break;
           case 2:
-            (new Teleporter.TeleportLocation(this.shooter.posX + Math.cos(this.rand.nextInt()) * 200.0D, this.rand.nextInt(255), this.shooter.posZ + Math.sin(this.rand.nextInt()) * 200.0D, entityLivingBase.dimension)).teleport((Entity)entityLivingBase);
+            (new Teleporter.TeleportLocation(this.shooter.posX + Math.cos(this.rand.nextInt()) * 200.0D, this.rand.nextInt(255), this.shooter.posZ + Math.sin(this.rand.nextInt()) * 200.0D, entityLivingBase.dimension)).teleport(entityLivingBase);
             break;
           default:
             entityLivingBase.heal(10.0F);

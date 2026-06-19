@@ -28,11 +28,11 @@ public class RenderIceGolem extends RenderLiving<EntityIceGolem> {
   private static ModelIceGolem regularmodel = new ModelIceGolem();
   
   public RenderIceGolem(RenderManager p_i46133_1_) {
-    super(p_i46133_1_, (ModelBase)regularmodel, 0.75F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
+    super(p_i46133_1_, regularmodel, 0.75F);
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
     addLayer(new LayerSnowmanHead(regularmodel.ironGolemHead));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    
+    addLayer(new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityIceGolem entity) {
@@ -116,7 +116,7 @@ public class RenderIceGolem extends RenderLiving<EntityIceGolem> {
         GlStateManager.translate(0.0F, -0.25F, 0.0F);
         GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.scale(f, -f, -f);
-        Minecraft.getMinecraft().getItemRenderer().renderItem((EntityLivingBase)entitylivingbaseIn, new ItemStack(Blocks.PUMPKIN, 1), ItemCameraTransforms.TransformType.HEAD);
+        Minecraft.getMinecraft().getItemRenderer().renderItem(entitylivingbaseIn, new ItemStack(Blocks.PUMPKIN, 1), ItemCameraTransforms.TransformType.HEAD);
         GlStateManager.popMatrix();
       } 
     }

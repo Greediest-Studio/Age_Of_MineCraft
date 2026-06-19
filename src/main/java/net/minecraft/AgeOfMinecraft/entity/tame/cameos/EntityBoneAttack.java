@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.cameos;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import net.minecraft.AgeOfMinecraft.registry.ESound;
@@ -112,7 +111,7 @@ public class EntityBoneAttack extends Entity {
       if (!list.isEmpty())
         for (EntityLivingBase entity1 : list) {
           if (this.shootingEntity != null && entity1 != null && entity1.isEntityAlive() && !false)
-            onImpact(new RayTraceResult((Entity)entity1)); 
+            onImpact(new RayTraceResult(entity1));
         }  
       this.posX += this.motionX;
       this.posY += this.motionY;
@@ -156,13 +155,13 @@ public class EntityBoneAttack extends Entity {
             movingObject.entityHit.hurtResistantTime = 0;
             playSound(ESound.bonehit, 1.0F, 1.0F);
             this.shootingEntity.inflictEngenderMobDamage((EntityLivingBase)movingObject.entityHit, " was boned by ", (new DamageSource("sans")).setDamageBypassesArmor().setDamageIsAbsolute().setMagicDamage(), 1.0F);
-            this.shootingEntity.attackWithAdditionalEffects((Entity)this.shootingEntity);
+            this.shootingEntity.attackWithAdditionalEffects(this.shootingEntity);
             this.shootingEntity.karmicRetribution((EntityLivingBase)movingObject.entityHit, isBlue() ? 6 : 5);
           }    
   }
   
   public boolean isBlue() {
-    return (Boolean) this.dataManager.get(ISBLUE);
+    return this.dataManager.get(ISBLUE);
   }
   
   public void setBlue(boolean blue) {
@@ -170,7 +169,7 @@ public class EntityBoneAttack extends Entity {
   }
   
   public int getBoneType() {
-    return (Integer) this.dataManager.get(BONETYPE);
+    return this.dataManager.get(BONETYPE);
   }
   
   public void setBoneType(int age) {
@@ -178,8 +177,8 @@ public class EntityBoneAttack extends Entity {
   }
   
   public void writeEntityToNBT(NBTTagCompound compound) {
-    compound.setTag("direction", (NBTBase)newDoubleNBTList(new double[] { this.motionX, this.motionY, this.motionZ }));
-    compound.setTag("power", (NBTBase)newDoubleNBTList(new double[] { this.accelerationX, this.accelerationY, this.accelerationZ }));
+    compound.setTag("direction", newDoubleNBTList(new double[] { this.motionX, this.motionY, this.motionZ }));
+    compound.setTag("power", newDoubleNBTList(new double[] { this.accelerationX, this.accelerationY, this.accelerationZ }));
     compound.setInteger("life", this.ticksAlive);
   }
   

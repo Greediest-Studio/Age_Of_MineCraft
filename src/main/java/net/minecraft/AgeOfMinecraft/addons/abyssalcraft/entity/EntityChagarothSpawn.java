@@ -41,11 +41,11 @@ public class EntityChagarothSpawn extends EntityTameBase implements Light {
   public EntityChagarothSpawn(World par1World) {
     super(par1World);
     setSize(0.5F, 0.5F);
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.1D, 32.0F, 9.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.0D, true));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 0.8D));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.8D));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.1D, 32.0F, 9.0F));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    this.tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 0.8D));
+    this.tasks.addTask(4, new EntityAIWander(this, 0.8D));
+    this.tasks.addTask(5, new EntityAILookIdle(this));
     this.isImmuneToFire = true;
     this.isOffensive = true;
   }
@@ -95,7 +95,7 @@ public class EntityChagarothSpawn extends EntityTameBase implements Light {
   }
   
   protected PathNavigate createNavigator(World worldIn) {
-    return (PathNavigate)new PathNavigateClimber((EntityLiving)this, worldIn);
+    return new PathNavigateClimber(this, worldIn);
   }
   
   public boolean attackEntityAsMob(Entity par1Entity) {
@@ -104,7 +104,7 @@ public class EntityChagarothSpawn extends EntityTameBase implements Light {
       par1Entity instanceof EntityLivingBase)
       ((EntityLivingBase)par1Entity).addPotionEffect(new PotionEffect(AbyssalCraftAPI.dread_plague, 100)); 
     if (ACConfig.hardcoreMode && par1Entity instanceof net.minecraft.entity.player.EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -144,11 +144,11 @@ public class EntityChagarothSpawn extends EntityTameBase implements Light {
   }
   
   public boolean isBesideClimbableBlock() {
-    return (((Byte) this.dataManager.get(CLIMBING) & 0x1) != 0);
+    return ((this.dataManager.get(CLIMBING) & 0x1) != 0);
   }
   
   public void setBesideClimbableBlock(boolean par1) {
-    byte b0 = (Byte) this.dataManager.get(CLIMBING);
+    byte b0 = this.dataManager.get(CLIMBING);
     if (par1) {
       b0 = (byte)(b0 | 0x1);
     } else {

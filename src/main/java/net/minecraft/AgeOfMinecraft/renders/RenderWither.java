@@ -21,12 +21,12 @@ public class RenderWither extends RenderLiving<EntityWither> {
   private static ModelWither regularmodel = new ModelWither(0.0F);
   
   public RenderWither(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)regularmodel, 1.0F);
+    super(renderManagerIn, regularmodel, 1.0F);
     addLayer(new LayerWitherAura(this));
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 0.5F));
+    addLayer(new LayerArrowCustomSized(this, 0.5F));
     addLayer(new LayerCustomHeadEngender(regularmodel.heads[0], regularmodel.heads[0]));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    
+    addLayer(new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityWither entity) {

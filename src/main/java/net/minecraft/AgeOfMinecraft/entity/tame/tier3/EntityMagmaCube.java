@@ -55,19 +55,19 @@ public class EntityMagmaCube extends EntitySlime {
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return (getSlimeSize() >= 4) ? I18n.translateToLocal("entity.LavaSlimeHelpful.cmm4.name") : (isSmallSlime() ? I18n.translateToLocal("entity.LavaSlimeHelpful.cmm1.name") : I18n.translateToLocal("entity.LavaSlimeHelpful.cmm2.name"));
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name");
   }
   
   public boolean isNotColliding() {
-    return (this.world.checkNoEntityCollision(getEntityBoundingBox(), (Entity)this) && this.world.getCollisionBoxes((Entity)this, getEntityBoundingBox()).isEmpty() && !this.world.containsAnyLiquid(getEntityBoundingBox()));
+    return (this.world.checkNoEntityCollision(getEntityBoundingBox(), this) && this.world.getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && !this.world.containsAnyLiquid(getEntityBoundingBox()));
   }
   
   public void setSlimeSize(int size) {
@@ -113,7 +113,7 @@ public class EntityMagmaCube extends EntitySlime {
     playSound(getJumpSound(), getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) / (EngenderConfig.mobs.useMobTalkerModels ? 1.35F : 1.1F));
     this.motionY += (0.42F + getSlimeSize() * 0.1F);
     this.isAirBorne = true;
-    ForgeHooks.onLivingJump((EntityLivingBase)this);
+    ForgeHooks.onLivingJump(this);
   }
   
   protected void handleJumpLava() {

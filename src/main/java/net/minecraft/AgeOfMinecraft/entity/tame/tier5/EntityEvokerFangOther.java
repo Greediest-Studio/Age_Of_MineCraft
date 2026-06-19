@@ -94,7 +94,7 @@ public class EntityEvokerFangOther extends EntityEvokerFangs {
             damage(entitylivingbase); 
         }  
       if (!this.sentSpikeEvent) {
-        this.world.setEntityState((Entity)this, (byte)4);
+        this.world.setEntityState(this, (byte)4);
         this.sentSpikeEvent = true;
       } 
       if (--this.lifeTicks < 0)
@@ -108,9 +108,9 @@ public class EntityEvokerFangOther extends EntityEvokerFangs {
       p_190551_1_.hurtResistantTime = 0;
       if (entitylivingbase instanceof EntityTameBase && entitylivingbase != null && p_190551_1_ != entitylivingbase) {
         p_190551_1_.playSound(SoundEvents.ENTITY_PLAYER_HURT, 1.0F, 0.9F);
-        applyEnchantments(entitylivingbase, (Entity)p_190551_1_);
+        applyEnchantments(entitylivingbase, p_190551_1_);
         p_190551_1_.motionY += this.rand.nextDouble();
-        ((EntityTameBase)entitylivingbase).inflictEngenderMobDamage(p_190551_1_, " was chopped up by ", DamageSource.causeIndirectMagicDamage((Entity)this, (Entity)entitylivingbase), 6.0F);
+        ((EntityTameBase)entitylivingbase).inflictEngenderMobDamage(p_190551_1_, " was chopped up by ", DamageSource.causeIndirectMagicDamage(this, entitylivingbase), 6.0F);
       } 
     } 
     if (entitylivingbase == null)

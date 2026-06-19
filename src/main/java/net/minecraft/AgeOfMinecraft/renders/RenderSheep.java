@@ -20,11 +20,11 @@ public class RenderSheep extends RenderLiving<EntitySheep> {
   private static final ResourceLocation antishearedSheepTextures = new ResourceLocation("ageofminecraft", "textures/entities/anti/sheep.png");
   
   public RenderSheep(RenderManager p_i46145_1_) {
-    super(p_i46145_1_, (ModelBase)new ModelSheep2(), 0.8F);
+    super(p_i46145_1_, new ModelSheep2(), 0.8F);
     addLayer(new LayerSheepWool(this));
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
     addLayer(new LayerCustomHeadEngender(((ModelSheep2)this.mainModel).head, ((ModelSheep2)this.mainModel).head));
-    addLayer(new LayerLearningBook(this));
+    
   }
   
   protected ResourceLocation getEntityTexture(EntitySheep entity) {

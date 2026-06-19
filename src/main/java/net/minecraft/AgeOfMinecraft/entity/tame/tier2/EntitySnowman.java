@@ -65,15 +65,15 @@ public class EntitySnowman extends EntityTameBase implements IRangedAttackMob, L
     setPathPriority(PathNodeType.LAVA, -1.0F);
     setPathPriority(PathNodeType.DANGER_FIRE, -1.0F);
     setPathPriority(PathNodeType.DAMAGE_FIRE, -1.0F);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIOpenDoor((EntityLiving)this, true));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.0D, 24.0F, 6.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIAttackRangedAlly(this, 1.25D, 30, 16.0F));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIWander((EntityCreature)this, 1.0D, 80));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
-    this.targetTasks.addTask(0, (EntityAIBase)new EntityAIFriendlyHurtByTarget((EntityCreature)this, true, new Class[0]));
-    this.targetTasks.addTask(1, (EntityAIBase)new EntityAILeaderHurtByTarget(this));
-    this.targetTasks.addTask(2, (EntityAIBase)new EntityAILeaderHurtTarget(this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(0, new EntityAIOpenDoor(this, true));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.0D, 24.0F, 6.0F));
+    this.tasks.addTask(3, new EntityAIAttackRangedAlly(this, 1.25D, 30, 16.0F));
+    this.tasks.addTask(4, new EntityAIWander(this, 1.0D, 80));
+    this.tasks.addTask(5, new EntityAILookIdle(this));
+    this.targetTasks.addTask(0, new EntityAIFriendlyHurtByTarget(this, true, new Class[0]));
+    this.targetTasks.addTask(1, new EntityAILeaderHurtByTarget(this));
+    this.targetTasks.addTask(2, new EntityAILeaderHurtTarget(this));
     this.experienceValue = 1;
   }
   
@@ -123,7 +123,7 @@ public class EntitySnowman extends EntityTameBase implements IRangedAttackMob, L
   
   public EntityTameBase getMutant() {
     if (Loader.isModLoaded("mutantbeasts"))
-      return (EntityTameBase)new EntityMutantSnowGolem(this.world); 
+      return new EntityMutantSnowGolem(this.world);
     return null;
   }
   
@@ -131,12 +131,12 @@ public class EntitySnowman extends EntityTameBase implements IRangedAttackMob, L
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return I18n.translateToLocal("entity." + str + ".cmm.name");
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name");
@@ -146,7 +146,7 @@ public class EntitySnowman extends EntityTameBase implements IRangedAttackMob, L
     super.createChild();
     if (!this.world.isRemote) {
       EntitySnowman baby = new EntitySnowman(this.world);
-      baby.copyLocationAndAnglesFrom((Entity)this);
+      baby.copyLocationAndAnglesFrom(this);
       baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
       baby.setGrowingAge(-24000);
       baby.setChild(true);
@@ -156,7 +156,7 @@ public class EntitySnowman extends EntityTameBase implements IRangedAttackMob, L
       if (isMarried())
         for (int e = 0; e < 10 + this.rand.nextInt(10); e++)
           baby.levelUp();  
-      this.world.spawnEntity((Entity)baby);
+      this.world.spawnEntity(baby);
     } 
   }
   
@@ -170,8 +170,8 @@ public class EntitySnowman extends EntityTameBase implements IRangedAttackMob, L
     this.basicInventory.setInventorySlotContents(7, charge);
     super.onLivingUpdate();
     if (isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && this.isOffensive && !isChild() && !false)
-      if (getDistanceSq((Entity)getAttackTarget()) < (this.reachWidth * this.reachWidth + ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width) * ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width)) + 9.0D && (this.ticksExisted + getEntityId()) % 20 == 0) {
-        attackEntityAsMob((Entity)getAttackTarget());
+      if (getDistanceSq(getAttackTarget()) < (this.reachWidth * this.reachWidth + ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width) * ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width)) + 9.0D && (this.ticksExisted + getEntityId()) % 20 == 0) {
+        attackEntityAsMob(getAttackTarget());
         swingArm(EnumHand.MAIN_HAND);
         if (!getHeldItemOffhand().isEmpty())
           swingArm(EnumHand.OFF_HAND); 
@@ -206,7 +206,7 @@ public class EntitySnowman extends EntityTameBase implements IRangedAttackMob, L
       if (hasOwner(player)) {
         player.swingArm(EnumHand.MAIN_HAND);
         if (getRidingEntity() == null) {
-          startRiding((Entity)player, true);
+          startRiding(player, true);
         } else {
           dismountRidingEntity();
         } 
@@ -217,7 +217,7 @@ public class EntitySnowman extends EntityTameBase implements IRangedAttackMob, L
       if (hasOwner(player) && !isPumpkinEquipped() && !this.world.isRemote) {
         this.world.playEvent(2001, getPosition().up(), Block.getStateId(Blocks.PUMPKIN.getDefaultState()));
         setPumpkinEquipped(true);
-        stack.damageItem(1, (EntityLivingBase)player);
+        stack.damageItem(1, player);
       } 
       return true;
     } 
@@ -225,11 +225,11 @@ public class EntitySnowman extends EntityTameBase implements IRangedAttackMob, L
   }
   
   public boolean isPumpkinEquipped() {
-    return (((Byte) this.dataManager.get(PUMPKIN_EQUIPPED) & 0x10) != 0);
+    return ((this.dataManager.get(PUMPKIN_EQUIPPED) & 0x10) != 0);
   }
   
   public void setPumpkinEquipped(boolean p_184747_1_) {
-    byte b0 = (Byte) this.dataManager.get(PUMPKIN_EQUIPPED);
+    byte b0 = this.dataManager.get(PUMPKIN_EQUIPPED);
     if (p_184747_1_) {
       this.dataManager.set(PUMPKIN_EQUIPPED, (byte) (b0 | 0x10));
     } else {
@@ -238,7 +238,7 @@ public class EntitySnowman extends EntityTameBase implements IRangedAttackMob, L
   }
   
   public void attackEntityWithRangedAttack(EntityLivingBase target, float p_82196_2_) {
-    EntitySnowballHarmful entitysnowball = new EntitySnowballHarmful(this.world, (EntityLivingBase)this);
+    EntitySnowballHarmful entitysnowball = new EntitySnowballHarmful(this.world, this);
     double d0 = target.posY + target.getEyeHeight() - 1.15D;
     double d1 = target.posX - this.posX;
     double d2 = d0 - entitysnowball.posY;
@@ -246,7 +246,7 @@ public class EntitySnowman extends EntityTameBase implements IRangedAttackMob, L
     float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
     entitysnowball.shoot(d1, d2 + f, d3, 1.6F, isPumpkinEquipped() ? 45.0F : 1.0F);
     playSound(SoundEvents.ENTITY_SNOWMAN_SHOOT, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
-    this.world.spawnEntity((Entity)entitysnowball);
+    this.world.spawnEntity(entitysnowball);
     swingArm(EnumHand.MAIN_HAND);
     entitysnowball.damage = (target instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityBlaze || target instanceof net.minecraft.entity.monster.EntityBlaze) ? 3.0F : ((this.rand.nextInt(3) == 0 || !(target instanceof EntityTameBase)) ? 1.0F : 0.0F);
   }

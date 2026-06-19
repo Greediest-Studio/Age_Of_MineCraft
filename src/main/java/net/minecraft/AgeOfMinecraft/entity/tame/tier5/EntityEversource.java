@@ -57,10 +57,10 @@ public class EntityEversource extends EntityTameBase implements IJumpingMount, L
     super(worldIn);
     this.timeUntilNextEgg = 200 + this.rand.nextInt(600);
     setPathPriority(PathNodeType.WATER, 0.0F);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.0D, 16.0F, 8.0F));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.5D, 80));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.0D, 16.0F, 8.0F));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.5D, 80));
+    this.tasks.addTask(7, new EntityAILookIdle(this));
     this.experienceValue = 50;
     setSize(0.4F, 0.7F);
   }
@@ -115,14 +115,14 @@ public class EntityEversource extends EntityTameBase implements IJumpingMount, L
   
   public void onLivingUpdate() {
     super.onLivingUpdate();
-    if (!this.world.isRemote && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && !false && getDistanceSq((Entity)getAttackTarget()) < (this.width * this.width + (getAttackTarget()).width * (getAttackTarget()).width) + 9.0D)
-      attackEntityAsMob((Entity)getAttackTarget()); 
+    if (!this.world.isRemote && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && !false && getDistanceSq(getAttackTarget()) < (this.width * this.width + (getAttackTarget()).width * (getAttackTarget()).width) + 9.0D)
+      attackEntityAsMob(getAttackTarget());
     if (getControllingPassenger() != null && getControllingPassenger() instanceof EntityZombie) {
       EntityZombie passenger = (EntityZombie)getControllingPassenger();
       this.renderYawOffset = this.rotationYaw = this.rotationYawHead = passenger.rotationYawHead;
       this.rotationPitch = passenger.rotationPitch;
       if (passenger.getAttackTarget() != null)
-        getNavigator().tryMoveToEntityLiving((Entity)passenger.getAttackTarget(), 1.0D); 
+        getNavigator().tryMoveToEntityLiving(passenger.getAttackTarget(), 1.0D);
     } 
     this.oFlap = this.wingRotation;
     this.oFlapSpeed = this.destPos;
@@ -145,91 +145,91 @@ public class EntityEversource extends EntityTameBase implements IJumpingMount, L
   private Item randomSpawnItem() {
     switch (this.rand.nextInt(42)) {
       default:
-        return (Item)EItem.chickenItem;
+        return EItem.chickenItem;
       case 1:
-        return (Item)EItem.batItem;
+        return EItem.batItem;
       case 2:
-        return (Item)EItem.cowItem;
+        return EItem.cowItem;
       case 3:
-        return (Item)EItem.mooshroomItem;
+        return EItem.mooshroomItem;
       case 4:
-        return (Item)EItem.pigItem;
+        return EItem.pigItem;
       case 5:
-        return (Item)EItem.rabbitItem;
+        return EItem.rabbitItem;
       case 6:
-        return (Item)EItem.sheepItem;
+        return EItem.sheepItem;
       case 7:
-        return (Item)EItem.ozelotItem;
+        return EItem.ozelotItem;
       case 8:
-        return (Item)EItem.squidItem;
+        return EItem.squidItem;
       case 9:
-        return (Item)EItem.llamaItem;
+        return EItem.llamaItem;
       case 10:
-        return (Item)EItem.villagerItem;
+        return EItem.villagerItem;
       case 11:
-        return (Item)EItem.snowmanItem;
+        return EItem.snowmanItem;
       case 12:
-        return (Item)EItem.silverfishItem;
+        return EItem.silverfishItem;
       case 13:
-        return (Item)EItem.endermiteItem;
+        return EItem.endermiteItem;
       case 14:
-        return (Item)EItem.wolfItem;
+        return EItem.wolfItem;
       case 15:
-        return (Item)EItem.spiderItem;
+        return EItem.spiderItem;
       case 16:
-        return (Item)EItem.zombieItem;
+        return EItem.zombieItem;
       case 17:
-        return (Item)EItem.skeletonItem;
+        return EItem.skeletonItem;
       case 18:
-        return (Item)EItem.polarBearItem;
+        return EItem.polarBearItem;
       case 19:
-        return (Item)EItem.slimeItem;
+        return EItem.slimeItem;
       case 20:
-        return (Item)EItem.magmacubeItem;
+        return EItem.magmacubeItem;
       case 21:
-        return (Item)EItem.vexItem;
+        return EItem.vexItem;
       case 22:
-        return (Item)EItem.spiderjockeyItem;
+        return EItem.spiderjockeyItem;
       case 23:
-        return (Item)EItem.chickenjockeyItem;
+        return EItem.chickenjockeyItem;
       case 24:
-        return (Item)EItem.blazeItem;
+        return EItem.blazeItem;
       case 25:
-        return (Item)EItem.endermanItem;
+        return EItem.endermanItem;
       case 26:
-        return (Item)EItem.cavespiderItem;
+        return EItem.cavespiderItem;
       case 27:
-        return (Item)EItem.pigzombieItem;
+        return EItem.pigzombieItem;
       case 28:
-        return (Item)EItem.guardianItem;
+        return EItem.guardianItem;
       case 29:
-        return (Item)EItem.ghastItem;
+        return EItem.ghastItem;
       case 30:
-        return (Item)EItem.huskItem;
+        return EItem.huskItem;
       case 31:
-        return (Item)EItem.shulkerItem;
+        return EItem.shulkerItem;
       case 32:
-        return (Item)EItem.strayItem;
+        return EItem.strayItem;
       case 33:
-        return (Item)EItem.witchItem;
+        return EItem.witchItem;
       case 34:
-        return (Item)EItem.vindicatorItem;
+        return EItem.vindicatorItem;
       case 35:
-        return (Item)EItem.witherskeletonItem;
+        return EItem.witherskeletonItem;
       case 36:
-        return (Item)EItem.killerrabbitItem;
+        return EItem.killerrabbitItem;
       case 37:
-        return (Item)EItem.elderguardianItem;
+        return EItem.elderguardianItem;
       case 38:
-        return (Item)EItem.the4horsemenItem;
+        return EItem.the4horsemenItem;
       case 39:
-        return (Item)EItem.evokerItem;
+        return EItem.evokerItem;
       case 40:
-        return (Item)EItem.giantItem;
+        return EItem.giantItem;
       case 41:
         break;
     } 
-    return (Item)EItem.villagergolemItem;
+    return EItem.villagergolemItem;
   }
   
   public boolean takesFallDamage() {
@@ -293,7 +293,7 @@ public class EntityEversource extends EntityTameBase implements IJumpingMount, L
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;

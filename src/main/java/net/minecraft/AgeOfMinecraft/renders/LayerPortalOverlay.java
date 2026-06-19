@@ -44,8 +44,8 @@ public class LayerPortalOverlay implements LayerRenderer<EntityLivingBase> {
     GlStateManager.color(1.0F, 1.0F, 1.0F, 0.9F);
     GlStateManager.scale(0.999F, 0.999F, 0.999F);
     this.layerModel.onlybase = true;
-    this.layerModel.render((Entity)entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-    this.layerModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, (Entity)entitylivingbaseIn);
+    this.layerModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+    this.layerModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entitylivingbaseIn);
     this.renderer.setLightmap(entitylivingbaseIn);
     GlStateManager.matrixMode(5890);
     GlStateManager.loadIdentity();
@@ -66,8 +66,8 @@ public class LayerPortalOverlay implements LayerRenderer<EntityLivingBase> {
     OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, i / 1.0F, j / 1.0F);
     GlStateManager.color(1.0F, 1.0F, 1.0F, 0.8F);
     this.layerModel.onlybase = true;
-    this.layerModel.render((Entity)entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-    this.layerModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, (Entity)entitylivingbaseIn);
+    this.layerModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+    this.layerModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entitylivingbaseIn);
     this.renderer.setLightmap(entitylivingbaseIn);
     GlStateManager.matrixMode(5890);
     GlStateManager.loadIdentity();
@@ -88,8 +88,8 @@ public class LayerPortalOverlay implements LayerRenderer<EntityLivingBase> {
     OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, i / 1.0F, j / 1.0F);
     GlStateManager.color(1.0F, 1.0F, 1.0F, 0.75F);
     this.layerModel.onlybase = true;
-    this.layerModel.render((Entity)entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-    this.layerModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, (Entity)entitylivingbaseIn);
+    this.layerModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+    this.layerModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entitylivingbaseIn);
     this.renderer.setLightmap(entitylivingbaseIn);
     GlStateManager.matrixMode(5890);
     GlStateManager.loadIdentity();
@@ -109,8 +109,8 @@ public class LayerPortalOverlay implements LayerRenderer<EntityLivingBase> {
     OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, i / 1.0F, j / 1.0F);
     GlStateManager.color(0.4F + MathHelper.cos(f * 0.1F) * 0.25F, 0.4F + MathHelper.cos(f * 0.1F) * 0.25F, 0.4F + MathHelper.cos(f * 0.1F) * 0.25F, 0.4F + MathHelper.cos(f * 0.1F) * 0.25F);
     this.layerModel.onlybase = true;
-    this.layerModel.render((Entity)entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-    this.layerModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, (Entity)entitylivingbaseIn);
+    this.layerModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+    this.layerModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entitylivingbaseIn);
     this.renderer.setLightmap(entitylivingbaseIn);
     GlStateManager.matrixMode(5890);
     GlStateManager.loadIdentity();

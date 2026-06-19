@@ -21,10 +21,10 @@ public class RenderCow extends RenderLiving<EntityCow> {
   private static final ResourceLocation anticowTextures = new ResourceLocation("ageofminecraft", "textures/entities/anti/cow.png");
   
   public RenderCow(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)new ModelCow(), 0.7F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
+    super(renderManagerIn, new ModelCow(), 0.7F);
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
     addLayer(new LayerCustomHeadEngender(((ModelCow)this.mainModel).head, ((ModelCow)this.mainModel).head));
-    addLayer(new LayerLearningBook(this));
+    
   }
   
   protected void preRenderCallback(EntityCow entitylivingbaseIn, float partialTickTime) {

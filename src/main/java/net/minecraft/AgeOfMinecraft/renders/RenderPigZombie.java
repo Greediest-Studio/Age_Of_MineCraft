@@ -30,7 +30,7 @@ public class RenderPigZombie extends RenderLiving<EntityPigZombie> {
   
   private static final ResourceLocation antiZOMBIE_PIGMAN_TEXTURE = new ResourceLocation("ageofminecraft", "textures/entities/anti/zombie_pigman.png");
   
-  private LayerBipedArmor armor = new LayerBipedArmor((RenderLivingBase)this);
+  private LayerBipedArmor armor = new LayerBipedArmor(this);
   
   private static ModelCMMPigZombie cmmmodel = new ModelCMMPigZombie();
   
@@ -46,19 +46,19 @@ public class RenderPigZombie extends RenderLiving<EntityPigZombie> {
   
   public RenderPigZombie(RenderManager renderManagerIn) {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.5F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
-    this.armor = new LayerBipedArmor((RenderLivingBase)this) {
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
+    this.armor = new LayerBipedArmor(this) {
         protected void initArmor() {
           this.modelLeggings = EngenderConfig.mobs.useMobTalkerModels ? RenderPigZombie.cmmleggings : RenderPigZombie.regularleggings;
           this.modelArmor = EngenderConfig.mobs.useMobTalkerModels ? RenderPigZombie.cmmarmor : RenderPigZombie.regulararmor;
         }
       };
     addLayer((LayerRenderer)this.armor);
-    addLayer((LayerRenderer)new LayerElytra((RenderLivingBase)this));
-    addLayer((LayerRenderer)new LayerHeldItem((RenderLivingBase)this));
+    addLayer((LayerRenderer)new LayerElytra(this));
+    addLayer((LayerRenderer)new LayerHeldItem(this));
     addLayer(new LayerCustomHeadEngender(regularmodel.bipedHead, cmmmodel.Head));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    
+    addLayer(new LayerMobCape(this));
   }
   
   protected void applyRotations(EntityPigZombie entityLiving, float p_77043_2_, float p_77043_3_, float partialTicks) {
@@ -93,9 +93,9 @@ public class RenderPigZombie extends RenderLiving<EntityPigZombie> {
   }
   
   private void changeModel() {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel;
+    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
     this.layerRenderers.remove(this.armor);
-    this.armor = new LayerBipedArmor((RenderLivingBase)this) {
+    this.armor = new LayerBipedArmor(this) {
         protected void initArmor() {
           this.modelLeggings = EngenderConfig.mobs.useMobTalkerModels ? RenderPigZombie.cmmleggings : RenderPigZombie.regularleggings;
           this.modelArmor = EngenderConfig.mobs.useMobTalkerModels ? RenderPigZombie.cmmarmor : RenderPigZombie.regulararmor;

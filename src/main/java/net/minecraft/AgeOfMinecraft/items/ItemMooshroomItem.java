@@ -2,7 +2,6 @@ package net.minecraft.AgeOfMinecraft.items;
 
 import net.minecraft.AgeOfMinecraft.entity.tame.tier1.EntityMooshroom;
 import net.minecraft.AgeOfMinecraft.registry.ESound;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -29,15 +28,15 @@ public class ItemMooshroomItem extends ItemVanillaTier {
     entityliving.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
     entityliving.rotationYawHead = entityliving.rotationYaw;
     entityliving.renderYawOffset = entityliving.rotationYaw;
-    entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos((Entity)entityliving)), null);
+    entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), null);
     if (!worldIn.isRemote) {
-      worldIn.spawnEntity((Entity)entityliving);
+      worldIn.spawnEntity(entityliving);
       int i = 5;
       while (i > 0) {
         int j = EntityXPOrb.getXPSplit(i);
         i -= j;
         if (!worldIn.getGameRules().getBoolean("disableExpItemDrops"))
-          entityliving.world.spawnEntity((Entity)new EntityXPOrb(entityliving.world, entityliving.posX, entityliving.posY + entityliving.getEyeHeight(), entityliving.posZ, j)); 
+          entityliving.world.spawnEntity(new EntityXPOrb(entityliving.world, entityliving.posX, entityliving.posY + entityliving.getEyeHeight(), entityliving.posZ, j));
       } 
     } 
     if (entityliving != null) {

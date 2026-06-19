@@ -51,12 +51,12 @@ public class LayerArrowCustomSized implements LayerRenderer<EntityLivingBase> {
         f1 *= -1.0F;
         f2 *= -1.0F;
         float f6 = MathHelper.sqrt(f * f + f2 * f2);
-        ((Entity)entityTippedArrow).prevRotationYaw = ((Entity)entityTippedArrow).rotationYaw = (float)(Math.atan2(f, f2) * 57.29577951308232D);
-        ((Entity)entityTippedArrow).prevRotationPitch = ((Entity)entityTippedArrow).rotationPitch = (float)(Math.atan2(f1, f6) * 57.29577951308232D);
+        entityTippedArrow.prevRotationYaw = ((Entity)entityTippedArrow).rotationYaw = (float)(Math.atan2(f, f2) * 57.29577951308232D);
+        entityTippedArrow.prevRotationPitch = ((Entity)entityTippedArrow).rotationPitch = (float)(Math.atan2(f1, f6) * 57.29577951308232D);
         double d0 = 0.0D;
         double d1 = 0.0D;
         double d2 = 0.0D;
-        this.renderer.getRenderManager().renderEntity((Entity)entityTippedArrow, d0, d1, d2, 0.0F, partialTicks, false);
+        this.renderer.getRenderManager().renderEntity(entityTippedArrow, d0, d1, d2, 0.0F, partialTicks, false);
         GlStateManager.popMatrix();
       } 
       RenderHelper.enableStandardItemLighting();

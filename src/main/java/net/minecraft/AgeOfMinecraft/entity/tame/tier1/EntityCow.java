@@ -10,12 +10,9 @@ import net.minecraft.AgeOfMinecraft.entity.tame.ai.EntityAIFriendlyAttackMelee;
 import net.minecraft.AgeOfMinecraft.registry.ELoot;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IJumpingMount;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
@@ -156,7 +153,7 @@ public class EntityCow extends EntityTameBase implements IJumpingMount, Light, A
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -227,7 +224,7 @@ public class EntityCow extends EntityTameBase implements IJumpingMount, Light, A
         this.jumpPower = 0.0F;
       } 
       if (forward > 0.0F) {
-        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(2.0D, 1.0D, 2.0D));
+        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(2.0D, 1.0D, 2.0D));
           for (Entity entity : list) {
               if (entity instanceof EntityLivingBase && !false) {
                   attackEntityAsMob(entity);
@@ -242,7 +239,7 @@ public class EntityCow extends EntityTameBase implements IJumpingMount, Light, A
               }
           }
         if (this.moralRaisedTimer > 100) {
-          List<Entity> list1 = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(2.0D, 2.0D, 2.0D));
+          List<Entity> list1 = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(2.0D, 2.0D, 2.0D));
             for (Entity entity : list1) {
                 if (entity instanceof EntityLivingBase && !false) {
                     attackEntityAsMob(entity);

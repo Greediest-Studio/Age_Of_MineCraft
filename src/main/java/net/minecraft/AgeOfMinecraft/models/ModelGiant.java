@@ -20,7 +20,7 @@ public class ModelGiant extends ModelBiped implements ICappedModel {
   
   public ModelGiant(float modelSize, boolean p_i1168_2_) {
     super(modelSize, 0.0F, 64, p_i1168_2_ ? 32 : 64);
-    this.bipedCape = new ModelRenderer((ModelBase)this, 0, 0);
+    this.bipedCape = new ModelRenderer(this, 0, 0);
     this.bipedCape.setTextureSize(64, 32);
     this.bipedCape.addBox(-5.0F, 0.0F, -1.0F, 10, 16, 1, modelSize);
   }

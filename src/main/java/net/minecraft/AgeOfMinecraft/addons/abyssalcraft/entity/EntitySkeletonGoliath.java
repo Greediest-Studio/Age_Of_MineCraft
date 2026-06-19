@@ -54,14 +54,14 @@ public class EntitySkeletonGoliath extends EntityTameBase implements Armored, Ma
   public EntitySkeletonGoliath(World par1World) {
     super(par1World);
     setSize(1.0F, 4.5F);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIOpenDoor((EntityLiving)this, true));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.1D, 32.0F, 12.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.0D, true));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 1.0D));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIWander((EntityCreature)this, 1.0D));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIFleeSun((EntityCreature)this, 1.0D));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(0, new EntityAIOpenDoor(this, true));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.1D, 32.0F, 12.0F));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    this.tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 1.0D));
+    this.tasks.addTask(4, new EntityAIWander(this, 1.0D));
+    this.tasks.addTask(5, new EntityAIFleeSun(this, 1.0D));
+    this.tasks.addTask(7, new EntityAILookIdle(this));
     this.isOffensive = true;
   }
   
@@ -113,7 +113,7 @@ public class EntitySkeletonGoliath extends EntityTameBase implements Armored, Ma
   
   public boolean attackEntityAsMob(Entity par1Entity) {
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return super.attackEntityAsMob(par1Entity);
   }
   
@@ -185,7 +185,7 @@ public class EntitySkeletonGoliath extends EntityTameBase implements Armored, Ma
       if (hasOwner(player)) {
         player.swingArm(EnumHand.MAIN_HAND);
         if (getRidingEntity() == null) {
-          startRiding((Entity)player, true);
+          startRiding(player, true);
         } else {
           dismountRidingEntity();
         } 
@@ -194,7 +194,7 @@ public class EntitySkeletonGoliath extends EntityTameBase implements Armored, Ma
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -234,7 +234,7 @@ public class EntitySkeletonGoliath extends EntityTameBase implements Armored, Ma
         this.motionY = 0.0D;
         this.motionZ = 0.0D;
       } 
-      List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(1.0D));
+      List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(1.0D));
         for (Entity entity : list) {
             if (entity instanceof EntityLivingBase && !false && !this.world.isRemote && this.ticksExisted % 10 == 0)
                 attackEntityAsMob(entity);

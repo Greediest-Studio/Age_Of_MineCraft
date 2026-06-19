@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier6;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import java.util.Random;
@@ -110,44 +109,44 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     if (!worldIn.isRemote) {
       this.centerHead = new EntityWitherStormHead(worldIn);
       this.centerHead.residentWitherStorm = this;
-      this.centerHead.copyLocationAndAnglesFrom((Entity)this);
-      worldIn.spawnEntity((Entity)this.centerHead);
+      this.centerHead.copyLocationAndAnglesFrom(this);
+      worldIn.spawnEntity(this.centerHead);
       this.rightHead = new EntityWitherStormHead(worldIn);
       this.rightHead.residentWitherStorm = this;
-      this.rightHead.copyLocationAndAnglesFrom((Entity)this);
-      worldIn.spawnEntity((Entity)this.rightHead);
+      this.rightHead.copyLocationAndAnglesFrom(this);
+      worldIn.spawnEntity(this.rightHead);
       this.leftHead = new EntityWitherStormHead(worldIn);
       this.leftHead.residentWitherStorm = this;
-      this.leftHead.copyLocationAndAnglesFrom((Entity)this);
-      worldIn.spawnEntity((Entity)this.leftHead);
+      this.leftHead.copyLocationAndAnglesFrom(this);
+      worldIn.spawnEntity(this.leftHead);
       this.tentacle1 = new EntityWitherStormTentacle(worldIn);
       this.tentacle1.residentWitherStorm = this;
-      this.tentacle1.copyLocationAndAnglesFrom((Entity)this);
-      this.world.spawnEntity((Entity)this.tentacle1);
+      this.tentacle1.copyLocationAndAnglesFrom(this);
+      this.world.spawnEntity(this.tentacle1);
       this.tentacle2 = new EntityWitherStormTentacle(worldIn);
       this.tentacle2.residentWitherStorm = this;
-      this.tentacle2.copyLocationAndAnglesFrom((Entity)this);
-      worldIn.spawnEntity((Entity)this.tentacle2);
+      this.tentacle2.copyLocationAndAnglesFrom(this);
+      worldIn.spawnEntity(this.tentacle2);
       this.tentacle3 = new EntityWitherStormTentacle(worldIn);
       this.tentacle3.residentWitherStorm = this;
-      this.tentacle3.copyLocationAndAnglesFrom((Entity)this);
-      worldIn.spawnEntity((Entity)this.tentacle3);
+      this.tentacle3.copyLocationAndAnglesFrom(this);
+      worldIn.spawnEntity(this.tentacle3);
       this.tentacle4 = new EntityWitherStormTentacle(worldIn);
       this.tentacle4.residentWitherStorm = this;
-      this.tentacle4.copyLocationAndAnglesFrom((Entity)this);
-      worldIn.spawnEntity((Entity)this.tentacle4);
+      this.tentacle4.copyLocationAndAnglesFrom(this);
+      worldIn.spawnEntity(this.tentacle4);
       this.tentacle5 = new EntityWitherStormTentacle(worldIn);
       this.tentacle5.residentWitherStorm = this;
-      this.tentacle5.copyLocationAndAnglesFrom((Entity)this);
-      worldIn.spawnEntity((Entity)this.tentacle5);
+      this.tentacle5.copyLocationAndAnglesFrom(this);
+      worldIn.spawnEntity(this.tentacle5);
       this.tentacledevourer1 = new EntityWitherStormTentacleDevourer(worldIn);
       this.tentacledevourer1.residentWitherStorm = this;
-      this.tentacledevourer1.copyLocationAndAnglesFrom((Entity)this);
-      worldIn.spawnEntity((Entity)this.tentacledevourer1);
+      this.tentacledevourer1.copyLocationAndAnglesFrom(this);
+      worldIn.spawnEntity(this.tentacledevourer1);
       this.tentacledevourer2 = new EntityWitherStormTentacleDevourer(worldIn);
       this.tentacledevourer2.residentWitherStorm = this;
-      this.tentacledevourer2.copyLocationAndAnglesFrom((Entity)this);
-      worldIn.spawnEntity((Entity)this.tentacledevourer2);
+      this.tentacledevourer2.copyLocationAndAnglesFrom(this);
+      worldIn.spawnEntity(this.tentacledevourer2);
     } 
   }
   
@@ -234,21 +233,21 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
   
   public void setDead() {
     killParts();
-    ChunkLoadingEvent.stopLoading((Entity)this);
+    ChunkLoadingEvent.stopLoading(this);
     super.setDead();
   }
   
   private void killParts() {
-    killPart((Entity)this.centerHead);
-    killPart((Entity)this.rightHead);
-    killPart((Entity)this.leftHead);
-    killPart((Entity)this.tentacle1);
-    killPart((Entity)this.tentacle2);
-    killPart((Entity)this.tentacle3);
-    killPart((Entity)this.tentacle4);
-    killPart((Entity)this.tentacle5);
-    killPart((Entity)this.tentacledevourer1);
-    killPart((Entity)this.tentacledevourer2);
+    killPart(this.centerHead);
+    killPart(this.rightHead);
+    killPart(this.leftHead);
+    killPart(this.tentacle1);
+    killPart(this.tentacle2);
+    killPart(this.tentacle3);
+    killPart(this.tentacle4);
+    killPart(this.tentacle5);
+    killPart(this.tentacledevourer1);
+    killPart(this.tentacledevourer2);
     this.centerHead = null;
     this.rightHead = null;
     this.leftHead = null;
@@ -343,13 +342,13 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     float rot = this.rotationYawHead * 0.017453292F;
     float oned = MathHelper.sin(rot);
     float twod = MathHelper.cos(rot);
-    if (!isWild() && getDistanceSq((Entity)getOwner()) >= 48400.0D)
+    if (!isWild() && getDistanceSq(getOwner()) >= 48400.0D)
       setLocationAndAngles((getOwner()).posX, (getOwner()).posY, (getOwner()).posZ, this.rotationYaw, this.rotationPitch); 
     if (!doesntContainACommandBlock() && !this.world.isRemote)
       if (isEntityAlive()) {
-        ChunkLoadingEvent.updateLoaded((Entity)this);
+        ChunkLoadingEvent.updateLoaded(this);
       } else {
-        ChunkLoadingEvent.stopLoading((Entity)this);
+        ChunkLoadingEvent.stopLoading(this);
       }  
     getNavigator().clearPath();
     this.experienceValue = getSize();
@@ -358,9 +357,9 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(doesntContainACommandBlock() ? 10.0D : 20.0D);
     if (!doesntContainACommandBlock() && getSize() >= 300000 && !this.world.isRemote && this.ticksExisted % 1000 == 0) {
       EntityWitherStorm entityzombie = new EntityWitherStorm(this.world);
-      entityzombie.copyLocationAndAnglesFrom((Entity)this);
+      entityzombie.copyLocationAndAnglesFrom(this);
       entityzombie.setNoAI(isAIDisabled());
-      this.world.spawnEntity((Entity)entityzombie);
+      this.world.spawnEntity(entityzombie);
       entityzombie.setOwnerId(getOwnerId());
       entityzombie.setNotContainingCommandBlock(true);
       entityzombie.motionX = this.rand.nextDouble() - 0.5D;
@@ -401,8 +400,8 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         } else {
           this.centerHead = new EntityWitherStormHead(this.world);
           this.centerHead.residentWitherStorm = this;
-          this.centerHead.copyLocationAndAnglesFrom((Entity)this);
-          this.world.spawnEntity((Entity)this.centerHead);
+          this.centerHead.copyLocationAndAnglesFrom(this);
+          this.world.spawnEntity(this.centerHead);
           this.centerHead.onUpdate();
         } 
         if (this.rightHead != null) {
@@ -423,8 +422,8 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         } else {
           this.rightHead = new EntityWitherStormHead(this.world);
           this.rightHead.residentWitherStorm = this;
-          this.rightHead.copyLocationAndAnglesFrom((Entity)this);
-          this.world.spawnEntity((Entity)this.rightHead);
+          this.rightHead.copyLocationAndAnglesFrom(this);
+          this.world.spawnEntity(this.rightHead);
           this.rightHead.onUpdate();
         } 
         if (this.leftHead != null) {
@@ -445,8 +444,8 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         } else {
           this.leftHead = new EntityWitherStormHead(this.world);
           this.leftHead.residentWitherStorm = this;
-          this.leftHead.copyLocationAndAnglesFrom((Entity)this);
-          this.world.spawnEntity((Entity)this.leftHead);
+          this.leftHead.copyLocationAndAnglesFrom(this);
+          this.world.spawnEntity(this.leftHead);
           this.leftHead.onUpdate();
         } 
         if (this.tentacle1 != null) {
@@ -467,8 +466,8 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         } else {
           this.tentacle1 = new EntityWitherStormTentacle(this.world);
           this.tentacle1.residentWitherStorm = this;
-          this.tentacle1.copyLocationAndAnglesFrom((Entity)this);
-          this.world.spawnEntity((Entity)this.tentacle1);
+          this.tentacle1.copyLocationAndAnglesFrom(this);
+          this.world.spawnEntity(this.tentacle1);
           this.tentacle1.onUpdate();
         } 
         if (this.tentacle2 != null) {
@@ -489,8 +488,8 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         } else {
           this.tentacle2 = new EntityWitherStormTentacle(this.world);
           this.tentacle2.residentWitherStorm = this;
-          this.tentacle2.copyLocationAndAnglesFrom((Entity)this);
-          this.world.spawnEntity((Entity)this.tentacle2);
+          this.tentacle2.copyLocationAndAnglesFrom(this);
+          this.world.spawnEntity(this.tentacle2);
           this.tentacle2.onUpdate();
         } 
         if (this.tentacle3 != null) {
@@ -511,8 +510,8 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         } else {
           this.tentacle3 = new EntityWitherStormTentacle(this.world);
           this.tentacle3.residentWitherStorm = this;
-          this.tentacle3.copyLocationAndAnglesFrom((Entity)this);
-          this.world.spawnEntity((Entity)this.tentacle3);
+          this.tentacle3.copyLocationAndAnglesFrom(this);
+          this.world.spawnEntity(this.tentacle3);
           this.tentacle3.onUpdate();
         } 
         if (this.tentacle4 != null) {
@@ -533,8 +532,8 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         } else {
           this.tentacle4 = new EntityWitherStormTentacle(this.world);
           this.tentacle4.residentWitherStorm = this;
-          this.tentacle4.copyLocationAndAnglesFrom((Entity)this);
-          this.world.spawnEntity((Entity)this.tentacle4);
+          this.tentacle4.copyLocationAndAnglesFrom(this);
+          this.world.spawnEntity(this.tentacle4);
           this.tentacle4.onUpdate();
         } 
         if (this.tentacle5 != null) {
@@ -555,8 +554,8 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         } else {
           this.tentacle5 = new EntityWitherStormTentacle(this.world);
           this.tentacle5.residentWitherStorm = this;
-          this.tentacle5.copyLocationAndAnglesFrom((Entity)this);
-          this.world.spawnEntity((Entity)this.tentacle5);
+          this.tentacle5.copyLocationAndAnglesFrom(this);
+          this.world.spawnEntity(this.tentacle5);
           this.tentacle5.onUpdate();
         } 
         if (this.tentacledevourer1 != null) {
@@ -578,8 +577,8 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         } else {
           this.tentacledevourer1 = new EntityWitherStormTentacleDevourer(this.world);
           this.tentacledevourer1.residentWitherStorm = this;
-          this.tentacledevourer1.copyLocationAndAnglesFrom((Entity)this);
-          this.world.spawnEntity((Entity)this.tentacledevourer1);
+          this.tentacledevourer1.copyLocationAndAnglesFrom(this);
+          this.world.spawnEntity(this.tentacledevourer1);
           this.tentacledevourer1.onUpdate();
         } 
         if (this.tentacledevourer2 != null) {
@@ -601,8 +600,8 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         } else {
           this.tentacledevourer2 = new EntityWitherStormTentacleDevourer(this.world);
           this.tentacledevourer2.residentWitherStorm = this;
-          this.tentacledevourer2.copyLocationAndAnglesFrom((Entity)this);
-          this.world.spawnEntity((Entity)this.tentacledevourer2);
+          this.tentacledevourer2.copyLocationAndAnglesFrom(this);
+          this.world.spawnEntity(this.tentacledevourer2);
           this.tentacledevourer2.onUpdate();
         } 
       }  
@@ -624,7 +623,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX + f13, this.posY - 4.0D + f15, this.posZ + f17, 0.0D, 0.0D, 0.0D);
     } 
     if (!this.world.isRemote && getOwner() != null && this.posY <= (getOwner()).posY && this.posY >= (getOwner()).posY - 0.5D && !isSneaking())
-      createEngenderModExplosion((Entity)this, this.posX, this.posY, this.posZ, 8.0F, false, EngenderConfig.mobs.grief); 
+      createEngenderModExplosion(this, this.posX, this.posY, this.posZ, 8.0F, false, EngenderConfig.mobs.grief);
     this.onGround = false;
     this.isAirBorne = true;
     this.noClip = true;
@@ -660,11 +659,11 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
             blockpos = this.world.getTopSolidOrLiquidBlock(blockpos);
             IBlockState iblockstate = this.world.getBlockState(blockpos);
             Block block = iblockstate.getBlock();
-            if (this.world.getBlockState(blockpos.up()).getBlock().isAir(this.world.getBlockState(blockpos.up()), (IBlockAccess)this.world, blockpos.up()) && !block.isAir(iblockstate, (IBlockAccess)this.world, blockpos) && !this.world.isRemote && this.world.isAreaLoaded(blockpos, blockpos) && block.getBlockHardness(iblockstate, this.world, new BlockPos(l1, blockpos.getY(), i2)) != -1.0F)
+            if (this.world.getBlockState(blockpos.up()).getBlock().isAir(this.world.getBlockState(blockpos.up()), this.world, blockpos.up()) && !block.isAir(iblockstate, this.world, blockpos) && !this.world.isRemote && this.world.isAreaLoaded(blockpos, blockpos) && block.getBlockHardness(iblockstate, this.world, new BlockPos(l1, blockpos.getY(), i2)) != -1.0F)
               if (block.getMaterial(iblockstate).isLiquid()) {
                 this.world.setBlockState(new BlockPos(l1, blockpos.getY(), i2),Blocks.AIR.getDefaultState(),2);
               } else {
-                this.world.spawnEntity((Entity)new EntityFallingBlock(this.world, l1, blockpos.getY(), i2, block.getActualState(iblockstate, (IBlockAccess)this.world, blockpos)));
+                this.world.spawnEntity(new EntityFallingBlock(this.world, l1, blockpos.getY(), i2, block.getActualState(iblockstate, this.world, blockpos)));
               }  
           } 
         }  
@@ -675,7 +674,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
             EntityCreature entity = list2.get(i1);
             EntityAIAvoidEntitySPC ai = new EntityAIAvoidEntitySPC(entity, EntityWitherStorm.class, 128.0F, 1.5D, 1.5D);
             if (entity != null && entity.isEntityAlive() && entity.isNonBoss() && !(entity instanceof net.minecraft.entity.monster.EntityEnderman) && !(entity instanceof EntityTameBase) && !entity.tasks.taskEntries.contains(ai)) {
-              entity.tasks.addTask(0, (EntityAIBase)ai);
+              entity.tasks.addTask(0, ai);
             } else {
               list2.remove(entity);
             } 
@@ -843,9 +842,9 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       amount *= 5.0F; 
     if (amount > 5000.0F && source.isExplosion() && !doesntContainACommandBlock() && getSize() >= 50000 && !this.world.isRemote) {
       EntityWitherStorm entityzombie = new EntityWitherStorm(this.world);
-      entityzombie.copyLocationAndAnglesFrom((Entity)this);
+      entityzombie.copyLocationAndAnglesFrom(this);
       entityzombie.setNoAI(isAIDisabled());
-      this.world.spawnEntity((Entity)entityzombie);
+      this.world.spawnEntity(entityzombie);
       entityzombie.setOwnerId(getOwnerId());
       entityzombie.setNotContainingCommandBlock(true);
       entityzombie.motionX = this.rand.nextDouble() - 0.5D;
@@ -926,7 +925,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
   }
   
   public int getSize() {
-    return (Integer) this.dataManager.get(SIZE);
+    return this.dataManager.get(SIZE);
   }
   
   public void Grow(int p_82215_1_) {
@@ -935,12 +934,12 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(doesntContainACommandBlock() ? 1000.0D : p_82215_1_);
       if (p_82215_1_ == 12500 && !isWild())
         for (EntityPlayer entityplayer : this.world.playerEntities)
-          entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation(doesntContainACommandBlock() ? "§5 A Wither Storm has fissioned!" : ("§5" + getOwner().getName() + "'s Wither Storm has grown to Destroyer form!!"), new Object[0]), true);
+          entityplayer.sendStatusMessage(new TextComponentTranslation(doesntContainACommandBlock() ? "§5 A Wither Storm has fissioned!" : ("§5" + getOwner().getName() + "'s Wither Storm has grown to Destroyer form!!"), new Object[0]), true);
     } 
   }
   
   public boolean doesntContainACommandBlock() {
-    return (Boolean) this.dataManager.get(DOESNT_HAVE_COMMAND_BLOCK);
+    return this.dataManager.get(DOESNT_HAVE_COMMAND_BLOCK);
   }
   
   public void setNotContainingCommandBlock(boolean p_82215_1_) {
@@ -959,7 +958,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     if (resourcelocation == null)
       return; 
     LootTable loottable = this.world.getLootTableManager().getLootTableFromLocation(resourcelocation);
-    LootContext lootcontext = (new LootContext.Builder((WorldServer)this.world)).withLootedEntity((Entity)this).withDamageSource(DamageSource.GENERIC).build();
+    LootContext lootcontext = (new LootContext.Builder((WorldServer)this.world)).withLootedEntity(this).withDamageSource(DamageSource.GENERIC).build();
     boolean droppedAny = false;
     for (ItemStack itemstack : loottable.generateLootForPools(this.rand, lootcontext)) {
       EntityItem entityitem = entityDropItem(itemstack, 0.0F);
@@ -984,11 +983,11 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       return; 
     this.witherStormDeathFinished = true;
     if (this.centerHead != null && this.centerHead.residentWitherStorm != null) {
-      playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
-      playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
-      playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
-      playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
-      createEngenderModExplosionFireless((Entity)this, this.centerHead.posX, this.centerHead.posY, this.centerHead.posZ, 9.0F, EngenderConfig.mobs.grief);
+      playSound(getHurtSound(null), getSoundVolume(), 2.0F);
+      playSound(getHurtSound(null), getSoundVolume(), 2.0F);
+      playSound(getHurtSound(null), getSoundVolume(), 2.0F);
+      playSound(getHurtSound(null), getSoundVolume(), 2.0F);
+      createEngenderModExplosionFireless(this, this.centerHead.posX, this.centerHead.posY, this.centerHead.posZ, 9.0F, EngenderConfig.mobs.grief);
       double d01 = this.centerHead.posX - this.posX;
       double d21 = this.centerHead.posZ - this.posZ;
       float f2 = MathHelper.sqrt(d01 * d01 + d21 * d21);
@@ -1001,7 +1000,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     if (list != null && !list.isEmpty() && this.world.isRemote)
         for (EntityFallingBlock entity : list) {
             if (entity != null) {
-                createEngenderModExplosionFireless((Entity) this, entity.posX, entity.posY, entity.posZ, 2.0F, false);
+                createEngenderModExplosionFireless(this, entity.posX, entity.posY, entity.posZ, 2.0F, false);
                 entity.setDead();
             }
         }
@@ -1011,7 +1010,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     while (i > 0) {
       int j = EntityXPOrb.getXPSplit(i);
       i -= j;
-      this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY + 8.0D, this.posZ, j));
+      this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + 8.0D, this.posZ, j));
     } 
     dropWitherStormLootTable();
     if (!this.world.isRemote)
@@ -1049,13 +1048,13 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
           deathBlocks.motionY -= this.rand.nextDouble();
           deathBlocks.motionZ += this.rand.nextDouble() * 4.0D - 2.0D;
           deathBlocks.setHurtEntities(true);
-          this.world.spawnEntity((Entity)deathBlocks);
+          this.world.spawnEntity(deathBlocks);
           Grow(getSize() - 3);
         }  
       if (this.deathTicks % 20 == 0)
         this.deathTime++; 
       if (getHealth() <= 0.0F) {
-        setAttackTarget((EntityLivingBase)null);
+        setAttackTarget(null);
         float f13 = (this.rand.nextFloat() - 0.5F) * 12.0F;
         float f15 = (this.rand.nextFloat() - 0.5F) * 36.0F;
         float f17 = (this.rand.nextFloat() - 0.5F) * 12.0F;
@@ -1066,52 +1065,52 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
           if (getOwner() != null) {
             for (EntityPlayer entityplayer : this.world.playerEntities) {
               this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
-              entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("§4" + getOwner().getName() + "'s Wither Storm has been killed!!!", new Object[0]), true);
+              entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s Wither Storm has been killed!!!", new Object[0]), true);
             } 
-            ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("Your Wither Storm has been destroyed!", new Object[0]));
+            getOwner().sendMessage(new TextComponentTranslation("Your Wither Storm has been destroyed!", new Object[0]));
           }   
       if (this.deathTicks == 1 && !this.world.isRemote)
         return; 
       if (this.deathTicks == 80)
         if (this.tentacle1 != null && this.tentacle1.residentWitherStorm != null) {
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
+          playSound(getHurtSound(null), getSoundVolume(), 2.0F);
           if (!this.world.isRemote)
-            createEngenderModExplosionFireless((Entity)this, this.tentacle1.posX, this.tentacle1.posY, this.tentacle1.posZ, 6.0F, EngenderConfig.mobs.grief); 
+            createEngenderModExplosionFireless(this, this.tentacle1.posX, this.tentacle1.posY, this.tentacle1.posZ, 6.0F, EngenderConfig.mobs.grief);
           this.tentacle1.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.tentacle1.motionY = 0.800000011920929D;
           this.tentacle1.motionZ = ((this.rand.nextFloat() - 0.5F) * 3.0F);
         }  
       if (this.deathTicks == 100)
         if (this.tentacle2 != null && this.tentacle2.residentWitherStorm != null) {
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
+          playSound(getHurtSound(null), getSoundVolume(), 2.0F);
           if (!this.world.isRemote)
-            createEngenderModExplosionFireless((Entity)this, this.tentacle2.posX, this.tentacle2.posY, this.tentacle2.posZ, 6.0F, EngenderConfig.mobs.grief); 
+            createEngenderModExplosionFireless(this, this.tentacle2.posX, this.tentacle2.posY, this.tentacle2.posZ, 6.0F, EngenderConfig.mobs.grief);
           this.tentacle2.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.tentacle2.motionY = 0.800000011920929D;
           this.tentacle2.motionZ = ((this.rand.nextFloat() - 0.5F) * 3.0F);
         }  
       if (this.deathTicks == 110)
         if (this.tentacledevourer1 != null && this.tentacledevourer1.residentWitherStorm != null) {
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
+          playSound(getHurtSound(null), getSoundVolume(), 2.0F);
           if (!this.world.isRemote)
-            createEngenderModExplosionFireless((Entity)this, this.tentacledevourer1.posX, this.tentacledevourer1.posY, this.tentacledevourer1.posZ, 15.0F, EngenderConfig.mobs.grief); 
+            createEngenderModExplosionFireless(this, this.tentacledevourer1.posX, this.tentacledevourer1.posY, this.tentacledevourer1.posZ, 15.0F, EngenderConfig.mobs.grief);
           this.tentacledevourer1.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.tentacledevourer1.motionY = 0.800000011920929D;
           this.tentacledevourer1.motionZ = ((this.rand.nextFloat() - 0.5F) * 3.0F);
         }  
       if (this.deathTicks == 150) {
         if (this.tentacle4 != null && this.tentacle4.residentWitherStorm != null) {
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
+          playSound(getHurtSound(null), getSoundVolume(), 2.0F);
           if (!this.world.isRemote)
-            createEngenderModExplosionFireless((Entity)this, this.tentacle4.posX, this.tentacle4.posY, this.tentacle4.posZ, 6.0F, EngenderConfig.mobs.grief); 
+            createEngenderModExplosionFireless(this, this.tentacle4.posX, this.tentacle4.posY, this.tentacle4.posZ, 6.0F, EngenderConfig.mobs.grief);
           this.tentacle4.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.tentacle4.motionY = 0.800000011920929D;
           this.tentacle4.motionZ = ((this.rand.nextFloat() - 0.5F) * 3.0F);
         } 
         if (this.tentacle3 != null && this.tentacle3.residentWitherStorm != null) {
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
+          playSound(getHurtSound(null), getSoundVolume(), 2.0F);
           if (!this.world.isRemote)
-            createEngenderModExplosionFireless((Entity)this, this.tentacle3.posX, this.tentacle3.posY, this.tentacle3.posZ, 6.0F, EngenderConfig.mobs.grief); 
+            createEngenderModExplosionFireless(this, this.tentacle3.posX, this.tentacle3.posY, this.tentacle3.posZ, 6.0F, EngenderConfig.mobs.grief);
           this.tentacle3.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.tentacle3.motionY = 0.800000011920929D;
           this.tentacle3.motionZ = ((this.rand.nextFloat() - 0.5F) * 3.0F);
@@ -1119,19 +1118,19 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       } 
       if (this.deathTicks == 180) {
         if (this.tentacle5 != null && this.tentacle5.residentWitherStorm != null) {
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
+          playSound(getHurtSound(null), getSoundVolume(), 2.0F);
+          playSound(getHurtSound(null), getSoundVolume(), 2.0F);
           if (!this.world.isRemote)
-            createEngenderModExplosionFireless((Entity)this, this.tentacle5.posX, this.tentacle5.posY, this.tentacle5.posZ, 6.0F, EngenderConfig.mobs.grief); 
+            createEngenderModExplosionFireless(this, this.tentacle5.posX, this.tentacle5.posY, this.tentacle5.posZ, 6.0F, EngenderConfig.mobs.grief);
           this.tentacle5.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.tentacle5.motionY = 0.800000011920929D;
           this.tentacle5.motionZ = ((this.rand.nextFloat() - 0.5F) * 3.0F);
         } 
         if (this.tentacledevourer2 != null && this.tentacledevourer2.residentWitherStorm != null) {
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
+          playSound(getHurtSound(null), getSoundVolume(), 2.0F);
+          playSound(getHurtSound(null), getSoundVolume(), 2.0F);
           if (!this.world.isRemote)
-            createEngenderModExplosionFireless((Entity)this, this.tentacledevourer2.posX, this.tentacledevourer2.posY, this.tentacledevourer2.posZ, 15.0F, EngenderConfig.mobs.grief); 
+            createEngenderModExplosionFireless(this, this.tentacledevourer2.posX, this.tentacledevourer2.posY, this.tentacledevourer2.posZ, 15.0F, EngenderConfig.mobs.grief);
           this.tentacledevourer2.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.tentacledevourer2.motionY = 0.800000011920929D;
           this.tentacledevourer2.motionZ = ((this.rand.nextFloat() - 0.5F) * 3.0F);
@@ -1139,23 +1138,23 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       } 
       if (this.deathTicks == 180)
         if (this.leftHead != null && this.leftHead.residentWitherStorm != null) {
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
+          playSound(getHurtSound(null), getSoundVolume(), 2.0F);
+          playSound(getHurtSound(null), getSoundVolume(), 2.0F);
+          playSound(getHurtSound(null), getSoundVolume(), 2.0F);
+          playSound(getHurtSound(null), getSoundVolume(), 2.0F);
           if (!this.world.isRemote)
-            createEngenderModExplosionFireless((Entity)this, this.leftHead.posX, this.leftHead.posY, this.leftHead.posZ, 9.0F, EngenderConfig.mobs.grief); 
+            createEngenderModExplosionFireless(this, this.leftHead.posX, this.leftHead.posY, this.leftHead.posZ, 9.0F, EngenderConfig.mobs.grief);
           this.leftHead.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.leftHead.motionZ = ((this.rand.nextFloat() - 0.5F) * 3.0F);
         }  
       if (this.deathTicks == 200)
         if (this.rightHead != null && this.rightHead.residentWitherStorm != null) {
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
+          playSound(getHurtSound(null), getSoundVolume(), 2.0F);
+          playSound(getHurtSound(null), getSoundVolume(), 2.0F);
+          playSound(getHurtSound(null), getSoundVolume(), 2.0F);
+          playSound(getHurtSound(null), getSoundVolume(), 2.0F);
           if (!this.world.isRemote)
-            createEngenderModExplosionFireless((Entity)this, this.rightHead.posX, this.rightHead.posY, this.rightHead.posZ, 9.0F, EngenderConfig.mobs.grief); 
+            createEngenderModExplosionFireless(this, this.rightHead.posX, this.rightHead.posY, this.rightHead.posZ, 9.0F, EngenderConfig.mobs.grief);
           this.rightHead.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.rightHead.motionZ = ((this.rand.nextFloat() - 0.5F) * 3.0F);
         }  
@@ -1177,7 +1176,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     
     public void updateTask() {
       if (this.witherStorm.getAttackTarget() != null) {
-        this.witherStorm.getLookHelper().setLookPositionWithEntity((Entity)this.witherStorm.getAttackTarget(), 3.0F, 0.0F);
+        this.witherStorm.getLookHelper().setLookPositionWithEntity(this.witherStorm.getAttackTarget(), 3.0F, 0.0F);
       } else if (this.witherStorm.centerHead != null && this.witherStorm.centerHead.isBeingRidden()) {
         Vec3d vec3 = this.witherStorm.centerHead.getControllingPassenger().getLook(1.0F);
         this.witherStorm.getLookHelper().setLookPosition((this.witherStorm.centerHead.getControllingPassenger()).posX + vec3.x * 8.0D, (this.witherStorm.centerHead.getControllingPassenger()).posY + vec3.y * 8.0D, (this.witherStorm.centerHead.getControllingPassenger()).posZ + vec3.z * 8.0D, 180.0F, 0.0F);
@@ -1229,13 +1228,13 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         } 
         this.witherStorm.getMoveHelper().setMoveTo(d0, d1, d2, 1.0D);
       } else {
-        EntityPlayer player = this.witherStorm.world.getClosestPlayerToEntity((Entity)this.witherStorm, 256.0D);
+        EntityPlayer player = this.witherStorm.world.getClosestPlayerToEntity(this.witherStorm, 256.0D);
         if (this.witherStorm.getAttackTarget() != null) {
           double d0 = (this.witherStorm.getAttackTarget()).posX + ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
           double d1 = this.witherStorm.world.getTopSolidOrLiquidBlock(this.witherStorm.getPosition()).getY() + 48.0D + ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
           double d2 = (this.witherStorm.getAttackTarget()).posZ + ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
           this.witherStorm.getMoveHelper().setMoveTo(d0, d1, d2, 1.0D);
-        } else if (player != null && this.witherStorm.getDistanceSq((Entity)player) > 2304.0D) {
+        } else if (player != null && this.witherStorm.getDistanceSq(player) > 2304.0D) {
           double d0 = player.posX + ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
           double d1 = player.posY + 48.0D + ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
           double d2 = player.posZ + ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
@@ -1258,7 +1257,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     private int courseChangeCooldown;
     
     public WitherStormMoveHelper(EntityWitherStorm ghast) {
-      super((EntityLiving)ghast);
+      super(ghast);
       this.witherStorm = ghast;
     }
     
@@ -1271,7 +1270,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         if (this.courseChangeCooldown-- <= 0) {
           this.courseChangeCooldown += this.witherStorm.getRNG().nextInt(5) + 2;
           d3 = MathHelper.sqrt(d3);
-          if (this.witherStorm.getOwner() != null && this.witherStorm.getDistanceSq((Entity)this.witherStorm.getOwner()) > 5184.0D && this.witherStorm.getGuardBlock() == null) {
+          if (this.witherStorm.getOwner() != null && this.witherStorm.getDistanceSq(this.witherStorm.getOwner()) > 5184.0D && this.witherStorm.getGuardBlock() == null) {
             this.witherStorm.motionX += d0 / d3 * 0.2D;
             this.witherStorm.motionY += d1 / d3 * 0.2D;
             this.witherStorm.motionZ += d2 / d3 * 0.2D;

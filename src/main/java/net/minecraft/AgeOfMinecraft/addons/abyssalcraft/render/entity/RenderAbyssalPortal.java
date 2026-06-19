@@ -19,7 +19,7 @@ public class RenderAbyssalPortal extends RenderLiving<EntityAbyssalPortal> {
   private Random rnd = new Random();
   
   public RenderAbyssalPortal(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)new ModelPortal(), 4.0F);
+    super(renderManagerIn, new ModelPortal(), 4.0F);
     addLayer(new LayerAbyssalPortalGlow(this));
     addLayer(new LayerAbyssalPortalOverlay(this));
   }

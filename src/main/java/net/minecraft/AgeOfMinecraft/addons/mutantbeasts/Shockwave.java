@@ -92,13 +92,13 @@ public class Shockwave extends Vec3i {
     BlockPos posUp = new BlockPos(getX(), getY() + 1, getZ());
     IBlockState blockStateUp = world.getBlockState(posUp);
     Block blockUp = blockState.getBlock();
-    if ((isPlayer && ((EntityPlayer)entity).isAllowEdit()) || ForgeEventFactory.getMobGriefingEvent(world, (Entity)entity)) {
+    if ((isPlayer && ((EntityPlayer)entity).isAllowEdit()) || ForgeEventFactory.getMobGriefingEvent(world, entity)) {
       if (block instanceof net.minecraft.block.BlockGrass || block instanceof net.minecraft.block.BlockGrassPath || block instanceof net.minecraft.block.BlockFarmland || block instanceof net.minecraft.block.BlockMycelium || block instanceof net.minecraft.block.BlockDirt) {
         EntityFallingBlock fallingblock = new EntityFallingBlock(world, pos.getX(), pos.getY(), pos.getZ(), blockState);
         fallingblock.motionY = 0.6D;
         fallingblock.setHurtEntities(true);
         fallingblock.setPosition(getX() + 0.5D, getY(), getZ() + 0.5D);
-        world.spawnEntity((Entity)fallingblock);
+        world.spawnEntity(fallingblock);
       } 
       if (block instanceof net.minecraft.block.BlockBreakable || block instanceof net.minecraft.block.BlockLeaves)
         world.destroyBlock(pos, false); 
@@ -122,12 +122,12 @@ public class Shockwave extends Vec3i {
           world.playEvent(1020, posUp, 0);
         }  
       if (block instanceof BlockTNT) {
-        ((BlockTNT)block).explode(world, pos, blockState.withProperty((IProperty)BlockTNT.EXPLODE, Boolean.TRUE), entity);
+        ((BlockTNT)block).explode(world, pos, blockState.withProperty(BlockTNT.EXPLODE, Boolean.TRUE), entity);
         world.setBlockToAir(pos);
       } 
     } 
     if (block instanceof net.minecraft.block.BlockRedstoneOre)
-      block.onEntityWalk(world, pos, (Entity)entity); 
+      block.onEntityWalk(world, pos, entity);
     if (this.spawnParticles)
       world.playEvent(2001, posUp, Block.getStateId(blockState)); 
   }

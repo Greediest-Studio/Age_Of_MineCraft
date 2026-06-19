@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier1;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -52,12 +51,12 @@ public class EntityPig extends EntityTameBase implements IJumpingMount, Light, A
   
   public EntityPig(World worldIn) {
     super(worldIn);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.2D, 16.0F, 4.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.2D, true));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.8D, 80));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAIWatchClosest((EntityLiving)this, EntityPlayer.class, 6.0F));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.2D, 16.0F, 4.0F));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.2D, true));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.8D, 80));
+    this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
     this.experienceValue = 1;
     setSize(0.9F, 0.9F);
   }
@@ -118,7 +117,7 @@ public class EntityPig extends EntityTameBase implements IJumpingMount, Light, A
   
   public void onLivingUpdate() {
     super.onLivingUpdate();
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 128.0D && getSpecialAttackTimer() <= 0 && isHero())
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) < 128.0D && getSpecialAttackTimer() <= 0 && isHero())
       performSpecialAttack(); 
   }
   
@@ -163,7 +162,7 @@ public class EntityPig extends EntityTameBase implements IJumpingMount, Light, A
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -184,7 +183,7 @@ public class EntityPig extends EntityTameBase implements IJumpingMount, Light, A
   }
   
   public boolean getSaddled() {
-    return (Boolean) this.dataManager.get(SADDLED);
+    return this.dataManager.get(SADDLED);
   }
   
   public void setSaddled(boolean saddled) {
@@ -205,9 +204,9 @@ public class EntityPig extends EntityTameBase implements IJumpingMount, Light, A
         entitypigzombie.setCustomNameTag(getCustomNameTag()); 
       if (!isWild())
         entitypigzombie.setOwnerId(getOwnerId()); 
-      this.world.spawnEntity((Entity)entitypigzombie);
+      this.world.spawnEntity(entitypigzombie);
       if (isBeingRidden())
-        getControllingPassenger().startRiding((Entity)entitypigzombie); 
+        getControllingPassenger().startRiding(entitypigzombie);
       setDead();
     } 
   }

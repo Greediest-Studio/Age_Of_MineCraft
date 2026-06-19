@@ -19,7 +19,7 @@ public class RenderPortal extends RenderLiving<EntityPortal> {
   private Random rnd = new Random();
   
   public RenderPortal(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)new ModelPortal(), 4.0F);
+    super(renderManagerIn, new ModelPortal(), 4.0F);
     addLayer(new LayerPortalGlow(this));
     addLayer(new LayerPortalOverlay(this));
   }

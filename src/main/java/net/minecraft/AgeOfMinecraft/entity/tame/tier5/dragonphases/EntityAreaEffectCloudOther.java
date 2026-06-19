@@ -2,7 +2,7 @@ package net.minecraft.AgeOfMinecraft.entity.tame.tier5.dragonphases;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import java.util.Iterator;
+
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -111,7 +111,7 @@ public class EntityAreaEffectCloudOther extends Entity {
   }
   
   public float getRadius() {
-    return (Float) getDataManager().get(RADIUS);
+    return getDataManager().get(RADIUS);
   }
   
   public void setPotion(PotionType potionIn) {
@@ -135,7 +135,7 @@ public class EntityAreaEffectCloudOther extends Entity {
   }
   
   public int getColor() {
-    return (Integer) getDataManager().get(COLOR);
+    return getDataManager().get(COLOR);
   }
   
   public void setColor(int colorIn) {
@@ -144,7 +144,7 @@ public class EntityAreaEffectCloudOther extends Entity {
   }
   
   public EnumParticleTypes getParticle() {
-    return EnumParticleTypes.getParticleFromId((Integer) getDataManager().get(PARTICLE));
+    return EnumParticleTypes.getParticleFromId(getDataManager().get(PARTICLE));
   }
   
   public void setParticle(EnumParticleTypes particleIn) {
@@ -152,7 +152,7 @@ public class EntityAreaEffectCloudOther extends Entity {
   }
   
   public int getParticleParam1() {
-    return (Integer) getDataManager().get(PARTICLE_PARAM_1);
+    return getDataManager().get(PARTICLE_PARAM_1);
   }
   
   public void setParticleParam1(int particleParam) {
@@ -160,7 +160,7 @@ public class EntityAreaEffectCloudOther extends Entity {
   }
   
   public int getParticleParam2() {
-    return (Integer) getDataManager().get(PARTICLE_PARAM_2);
+    return getDataManager().get(PARTICLE_PARAM_2);
   }
   
   public void setParticleParam2(int particleParam) {
@@ -172,7 +172,7 @@ public class EntityAreaEffectCloudOther extends Entity {
   }
   
   public boolean shouldIgnoreRadius() {
-    return (Boolean) getDataManager().get(IGNORE_RADIUS);
+    return getDataManager().get(IGNORE_RADIUS);
   }
   
   public int getDuration() {
@@ -252,7 +252,7 @@ public class EntityAreaEffectCloudOther extends Entity {
         setRadius(f);
       } 
       if (this.ticksExisted % 20 == 0) {
-          this.reapplicationDelayMap.entrySet().removeIf(entry -> this.ticksExisted >= entry.getValue().intValue());
+          this.reapplicationDelayMap.entrySet().removeIf(entry -> this.ticksExisted >= entry.getValue());
         List<PotionEffect> potions = Lists.newArrayList();
         for (PotionEffect potioneffect1 : this.potion.getEffects())
           potions.add(new PotionEffect(potioneffect1.getPotion(), potioneffect1.getDuration() / 4, potioneffect1.getAmplifier(), potioneffect1.getIsAmbient(), potioneffect1.doesShowParticles())); 
@@ -273,7 +273,7 @@ public class EntityAreaEffectCloudOther extends Entity {
                     for (PotionEffect potioneffect : potions) {
                       if (!potioneffect.getPotion().isBadEffect()) {
                         if (potioneffect.getPotion().isInstant()) {
-                          potioneffect.getPotion().affectEntity(this, (Entity)getOwner(), entitylivingbase, potioneffect.getAmplifier(), 0.5D);
+                          potioneffect.getPotion().affectEntity(this, getOwner(), entitylivingbase, potioneffect.getAmplifier(), 0.5D);
                           continue;
                         } 
                         entitylivingbase.addPotionEffect(new PotionEffect(potioneffect));
@@ -282,14 +282,14 @@ public class EntityAreaEffectCloudOther extends Entity {
                   } else {
                     for (PotionEffect potioneffect : potions) {
                       if (potioneffect.getPotion().isInstant()) {
-                        getOwner().inflictEngenderMobDamage(entitylivingbase, " was killed by magic created by ", (new EntityDamageSource("indirectMagic", (Entity)getOwner())).setMagicDamage().setDamageBypassesArmor().setDamageIsAbsolute(), 8.0F);
+                        getOwner().inflictEngenderMobDamage(entitylivingbase, " was killed by magic created by ", (new EntityDamageSource("indirectMagic", getOwner())).setMagicDamage().setDamageBypassesArmor().setDamageIsAbsolute(), 8.0F);
                         continue;
                       } 
                       if (potioneffect.getPotion().isBadEffect() && entitylivingbase.isPotionApplicable(potioneffect)) {
                         entitylivingbase.addPotionEffect(new PotionEffect(potioneffect));
                         continue;
                       } 
-                      getOwner().inflictEngenderMobDamage(entitylivingbase, " was killed by magic created by ", (new EntityDamageSource("indirectMagic", (Entity)getOwner())).setMagicDamage().setDamageBypassesArmor().setDamageIsAbsolute(), 8.0F);
+                      getOwner().inflictEngenderMobDamage(entitylivingbase, " was killed by magic created by ", (new EntityDamageSource("indirectMagic", getOwner())).setMagicDamage().setDamageBypassesArmor().setDamageIsAbsolute(), 8.0F);
                     } 
                   } 
                   if (this.radiusOnUse != 0.0F) {
@@ -346,7 +346,7 @@ public class EntityAreaEffectCloudOther extends Entity {
     ItemStack stack = player.getHeldItem(hand);
     if (!this.world.isRemote && !stack.isEmpty() && stack.getItem() == Items.GLASS_BOTTLE) {
       setRadius(getRadius() - 0.5F);
-      this.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+      this.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
       turnBottleIntoItem(stack, player, new ItemStack(Items.DRAGON_BREATH));
       return true;
     } 
@@ -413,12 +413,12 @@ public class EntityAreaEffectCloudOther extends Entity {
     if (this.colorSet)
       compound.setInteger("Color", getColor()); 
     if (this.potion != PotionTypes.EMPTY && this.potion != null)
-      compound.setString("Potion", ((ResourceLocation)PotionType.REGISTRY.getNameForObject(this.potion)).toString()); 
+      compound.setString("Potion", PotionType.REGISTRY.getNameForObject(this.potion).toString());
     if (!this.effects.isEmpty()) {
       NBTTagList nbttaglist = new NBTTagList();
       for (PotionEffect potioneffect : this.effects)
-        nbttaglist.appendTag((NBTBase)potioneffect.writeCustomPotionEffectToNBT(new NBTTagCompound())); 
-      compound.setTag("Effects", (NBTBase)nbttaglist);
+        nbttaglist.appendTag(potioneffect.writeCustomPotionEffectToNBT(new NBTTagCompound()));
+      compound.setTag("Effects", nbttaglist);
     } 
   }
   

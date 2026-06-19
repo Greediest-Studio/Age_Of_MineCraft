@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 public class EntityCoraliumSquid extends EntitySquid implements IRangedAttackMob {
   public EntityCoraliumSquid(World worldIn) {
     super(worldIn);
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIAttackRanged(this, 1.0D, 20, 8.0F));
+    this.tasks.addTask(1, new EntityAIAttackRanged(this, 1.0D, 20, 8.0F));
   }
   
   public int getNextLevelRequirement() {
@@ -32,14 +32,14 @@ public class EntityCoraliumSquid extends EntitySquid implements IRangedAttackMob
   }
   
   public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
-    EntityInkProjectileOther entityinkprojectile = new EntityInkProjectileOther(this.world, (EntityLivingBase)this);
+    EntityInkProjectileOther entityinkprojectile = new EntityInkProjectileOther(this.world, this);
     double d0 = target.posX - this.posX;
     double d1 = target.posY + 0.5D - this.posY + getEyeHeight();
     double d2 = target.posZ - this.posZ;
     float f1 = MathHelper.sqrt(d0 * d0 + d2 * d2) * 0.2F;
     entityinkprojectile.shoot(d0, d1 + f1, d2, 1.6F, 1.0F);
     playLivingSound();
-    this.world.spawnEntity((Entity)entityinkprojectile);
+    this.world.spawnEntity(entityinkprojectile);
   }
   
   public boolean isEntityImmuneToCoralium() {

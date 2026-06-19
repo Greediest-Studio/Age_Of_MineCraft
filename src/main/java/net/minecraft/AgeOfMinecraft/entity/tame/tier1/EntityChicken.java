@@ -59,10 +59,10 @@ public class EntityChicken extends EntityTameBase implements IJumpingMount, Ligh
     super(worldIn);
     this.timeUntilNextEgg = this.rand.nextInt(600) + 600;
     setPathPriority(PathNodeType.WATER, 0.0F);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.4D, 24.0F, 8.0F));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 1.0D, 80));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.4D, 24.0F, 8.0F));
+    this.tasks.addTask(5, new EntityAIWander(this, 1.0D, 80));
+    this.tasks.addTask(7, new EntityAILookIdle(this));
     this.experienceValue = 2;
     setSize(0.4F, 0.7F);
   }
@@ -116,8 +116,8 @@ public class EntityChicken extends EntityTameBase implements IJumpingMount, Ligh
       attackEntityFrom(DamageSource.IN_WALL, 1.0F); 
     if (isHero() && !this.world.isRemote && getAttackTarget() != null) {
       (getAttackTarget()).hurtResistantTime = 0;
-      getLookHelper().setLookPositionWithEntity((Entity)getAttackTarget(), 180.0F, 40.0F);
-      EntityEgg entitysnowball = new EntityEgg(this.world, (EntityLivingBase)this);
+      getLookHelper().setLookPositionWithEntity(getAttackTarget(), 180.0F, 40.0F);
+      EntityEgg entitysnowball = new EntityEgg(this.world, this);
       double d0 = (getAttackTarget()).posY + getAttackTarget().getEyeHeight() - 1.100000023841858D;
       double d1 = (getAttackTarget()).posX - this.posX;
       double d2 = d0 - entitysnowball.posY;
@@ -125,7 +125,7 @@ public class EntityChicken extends EntityTameBase implements IJumpingMount, Ligh
       float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
       entitysnowball.shoot(d1, d2 + f, d3, 1.6F, 4.0F);
       playSound(SoundEvents.ENTITY_EGG_THROW, 1.0F, 1.5F / (getRNG().nextFloat() * 0.4F + 0.8F));
-      this.world.spawnEntity((Entity)entitysnowball);
+      this.world.spawnEntity(entitysnowball);
     } 
     if (isChickenJockey()) {
       this.isOffensive = true;
@@ -137,7 +137,7 @@ public class EntityChicken extends EntityTameBase implements IJumpingMount, Ligh
       this.renderYawOffset = this.rotationYaw = this.rotationYawHead = passenger.rotationYawHead;
       this.rotationPitch = passenger.rotationPitch;
       if (passenger.getAttackTarget() != null)
-        getNavigator().tryMoveToEntityLiving((Entity)passenger.getAttackTarget(), 1.0D); 
+        getNavigator().tryMoveToEntityLiving(passenger.getAttackTarget(), 1.0D);
     } 
     this.oFlap = this.wingRotation;
     this.oFlapSpeed = this.destPos;
@@ -223,7 +223,7 @@ public class EntityChicken extends EntityTameBase implements IJumpingMount, Ligh
                 if (entity != null)
                     if (entity.isChild() && false && !entity.isRiding() && !this.world.isRemote) {
                         player.swingArm(EnumHand.MAIN_HAND);
-                        entity.startRiding((Entity) this);
+                        entity.startRiding(this);
                         playSound(SoundEvents.ENTITY_CHICKEN_AMBIENT, 1.0F, 1.5F);
                         break;
                     }
@@ -231,7 +231,7 @@ public class EntityChicken extends EntityTameBase implements IJumpingMount, Ligh
         return true;
       } 
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;

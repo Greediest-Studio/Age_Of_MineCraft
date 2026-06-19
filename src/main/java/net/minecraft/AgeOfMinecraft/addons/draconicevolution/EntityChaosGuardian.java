@@ -190,7 +190,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
     if (this.innerRotation > 500)
       this.innerRotation = 0; 
     if (getAttackTarget() != null && getJukeboxToDanceTo() == null)
-      faceEntity((Entity)getAttackTarget(), 10.0F, 90.0F); 
+      faceEntity(getAttackTarget(), 10.0F, 90.0F);
     if (getAttackTarget() != null && (!getAttackTarget().isEntityAlive() || false))
       setAttackTarget(null); 
     if (getAttackTarget() == null)
@@ -209,12 +209,12 @@ public class EntityChaosGuardian extends EntityEnderDragon {
         this.targetTasks.onUpdateTasks(); 
       if (!this.world.isRemote) {
         if (isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && this.isOffensive && !isChild() && !false)
-          if (getDistanceSq((Entity)getAttackTarget()) < (this.reachWidth * this.reachWidth + ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width) * ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width)) + 9.0D && (this.ticksExisted + getEntityId()) % 10 == 0)
-            attackEntityAsMob((Entity)getAttackTarget());  
+          if (getDistanceSq(getAttackTarget()) < (this.reachWidth * this.reachWidth + ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width) * ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width)) + 9.0D && (this.ticksExisted + getEntityId()) % 10 == 0)
+            attackEntityAsMob(getAttackTarget());
         if (isEntityAlive()) {
-          ChunkLoadingEvent.updateLoaded((Entity)this);
+          ChunkLoadingEvent.updateLoaded(this);
         } else {
-          ChunkLoadingEvent.stopLoading((Entity)this);
+          ChunkLoadingEvent.stopLoading(this);
         } 
       } 
     } 
@@ -471,16 +471,16 @@ public class EntityChaosGuardian extends EntityEnderDragon {
       (this.dragonPartArray[l]).prevPosZ = (avec3d[l]).z;
     } 
     if (!this.world.isRemote) {
-      collideWithEntities(this.dragonPartHead, this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartHead.getEntityBoundingBox().grow(1.0D)));
-      collideWithEntities(this.dragonPartNeck, this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartNeck.getEntityBoundingBox().grow(1.0D)));
-      collideWithEntities(this.dragonPartBody, this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartBody.getEntityBoundingBox().grow(1.0D)));
-      flingEntities(this.dragonPartWing1, this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartWing1.getEntityBoundingBox().grow(4.0D).offset(0.0D, -2.0D, 0.0D)));
-      flingEntities(this.dragonPartWing2, this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartWing2.getEntityBoundingBox().grow(4.0D).offset(0.0D, -2.0D, 0.0D)));
-      collideWithEntities(this.dragonPartTail1, this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartTail1.getEntityBoundingBox().grow(1.0D)));
-      collideWithEntities(this.dragonPartTail2, this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartTail2.getEntityBoundingBox().grow(1.0D)));
-      collideWithEntities(this.dragonPartTail3, this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartTail3.getEntityBoundingBox().grow(1.0D)));
-      attackEntitiesInList(this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartHead.getEntityBoundingBox().grow(3.0D)));
-      attackEntitiesInList(this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartNeck.getEntityBoundingBox().grow(2.0D)));
+      collideWithEntities(this.dragonPartHead, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartHead.getEntityBoundingBox().grow(1.0D)));
+      collideWithEntities(this.dragonPartNeck, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartNeck.getEntityBoundingBox().grow(1.0D)));
+      collideWithEntities(this.dragonPartBody, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartBody.getEntityBoundingBox().grow(1.0D)));
+      flingEntities(this.dragonPartWing1, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartWing1.getEntityBoundingBox().grow(4.0D).offset(0.0D, -2.0D, 0.0D)));
+      flingEntities(this.dragonPartWing2, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartWing2.getEntityBoundingBox().grow(4.0D).offset(0.0D, -2.0D, 0.0D)));
+      collideWithEntities(this.dragonPartTail1, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartTail1.getEntityBoundingBox().grow(1.0D)));
+      collideWithEntities(this.dragonPartTail2, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartTail2.getEntityBoundingBox().grow(1.0D)));
+      collideWithEntities(this.dragonPartTail3, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartTail3.getEntityBoundingBox().grow(1.0D)));
+      attackEntitiesInList(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartHead.getEntityBoundingBox().grow(3.0D)));
+      attackEntitiesInList(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartNeck.getEntityBoundingBox().grow(2.0D)));
     } 
     destroyBlocksInAABB(this.dragonPartHead.getEntityBoundingBox());
     destroyBlocksInAABB(this.dragonPartNeck.getEntityBoundingBox());
@@ -492,18 +492,18 @@ public class EntityChaosGuardian extends EntityEnderDragon {
     destroyBlocksInAABB(this.dragonPartTail3.getEntityBoundingBox());
     if (!this.world.isRemote && isEntityAlive() && getHealth() < getMaxHealth() && this.hurtTime <= 5)
       heal((getAttackTarget() != null || isPotionActive(MobEffects.HUNGER)) ? 0.02F : 0.1F); 
-    if (!isWild() && getDistanceSq((Entity)getOwner()) >= 48400.0D) {
+    if (!isWild() && getDistanceSq(getOwner()) >= 48400.0D) {
       this.behaviour = EnumBehaviour.GUARDING;
       setPositionAndUpdate((getOwner()).posX + 60.0D, (getOwner()).posY + 40.0D, (getOwner()).posZ + 60.0D);
       this.targetX = this.posX;
       this.targetY = this.posY;
       this.targetZ = this.posZ;
     } 
-    if (!this.world.isRemote && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen((Entity)this) && this.rand.nextInt(40) == 0) {
+    if (!this.world.isRemote && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && this.rand.nextInt(40) == 0) {
       List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getAttackTarget().getEntityBoundingBox().grow(3.0D));
       for (EntityLivingBase entityLivingBase : entities) {
         if (!false)
-          fireLightning((Entity)entityLivingBase, this.dragonPartHead.posX, this.dragonPartHead.posY + 0.25D, this.dragonPartHead.posZ); 
+          fireLightning(entityLivingBase, this.dragonPartHead.posX, this.dragonPartHead.posY + 0.25D, this.dragonPartHead.posZ);
       } 
     } 
     if (isBeingRidden() && getControllingPassenger() != null && getControllingPassenger() instanceof EntityPlayer) {
@@ -539,43 +539,43 @@ public class EntityChaosGuardian extends EntityEnderDragon {
     } else {
       setSneaking(false);
     } 
-    if (!this.world.isRemote && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen((Entity)this) && this.rand.nextInt(120) == 0) {
+    if (!this.world.isRemote && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && this.rand.nextInt(120) == 0) {
       EntityGuardianProjectile projectile;
       double distance;
       switch (this.rand.nextInt(4)) {
         case 0:
-          projectile = new EntityGuardianProjectile(this.world, 1, getAttackTarget(), 5.0F + this.rand.nextFloat() * 8.0F, (Entity)this);
+          projectile = new EntityGuardianProjectile(this.world, 1, getAttackTarget(), 5.0F + this.rand.nextFloat() * 8.0F, this);
           projectile.setPosition(this.dragonPartHead.posX, this.dragonPartHead.posY, this.dragonPartHead.posZ);
-          projectile.shooter = (Entity)this;
+          projectile.shooter = this;
           projectile.target = getAttackTarget();
           this.world.spawnEntity(projectile);
           distance = Utils.getDistanceAtoB((getAttackTarget()).posX, (getAttackTarget()).posZ, this.dragonPartHead.posX, this.dragonPartHead.posZ);
           this.rotationPitch = (float)Math.toDegrees(Math.atan2((getAttackTarget()).posY - this.dragonPartHead.posY, distance)) * -1.0F;
           break;
         case 1:
-          projectile = new EntityGuardianProjectile(this.world, 3, getAttackTarget(), 5.0F + this.rand.nextFloat() * 2.0F, (Entity)this);
+          projectile = new EntityGuardianProjectile(this.world, 3, getAttackTarget(), 5.0F + this.rand.nextFloat() * 2.0F, this);
           projectile.setPosition(this.dragonPartHead.posX, this.dragonPartHead.posY, this.dragonPartHead.posZ);
-          projectile.shooter = (Entity)this;
+          projectile.shooter = this;
           projectile.target = getAttackTarget();
           this.world.spawnEntity(projectile);
           break;
         case 2:
-          projectile = new EntityGuardianProjectile(this.world, 4, getAttackTarget(), 5.0F + this.rand.nextFloat() * 10.0F, (Entity)this);
+          projectile = new EntityGuardianProjectile(this.world, 4, getAttackTarget(), 5.0F + this.rand.nextFloat() * 10.0F, this);
           projectile.setPosition(this.dragonPartHead.posX, this.dragonPartHead.posY, this.dragonPartHead.posZ);
-          projectile.shooter = (Entity)this;
+          projectile.shooter = this;
           projectile.target = getAttackTarget();
           this.world.spawnEntity(projectile);
           break;
         case 3:
-          projectile = new EntityGuardianProjectile(this.world, 5, getAttackTarget(), 5.0F + this.rand.nextFloat() * 10.0F, (Entity)this);
+          projectile = new EntityGuardianProjectile(this.world, 5, getAttackTarget(), 5.0F + this.rand.nextFloat() * 10.0F, this);
           projectile.setPosition(this.dragonPartHead.posX, this.dragonPartHead.posY, this.dragonPartHead.posZ);
-          projectile.shooter = (Entity)this;
+          projectile.shooter = this;
           projectile.target = getAttackTarget();
           this.world.spawnEntity(projectile);
           break;
       } 
     } 
-    if (!this.world.isRemote && getAttackTarget() != null && getAttackTarget().isEntityAlive() && this.rand.nextInt(200) == 0 && getDistance((Entity)getAttackTarget()) >= 100.0D) {
+    if (!this.world.isRemote && getAttackTarget() != null && getAttackTarget().isEntityAlive() && this.rand.nextInt(200) == 0 && getDistance(getAttackTarget()) >= 100.0D) {
       this.behaviour = EnumBehaviour.CHARGING;
       this.targetX = (getAttackTarget()).posX;
       this.targetY = Flying.clampFlightY((getAttackTarget()).posY);
@@ -609,7 +609,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
           this.behaviour = EnumBehaviour.GO_HOME; 
         break;
       case LOW_HEALTH_STRATEGY:
-        if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 60.0D && this.attackInProgress != 4) {
+        if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) < 60.0D && this.attackInProgress != 4) {
           int escape = 0;
           while (escape < 50) {
             this.targetX = this.homeX + (this.rand.nextDouble() - 0.5D) * 220.0D;
@@ -657,7 +657,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
         if (Utils.getDistanceAtoB((getAttackTarget()).posX, (getAttackTarget()).posZ, this.posX, this.posZ) > 8.0D)
           this.rotationYaw = angleYaw + 180.0F; 
         if (this.ticksExisted % 2 == 0) {
-          EntityGuardianProjectile projectile = new EntityGuardianProjectile(this.world, 1, getAttackTarget(), 5.0F + this.rand.nextFloat() * 8.0F, (Entity)this);
+          EntityGuardianProjectile projectile = new EntityGuardianProjectile(this.world, 1, getAttackTarget(), 5.0F + this.rand.nextFloat() * 8.0F, this);
           projectile.setPosition(this.dragonPartHead.posX + Math.cos(((this.rotationYaw - 90.0F) / 180.0F * 3.1415927F)) * 2.0D, this.dragonPartHead.posY + 1.5D, this.dragonPartHead.posZ + Math.sin(((this.rotationYaw - 90.0F) / 180.0F * 3.1415927F)) * 2.0D);
           this.world.spawnEntity(projectile);
         } 
@@ -705,9 +705,9 @@ public class EntityChaosGuardian extends EntityEnderDragon {
         case 0:
           if (getAttackTarget() != null && Utils.getDistanceAtoB(this.posX, this.posY, this.posZ, (getAttackTarget()).posX, (getAttackTarget()).posY, (getAttackTarget()).posZ) > 10.0D) {
             if (this.attackTimer % 2 == 0) {
-              EntityGuardianProjectile projectile = new EntityGuardianProjectile(this.world, 1, getAttackTarget(), 5.0F + this.rand.nextFloat() * 8.0F, (Entity)this);
+              EntityGuardianProjectile projectile = new EntityGuardianProjectile(this.world, 1, getAttackTarget(), 5.0F + this.rand.nextFloat() * 8.0F, this);
               projectile.setPosition(this.dragonPartHead.posX, this.dragonPartHead.posY, this.dragonPartHead.posZ);
-              projectile.shooter = (Entity)this;
+              projectile.shooter = this;
               projectile.target = getAttackTarget();
               this.world.spawnEntity(projectile);
             } 
@@ -719,27 +719,27 @@ public class EntityChaosGuardian extends EntityEnderDragon {
           break;
         case 1:
           if (getAttackTarget() != null && this.attackTimer % 10 == 0) {
-            EntityGuardianProjectile projectile = new EntityGuardianProjectile(this.world, 3, getAttackTarget(), 5.0F + this.rand.nextFloat() * 2.0F, (Entity)this);
+            EntityGuardianProjectile projectile = new EntityGuardianProjectile(this.world, 3, getAttackTarget(), 5.0F + this.rand.nextFloat() * 2.0F, this);
             projectile.setPosition(this.dragonPartHead.posX, this.dragonPartHead.posY, this.dragonPartHead.posZ);
-            projectile.shooter = (Entity)this;
+            projectile.shooter = this;
             projectile.target = getAttackTarget();
             this.world.spawnEntity(projectile);
           } 
           break;
         case 2:
           if (getAttackTarget() != null && this.attackTimer % 10 == 0) {
-            EntityGuardianProjectile projectile = new EntityGuardianProjectile(this.world, 4, getAttackTarget(), 5.0F + this.rand.nextFloat() * 10.0F, (Entity)this);
+            EntityGuardianProjectile projectile = new EntityGuardianProjectile(this.world, 4, getAttackTarget(), 5.0F + this.rand.nextFloat() * 10.0F, this);
             projectile.setPosition(this.dragonPartHead.posX, this.dragonPartHead.posY, this.dragonPartHead.posZ);
-            projectile.shooter = (Entity)this;
+            projectile.shooter = this;
             projectile.target = getAttackTarget();
             this.world.spawnEntity(projectile);
           } 
           break;
         case 3:
           if (getAttackTarget() != null && this.attackTimer % 10 == 0) {
-            EntityGuardianProjectile projectile = new EntityGuardianProjectile(this.world, 5, getAttackTarget(), 5.0F + this.rand.nextFloat() * 10.0F, (Entity)this);
+            EntityGuardianProjectile projectile = new EntityGuardianProjectile(this.world, 5, getAttackTarget(), 5.0F + this.rand.nextFloat() * 10.0F, this);
             projectile.setPosition(this.dragonPartHead.posX, this.dragonPartHead.posY, this.dragonPartHead.posZ);
-            projectile.shooter = (Entity)this;
+            projectile.shooter = this;
             projectile.target = getAttackTarget();
             this.world.spawnEntity(projectile);
           } 
@@ -751,9 +751,9 @@ public class EntityChaosGuardian extends EntityEnderDragon {
           } 
           if (getAttackTarget() != null && Utils.getDistanceAtoB(this.posX, this.posY, this.posZ, (getAttackTarget()).posX, (getAttackTarget()).posY, (getAttackTarget()).posZ) > 15.0D) {
             if (this.attackTimer % 2 == 0) {
-              EntityGuardianProjectile projectile = new EntityGuardianProjectile(this.world, 2, getAttackTarget(), 5.0F + this.rand.nextFloat() * 8.0F, (Entity)this);
+              EntityGuardianProjectile projectile = new EntityGuardianProjectile(this.world, 2, getAttackTarget(), 5.0F + this.rand.nextFloat() * 8.0F, this);
               projectile.setPosition(this.dragonPartHead.posX, this.dragonPartHead.posY, this.dragonPartHead.posZ);
-              projectile.shooter = (Entity)this;
+              projectile.shooter = this;
               projectile.target = getAttackTarget();
               this.world.spawnEntity(projectile);
             } 
@@ -768,7 +768,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
             List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getAttackTarget().getEntityBoundingBox().grow(3.0D));
             for (EntityLivingBase entityLivingBase : entities) {
               if (!false)
-                fireLightning((Entity)entityLivingBase, this.dragonPartHead.posX, this.dragonPartHead.posY + 0.25D, this.dragonPartHead.posZ); 
+                fireLightning(entityLivingBase, this.dragonPartHead.posX, this.dragonPartHead.posY + 0.25D, this.dragonPartHead.posZ);
             } 
           } 
           break;
@@ -781,19 +781,19 @@ public class EntityChaosGuardian extends EntityEnderDragon {
               double d9 = (getAttackTarget()).posX - d6;
               double d10 = (getAttackTarget()).posY + 1.0D - d7;
               double d11 = (getAttackTarget()).posZ - d8;
-              this.world.playEvent((EntityPlayer)null, 1016, new BlockPos((Entity)this), 0);
-              EntityDragonFireballOther entitydragonfireball = new EntityDragonFireballOther(this.world, (EntityLivingBase)this, d9, d10, d11);
+              this.world.playEvent(null, 1016, new BlockPos(this), 0);
+              EntityDragonFireballOther entitydragonfireball = new EntityDragonFireballOther(this.world, this, d9, d10, d11);
               entitydragonfireball.posX = d6;
               entitydragonfireball.posY = d7;
               entitydragonfireball.posZ = d8;
-              this.world.spawnEntity((Entity)entitydragonfireball);
+              this.world.spawnEntity(entitydragonfireball);
             }  
           break;
         case 7:
           if (getAttackTarget() != null && this.attackTimer % 2 == 0) {
-            EntityGuardianProjectile projectile = new EntityGuardianProjectile(this.world, 1 + this.rand.nextInt(5), getAttackTarget(), 5.0F + this.rand.nextFloat() * 10.0F, (Entity)this);
+            EntityGuardianProjectile projectile = new EntityGuardianProjectile(this.world, 1 + this.rand.nextInt(5), getAttackTarget(), 5.0F + this.rand.nextFloat() * 10.0F, this);
             projectile.setPosition(this.dragonPartHead.posX, this.dragonPartHead.posY, this.dragonPartHead.posZ);
-            projectile.shooter = (Entity)this;
+            projectile.shooter = this;
             projectile.target = getAttackTarget();
             this.world.spawnEntity(projectile);
           } 
@@ -845,9 +845,9 @@ public class EntityChaosGuardian extends EntityEnderDragon {
     if (this.behaviour == EnumBehaviour.DEAD)
       return; 
     if (this.behaviour == EnumBehaviour.LOW_HEALTH_STRATEGY) {
-      this.attackInProgress = ((WeightedAttack)WeightedRandom.getRandomItem(this.rand, weightedLowHealthAttaxks)).attack;
+      this.attackInProgress = WeightedRandom.getRandomItem(this.rand, weightedLowHealthAttaxks).attack;
     } else if (this.behaviour != EnumBehaviour.FIREBOMB) {
-      this.attackInProgress = ((WeightedAttack)WeightedRandom.getRandomItem(this.rand, weightedAttacks)).attack;
+      this.attackInProgress = WeightedRandom.getRandomItem(this.rand, weightedAttacks).attack;
     } else {
       this.attackInProgress = 2;
     } 
@@ -1069,33 +1069,33 @@ public class EntityChaosGuardian extends EntityEnderDragon {
         Entity var8 = EntityList.createEntityByIDFromName(new ResourceLocation("draconicevolution:dragonheartitem"), this.world);
         this.world.spawnEntity(var8);
       } 
-      this.world.playBroadcastSound(1028, new BlockPos((Entity)this), 0);
+      this.world.playBroadcastSound(1028, new BlockPos(this), 0);
       if (getOwner() != null) {
         for (EntityPlayer entityplayer : this.world.playerEntities) {
           this.world.playSound(null, entityplayer.getPosition(), SoundEvents.ENTITY_ENDERDRAGON_DEATH, getSoundCategory(), getSoundVolume(), 1.0F);
-          entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
+          entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
         } 
-        ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("Your Chaos Guardian has fallen in battle.", new Object[0]));
+        getOwner().sendMessage(new TextComponentTranslation("Your Chaos Guardian has fallen in battle.", new Object[0]));
       } 
     } 
     if (this.deathTicks >= 180 && this.deathTicks <= 200) {
       EntityLightningBolt bolt = new EntityLightningBolt(this.world, this.homeX, (this.homeY + 1), this.homeZ, true);
       bolt.ignoreFrustumCheck = true;
-      this.world.addWeatherEffect((Entity)bolt);
+      this.world.addWeatherEffect(bolt);
     } 
     if (this.deathTicks == 200 && !this.world.isRemote) {
       int i = 200000;
       while (i > 0) {
         int j = EntityXPOrb.getXPSplit(i);
         i -= j;
-        this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+        this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
       } 
       playSound(ESound.blast, 100.0F, 0.75F);
       setDead();
       List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(200.0D));
       for (EntityLivingBase entity : entities) {
         if (!entity.isImmuneToExplosions() && !false)
-          entity.attackEntityFrom((new EntityDamageSource("explosion.player", (Entity)this)).setExplosion().setDamageBypassesArmor().setDamageIsAbsolute(), 10000.0F); 
+          entity.attackEntityFrom((new EntityDamageSource("explosion.player", this)).setExplosion().setDamageBypassesArmor().setDamageIsAbsolute(), 10000.0F);
       } 
     } 
   }

@@ -3,7 +3,6 @@ package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 import com.shinoow.abyssalcraft.client.model.entity.ModelDreadSpawn;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityGreaterDreadSpawn;
 import net.minecraft.AgeOfMinecraft.renders.LayerArrowCustomSized;
-import net.minecraft.AgeOfMinecraft.renders.LayerLearningBook;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -22,9 +21,9 @@ public class RenderGreaterDreadSpawn extends RenderLiving<EntityGreaterDreadSpaw
   private static final ResourceLocation mobTexture = new ResourceLocation("abyssalcraft:textures/model/greater_dread_spawn.png");
   
   public RenderGreaterDreadSpawn(RenderManager manager) {
-    super(manager, (ModelBase)new ModelDreadSpawn(), 1.0F);
-    addLayer((LayerRenderer)new LayerArrowCustomSized((RenderLivingBase)this, 0.5F));
-    addLayer((LayerRenderer)new LayerLearningBook(this));
+    super(manager, new ModelDreadSpawn(), 1.0F);
+    addLayer((LayerRenderer)new LayerArrowCustomSized(this, 0.5F));
+    
   }
   
   protected void preRenderScale(EntityGreaterDreadSpawn entitylivingbaseIn, float partialTickTime) {

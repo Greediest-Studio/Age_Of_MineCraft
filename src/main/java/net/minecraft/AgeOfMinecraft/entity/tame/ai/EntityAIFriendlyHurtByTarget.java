@@ -31,7 +31,7 @@ public class EntityAIFriendlyHurtByTarget extends EntityAITarget {
       List<? extends EntityCreature> list = this.taskOwner.world.getEntitiesWithinAABB(this.taskOwner.getClass(), (new AxisAlignedBB(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D)).grow(32.0D, 32.0D, 32.0D));
         for (EntityTameBase entitycreature : (Iterable<EntityTameBase>) list) {
             if (this.taskOwner != entitycreature)
-                setEntityAttackTarget((EntityCreature) entitycreature, this.taskOwner.getRevengeTarget());
+                setEntityAttackTarget(entitycreature, this.taskOwner.getRevengeTarget());
         }
     } 
     super.startExecuting();

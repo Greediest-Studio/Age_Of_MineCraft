@@ -26,12 +26,12 @@ public class LayerEversource implements LayerRenderer<EntityEversource> {
   
   public void doRenderLayer(EntityEversource entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
     this.layerModel.setModelAttributes(this.renderer.getMainModel());
-    this.layerModel.setLivingAnimations((EntityLivingBase)entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks);
+    this.layerModel.setLivingAnimations(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks);
     GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     GlStateManager.translate(0.0F, -0.06F, 0.0F);
     this.renderer.bindTexture(CROWN_AND_MEDALLION);
     this.layerModel.body.setRotationPoint(0.0F, 17.0F, -0.001F);
-    this.layerModel.render((Entity)entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+    this.layerModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
   }
   
   public boolean shouldCombineTextures() {

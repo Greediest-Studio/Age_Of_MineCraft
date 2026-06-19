@@ -64,7 +64,7 @@ public class ItemManaCollector extends ItemBEItem implements IBauble {
     if (!world.isRemote && entityIn instanceof EntityPlayer) {
       EntityPlayer player = (EntityPlayer)entityIn;
       if (!player.isSpectator()) {
-        List<Entity> list = world.getEntitiesWithinAABBExcludingEntity((Entity)player, player.getEntityBoundingBox().grow(24.0D));
+        List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().grow(24.0D));
         if (list != null && !list.isEmpty())
             for (Entity entity : list) {
                 if (entity instanceof EntityManaOrb) {
@@ -81,7 +81,7 @@ public class ItemManaCollector extends ItemBEItem implements IBauble {
                         orb.magnet = stack;
                         orb.closestPlayer = player;
                     }
-                    if (player.getDistance((Entity) orb) <= 2.0D)
+                    if (player.getDistance(orb) <= 2.0D)
                         if (orb.getMana() > 0) {
                             if (orb.getEntropy() && getEntropy(stack) < getMaxEntropy(stack)) {
                                 orb.world.playSound(null, entityIn.getPosition(), SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, entityIn.getSoundCategory(), 2.0F, 2.0F);

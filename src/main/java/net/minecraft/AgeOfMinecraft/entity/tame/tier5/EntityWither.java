@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier5;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -143,14 +142,14 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
     this.isImmuneToFire = true;
     ((PathNavigateGround)getNavigator()).setCanSwim(true);
     this.tasks.addTask(0, new AIDoNothing());
-    this.tasks.addTask(1, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 4.0D, 100.0F, 16.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIAttackRangedAlly(this, 4.0D, 50, 20.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIWanderAvoidWaterFlying((EntityCreature)this, 2.0D));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(1, new EntityAISwimming(this));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 4.0D, 100.0F, 16.0F));
+    this.tasks.addTask(3, new EntityAIAttackRangedAlly(this, 4.0D, 50, 20.0F));
+    this.tasks.addTask(3, new EntityAIWanderAvoidWaterFlying(this, 2.0D));
+    this.tasks.addTask(7, new EntityAILookIdle(this));
     this.ignoreFrustumCheck = true;
     this.experienceValue = 500;
-    this.moveHelper = (EntityMoveHelper)new EntityFlyHelper((EntityLiving)this);
+    this.moveHelper = new EntityFlyHelper(this);
   }
   
   public String getDescName() {
@@ -174,7 +173,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
     pathnavigateflying.setCanOpenDoors(true);
     pathnavigateflying.setCanFloat(true);
     pathnavigateflying.setCanEnterDoors(true);
-    return (PathNavigate)pathnavigateflying;
+    return pathnavigateflying;
   }
   
   public int getNextLevelRequirement() {
@@ -182,7 +181,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
   }
   
   public boolean hasSpawnedSkeletons() {
-    return (Boolean) getDataManager().get(SPAWNEDSKELETONS);
+    return getDataManager().get(SPAWNEDSKELETONS);
   }
   
   public void setCanSpawnSkeletons(boolean childZombie) {
@@ -410,14 +409,14 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
             List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(20.0D, 8.0D, 20.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
             for (int k1 = 0; k1 < 10 && !list.isEmpty(); k1++) {
               EntityLivingBase entitylivingbase1 = list.get(this.rand.nextInt(list.size()));
-              if (entitylivingbase1 != this && entitylivingbase1.isEntityAlive() && canEntityBeSeen((Entity)entitylivingbase1) && (!false || (entitylivingbase1 instanceof EntityTameBase && false && entitylivingbase1 != this && ((EntityTameBase)entitylivingbase1).getFakeHealth() > 0.0F && getFakeHealth() > 0.0F)) && entitylivingbase1 != getOwner())
+              if (entitylivingbase1 != this && entitylivingbase1.isEntityAlive() && canEntityBeSeen(entitylivingbase1) && (!false || (entitylivingbase1 instanceof EntityTameBase && false && entitylivingbase1 != this && ((EntityTameBase)entitylivingbase1).getFakeHealth() > 0.0F && getFakeHealth() > 0.0F)) && entitylivingbase1 != getOwner())
                 if (entitylivingbase1 instanceof EntityPlayer) {
                   if (!((EntityPlayer)entitylivingbase1).capabilities.disableDamage)
                     updateWatchedTargetId(i, entitylivingbase1.getEntityId()); 
                 } else {
                   updateWatchedTargetId(i, entitylivingbase1.getEntityId());
                 }  
-              if (entitylivingbase1 == this || !entitylivingbase1.isEntityAlive() || !canEntityBeSeen((Entity)entitylivingbase1) || false || entitylivingbase1 == getOwner())
+              if (entitylivingbase1 == this || !entitylivingbase1.isEntityAlive() || !canEntityBeSeen(entitylivingbase1) || false || entitylivingbase1 == getOwner())
                 list.remove(entitylivingbase1); 
             } 
           } 
@@ -609,29 +608,29 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
       } 
       if (isArmored()) {
         if (!hasSpawnedSkeletons() && getFakeHealth() <= 0.0F && isArmored() && this.onGround) {
-          createEngenderModExplosionFireless((Entity)this, this.posX, this.posY + getEyeHeight(), this.posZ, isHero() ? 35.0F : 7.0F, EngenderConfig.mobs.grief);
-          this.world.playBroadcastSound(1023, new BlockPos((Entity)this), 0);
+          createEngenderModExplosionFireless(this, this.posX, this.posY + getEyeHeight(), this.posZ, isHero() ? 35.0F : 7.0F, EngenderConfig.mobs.grief);
+          this.world.playBroadcastSound(1023, new BlockPos(this), 0);
           for (int a = 0; a < 4; a++) {
             EntitySkeleton entityliving = new EntitySkeleton(this.world);
-            entityliving.copyLocationAndAnglesFrom((Entity)this);
+            entityliving.copyLocationAndAnglesFrom(this);
             entityliving.rotationYawHead = entityliving.rotationYaw;
             entityliving.renderYawOffset = entityliving.rotationYaw;
-            entityliving.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityliving)), null);
+            entityliving.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityliving)), null);
             entityliving.setSkeletonType(1);
             entityliving.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
             if (entityliving.getRNG().nextInt(2) > 0)
               entityliving.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Items.STONE_SWORD)); 
-            this.world.spawnEntity((Entity)entityliving);
+            this.world.spawnEntity(entityliving);
             entityliving.setOwnerId(getOwnerId());
           } 
           setCanSpawnSkeletons(true);
         } 
         if (getRamTime() <= 0 && getAttackTarget() != null) {
           setRamTime(200);
-          faceEntity((Entity)getAttackTarget(), 180.0F, 0.0F);
+          faceEntity(getAttackTarget(), 180.0F, 0.0F);
         } 
         if (getRamTime() == 120) {
-          double d1 = (getAttackTarget() != null && getDistance((Entity)getAttackTarget()) > 24.0D) ? getDistance((Entity)getAttackTarget()) : 24.0D;
+          double d1 = (getAttackTarget() != null && getDistance(getAttackTarget()) > 24.0D) ? getDistance(getAttackTarget()) : 24.0D;
           Vec3d vec3d = getLook(1.0F);
           this.hoverX = this.posX + vec3d.x * d1;
           this.hoverZ = this.posZ + vec3d.z * d1;
@@ -641,7 +640,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
           double d0 = ((getEntityBoundingBox()).minX + (getEntityBoundingBox()).maxX) * 5.0D;
           double d1 = ((getEntityBoundingBox()).minY + (getEntityBoundingBox()).maxY) * 2.0D;
           double d2 = ((getEntityBoundingBox()).minZ + (getEntityBoundingBox()).maxZ) * 5.0D;
-          List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(5.0D));
+          List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(5.0D));
           if (!list.isEmpty())
               for (Entity e : list) {
                   if (e.isEntityAlive() && e instanceof EntityLivingBase) {
@@ -651,7 +650,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
                           double d4 = entity.posY - d1;
                           double d5 = entity.posZ - d2;
                           double d6 = d3 * d3 + d4 * d4 + d5 * d5;
-                          inflictEngenderMobDamage(entity, " was rammed into by ", DamageSource.causeMobDamage((EntityLivingBase) this), (float) getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue() * 2.0F);
+                          inflictEngenderMobDamage(entity, " was rammed into by ", DamageSource.causeMobDamage(this), (float) getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue() * 2.0F);
                           entity.renderYawOffset = entity.rotationYaw = entity.rotationYawHead = (float) MathHelper.atan2(entity.motionZ, entity.motionX) * 57.295776F - 90.0F;
                           entity.setRevengeTarget(null);
                           if (entity instanceof EntityLiving)
@@ -674,7 +673,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
                   BlockPos blockpos = new BlockPos(i3, n, l);
                   IBlockState iblockstate = this.world.getBlockState(blockpos);
                   Block block = iblockstate.getBlock();
-                  if (!block.isAir(iblockstate, (IBlockAccess)this.world, blockpos)) {
+                  if (!block.isAir(iblockstate, this.world, blockpos)) {
                     if (canDestroyBlock(block))
                       bool = (this.world.destroyBlock(blockpos, true) || bool); 
                   } 
@@ -682,7 +681,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
               } 
             } 
             if (bool)
-              this.world.playEvent((EntityPlayer)null, 1022, new BlockPos((Entity)this), 0); 
+              this.world.playEvent(null, 1022, new BlockPos(this), 0);
           } 
         } 
       } else {
@@ -739,11 +738,11 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
         this.yRotationHeads[k] = rotlerp(this.yRotationHeads[k], this.prevRenderYawOffset + this.renderYawOffset - this.prevRenderYawOffset + this.headRandomTurn[k], 2.0F);
       } 
     } 
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 512.0D && getSpecialAttackTimer() <= 0 && isHero())
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) < 512.0D && getSpecialAttackTimer() <= 0 && isHero())
       performSpecialAttack(); 
     if (isHero() && getSpecialAttackTimer() == 1400) {
-      createEngenderModExplosionFireless((Entity)this, this.posX, this.posY + getEyeHeight(), this.posZ, 7.0F, false);
-      this.world.playBroadcastSound(1023, new BlockPos((Entity)this), 0);
+      createEngenderModExplosionFireless(this, this.posX, this.posY + getEyeHeight(), this.posZ, 7.0F, false);
+      this.world.playBroadcastSound(1023, new BlockPos(this), 0);
       List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(128.0D, 128.0D, 128.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
         for (int i1 = 0; i1 < list.size(); i1++) {
@@ -773,7 +772,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
               entity.attackEntityFrom((new DamageSource("generic")).setDamageBypassesArmor().setDamageIsAbsolute(), Float.MAX_VALUE);
               if (EngenderConfig.general.useMessage && !entity.isEntityAlive() && !isWild()) {
                 entity.setDead();
-                getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + " doesn't exist anymore...", new Object[0]));
+                getOwner().sendMessage(new TextComponentTranslation(entity.getName() + " doesn't exist anymore...", new Object[0]));
               } 
             } else {
               list.remove(entity);
@@ -809,8 +808,8 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
     if (getInvulTime() > 0) {
       int i = getInvulTime() - 1;
       if (i <= 0) {
-        createEngenderModExplosionFireless((Entity)this, this.posX, this.posY + getEyeHeight(), this.posZ, isHero() ? 35.0F : 7.0F, EngenderConfig.mobs.grief);
-        this.world.playBroadcastSound(1023, new BlockPos((Entity)this), 0);
+        createEngenderModExplosionFireless(this, this.posX, this.posY + getEyeHeight(), this.posZ, isHero() ? 35.0F : 7.0F, EngenderConfig.mobs.grief);
+        this.world.playBroadcastSound(1023, new BlockPos(this), 0);
       } 
       setInvulTime(i);
       if (this.ticksExisted % 1 == 0)
@@ -859,9 +858,9 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
             List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(32.0D, 32.0D, 32.0D), Predicates.and(EntitySelectors.IS_ALIVE));
             for (int k1 = 0; k1 < 10 && !list.isEmpty(); k1++) {
               EntityLivingBase entitylivingbase = list.get(this.rand.nextInt(list.size()));
-              if (entitylivingbase != this && entitylivingbase.isEntityAlive() && canEntityBeSeen((Entity)entitylivingbase) && (!false || (getAttackTarget() != null && this.rand.nextInt(120) == 0))) {
+              if (entitylivingbase != this && entitylivingbase.isEntityAlive() && canEntityBeSeen(entitylivingbase) && (!false || (getAttackTarget() != null && this.rand.nextInt(120) == 0))) {
                 updateWatchedTargetId(i, entitylivingbase.getEntityId());
-              } else if (!entitylivingbase.isEntityAlive() || !canEntityBeSeen((Entity)entitylivingbase) || (false && this.rand.nextInt(80) == 0)) {
+              } else if (!entitylivingbase.isEntityAlive() || !canEntityBeSeen(entitylivingbase) || (false && this.rand.nextInt(80) == 0)) {
                 list.remove(entitylivingbase);
               } 
             } 
@@ -889,13 +888,13 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
                 BlockPos blockpos = new BlockPos(i3, k, l);
                 IBlockState iblockstate = this.world.getBlockState(blockpos);
                 Block block = iblockstate.getBlock();
-                if (!block.isAir(iblockstate, (IBlockAccess)this.world, blockpos) && canDestroyBlock(block))
+                if (!block.isAir(iblockstate, this.world, blockpos) && canDestroyBlock(block))
                   flag = (this.world.destroyBlock(blockpos, true) || flag); 
               } 
             } 
           } 
           if (flag)
-            this.world.playEvent((EntityPlayer)null, 1022, new BlockPos((Entity)this), 0); 
+            this.world.playEvent(null, 1022, new BlockPos(this), 0);
         } 
       } 
       if (this.ticksExisted % 20 == 0)
@@ -919,7 +918,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
       if (!p_70652_1_.isEntityAlive()) {
         heal(10.0F);
       } else {
-        applyEnchantments((EntityLivingBase)this, p_70652_1_);
+        applyEnchantments(this, p_70652_1_);
       } 
       return true;
     } 
@@ -942,7 +941,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -975,10 +974,10 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
       double d3 = getHeadX(p_82216_1_);
       double d4 = getHeadY(p_82216_1_);
       double d5 = getHeadZ(p_82216_1_);
-      EntityInvisibleFangsProjectile entitymagicmissiles = new EntityInvisibleFangsProjectile(this.world, (Entity)p_82216_2_, (EntityLivingBase)this, d3, d4, d5);
-      this.world.spawnEntity((Entity)entitymagicmissiles);
+      EntityInvisibleFangsProjectile entitymagicmissiles = new EntityInvisibleFangsProjectile(this.world, p_82216_2_, this, d3, d4, d5);
+      this.world.spawnEntity(entitymagicmissiles);
     } else {
-      launchWitherSkullToCoords(p_82216_1_, p_82216_2_.posX + p_82216_2_.motionX * p_82216_2_.motionX, p_82216_2_.posY + ((p_82216_2_.height > 8.0F) ? 7.0D : (p_82216_2_.height * 0.5D)), p_82216_2_.posZ + p_82216_2_.motionZ * p_82216_2_.motionZ, (p_82216_1_ == 0 && !p_82216_2_.canEntityBeSeen((Entity)this)));
+      launchWitherSkullToCoords(p_82216_1_, p_82216_2_.posX + p_82216_2_.motionX * p_82216_2_.motionX, p_82216_2_.posY + ((p_82216_2_.height > 8.0F) ? 7.0D : (p_82216_2_.height * 0.5D)), p_82216_2_.posZ + p_82216_2_.motionZ * p_82216_2_.motionZ, (p_82216_1_ == 0 && !p_82216_2_.canEntityBeSeen(this)));
     } 
   }
   
@@ -990,7 +989,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
     double d6 = p_82209_2_ - d3;
     double d7 = p_82209_4_ - d4;
     double d8 = p_82209_6_ - d5;
-    EntityWitherSkullOther entitywitherskull = new EntityWitherSkullOther(this.world, (EntityLivingBase)this, d6, d7, d8);
+    EntityWitherSkullOther entitywitherskull = new EntityWitherSkullOther(this.world, this, d6, d7, d8);
     if (p_82209_8_)
       entitywitherskull.setInvulnerable(true); 
     float f = (float)getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
@@ -999,7 +998,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
     entitywitherskull.posX = d3;
     entitywitherskull.posZ = d5;
     if (!this.world.isRemote)
-      this.world.spawnEntity((Entity)entitywitherskull); 
+      this.world.spawnEntity(entitywitherskull);
   }
   
   public void attackEntityWithRangedAttack(EntityLivingBase p_82196_1_, float p_82196_2_) {
@@ -1056,7 +1055,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
   }
   
   public int getHoverTime() {
-    return (Integer) this.dataManager.get(HOVERTIMER);
+    return this.dataManager.get(HOVERTIMER);
   }
   
   public void setHoverTime(int p_82215_1_) {
@@ -1064,7 +1063,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
   }
   
   public int getRamTime() {
-    return (Integer) this.dataManager.get(RAMTIMER);
+    return this.dataManager.get(RAMTIMER);
   }
   
   public void setRamTime(int p_82215_1_) {
@@ -1072,7 +1071,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
   }
   
   public int getInvulTime() {
-    return (Integer) this.dataManager.get(INVULNERABILITY_TIME);
+    return this.dataManager.get(INVULNERABILITY_TIME);
   }
   
   public void setInvulTime(int p_82215_1_) {
@@ -1080,7 +1079,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
   }
   
   public int getWatchedTargetId(int p_82203_1_) {
-    return (Integer) this.dataManager.get(HEAD_TARGETS[p_82203_1_]);
+    return this.dataManager.get(HEAD_TARGETS[p_82203_1_]);
   }
   
   public void updateWatchedTargetId(int targetOffset, int newId) {
@@ -1114,8 +1113,8 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
     setHoverTime(0);
     if (!this.world.isRemote && this.deathTicks == 120) {
       playSound(ESound.blast, 10.0F, 1.0F);
-      createEngenderModExplosionFireless((Entity)this, this.posX, this.posY + 1.0D, this.posZ, 14.0F, EngenderConfig.mobs.grief);
-      List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(128.0D));
+      createEngenderModExplosionFireless(this, this.posX, this.posY + 1.0D, this.posZ, 14.0F, EngenderConfig.mobs.grief);
+      List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(128.0D));
       this.world.playEvent(3000, getPosition(), 0);
       playSound(ESound.blast, 10.0F, 1.0F);
       if (list != null && !list.isEmpty())
@@ -1125,9 +1124,9 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
               dir = dir.normalize();
               if (entity instanceof EntityLivingBase)
                   if (entity.isEntityAlive()) {
-                      if (entity.getDistance((Entity) this) <= 16.0D) {
+                      if (entity.getDistance(this) <= 16.0D) {
                           entity.hurtResistantTime = 0;
-                          inflictEngenderMobDamage((EntityLivingBase) entity, " was blown up by ", DamageSource.causeExplosionDamage((EntityLivingBase) this), 96.0F);
+                          inflictEngenderMobDamage((EntityLivingBase) entity, " was blown up by ", DamageSource.causeExplosionDamage(this), 96.0F);
                       }
                       entity.addVelocity(dir.x * 2.5D * scale, 1.5D + this.rand.nextDouble(), dir.z * 2.5D * scale);
                   } else {
@@ -1136,11 +1135,11 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
           }
       if (!this.world.isRemote && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")) {
         int i = getExperiencePoints(this.attackingPlayer);
-        i = ForgeEventFactory.getExperienceDrop((EntityLivingBase)this, this.attackingPlayer, i);
+        i = ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
         while (i > 0) {
           int j = EntityXPOrb.getXPSplit(i);
           i -= j;
-          this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY + 8.0D, this.posZ, j));
+          this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + 8.0D, this.posZ, j));
         } 
       } 
       for (int k = 0; k < 20; k++) {
@@ -1156,9 +1155,9 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
         if (getOwner() != null) {
           for (EntityPlayer entityplayer : this.world.playerEntities) {
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
-            entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
+            entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
           } 
-          ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("Your " + getName() + " has been destroyed!", new Object[0]));
+          getOwner().sendMessage(new TextComponentTranslation("Your " + getName() + " has been destroyed!", new Object[0]));
         }   
   }
   
@@ -1171,7 +1170,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
   }
   
   public Entity[] getParts() {
-    return (Entity[])this.partArray;
+    return this.partArray;
   }
   
   public int getDamageCap() {
@@ -1179,7 +1178,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
   }
   
   public boolean attackEntityFrom(DamageSource source, float amount) {
-    return attackEntityFromPart((MultiPartEntityPart)this.mainHead, source, amount);
+    return attackEntityFromPart(this.mainHead, source, amount);
   }
   
   public boolean attackEntityFromPart(MultiPartEntityPart witherPart, DamageSource source, float damage) {

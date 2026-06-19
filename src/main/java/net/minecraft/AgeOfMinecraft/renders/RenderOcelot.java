@@ -20,9 +20,9 @@ public class RenderOcelot extends RenderLiving<EntityOcelot> {
   private static final ResourceLocation antiocelotTextures = new ResourceLocation("ageofminecraft", "textures/entities/anti/ocelot.png");
   
   public RenderOcelot(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)new ModelOcelot(), 0.4F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
-    addLayer(new LayerLearningBook(this));
+    super(renderManagerIn, new ModelOcelot(), 0.4F);
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
+    
   }
   
   protected ResourceLocation getEntityTexture(EntityOcelot entity) {

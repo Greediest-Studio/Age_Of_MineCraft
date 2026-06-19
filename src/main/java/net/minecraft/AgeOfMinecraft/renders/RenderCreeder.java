@@ -19,12 +19,12 @@ public class RenderCreeder extends RenderLiving<EntityCreeder> {
   private static final ResourceLocation spiderTextures = new ResourceLocation("ageofminecraft", "textures/entities/creeder.png");
   
   public RenderCreeder(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)new ModelCreeder(), 1.0F);
+    super(renderManagerIn, new ModelCreeder(), 1.0F);
     addLayer(new LayerCreederEyes(this));
     addLayer(new LayerCreederCharge(this));
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
-    addLayer(new LayerLearningBook(this));
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
+    addLayer(new LayerMobCape(this));
+    
   }
   
   protected void preRenderCallback(EntityCreeder entitylivingbaseIn, float partialTickTime) {

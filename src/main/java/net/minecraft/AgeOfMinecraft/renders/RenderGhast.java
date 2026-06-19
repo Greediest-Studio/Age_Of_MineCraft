@@ -40,11 +40,11 @@ public class RenderGhast extends RenderLiving<EntityGhast> {
   
   public RenderGhast(RenderManager renderManagerIn) {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, EngenderConfig.mobs.useMobTalkerModels ? 0.5F : 3.0F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, EngenderConfig.mobs.useMobTalkerModels ? 1.0F : 0.2F));
+    addLayer(new LayerArrowCustomSized(this, EngenderConfig.mobs.useMobTalkerModels ? 1.0F : 0.2F));
     addLayer(new LayerGhastEyes(this));
     addLayer(new LayerCustomHeadEngender(regularmodel.body, cmmmodel.Head));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    
+    addLayer(new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityGhast entity) {
@@ -75,7 +75,7 @@ public class RenderGhast extends RenderLiving<EntityGhast> {
   }
   
   protected void preRenderCallback(EntityGhast entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel;
+    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
     this.shadowSize = EngenderConfig.mobs.useMobTalkerModels ? 0.5F : 3.0F;
     if (!EngenderConfig.mobs.useMobTalkerModels) {
       if (entitylivingbaseIn.isBeingRidden() && entitylivingbaseIn.getControllingPassenger() != null && entitylivingbaseIn.getControllingPassenger() instanceof net.minecraft.entity.player.EntityPlayer) {

@@ -1,8 +1,7 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier5;
 
-import com.google.common.base.Predicate;
 import java.util.List;
-import javax.annotation.Nullable;
+
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
 import net.minecraft.AgeOfMinecraft.entity.tame.EnumTier;
@@ -91,7 +90,7 @@ public class EntityElderGuardian extends EntityGuardian implements Massive {
   }
   
   protected SoundEvent getDeathSound() {
-    setAttackTarget((EntityLivingBase)null);
+    setAttackTarget(null);
     if (EngenderConfig.mobs.useMobTalkerModels)
       playSound(ESound.girlDeath, getSoundVolume(), getSoundPitch() + 0.1F); 
     if (!isInWater())
@@ -128,7 +127,7 @@ public class EntityElderGuardian extends EntityGuardian implements Massive {
     if (!this.world.isRemote)
       for (int i = 0; i < 1 + this.rand.nextInt(2); i++) {
         EntityGuardian baby = new EntityGuardian(this.world);
-        baby.copyLocationAndAnglesFrom((Entity)this);
+        baby.copyLocationAndAnglesFrom(this);
         baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
         if (this.rand.nextFloat() < 0.25F) {
           baby = new EntityElderGuardian(this.world);
@@ -144,7 +143,7 @@ public class EntityElderGuardian extends EntityGuardian implements Massive {
         if (isMarried())
           for (int e = 0; e < 10 + this.rand.nextInt(10); e++)
             baby.levelUp();  
-        this.world.spawnEntity((Entity)baby);
+        this.world.spawnEntity(baby);
       }  
   }
   
@@ -175,13 +174,13 @@ public class EntityElderGuardian extends EntityGuardian implements Massive {
   }
   
   public EntityTameBase spawnBaby(EntityTameBase par1idleTimeable) {
-    return (EntityTameBase)new EntityElderGuardian(this.world);
+    return new EntityElderGuardian(this.world);
   }
   
   protected void updateAITasks() {
     super.updateAITasks();
     if ((this.ticksExisted + getEntityId()) % 200 == 0) {
-      List<EntityLivingBase> list = this.world.getEntities(EntityLivingBase.class, p_apply_1_ -> (EntityElderGuardian.this.getDistanceSq((Entity)p_apply_1_) < 2500.0D && EntityElderGuardian.this.getRNG().nextInt(20) == 0));
+      List<EntityLivingBase> list = this.world.getEntities(EntityLivingBase.class, p_apply_1_ -> (EntityElderGuardian.this.getDistanceSq(p_apply_1_) < 2500.0D && EntityElderGuardian.this.getRNG().nextInt(20) == 0));
       int j = 1;
       int k = 6000;
       int l = 1200;
@@ -200,7 +199,7 @@ public class EntityElderGuardian extends EntityGuardian implements Massive {
       } 
     } 
     if (this.ticksExisted % 20 == 0) {
-      List<EntityPlayerMP> list = this.world.getPlayers(EntityPlayerMP.class, p_apply_1_ -> (EntityElderGuardian.this.getDistanceSq((Entity)p_apply_1_) < 2500.0D));
+      List<EntityPlayerMP> list = this.world.getPlayers(EntityPlayerMP.class, p_apply_1_ -> (EntityElderGuardian.this.getDistanceSq(p_apply_1_) < 2500.0D));
       for (EntityPlayerMP entityplayermp : list) {
         Potion potion;
         if (false) {
@@ -209,10 +208,10 @@ public class EntityElderGuardian extends EntityGuardian implements Massive {
           potion = MobEffects.MINING_FATIGUE;
         } 
         if (this.ticksExisted == 40 || !entityplayermp.isPotionActive(potion) || entityplayermp.getActivePotionEffect(potion).getAmplifier() < 2 || entityplayermp.getActivePotionEffect(potion).getDuration() < 1200) {
-          entityplayermp.connection.sendPacket((Packet)new SPacketChangeGameState(10, 0.0F));
+          entityplayermp.connection.sendPacket(new SPacketChangeGameState(10, 0.0F));
           entityplayermp.addPotionEffect(new PotionEffect(potion, 6000, 2, true, false));
           entityplayermp.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 100, 0, true, false));
-          faceEntity((Entity)entityplayermp, 180.0F, getVerticalFaceSpeed());
+          faceEntity(entityplayermp, 180.0F, getVerticalFaceSpeed());
         } 
       } 
     } 

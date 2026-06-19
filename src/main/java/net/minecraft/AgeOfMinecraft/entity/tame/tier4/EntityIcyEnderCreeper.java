@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier4;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import java.util.Random;
@@ -80,11 +79,11 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
     setPathPriority(PathNodeType.WATER, -1.0F);
     setPathPriority(PathNodeType.DANGER_FIRE, -1.0F);
     setPathPriority(PathNodeType.DANGER_CACTUS, -1.0F);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.5D, 48.0F, 12.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.5D, true));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.8D, 80));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.5D, 48.0F, 12.0F));
+    this.tasks.addTask(3, new EntityAIFriendlyAttackMelee(this, 1.5D, true));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.8D, 80));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
     this.experienceValue = 10;
   }
   
@@ -125,12 +124,12 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return I18n.translateToLocal("entity." + str + ".cmm.name");
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name");
@@ -166,7 +165,7 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
     if (!this.world.isRemote)
       for (int i = 0; i < 1 + this.rand.nextInt(10); i++) {
         EntityIcyEnderCreeper baby = new EntityIcyEnderCreeper(this.world);
-        baby.copyLocationAndAnglesFrom((Entity)this);
+        baby.copyLocationAndAnglesFrom(this);
         baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
         baby.setGrowingAge(-100000);
         baby.setChild(true);
@@ -176,7 +175,7 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
         if (isMarried())
           for (int e = 0; e < 10 + this.rand.nextInt(10); e++)
             baby.levelUp();  
-        this.world.spawnEntity((Entity)baby);
+        this.world.spawnEntity(baby);
       }  
   }
   
@@ -216,15 +215,15 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
         for (EntityLivingBase entity : list) {
             if (entity != null)
                 if (!false) {
-                    teleportToEntity((Entity) entity);
-                    attackEntityAsMob((Entity) entity);
+                    teleportToEntity(entity);
+                    attackEntityAsMob(entity);
                 }
         }
     setSpecialAttackTimer(1200);
   }
   
   public void onLivingUpdate() {
-    if (getAttackTarget() != null && getAttackTarget().isEntityAlive() && getDistanceSq((Entity)getAttackTarget()) < 512.0D && getSpecialAttackTimer() <= 0 && isHero())
+    if (getAttackTarget() != null && getAttackTarget().isEntityAlive() && getDistanceSq(getAttackTarget()) < 512.0D && getSpecialAttackTimer() <= 0 && isHero())
       performSpecialAttack(); 
     if (isWet() && this.hurtResistantTime <= 10)
       attackEntityFrom((new DamageSource("onFire")).setDamageBypassesArmor().setDamageIsAbsolute().setDifficultyScaled(), 2.0F); 
@@ -232,10 +231,10 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
       if (this.ticksExisted % 400 == 0)
         playSound(SoundEvents.ENTITY_ENDERMEN_STARE, isSneaking() ? 1.0F : 2.5F, EngenderConfig.mobs.useMobTalkerModels ? 1.25F : 1.0F); 
       if ((getAttackTarget()).height <= 2.5F && getAttackTarget().isNonBoss() && getAttackTarget() instanceof EntityLiving && !(getAttackTarget() instanceof EntityTameBase)) {
-        ((EntityLiving)getAttackTarget()).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 60, 9));
-        ((EntityLiving)getAttackTarget()).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 0));
+        getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 60, 9));
+        getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 0));
         ((EntityLiving)getAttackTarget()).getLookHelper().setLookPosition((getAttackTarget()).posX + this.rand.nextDouble() * 60.0D - 30.0D, (getAttackTarget()).posY + this.rand.nextDouble() * 60.0D - 30.0D, (getAttackTarget()).posZ + this.rand.nextDouble() * 60.0D - 30.0D, 180.0F, 180.0F);
-        ((EntityLiving)getAttackTarget()).setAttackTarget((EntityLivingBase)null);
+        ((EntityLiving)getAttackTarget()).setAttackTarget(null);
         (getAttackTarget()).renderYawOffset = (getAttackTarget()).rotationYaw = (getAttackTarget()).rotationYawHead;
       } 
     } 
@@ -253,16 +252,16 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
         this.world.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
       } 
     } 
-    if (!isBeingRidden() && getGuardBlock() == null && getOwner() != null && (getDistanceSq((Entity)getOwner()) > 4096.0D || !canEntityBeSeen((Entity)getOwner())) && !this.world.isRemote) {
-      setAttackTarget((EntityLivingBase)null);
+    if (!isBeingRidden() && getGuardBlock() == null && getOwner() != null && (getDistanceSq(getOwner()) > 4096.0D || !canEntityBeSeen(getOwner())) && !this.world.isRemote) {
+      setAttackTarget(null);
       getNavigator().clearPath();
       teleportTo((getOwner()).posX, (getOwner()).posY, (getOwner()).posZ);
     } 
     if (!isBeingRidden() && getRevengeTarget() != null && getRNG().nextInt(20) == 0) {
-      if (getRevengeTarget().getDistanceSq((Entity)this) < 2.0D && !this.world.isRemote)
+      if (getRevengeTarget().getDistanceSq(this) < 2.0D && !this.world.isRemote)
         teleportRandomly(); 
-      if (getRevengeTarget().getDistanceSq((Entity)this) > 128.0D && !this.world.isRemote)
-        teleportToEntity((Entity)getRevengeTarget()); 
+      if (getRevengeTarget().getDistanceSq(this) > 128.0D && !this.world.isRemote)
+        teleportToEntity(getRevengeTarget());
     } 
     super.onLivingUpdate();
   }
@@ -295,18 +294,18 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
   }
   
   protected boolean teleportTo(double x, double y, double z) {
-    EnderTeleportEvent event = new EnderTeleportEvent((EntityLivingBase)this, x, y, z, 0.0F);
-    if (MinecraftForge.EVENT_BUS.post((Event)event))
+    EnderTeleportEvent event = new EnderTeleportEvent(this, x, y, z, 0.0F);
+    if (MinecraftForge.EVENT_BUS.post(event))
       return false; 
     boolean flag = (attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ()) && !isInLove() && !isRiding());
     if (flag) {
-      this.world.playSound((EntityPlayer)null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
+      this.world.playSound(null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
       playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
       if (!this.world.isRemote && this.rand.nextFloat() < 0.01F) {
         EntityEndermite entityendermite = new EntityEndermite(this.world);
         entityendermite.setOwnerId(getOwnerId());
         entityendermite.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
-        this.world.spawnEntity((Entity)entityendermite);
+        this.world.spawnEntity(entityendermite);
       } 
     } 
     return flag;
@@ -320,7 +319,7 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
     this.posY = y;
     this.posZ = z;
     boolean flag = false;
-    BlockPos blockpos = new BlockPos((Entity)this);
+    BlockPos blockpos = new BlockPos(this);
     World world = this.world;
     Random random = getRNG();
     if (world.isBlockLoaded(blockpos)) {
@@ -339,7 +338,7 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
         setPositionAndUpdate(this.posX, this.posY, this.posZ);
         if (isBeingRidden())
           getControllingPassenger().setPositionAndUpdate(this.posX, this.posY, this.posZ); 
-        if (world.getCollisionBoxes((Entity)this, getEntityBoundingBox()).isEmpty() && !world.containsAnyLiquid(getEntityBoundingBox()))
+        if (world.getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && !world.containsAnyLiquid(getEntityBoundingBox()))
           flag = true; 
       } 
     } 
@@ -386,7 +385,7 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null && !isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote) {
-      player.startRiding((Entity)this);
+      player.startRiding(this);
       return true;
     } 
     if (!stack.isEmpty() && stack.getItem() == Items.ENDER_EYE && (hasOwner(player) || false)) {
@@ -395,12 +394,12 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
           for (EntityTameBase entity : list) {
               if (entity != null)
                   if (false) {
-                      this.world.playSound((EntityPlayer) null, entity.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
+                      this.world.playSound(null, entity.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
                       entity.changeDimension(1);
                   }
           }
-      this.world.playSound((EntityPlayer)null, getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
-      this.world.playSound((EntityPlayer)null, player.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
+      this.world.playSound(null, getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
+      this.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
       changeDimension(1);
       player.changeDimension(1);
       return true;

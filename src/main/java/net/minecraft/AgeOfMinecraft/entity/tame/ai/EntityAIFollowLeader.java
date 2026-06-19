@@ -59,12 +59,12 @@ public class EntityAIFollowLeader extends EntityAIBase {
     if (this.theCreature.world.provider != entitylivingbase.world.provider)
       return false; 
     this.theOwner = entitylivingbase;
-    double d0 = this.theCreature.getDistance((Entity)entitylivingbase);
+    double d0 = this.theCreature.getDistance(entitylivingbase);
     return (d0 >= getMinDis() || this.theOwner.isSneaking());
   }
   
   public boolean shouldContinueExecuting() {
-    return ((this.theCreature.canFollowOwner() && this.theCreature.getDistance((Entity)this.theOwner) >= getMaxDis()) || this.theOwner.isSneaking());
+    return ((this.theCreature.canFollowOwner() && this.theCreature.getDistance(this.theOwner) >= getMaxDis()) || this.theOwner.isSneaking());
   }
   
   public void startExecuting() {
@@ -77,7 +77,7 @@ public class EntityAIFollowLeader extends EntityAIBase {
   public void resetTask() {
     this.theOwner = null;
     this.petPathfinder.clearPath();
-    this.petPathfinder.tryMoveToEntityLiving((Entity)this.theCreature, 0.0D);
+    this.petPathfinder.tryMoveToEntityLiving(this.theCreature, 0.0D);
     this.theCreature.setPathPriority(PathNodeType.WATER, this.oldWaterCost);
   }
   
@@ -101,7 +101,7 @@ public class EntityAIFollowLeader extends EntityAIBase {
       ((EntityWither)this.theCreature).updateWatchedTargetId(0, this.theOwner.getEntityId());
       if (this.theCreature.posY < Flying.MAX_FLIGHT_TARGET_Y && (this.theCreature.posY < Flying.clampFlightY(this.theOwner.posY) || (!((EntityWither)this.theCreature).isArmored() && this.theCreature.posY < Flying.clampFlightY(this.theOwner.posY + 5.0D + this.theOwner.getEyeHeight()))))
         this.theCreature.motionY += 0.5D - this.theCreature.motionY; 
-      this.theCreature.faceEntity((Entity)this.theOwner, 180.0F, 40.0F);
+      this.theCreature.faceEntity(this.theOwner, 180.0F, 40.0F);
       double d0 = this.theOwner.posX - this.theCreature.posX;
       double d2 = this.theOwner.posZ - this.theCreature.posZ;
       double d3 = d0 * d0 + d2 * d2;
@@ -119,7 +119,7 @@ public class EntityAIFollowLeader extends EntityAIBase {
     if (this.theCreature instanceof EntityCommandBlockWither) {
       if (this.theCreature.posY < Flying.MAX_FLIGHT_TARGET_Y && (this.theCreature.posY < Flying.clampFlightY(this.theOwner.posY) || (!((EntityCommandBlockWither)this.theCreature).isArmored() && this.theCreature.posY < Flying.clampFlightY(this.theOwner.posY + 5.0D + this.theOwner.getEyeHeight()))))
         this.theCreature.motionY += 0.5D - this.theCreature.motionY; 
-      this.theCreature.faceEntity((Entity)this.theOwner, 180.0F, 40.0F);
+      this.theCreature.faceEntity(this.theOwner, 180.0F, 40.0F);
       double d0 = this.theOwner.posX - this.theCreature.posX;
       double d2 = this.theOwner.posZ - this.theCreature.posZ;
       double d3 = d0 * d0 + d2 * d2;
@@ -138,22 +138,22 @@ public class EntityAIFollowLeader extends EntityAIBase {
     if (this.theCreature instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStorm)
       this.theCreature.getMoveHelper().setMoveTo(this.theOwner.lastTickPosX - vec3.x * d1, this.theOwner.lastTickPosY - this.theCreature.height - 16.0D, this.theOwner.lastTickPosZ - vec3.z * d1, this.followSpeed); 
     if (this.theCreature instanceof EntityGuardian)
-      if (((EntityGuardian)this.theCreature).isInWater()) {
+      if (this.theCreature.isInWater()) {
         this.theCreature.getMoveHelper().setMoveTo(this.theOwner.lastTickPosX - vec3.x * d1, this.theOwner.lastTickPosY, this.theOwner.lastTickPosZ - vec3.z * d1, this.followSpeed);
       } else if (!EngenderConfig.mobs.useMobTalkerModels) {
-        double d01 = this.theOwner.posX - ((EntityGuardian)this.theCreature).posX;
-        double d11 = this.theOwner.posZ - ((EntityGuardian)this.theCreature).posZ;
+        double d01 = this.theOwner.posX - this.theCreature.posX;
+        double d11 = this.theOwner.posZ - this.theCreature.posZ;
         float f2 = MathHelper.sqrt(d01 * d01 + d11 * d11);
-        ((EntityGuardian)this.theCreature).motionX = d01 / f2 * 0.5D * 0.5D + ((EntityGuardian)this.theCreature).motionX;
-        ((EntityGuardian)this.theCreature).motionZ = d11 / f2 * 0.5D * 0.5D + ((EntityGuardian)this.theCreature).motionZ;
-        ((EntityGuardian)this.theCreature).faceEntity((Entity)this.theOwner, 180.0F, 30.0F);
-        if (((EntityGuardian)this.theCreature).onGround) {
-          ((EntityGuardian)this.theCreature).motionY += 0.6D;
-          ((EntityGuardian)this.theCreature).playSound(SoundEvents.ENTITY_GUARDIAN_FLOP, 1.0F, 1.0F);
+        this.theCreature.motionX = d01 / f2 * 0.5D * 0.5D + this.theCreature.motionX;
+        this.theCreature.motionZ = d11 / f2 * 0.5D * 0.5D + this.theCreature.motionZ;
+        this.theCreature.faceEntity(this.theOwner, 180.0F, 30.0F);
+        if (this.theCreature.onGround) {
+          this.theCreature.motionY += 0.6D;
+          this.theCreature.playSound(SoundEvents.ENTITY_GUARDIAN_FLOP, 1.0F, 1.0F);
         } 
       }  
     if (!this.theCreature.isSneaking()) {
-      this.theCreature.getLookHelper().setLookPositionWithEntity((Entity)this.theOwner, 180.0F, this.theCreature.getVerticalFaceSpeed());
+      this.theCreature.getLookHelper().setLookPositionWithEntity(this.theOwner, 180.0F, this.theCreature.getVerticalFaceSpeed());
       this.theCreature.setAttackTarget(null);
     } 
     if (--this.timeToRecalcPath <= 0 || this.theCreature.isSneaking()) {
@@ -163,11 +163,11 @@ public class EntityAIFollowLeader extends EntityAIBase {
       if (this.theCreature instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntityVex)
         this.theCreature.getMoveHelper().setMoveTo(this.theOwner.lastTickPosX - vec3.x * d1, this.theOwner.lastTickPosY, this.theOwner.lastTickPosZ - vec3.z * d1, this.followSpeed); 
       if (this.theCreature instanceof EntitySlime && !EngenderConfig.mobs.useMobTalkerModels) {
-        this.theCreature.faceEntity((Entity)this.theOwner, 10.0F, 10.0F);
+        this.theCreature.faceEntity(this.theOwner, 10.0F, 10.0F);
         ((EntitySlime.SlimeMoveHelper)this.theCreature.getMoveHelper()).setDirection(this.theCreature.rotationYawHead, true);
       } 
       if (!this.petPathfinder.tryMoveToXYZ(this.theOwner.lastTickPosX - vec3.x * d1, this.theOwner.lastTickPosY, this.theOwner.lastTickPosZ - vec3.z * d1, this.followSpeed) || this.theCreature.isInWater() || this.theCreature.isInLava())
-        if (this.theCreature.getDistance((Entity)this.theOwner) >= getMinDis() + 4.0D && !this.theCreature.getLeashed()) {
+        if (this.theCreature.getDistance(this.theOwner) >= getMinDis() + 4.0D && !this.theCreature.getLeashed()) {
           int i = MathHelper.floor(this.theOwner.posX);
           int j = MathHelper.floor(this.theOwner.posZ);
           int k = MathHelper.floor(this.theOwner.world.getTopSolidOrLiquidBlock(this.theOwner.getPosition()).getY());

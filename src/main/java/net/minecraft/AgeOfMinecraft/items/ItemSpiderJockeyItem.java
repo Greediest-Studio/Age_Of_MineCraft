@@ -30,15 +30,15 @@ public class ItemSpiderJockeyItem extends ItemVanillaTier {
     entityliving.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
     entityliving.rotationYawHead = entityliving.rotationYaw;
     entityliving.renderYawOffset = entityliving.rotationYaw;
-    entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos((Entity)entityliving)), null);
+    entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), null);
     if (!worldIn.isRemote) {
-      worldIn.spawnEntity((Entity)entityliving);
+      worldIn.spawnEntity(entityliving);
       int i = 80;
       while (i > 0) {
         int j = EntityXPOrb.getXPSplit(i);
         i -= j;
         if (!worldIn.getGameRules().getBoolean("disableExpItemDrops"))
-          entityliving.world.spawnEntity((Entity)new EntityXPOrb(entityliving.world, entityliving.posX, entityliving.posY + entityliving.getEyeHeight(), entityliving.posZ, j)); 
+          entityliving.world.spawnEntity(new EntityXPOrb(entityliving.world, entityliving.posX, entityliving.posY + entityliving.getEyeHeight(), entityliving.posZ, j));
       } 
     } 
     if (entityliving != null) {
@@ -47,9 +47,9 @@ public class ItemSpiderJockeyItem extends ItemVanillaTier {
       entitymount.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
       entitymount.rotationYawHead = entitymount.rotationYaw;
       entitymount.renderYawOffset = entitymount.rotationYaw;
-      entitymount.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos((Entity)entityliving)), null);
-      worldIn.spawnEntity((Entity)entitymount);
-      entitymount.startRiding((Entity)entityliving);
+      entitymount.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), null);
+      worldIn.spawnEntity(entitymount);
+      entitymount.startRiding(entityliving);
       entitymount.setOwnerId(playerIn.getUniqueID());
       entityliving.setOwnerId(playerIn.getUniqueID());
       entityliving.playLivingSound();

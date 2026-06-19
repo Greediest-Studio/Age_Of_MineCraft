@@ -61,7 +61,7 @@ public class EntityPotionOther extends EntityPotion {
               applySplash(result, list);
             }  
           int i = potiontype.hasInstantEffect() ? 2007 : 2002;
-          this.world.playEvent(i, new BlockPos((Entity)this), PotionUtils.getColor(itemstack));
+          this.world.playEvent(i, new BlockPos(this), PotionUtils.getColor(itemstack));
           setDead();
         } 
       } else if (result.entityHit == null) {
@@ -72,7 +72,7 @@ public class EntityPotionOther extends EntityPotion {
             applySplash(result, list);
           }  
         int i = potiontype.hasInstantEffect() ? 2007 : 2002;
-        this.world.playEvent(i, new BlockPos((Entity)this), PotionUtils.getColor(itemstack));
+        this.world.playEvent(i, new BlockPos(this), PotionUtils.getColor(itemstack));
         setDead();
       } 
     } 
@@ -83,7 +83,7 @@ public class EntityPotionOther extends EntityPotion {
     List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, axisalignedbb, WATER_SENSITIVE);
     if (!list.isEmpty())
       for (EntityLivingBase entitylivingbase : list) {
-        double d0 = getDistanceSq((Entity)entitylivingbase);
+        double d0 = getDistanceSq(entitylivingbase);
         if (d0 < 16.0D && isWaterSensitiveEntity(entitylivingbase))
           entitylivingbase.attackEntityFrom(DamageSource.DROWN, 1.0F); 
       }  
@@ -95,17 +95,17 @@ public class EntityPotionOther extends EntityPotion {
     if (!list.isEmpty())
       for (EntityLivingBase entitylivingbase : list) {
         if (entitylivingbase.canBeHitWithPotion()) {
-          double d0 = getDistanceSq((Entity)entitylivingbase);
+          double d0 = getDistanceSq(entitylivingbase);
           if (d0 < 16.0D) {
             double d1 = 1.0D - Math.sqrt(d0) / 4.0D;
             if (entitylivingbase == p_190543_1_.entityHit) {
-              copyLocationAndAnglesFrom((Entity)entitylivingbase);
+              copyLocationAndAnglesFrom(entitylivingbase);
               d1 = 1.0D;
             } 
             if (false) {
               for (PotionEffect potioneffect : p_190543_2_) {
                 if (potioneffect.getPotion().isInstant()) {
-                  potioneffect.getPotion().affectEntity((Entity)this, (Entity)getThrower(), entitylivingbase, potioneffect.getAmplifier(), 0.5D);
+                  potioneffect.getPotion().affectEntity(this, getThrower(), entitylivingbase, potioneffect.getAmplifier(), 0.5D);
                   continue;
                 } 
                 if (!potioneffect.getPotion().isBadEffect())
@@ -115,14 +115,14 @@ public class EntityPotionOther extends EntityPotion {
             } 
             for (PotionEffect potioneffect : p_190543_2_) {
               if (potioneffect.getPotion().isInstant()) {
-                ((EntityTameBase)getThrower()).inflictEngenderMobDamage(entitylivingbase, " was killed by magic created by ", (new EntityDamageSource("indirectMagic", (Entity)getThrower())).setMagicDamage().setDamageBypassesArmor().setDamageIsAbsolute(), 8.0F);
+                ((EntityTameBase)getThrower()).inflictEngenderMobDamage(entitylivingbase, " was killed by magic created by ", (new EntityDamageSource("indirectMagic", getThrower())).setMagicDamage().setDamageBypassesArmor().setDamageIsAbsolute(), 8.0F);
                 continue;
               } 
               if (potioneffect.getPotion().isBadEffect() && entitylivingbase.isPotionApplicable(potioneffect)) {
                 entitylivingbase.addPotionEffect(new PotionEffect(potioneffect));
                 continue;
               } 
-              ((EntityTameBase)getThrower()).inflictEngenderMobDamage(entitylivingbase, " was killed by magic created by ", (new EntityDamageSource("indirectMagic", (Entity)getThrower())).setMagicDamage().setDamageBypassesArmor().setDamageIsAbsolute(), 8.0F);
+              ((EntityTameBase)getThrower()).inflictEngenderMobDamage(entitylivingbase, " was killed by magic created by ", (new EntityDamageSource("indirectMagic", getThrower())).setMagicDamage().setDamageBypassesArmor().setDamageIsAbsolute(), 8.0F);
             } 
           } 
         } 
@@ -143,7 +143,7 @@ public class EntityPotionOther extends EntityPotion {
     NBTTagCompound nbttagcompound = p_190542_1_.getTagCompound();
     if (nbttagcompound != null && nbttagcompound.hasKey("CustomPotionColor", 99))
       entityareaeffectcloud.setColor(nbttagcompound.getInteger("CustomPotionColor")); 
-    this.world.spawnEntity((Entity)entityareaeffectcloud);
+    this.world.spawnEntity(entityareaeffectcloud);
   }
   
   private boolean isLingering() {

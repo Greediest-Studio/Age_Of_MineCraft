@@ -23,10 +23,10 @@ public class EntityAIVindicatorBreakDoor extends EntityAIDoorInteract {
   public boolean shouldExecute() {
     if (!super.shouldExecute())
       return false; 
-    if (!this.entity.world.getBlockState(this.doorPosition).getBlock().canEntityDestroy(this.entity.world.getBlockState(this.doorPosition), (IBlockAccess)this.entity.world, this.doorPosition, (Entity)this.entity) || !ForgeEventFactory.onEntityDestroyBlock((EntityLivingBase)this.entity, this.doorPosition, this.entity.world.getBlockState(this.doorPosition)))
+    if (!this.entity.world.getBlockState(this.doorPosition).getBlock().canEntityDestroy(this.entity.world.getBlockState(this.doorPosition), this.entity.world, this.doorPosition, this.entity) || !ForgeEventFactory.onEntityDestroyBlock(this.entity, this.doorPosition, this.entity.world.getBlockState(this.doorPosition)))
       return false; 
     BlockDoor blockdoor = this.doorBlock;
-    return !BlockDoor.isOpen((IBlockAccess)this.entity.world, this.doorPosition);
+    return !BlockDoor.isOpen(this.entity.world, this.doorPosition);
   }
   
   public void startExecuting() {
@@ -38,7 +38,7 @@ public class EntityAIVindicatorBreakDoor extends EntityAIDoorInteract {
     double d0 = this.entity.getDistanceSq(this.doorPosition);
     if (this.breakingTime <= 8) {
       BlockDoor blockdoor = this.doorBlock;
-      if (!BlockDoor.isOpen((IBlockAccess)this.entity.world, this.doorPosition) && d0 < 4.0D) {
+      if (!BlockDoor.isOpen(this.entity.world, this.doorPosition) && d0 < 4.0D) {
         boolean bool = true;
         return bool;
       } 
@@ -71,7 +71,7 @@ public class EntityAIVindicatorBreakDoor extends EntityAIDoorInteract {
       this.entity.world.setBlockToAir(this.doorPosition.down());
       this.entity.playSound(ESound.heresJohnny, 2.0F, 1.0F);
       this.entity.world.playEvent(1021, this.doorPosition, 0);
-      this.entity.world.playEvent(2001, this.doorPosition, Block.getIdFromBlock((Block)this.doorBlock));
+      this.entity.world.playEvent(2001, this.doorPosition, Block.getIdFromBlock(this.doorBlock));
     } 
   }
 }

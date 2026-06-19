@@ -19,7 +19,7 @@ public class EntityAILeaderHurtByTarget extends EntityAITarget {
   private int timestamp;
   
   public EntityAILeaderHurtByTarget(EntityTameBase p_i1667_1_) {
-    super((EntityCreature)p_i1667_1_, false);
+    super(p_i1667_1_, false);
     this.theDefendingTameable = p_i1667_1_;
     setMutexBits(1);
   }
@@ -40,10 +40,10 @@ public class EntityAILeaderHurtByTarget extends EntityAITarget {
     this.theDefendingTameable.setAttackTarget(this.theOwnerAttacker); 
     EntityLivingBase entitylivingbase = this.theDefendingTameable.getOwner();
     if (this.theDefendingTameable instanceof EntityPigZombie)
-      ((EntityPigZombie)this.theDefendingTameable).becomeAngryAt((Entity)this.theOwnerAttacker); 
+      ((EntityPigZombie)this.theDefendingTameable).becomeAngryAt(this.theOwnerAttacker);
     if (this.theDefendingTameable instanceof EntityEnderDragon) {
       ((EntityEnderDragon)this.theDefendingTameable).getPhaseManager().setPhase(PhaseList.CHARGING_PLAYER);
-      ((PhaseRamAttack)((EntityEnderDragon)this.theDefendingTameable).getPhaseManager().getPhase(PhaseList.CHARGING_PLAYER)).setTarget(new Vec3d(this.theOwnerAttacker.posX, this.theOwnerAttacker.posY, this.theOwnerAttacker.posZ));
+      ((EntityEnderDragon)this.theDefendingTameable).getPhaseManager().getPhase(PhaseList.CHARGING_PLAYER).setTarget(new Vec3d(this.theOwnerAttacker.posX, this.theOwnerAttacker.posY, this.theOwnerAttacker.posZ));
     } 
     super.startExecuting();
   }

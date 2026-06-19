@@ -14,16 +14,16 @@ import net.minecraft.nbt.NBTTagCompound;
 public class EngenderRituals {
   public static void registerRituals() {
     Object[] engenderAsorah = { ACItems.transmutation_gem, new ItemStack(ACBlocks.ingot_block, 1, 1), ACItems.coralium_pearl, new ItemStack(ACBlocks.ingot_block, 1, 1), ACItems.eye_of_the_abyss, new ItemStack(ACBlocks.ingot_block, 1, 1), ACItems.coralium_pearl, new ItemStack(ACBlocks.ingot_block, 1, 1) };
-    RitualRegistry.instance().registerRitual((new NecronomiconInfusionRitual("engenderAsorah", 2, ACLib.abyssal_wasteland_id, 20000.0F, false, new ItemStack((Item)EItem.fusionItemAsorah), new ItemStack(ACItems.dreaded_gateway_key), engenderAsorah)).setNBTSensitive());
+    RitualRegistry.instance().registerRitual((new NecronomiconInfusionRitual("engenderAsorah", 2, ACLib.abyssal_wasteland_id, 20000.0F, false, new ItemStack(EItem.fusionItemAsorah), new ItemStack(ACItems.dreaded_gateway_key), engenderAsorah)).setNBTSensitive());
     Object[] engenderChagaroth = { ACItems.dread_plagued_gateway_key, new ItemStack(ACBlocks.ingot_block, 1, 2), ACItems.dreaded_shard_of_abyssalnite, new ItemStack(ACBlocks.ingot_block, 1, 2), ACItems.dreadium_katana, new ItemStack(ACBlocks.ingot_block, 1, 2), ACItems.dreaded_shard_of_abyssalnite, new ItemStack(ACBlocks.ingot_block, 1, 2) };
-    RitualRegistry.instance().registerRitual((new NecronomiconInfusionRitual("engenderChagaroth", 3, ACLib.dreadlands_id, 40000.0F, false, new ItemStack((Item)EItem.fusionItemChagaroth), new ItemStack((Item)EItem.fusionItemLesserDreadbeast), engenderChagaroth)).setNBTSensitive());
+    RitualRegistry.instance().registerRitual((new NecronomiconInfusionRitual("engenderChagaroth", 3, ACLib.dreadlands_id, 40000.0F, false, new ItemStack(EItem.fusionItemChagaroth), new ItemStack(EItem.fusionItemLesserDreadbeast), engenderChagaroth)).setNBTSensitive());
     Object[] engenderSacthoth = { ACBlocks.oblivion_deathbomb, ACItems.shard_of_oblivion, ACItems.liquid_antimatter_bucket_stack, Blocks.OBSIDIAN, ACItems.oblivion_catalyst, Blocks.OBSIDIAN, ACItems.liquid_coralium_bucket_stack, ACItems.shard_of_oblivion };
-    RitualRegistry.instance().registerRitual((new NecronomiconInfusionRitual("engenderSacthoth", 3, ACLib.dark_realm_id, 40000.0F, false, new ItemStack((Item)EItem.fusionItemSacthoth), new ItemStack(ACItems.sacthoths_soul_harvesting_blade), engenderSacthoth)).setNBTSensitive());
+    RitualRegistry.instance().registerRitual((new NecronomiconInfusionRitual("engenderSacthoth", 3, ACLib.dark_realm_id, 40000.0F, false, new ItemStack(EItem.fusionItemSacthoth), new ItemStack(ACItems.sacthoths_soul_harvesting_blade), engenderSacthoth)).setNBTSensitive());
     Object[] engenderJzahar = { ACItems.essence_of_the_gatekeeper, new ItemStack(ACBlocks.ingot_block, 1, 3), ACItems.eldritch_scale, new ItemStack(ACBlocks.ingot_block, 1, 3), ACItems.staff_of_the_gatekeeper, new ItemStack(ACBlocks.ingot_block, 1, 3), ACItems.eldritch_scale, new ItemStack(ACBlocks.ingot_block, 1, 3) };
     ItemStack abynom = new ItemStack(ACItems.abyssalnomicon);
     abynom.setTagCompound(new NBTTagCompound());
     abynom.getTagCompound().setFloat("PotEnergy", 100000.0F);
-    RitualRegistry.instance().registerRitual((new NecronomiconInfusionRitual("engenderJzahar", 4, ACLib.omothol_id, 100000.0F, false, new ItemStack((Item)EItem.fusionItemJzahar), abynom, engenderJzahar)).setNBTSensitiveSacrifice());
+    RitualRegistry.instance().registerRitual((new NecronomiconInfusionRitual("engenderJzahar", 4, ACLib.omothol_id, 100000.0F, false, new ItemStack(EItem.fusionItemJzahar), abynom, engenderJzahar)).setNBTSensitiveSacrifice());
     RitualRegistry.instance().registerRitual(new NecronomiconMobGirlBreedingRitual());
     Object[] offerings = { new ItemStack(EItem.convertingStaff, 1, 0), Blocks.IRON_BLOCK, new ItemStack(EItem.convertingStaff, 1, 0), Blocks.GOLD_BLOCK, new ItemStack(EItem.convertingStaff, 1, 0), Blocks.DIAMOND_BLOCK, new ItemStack(EItem.convertingStaff, 1, 0), Blocks.EMERALD_BLOCK };
     ItemStack gun1 = new ItemStack(EItem.peGunLevel1);

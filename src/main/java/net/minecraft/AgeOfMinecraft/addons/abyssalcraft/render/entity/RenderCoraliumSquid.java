@@ -2,7 +2,6 @@ package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityCoraliumSquid;
 import net.minecraft.AgeOfMinecraft.renders.LayerArrowCustomSized;
-import net.minecraft.AgeOfMinecraft.renders.LayerLearningBook;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelSquid;
 import net.minecraft.client.renderer.GlStateManager;
@@ -21,9 +20,9 @@ public class RenderCoraliumSquid extends RenderLiving<EntityCoraliumSquid> {
   private static final ResourceLocation SQUID_TEXTURES = new ResourceLocation("abyssalcraft", "textures/model/coraliumsquid.png");
   
   public RenderCoraliumSquid(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)new ModelSquid(), 0.7F);
-    addLayer((LayerRenderer)new LayerArrowCustomSized((RenderLivingBase)this, 1.0F));
-    addLayer((LayerRenderer)new LayerLearningBook(this));
+    super(renderManagerIn, new ModelSquid(), 0.7F);
+    addLayer((LayerRenderer)new LayerArrowCustomSized(this, 1.0F));
+    
   }
   
   protected ResourceLocation getEntityTexture(EntityCoraliumSquid entity) {

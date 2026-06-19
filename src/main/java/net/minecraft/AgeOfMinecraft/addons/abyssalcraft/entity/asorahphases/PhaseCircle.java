@@ -53,7 +53,7 @@ public class PhaseCircle extends PhaseBaseFriendly {
         d0 = entity.getDistanceSqToCenter(blockpos) / 512.0D; 
       if (entity != null && this.dragon.getRNG().nextInt(2) == 0) {
         this.dragon.getPhaseManager().setPhase(PhaseListAsorah.CHARGING_PLAYER);
-        ((PhaseRamAttack)this.dragon.getPhaseManager().getPhase(PhaseListAsorah.CHARGING_PLAYER)).setTarget(new Vec3d(entity.posX, entity.posY, entity.posZ));
+        this.dragon.getPhaseManager().getPhase(PhaseListAsorah.CHARGING_PLAYER).setTarget(new Vec3d(entity.posX, entity.posY, entity.posZ));
         return;
       } 
       if (entity != null && this.dragon.getRNG().nextInt(3) == 0) {
@@ -76,7 +76,7 @@ public class PhaseCircle extends PhaseBaseFriendly {
       k -= 12;
       k &= 0x7;
       k += 12;
-      this.currentPath = this.dragon.findPath(j, k, (PathPoint)null);
+      this.currentPath = this.dragon.findPath(j, k, null);
       if (this.currentPath != null)
         this.currentPath.incrementPathIndex(); 
     } 
@@ -86,7 +86,7 @@ public class PhaseCircle extends PhaseBaseFriendly {
   private void strafePlayer(EntityLivingBase p_188674_1_) {
     if (!false) {
       this.dragon.getPhaseManager().setPhase(PhaseListAsorah.STRAFE_PLAYER);
-      ((PhaseFireballAndStrafe)this.dragon.getPhaseManager().getPhase(PhaseListAsorah.STRAFE_PLAYER)).setTarget(p_188674_1_);
+      this.dragon.getPhaseManager().getPhase(PhaseListAsorah.STRAFE_PLAYER).setTarget(p_188674_1_);
     } 
   }
   

@@ -19,11 +19,11 @@ public class RenderEversource extends RenderLiving<EntityEversource> {
   private static final ResourceLocation chickenTextures = new ResourceLocation("textures/entity/chicken.png");
   
   public RenderEversource(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)new ModelChicken(), 0.3F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
-    addLayer(new LayerEversource((RenderLivingBase<?>)this));
+    super(renderManagerIn, new ModelChicken(), 0.3F);
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
+    addLayer(new LayerEversource(this));
     addLayer(new LayerCustomHeadEngender(((ModelChicken)this.mainModel).head, ((ModelChicken)this.mainModel).head));
-    addLayer(new LayerLearningBook(this));
+    
   }
   
   protected void preRenderCallback(EntityEversource entitylivingbaseIn, float partialTickTime) {

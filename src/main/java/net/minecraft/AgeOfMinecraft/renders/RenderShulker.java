@@ -28,11 +28,11 @@ public class RenderShulker extends RenderLiving<EntityShulker> {
   private static final ResourceLocation antiSHULKER_ENDERGOLEM_TEXTURE = new ResourceLocation("ageofminecraft", "textures/entities/anti/shulker_purple.png");
   
   public RenderShulker(RenderManager p_i46550_1_) {
-    super(p_i46550_1_, (ModelBase)new ModelShulker(), 0.75F);
+    super(p_i46550_1_, new ModelShulker(), 0.75F);
     addLayer(new HeadLayer());
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
     addLayer(new LayerCustomHeadEngender(((ModelShulker)this.mainModel).head, ((ModelShulker)this.mainModel).head));
-    addLayer(new LayerLearningBook(this));
+    
   }
   
   public void doRender(EntityShulker entity, double x, double y, double z, float entityYaw, float partialTicks) {

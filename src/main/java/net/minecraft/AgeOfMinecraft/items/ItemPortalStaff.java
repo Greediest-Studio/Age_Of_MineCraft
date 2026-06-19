@@ -78,7 +78,7 @@ public class ItemPortalStaff extends ItemBEItem {
     if (!playerIn.capabilities.isCreativeMode && !flag)
       return !flag ? new ActionResult(EnumActionResult.FAIL, itemStackIn) : new ActionResult(EnumActionResult.PASS, itemStackIn); 
     playerIn.setActiveHand(hand);
-    playerIn.world.playSound(playerIn, new BlockPos((Entity)playerIn), SoundEvents.BLOCK_ANVIL_DESTROY, SoundCategory.PLAYERS, 100.0F, 0.5F);
+    playerIn.world.playSound(playerIn, new BlockPos(playerIn), SoundEvents.BLOCK_ANVIL_DESTROY, SoundCategory.PLAYERS, 100.0F, 0.5F);
     return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
   }
   
@@ -99,7 +99,7 @@ public class ItemPortalStaff extends ItemBEItem {
     portal.playSound(ESound.portalMake, 100.0F, 1.0F);
     portal.playSound(ESound.portalAmbient, 5.0F, 1.0F);
     if (!worldIn.isRemote) {
-      worldIn.spawnEntity((Entity)portal);
+      worldIn.spawnEntity(portal);
       portal.setMetaData(stack.getMetadata());
       portal.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1000.0D + portal.getMetaData() * 500.0D);
       portal.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(20.0D + portal.getMetaData() * 5.0D);

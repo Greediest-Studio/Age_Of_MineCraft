@@ -51,7 +51,7 @@ public class EntityAIMobGirlMate extends EntityAIBase {
   }
   
   public void updateTask() {
-    if (this.theAnimal.getDistanceSq((Entity)this.theAnimal.getOwner()) < 2.0D) {
+    if (this.theAnimal.getDistanceSq(this.theAnimal.getOwner()) < 2.0D) {
       if ((this.theAnimal instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityBlaze || this.theAnimal instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityGhast || this.theAnimal instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntityMagmaCube) && !this.theAnimal.getOwner().isPotionActive(MobEffects.FIRE_RESISTANCE))
         this.theAnimal.getOwner().setFire(10); 
       if (this.spawnBabyDelay % ((this.spawnBabyDelay >= 100) ? 5 : 10) == 0) {
@@ -66,8 +66,8 @@ public class EntityAIMobGirlMate extends EntityAIBase {
       if (this.spawnBabyDelay >= 200)
         spawnBaby(); 
     } else {
-      this.theAnimal.getLookHelper().setLookPositionWithEntity((Entity)this.theAnimal.getOwner(), 10.0F, this.theAnimal.getVerticalFaceSpeed());
-      this.theAnimal.getNavigator().tryMoveToEntityLiving((Entity)this.theAnimal.getOwner(), this.moveSpeed);
+      this.theAnimal.getLookHelper().setLookPositionWithEntity(this.theAnimal.getOwner(), 10.0F, this.theAnimal.getVerticalFaceSpeed());
+      this.theAnimal.getNavigator().tryMoveToEntityLiving(this.theAnimal.getOwner(), this.moveSpeed);
       this.theAnimal.getMoveHelper().setMoveTo((this.theAnimal.getOwner()).posX, (this.theAnimal.getOwner()).posY, (this.theAnimal.getOwner()).posZ, this.moveSpeed);
     } 
   }
@@ -77,9 +77,9 @@ public class EntityAIMobGirlMate extends EntityAIBase {
     double d0 = Double.MAX_VALUE;
     EntityPlayer entityanimal = null;
     for (EntityPlayer entityanimal1 : list) {
-      if (this.theAnimal.canBeMatedWith() && this.theAnimal.getDistanceSq((Entity)entityanimal1) < d0) {
+      if (this.theAnimal.canBeMatedWith() && this.theAnimal.getDistanceSq(entityanimal1) < d0) {
         entityanimal = entityanimal1;
-        d0 = this.theAnimal.getDistanceSq((Entity)entityanimal1);
+        d0 = this.theAnimal.getDistanceSq(entityanimal1);
       } 
     } 
     return entityanimal;
@@ -105,7 +105,7 @@ public class EntityAIMobGirlMate extends EntityAIBase {
         this.world.spawnParticle(EnumParticleTypes.HEART, this.theAnimal.posX + d3, this.theAnimal.posY + d4, this.theAnimal.posZ + d5, d0, d1, d2);
       } 
       if (this.world.getGameRules().getBoolean("doMobLoot"))
-        this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.theAnimal.posX, this.theAnimal.posY, this.theAnimal.posZ, random.nextInt(15) + 5 + (int)this.theAnimal.height + (int)this.theAnimal.width + (int)this.theAnimal.getEyeHeight())); 
+        this.world.spawnEntity(new EntityXPOrb(this.world, this.theAnimal.posX, this.theAnimal.posY, this.theAnimal.posZ, random.nextInt(15) + 5 + (int)this.theAnimal.height + (int)this.theAnimal.width + (int)this.theAnimal.getEyeHeight()));
     } 
   }
 }

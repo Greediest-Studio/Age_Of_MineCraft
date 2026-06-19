@@ -41,8 +41,8 @@ public class RenderBoneAttack<T extends Entity> extends Render<T> {
     GlStateManager.enableRescaleNormal();
     switch (((EntityBoneAttack)entity).getBoneType()) {
       case 0:
-        GlStateManager.rotate(((Entity)entity).prevRotationYaw + (((Entity)entity).rotationYaw - ((Entity)entity).prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(((Entity)entity).prevRotationPitch + (((Entity)entity).rotationPitch - ((Entity)entity).prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
+        GlStateManager.rotate(entity.prevRotationYaw + (entity.rotationYaw - ((Entity)entity).prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(entity.prevRotationPitch + (entity.rotationPitch - ((Entity)entity).prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
         GlStateManager.scale(0.125F, 0.125F, 0.125F);
         break;
       default:

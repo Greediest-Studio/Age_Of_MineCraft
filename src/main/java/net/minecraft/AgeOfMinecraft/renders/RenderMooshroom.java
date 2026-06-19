@@ -20,11 +20,11 @@ public class RenderMooshroom extends RenderLiving<EntityMooshroom> {
   private static final ResourceLocation antimooshroomTextures = new ResourceLocation("ageofminecraft", "textures/entities/anti/mooshroom.png");
   
   public RenderMooshroom(RenderManager p_i46152_1_) {
-    super(p_i46152_1_, (ModelBase)new ModelCow(), 0.9F);
+    super(p_i46152_1_, new ModelCow(), 0.9F);
     addLayer(new LayerMooshroomMushroom(this));
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
     addLayer(new LayerCustomHeadEngender(((ModelCow)this.mainModel).head, ((ModelCow)this.mainModel).head));
-    addLayer(new LayerLearningBook(this));
+    
   }
   
   protected ResourceLocation getEntityTexture(EntityMooshroom p_180582_1_) {

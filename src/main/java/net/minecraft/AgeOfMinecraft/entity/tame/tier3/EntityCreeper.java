@@ -71,15 +71,15 @@ public class EntityCreeper extends EntityTameBase implements Light {
   public EntityCreeper(World worldIn) {
     super(worldIn);
     this.isOffensive = true;
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIAvoidEntitySPC((EntityCreature)this, net.minecraft.entity.passive.EntityOcelot.class, (Predicate<EntityOcelot>) p_apply_1_ -> (p_apply_1_ != null && p_apply_1_.isEntityAlive() && EntityCreeper.this.getIntelligence() < 10.0F),  6.0F, 1.0D, 1.2D));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIAvoidEntitySPC((EntityCreature)this, net.minecraft.entity.passive.EntityOcelot.class, (Predicate<EntityOcelot>) p_apply_1_ -> (p_apply_1_ != null && p_apply_1_.isEntityAlive() && EntityCreeper.this.getIntelligence() < 10.0F),  6.0F, 1.0D, 1.2D));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIOpenDoor((EntityLiving)this, true));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAICreeperSwell(this));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.0D, 32.0F, 6.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.2D, true));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.8D, 80));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAIAvoidEntitySPC(this, EntityOcelot.class, (Predicate<EntityOcelot>) p_apply_1_ -> (p_apply_1_ != null && p_apply_1_.isEntityAlive() && EntityCreeper.this.getIntelligence() < 10.0F),  6.0F, 1.0D, 1.2D));
+    this.tasks.addTask(0, new EntityAIAvoidEntitySPC(this, EntityOcelot.class, (Predicate<EntityOcelot>) p_apply_1_ -> (p_apply_1_ != null && p_apply_1_.isEntityAlive() && EntityCreeper.this.getIntelligence() < 10.0F),  6.0F, 1.0D, 1.2D));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(0, new EntityAIOpenDoor(this, true));
+    this.tasks.addTask(0, new EntityAICreeperSwell(this));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.0D, 32.0F, 6.0F));
+    this.tasks.addTask(3, new EntityAIFriendlyAttackMelee(this, 1.2D, true));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.8D, 80));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
     if (EngenderConfig.mobs.useMobTalkerModels) {
       setSize(0.45F, 1.75F);
     } else {
@@ -127,7 +127,7 @@ public class EntityCreeper extends EntityTameBase implements Light {
     if (!this.world.isRemote)
       for (int i = 0; i < 1 + this.rand.nextInt(2); i++) {
         EntityCreeper baby = new EntityCreeper(this.world);
-        baby.copyLocationAndAnglesFrom((Entity)this);
+        baby.copyLocationAndAnglesFrom(this);
         baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
         baby.setGrowingAge(-36000);
         baby.setChild(true);
@@ -135,17 +135,17 @@ public class EntityCreeper extends EntityTameBase implements Light {
         baby.setIsHero(isHero());
         baby.setOwnerId(getOwnerId());
         if (getPowered())
-          this.world.addWeatherEffect((Entity)new EntityLightningBolt(this.world, baby.posX - 0.5D, baby.posY + 1.0D, baby.posZ - 0.5D, false)); 
+          this.world.addWeatherEffect(new EntityLightningBolt(this.world, baby.posX - 0.5D, baby.posY + 1.0D, baby.posZ - 0.5D, false));
         if (isMarried())
           for (int e = 0; e < 10 + this.rand.nextInt(10); e++)
             baby.levelUp();  
-        this.world.spawnEntity((Entity)baby);
+        this.world.spawnEntity(baby);
       }  
   }
   
   public EntityTameBase getMutant() {
     if (Loader.isModLoaded("mutantbeasts"))
-      return (EntityTameBase)new EntityMutantCreeper(this.world); 
+      return new EntityMutantCreeper(this.world);
     return null;
   }
   
@@ -165,12 +165,12 @@ public class EntityCreeper extends EntityTameBase implements Light {
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return getPowered() ? I18n.translateToLocal("entity.ChargedCreeperHelpful.cmm.name") : I18n.translateToLocal("entity." + str + ".cmm.name");
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return getPowered() ? I18n.translateToLocal("entity.ChargedCreeperHelpful.name") : I18n.translateToLocal("entity." + s + ".name");
@@ -196,7 +196,7 @@ public class EntityCreeper extends EntityTameBase implements Light {
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
     super.writeEntityToNBT(tagCompound);
-    if ((Boolean) this.dataManager.get(POWERED))
+    if (this.dataManager.get(POWERED))
       tagCompound.setBoolean("powered", true); 
     tagCompound.setShort("Fuse", (short)this.fuseTime);
     tagCompound.setByte("ExplosionRadius", (byte)this.explosionRadius);
@@ -267,12 +267,12 @@ public class EntityCreeper extends EntityTameBase implements Light {
   }
   
   public float getExplosionResistance(Explosion explosionIn, World worldIn, BlockPos pos, IBlockState blockStateIn) {
-    return blockStateIn.getBlock().getExplosionResistance(worldIn, pos, (Entity)this, explosionIn) * 0.5F;
+    return blockStateIn.getBlock().getExplosionResistance(worldIn, pos, this, explosionIn) * 0.5F;
   }
   
   public void inflictEngenderMobDamage(EntityLivingBase entity, String killmessage, DamageSource attacktype, float damage) {
     if (getPowered()) {
-      this.world.addWeatherEffect((Entity)new EntityLightningBolt(this.world, entity.posX - 0.5D, entity.posY + entity.height, entity.posZ - 0.5D, true));
+      this.world.addWeatherEffect(new EntityLightningBolt(this.world, entity.posX - 0.5D, entity.posY + entity.height, entity.posZ - 0.5D, true));
       entity.onStruckByLightning(new EntityLightningBolt(this.world, entity.posX - 0.5D, entity.posY + entity.height, entity.posZ - 0.5D, true));
     } 
     super.inflictEngenderMobDamage(entity, killmessage, attacktype, damage);
@@ -281,7 +281,7 @@ public class EntityCreeper extends EntityTameBase implements Light {
   public boolean attackEntityAsMob(Entity entity) {
     if (super.attackEntityAsMob(entity)) {
       if (getPowered()) {
-        this.world.addWeatherEffect((Entity)new EntityLightningBolt(this.world, entity.posX - 0.5D, entity.posY + entity.height, entity.posZ - 0.5D, true));
+        this.world.addWeatherEffect(new EntityLightningBolt(this.world, entity.posX - 0.5D, entity.posY + entity.height, entity.posZ - 0.5D, true));
         entity.onStruckByLightning(new EntityLightningBolt(this.world, entity.posX - 0.5D, entity.posY + entity.height, entity.posZ - 0.5D, true));
       } 
       return true;
@@ -290,7 +290,7 @@ public class EntityCreeper extends EntityTameBase implements Light {
   }
   
   public boolean getPowered() {
-    return (Boolean) this.dataManager.get(POWERED);
+    return this.dataManager.get(POWERED);
   }
   
   public void setPowered(boolean powered) {
@@ -310,7 +310,7 @@ public class EntityCreeper extends EntityTameBase implements Light {
   }
   
   public int getCreeperState() {
-    return (Integer) this.dataManager.get(STATE);
+    return this.dataManager.get(STATE);
   }
   
   public void setCreeperState(int state) {
@@ -333,7 +333,7 @@ public class EntityCreeper extends EntityTameBase implements Light {
             ignite(); 
           if (!getPowered()) {
             if (this.world.canBlockSeeSky(getPosition())) {
-              this.world.addWeatherEffect((Entity)new EntityLightningBolt(this.world, this.posX - 0.5D, this.posY + 1.625D, this.posZ - 0.5D, false));
+              this.world.addWeatherEffect(new EntityLightningBolt(this.world, this.posX - 0.5D, this.posY + 1.625D, this.posZ - 0.5D, false));
             } else {
               spawnExplosionParticle();
             } 
@@ -343,7 +343,7 @@ public class EntityCreeper extends EntityTameBase implements Light {
         } else {
           ignite();
         } 
-        stack.damageItem(1, (EntityLivingBase)player);
+        stack.damageItem(1, player);
       } 
       return true;
     } 
@@ -360,11 +360,11 @@ public class EntityCreeper extends EntityTameBase implements Light {
       boolean flag = EngenderConfig.mobs.grief;
       float f = getPowered() ? 2.0F : 1.0F;
       if (getSpecialAttackTimer() <= 0 && isHero()) {
-        createEngenderModExplosionFireless((Entity)this, this.posX, this.posY + 1.0D, this.posZ, 20.0F * f, flag);
+        createEngenderModExplosionFireless(this, this.posX, this.posY + 1.0D, this.posZ, 20.0F * f, flag);
         setSpecialAttackTimer(800);
         this.motionY = 0.0D;
       } else if (getHealth() > getMaxHealth() * getIntelligence() * 0.01F || isWild()) {
-        createEngenderModExplosionFireless((Entity)this, this.posX, this.posY + 1.0D, this.posZ, this.explosionRadius * f, flag);
+        createEngenderModExplosionFireless(this, this.posX, this.posY + 1.0D, this.posZ, this.explosionRadius * f, flag);
         setDead();
         Collection<PotionEffect> collection = getActivePotionEffects();
         if (!collection.isEmpty()) {
@@ -376,10 +376,10 @@ public class EntityCreeper extends EntityTameBase implements Light {
           entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / entityareaeffectcloud.getDuration());
           for (PotionEffect potioneffect : collection)
             entityareaeffectcloud.addEffect(new PotionEffect(potioneffect)); 
-          this.world.spawnEntity((Entity)entityareaeffectcloud);
+          this.world.spawnEntity(entityareaeffectcloud);
         } 
         if (!this.world.isRemote && EngenderConfig.general.useMessage && !isWild() && getOwner() instanceof net.minecraft.entity.player.EntityPlayerMP)
-          getOwner().sendMessage((ITextComponent)new TextComponentTranslation("death.attack.self_destruct", new Object[] { getDisplayName() })); 
+          getOwner().sendMessage(new TextComponentTranslation("death.attack.self_destruct", new Object[] { getDisplayName() }));
       } 
       setCreeperState(-1);
       this.timeSinceIgnited = 0;
@@ -391,12 +391,12 @@ public class EntityCreeper extends EntityTameBase implements Light {
     super.onLivingUpdate();
     if (getPowered())
       extinguish(); 
-    if (getAttackTarget() != null && !hasIgnited() && getDistanceSq((Entity)getAttackTarget()) < 128.0D && getSpecialAttackTimer() <= 0 && isHero())
+    if (getAttackTarget() != null && !hasIgnited() && getDistanceSq(getAttackTarget()) < 128.0D && getSpecialAttackTimer() <= 0 && isHero())
       performSpecialAttack(); 
   }
   
   public boolean hasIgnited() {
-    return (Boolean) this.dataManager.get(IGNITED);
+    return this.dataManager.get(IGNITED);
   }
   
   public void ignite() {

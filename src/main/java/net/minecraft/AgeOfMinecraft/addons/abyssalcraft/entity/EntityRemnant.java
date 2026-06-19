@@ -10,7 +10,6 @@ import com.shinoow.abyssalcraft.lib.ACSounds;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -89,13 +88,13 @@ public class EntityRemnant extends EntityTameBase implements IMerchant, Undead {
   
   public EntityRemnant(World par1World) {
     super(par1World);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIFollowLeader(this, 1.2D, 24.0F, 9.0F));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 1.0D));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.2D, true));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.8D, 80));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAIWatchClosest2((EntityLiving)this, EntityJzahar.class, 8.0F, 1.0F));
-    this.tasks.addTask(10, (EntityAIBase)new EntityAIWatchClosest((EntityLiving)this, EntityLiving.class, 8.0F));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(3, new EntityAIFollowLeader(this, 1.2D, 24.0F, 9.0F));
+    this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.2D, true));
+    this.tasks.addTask(7, new EntityAIWander(this, 0.8D, 80));
+    this.tasks.addTask(8, new EntityAIWatchClosest2(this, EntityJzahar.class, 8.0F, 1.0F));
+    this.tasks.addTask(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
     this.isOffensive = true;
     setSize(0.5F, 1.95F);
   }
@@ -134,7 +133,7 @@ public class EntityRemnant extends EntityTameBase implements IMerchant, Undead {
     swingArm(EnumHand.OFF_HAND);
     boolean flag = super.attackEntityAsMob(par1Entity);
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -164,11 +163,11 @@ public class EntityRemnant extends EntityTameBase implements IMerchant, Undead {
           if (!this.world.isRemote) {
             setCustomer(player);
             player.displayVillagerTradeGui(this);
-            player.sendMessage((ITextComponent)new TextComponentString(getName() + ": " + I18n.translateToLocal("message.remnanthelpful.trade")));
+            player.sendMessage(new TextComponentString(getName() + ": " + I18n.translateToLocal("message.remnanthelpful.trade")));
             return true;
           } 
         } else if (!this.tradingPlayer.getUniqueID().equals(player.getUniqueID())) {
-          player.sendMessage((ITextComponent)new TextComponentString(getName() + ": " + I18n.translateToLocal("message.remnanthelpful.busy")));
+          player.sendMessage(new TextComponentString(getName() + ": " + I18n.translateToLocal("message.remnanthelpful.busy")));
         } 
       } else {
         advice(player);
@@ -197,7 +196,7 @@ public class EntityRemnant extends EntityTameBase implements IMerchant, Undead {
       List<EntityPlayer> players = this.world.getEntitiesWithinAABB(EntityPlayer.class, player.getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D));
       if (players != null) {
           for (EntityPlayer player1 : players) {
-              player1.sendMessage((ITextComponent) new TextComponentString(translated));
+              player1.sendMessage(new TextComponentString(translated));
           }
       } 
     } 
@@ -249,7 +248,7 @@ public class EntityRemnant extends EntityTameBase implements IMerchant, Undead {
     par1NBTTagCompound.setInteger("Money", this.wealth);
     par1NBTTagCompound.setInteger("AngerTimer", this.timer);
     if (this.tradingList != null)
-      par1NBTTagCompound.setTag("Offers", (NBTBase)this.tradingList.getRecipiesAsTags()); 
+      par1NBTTagCompound.setTag("Offers", this.tradingList.getRecipiesAsTags());
   }
   
   public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {
@@ -316,7 +315,7 @@ public class EntityRemnant extends EntityTameBase implements IMerchant, Undead {
   }
   
   public int getProfession() {
-    return (Integer) this.dataManager.get(PROFESSION);
+    return this.dataManager.get(PROFESSION);
   }
   
   public void setCustomer(EntityPlayer var1) {
@@ -362,7 +361,7 @@ public class EntityRemnant extends EntityTameBase implements IMerchant, Undead {
         addCoinTrade(list, Items.MELON, this.rand, adjustProbability(0.3F));
         addCoinTrade(list, Items.APPLE, this.rand, adjustProbability(0.3F));
         addCoinTrade(list, Items.COOKIE, this.rand, adjustProbability(0.3F));
-        addCoinTrade(list, (Item)Items.SHEARS, this.rand, adjustProbability(0.3F));
+        addCoinTrade(list, Items.SHEARS, this.rand, adjustProbability(0.3F));
         addCoinTrade(list, Items.FLINT_AND_STEEL, this.rand, adjustProbability(0.3F));
         addCoinTrade(list, ACItems.fish_on_a_plate, this.rand, adjustProbability(0.3F));
         addCoinTrade(list, Items.ARROW, this.rand, adjustProbability(0.5F));
@@ -496,11 +495,11 @@ public class EntityRemnant extends EntityTameBase implements IMerchant, Undead {
     } 
     if (list.isEmpty())
       addItemTrade(list, Items.GOLD_INGOT, this.rand, 1.0F); 
-    Collections.shuffle((List<?>)list);
+    Collections.shuffle(list);
     if (this.tradingList == null)
       this.tradingList = new MerchantRecipeList(); 
     for (int l = 0; l < par1 && l < list.size(); l++)
-      addToListWithCheck(this.tradingList, (MerchantRecipe)list.get(l)); 
+      addToListWithCheck(this.tradingList, list.get(l));
   }
   
   @SideOnly(Side.CLIENT)
@@ -511,7 +510,7 @@ public class EntityRemnant extends EntityTameBase implements IMerchant, Undead {
   }
   
   public BlockPos getPos() {
-    return new BlockPos((Entity)this);
+    return new BlockPos(this);
   }
   
   public void useRecipe(MerchantRecipe var1) {
@@ -533,12 +532,12 @@ public class EntityRemnant extends EntityTameBase implements IMerchant, Undead {
       this.wealth += var1.getItemToBuy().getCount(); 
     int i = 10 + this.rand.nextInt(10);
     if (var1.getRewardsExp())
-      this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY + 0.5D, this.posZ, i)); 
+      this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + 0.5D, this.posZ, i));
   }
   
   private void addToListWithCheck(MerchantRecipeList list, MerchantRecipe recipe) {
     for (int i = 0; i < list.size(); i++) {
-      MerchantRecipe merchantrecipe1 = (MerchantRecipe)list.get(i);
+      MerchantRecipe merchantrecipe1 = list.get(i);
       if (hasSameIDsAs(recipe, merchantrecipe1)) {
         if (hasSameItemsAs(recipe, merchantrecipe1))
           list.set(i, recipe); 
@@ -599,11 +598,11 @@ public class EntityRemnant extends EntityTameBase implements IMerchant, Undead {
       if (!par1ItemStack.isEmpty()) {
         playSound(ACSounds.remnant_yes, getSoundVolume(), getSoundPitch());
         if (getCustomer() != null)
-          getCustomer().sendMessage((ITextComponent)new TextComponentString(getName() + ": " + I18n.translateToLocal("message.remnanthelpful.trade.success"))); 
+          getCustomer().sendMessage(new TextComponentString(getName() + ": " + I18n.translateToLocal("message.remnanthelpful.trade.success")));
       } else {
         playSound(ACSounds.remnant_no, getSoundVolume(), getSoundPitch());
         if (getCustomer() != null)
-          getCustomer().sendMessage((ITextComponent)new TextComponentString(getName() + ": " + I18n.translateToLocal("message.remnanthelpful.trade.rejected"))); 
+          getCustomer().sendMessage(new TextComponentString(getName() + ": " + I18n.translateToLocal("message.remnanthelpful.trade.rejected")));
       } 
     } 
   }

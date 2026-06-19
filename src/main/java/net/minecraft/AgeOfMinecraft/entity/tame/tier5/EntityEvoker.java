@@ -67,26 +67,26 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
   public EntityEvoker(World worldIn) {
     super(worldIn);
     this.experienceValue = 50;
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIFollowLeader((EntityTameBase)this, 1.2D, 32.0F, 6.0F));
-    this.tasks.addTask(1, (EntityAIBase)new EntitySpellcasterIllager.AICastingSpell());
-    this.tasks.addTask(2, (EntityAIBase)new AIConvertingSpell());
-    this.tasks.addTask(2, (EntityAIBase)new AIReinforcingSpell());
-    this.tasks.addTask(2, (EntityAIBase)new AIPolymorphSpell());
-    this.tasks.addTask(2, (EntityAIBase)new AIWololoSpell());
-    this.tasks.addTask(2, (EntityAIBase)new AISummonSpell());
-    this.tasks.addTask(3, (EntityAIBase)new AISummonMeteorStormSpell());
-    this.tasks.addTask(3, (EntityAIBase)new AIDisintigrationRaySpell());
-    this.tasks.addTask(3, (EntityAIBase)new AILightningBoltSpell());
-    this.tasks.addTask(3, (EntityAIBase)new AIPoisonSpraySpell());
-    this.tasks.addTask(4, (EntityAIBase)new AISmallFireballSpell());
-    this.tasks.addTask(4, (EntityAIBase)new AIFireballSpell());
-    this.tasks.addTask(4, (EntityAIBase)new AIFrostRaySpell());
-    this.tasks.addTask(4, (EntityAIBase)new AIMagicMissileSpell());
-    this.tasks.addTask(5, (EntityAIBase)new AIAttackSpell());
-    this.tasks.addTask(6, (EntityAIBase)new EntityAIFriendlyAttackMelee((EntityTameBase)this, 1.0D, false));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.8D, 80));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(0, new EntityAIFollowLeader(this, 1.2D, 32.0F, 6.0F));
+    this.tasks.addTask(1, new AICastingSpell());
+    this.tasks.addTask(2, new AIConvertingSpell());
+    this.tasks.addTask(2, new AIReinforcingSpell());
+    this.tasks.addTask(2, new AIPolymorphSpell());
+    this.tasks.addTask(2, new AIWololoSpell());
+    this.tasks.addTask(2, new AISummonSpell());
+    this.tasks.addTask(3, new AISummonMeteorStormSpell());
+    this.tasks.addTask(3, new AIDisintigrationRaySpell());
+    this.tasks.addTask(3, new AILightningBoltSpell());
+    this.tasks.addTask(3, new AIPoisonSpraySpell());
+    this.tasks.addTask(4, new AISmallFireballSpell());
+    this.tasks.addTask(4, new AIFireballSpell());
+    this.tasks.addTask(4, new AIFrostRaySpell());
+    this.tasks.addTask(4, new AIMagicMissileSpell());
+    this.tasks.addTask(5, new AIAttackSpell());
+    this.tasks.addTask(6, new EntityAIFriendlyAttackMelee(this, 1.0D, false));
+    this.tasks.addTask(7, new EntityAIWander(this, 0.8D, 80));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
   }
   
   public String getDescName() {
@@ -117,7 +117,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
   }
   
   public EntityTameBase spawnBaby(EntityTameBase par1idleTimeable) {
-    return (EntityTameBase)new EntityEvoker(this.world);
+    return new EntityEvoker(this.world);
   }
   
   public float getBonusVSLight() {
@@ -133,8 +133,8 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     if (!this.world.isRemote)
       for (int i = 0; i < 1; i++) {
         EntityEvoker baby = new EntityEvoker(this.world);
-        baby.copyLocationAndAnglesFrom((Entity)this);
-        baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), (IEntityLivingData)null);
+        baby.copyLocationAndAnglesFrom(this);
+        baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
         baby.setGrowingAge(-100000);
         baby.setChild(true);
         baby.setIsAntiMob(isAntiMob());
@@ -143,7 +143,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
         if (isMarried())
           for (int e = 0; e < 10 + this.rand.nextInt(10); e++)
             baby.levelUp();  
-        this.world.spawnEntity((Entity)baby);
+        this.world.spawnEntity(baby);
       }  
   }
   
@@ -151,12 +151,12 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return I18n.translateToLocal("entity." + str + ".cmm.name");
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name");
@@ -185,13 +185,13 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     double d2 = target.posX - this.posX + vec3d.x * d1;
     double d3 = (target.getEntityBoundingBox()).minY + (target.height / 2.0F) - 0.5D + this.posY + (this.height / 2.0F);
     double d4 = target.posZ - this.posZ + vec3d.z * d1;
-    this.world.playEvent((EntityPlayer)null, 1016, new BlockPos((Entity)this), 0);
-    EntityLargeFireballOther entitylargefireball = new EntityLargeFireballOther(this.world, (EntityLivingBase)this, d2, d3, d4);
+    this.world.playEvent(null, 1016, new BlockPos(this), 0);
+    EntityLargeFireballOther entitylargefireball = new EntityLargeFireballOther(this.world, this, d2, d3, d4);
     entitylargefireball.explosionPower = 4;
     entitylargefireball.posX = this.posX + vec3d.x * d1;
     entitylargefireball.posY = this.posY + (this.height / 2.0F) + 0.5D;
     entitylargefireball.posZ = this.posZ + vec3d.z * d1;
-    this.world.spawnEntity((Entity)entitylargefireball);
+    this.world.spawnEntity(entitylargefireball);
     swingArm(EnumHand.MAIN_HAND);
   }
   
@@ -201,19 +201,19 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     double d2 = target.posX - this.posX + vec3d.x * d1;
     double d3 = (target.getEntityBoundingBox()).minY + (target.height / 2.0F) - 0.5D + this.posY + (this.height / 2.0F);
     double d4 = target.posZ - this.posZ + vec3d.z * d1;
-    this.world.playEvent((EntityPlayer)null, 1016, new BlockPos((Entity)this), 0);
-    EntitySmallFireballOther entitylargefireball = new EntitySmallFireballOther(this.world, (EntityLivingBase)this, d2, d3, d4);
+    this.world.playEvent(null, 1016, new BlockPos(this), 0);
+    EntitySmallFireballOther entitylargefireball = new EntitySmallFireballOther(this.world, this, d2, d3, d4);
     entitylargefireball.posX = this.posX + vec3d.x * d1;
     entitylargefireball.posY = this.posY + (this.height / 2.0F) + 0.5D;
     entitylargefireball.posZ = this.posZ + vec3d.z * d1;
-    this.world.spawnEntity((Entity)entitylargefireball);
+    this.world.spawnEntity(entitylargefireball);
     swingArm(EnumHand.MAIN_HAND);
   }
   
   public void attackEntityWithSpray(EntityLivingBase target, float p_82196_2_) {
     double d = 1.25D;
     Vec3d vec3d = getLook(1.0F);
-    EntityPoisonSpray entitysnowball = new EntityPoisonSpray(this.world, (EntityLivingBase)this);
+    EntityPoisonSpray entitysnowball = new EntityPoisonSpray(this.world, this);
     double d0 = target.posY + target.getEyeHeight() - 1.100000023841858D;
     double d1 = target.posX - this.posX + vec3d.x * d;
     double d2 = d0 - entitysnowball.posY;
@@ -221,7 +221,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.1F;
     entitysnowball.shoot(d1, d2 + f, d3, 1.2F, 1.0F);
     playSound(SoundEvents.BLOCK_SLIME_STEP, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
-    this.world.spawnEntity((Entity)entitysnowball);
+    this.world.spawnEntity(entitysnowball);
     swingArm(EnumHand.MAIN_HAND);
   }
   
@@ -233,7 +233,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
       double d6 = entity.posX - d3;
       double d7 = entity.posY - d4;
       double d8 = entity.posZ - d5;
-      EntityDisintigrationRay entitywitherskull = new EntityDisintigrationRay(this.world, entity, (EntityLivingBase)this, d6, d7, d8);
+      EntityDisintigrationRay entitywitherskull = new EntityDisintigrationRay(this.world, entity, this, d6, d7, d8);
       entitywitherskull.posY = d4;
       entitywitherskull.posX = d3;
       entitywitherskull.posZ = d5;
@@ -241,7 +241,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
       entitywitherskull.accelerationX = d3;
       entitywitherskull.accelerationZ = d5;
       entitywitherskull.targetEntity = entity;
-      this.world.spawnEntity((Entity)entitywitherskull);
+      this.world.spawnEntity(entitywitherskull);
     } 
   }
   
@@ -253,7 +253,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
       double d6 = entity.posX - d3;
       double d7 = entity.posY - d4;
       double d8 = entity.posZ - d5;
-      EntityFrostRay entitywitherskull = new EntityFrostRay(this.world, entity, (EntityLivingBase)this, d6, d7, d8);
+      EntityFrostRay entitywitherskull = new EntityFrostRay(this.world, entity, this, d6, d7, d8);
       entitywitherskull.posY = d4;
       entitywitherskull.posX = d3;
       entitywitherskull.posZ = d5;
@@ -261,7 +261,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
       entitywitherskull.accelerationX = d3;
       entitywitherskull.accelerationZ = d5;
       entitywitherskull.targetEntity = entity;
-      this.world.spawnEntity((Entity)entitywitherskull);
+      this.world.spawnEntity(entitywitherskull);
     } 
   }
   
@@ -278,8 +278,8 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
                     double d1 = entity.posX + (this.rand.nextFloat() * 16.0F - 8.0F);
                     double d2 = entity.posY + 20.0D + (this.rand.nextFloat() * 20.0F - 10.0F);
                     double d3 = entity.posZ + (this.rand.nextFloat() * 16.0F - 8.0F);
-                    fireLightning((Entity) entity, d1, d2, d3);
-                    this.world.addWeatherEffect((Entity) new EntityLightningBolt(this.world, entity.posX, entity.posY, entity.posZ, true));
+                    fireLightning(entity, d1, d2, d3);
+                    this.world.addWeatherEffect(new EntityLightningBolt(this.world, entity.posX, entity.posY, entity.posZ, true));
                 }
         }
     setSpecialAttackTimer(1800);
@@ -287,18 +287,18 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
   
   protected void updateAITasks() {
     super.updateAITasks();
-    if (getConvertingTarget() != null && getDistanceSq((Entity)getConvertingTarget()) > 256.0D)
-      getNavigator().tryMoveToEntityLiving((Entity)getConvertingTarget(), 1.0D); 
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) > 512.0D)
-      getNavigator().tryMoveToEntityLiving((Entity)getAttackTarget(), 1.0D); 
+    if (getConvertingTarget() != null && getDistanceSq(getConvertingTarget()) > 256.0D)
+      getNavigator().tryMoveToEntityLiving(getConvertingTarget(), 1.0D);
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) > 512.0D)
+      getNavigator().tryMoveToEntityLiving(getAttackTarget(), 1.0D);
     if (getAllyTarget() != null && !getAllyTarget().isEntityAlive())
-      setConvertingTarget((EntityTameBase)null); 
+      setConvertingTarget(null);
     if (getConvertingTarget() != null && !getConvertingTarget().isEntityAlive())
-      setConvertingTarget((EntityTameBase)null); 
+      setConvertingTarget(null);
     if (getWololoTarget() != null && !getWololoTarget().isEntityAlive())
-      setWololoTarget((EntitySheep)null); 
+      setWololoTarget(null);
     if (getAttackTarget() != null && !getAttackTarget().isEntityAlive())
-      setAttackTarget((EntityLivingBase)null); 
+      setAttackTarget(null);
   }
   
   public void onLivingUpdate() {
@@ -403,7 +403,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
       double d0 = EntityEvoker.this.posY;
       double d1 = EntityEvoker.this.posY;
       float f = (float)MathHelper.atan2(entitylivingbase.posZ - EntityEvoker.this.posZ, entitylivingbase.posX - EntityEvoker.this.posX);
-      if (EntityEvoker.this.getDistance((Entity)entitylivingbase) < 4.0D && entitylivingbase.posY <= d0 + 1.0D) {
+      if (EntityEvoker.this.getDistance(entitylivingbase) < 4.0D && entitylivingbase.posY <= d0 + 1.0D) {
         d0 = EntityEvoker.this.posY;
         d1 = EntityEvoker.this.posY;
         int i;
@@ -450,8 +450,8 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
           float j = EntityEvoker.this.renderYawOffset * 0.017453292F;
           float f1 = MathHelper.cos(j);
           float f2 = MathHelper.sin(j);
-          EntityInvisibleFangsProjectile entitymagicmissiles = new EntityInvisibleFangsProjectile(EntityEvoker.this.world, (Entity)entitylivingbase, (EntityLivingBase)EntityEvoker.this, EntityEvoker.this.posX, EntityEvoker.this.posY, EntityEvoker.this.posZ);
-          EntityEvoker.this.world.spawnEntity((Entity)entitymagicmissiles);
+          EntityInvisibleFangsProjectile entitymagicmissiles = new EntityInvisibleFangsProjectile(EntityEvoker.this.world, entitylivingbase, EntityEvoker.this, EntityEvoker.this.posX, EntityEvoker.this.posY, EntityEvoker.this.posZ);
+          EntityEvoker.this.world.spawnEntity(entitymagicmissiles);
         } 
       } 
     }
@@ -461,8 +461,8 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
       boolean flag = true;
       double d0 = 0.0D;
       if (flag && !EntityEvoker.this.world.isRemote) {
-        EntityEvokerFangOther entityevokerfangs = new EntityEvokerFangOther(EntityEvoker.this.world, p_190876_1_, blockpos.getY() + d0, p_190876_3_, p_190876_9_, p_190876_10_, (EntityLivingBase)EntityEvoker.this);
-        EntityEvoker.this.world.spawnEntity((Entity)entityevokerfangs);
+        EntityEvokerFangOther entityevokerfangs = new EntityEvokerFangOther(EntityEvoker.this.world, p_190876_1_, blockpos.getY() + d0, p_190876_3_, p_190876_9_, p_190876_10_, EntityEvoker.this);
+        EntityEvoker.this.world.spawnEntity(entityevokerfangs);
       } 
     }
     
@@ -483,7 +483,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     public boolean shouldExecute() {
       if (!super.shouldExecute())
         return false; 
-      if (EntityEvoker.this.getAttackTarget() != null && EntityEvoker.this.getDistance((Entity)EntityEvoker.this.getAttackTarget()) > 45.72D && EntityEvoker.this.getDistanceSq((Entity)EntityEvoker.this.getAttackTarget()) < 45.0D)
+      if (EntityEvoker.this.getAttackTarget() != null && EntityEvoker.this.getDistance(EntityEvoker.this.getAttackTarget()) > 45.72D && EntityEvoker.this.getDistanceSq(EntityEvoker.this.getAttackTarget()) < 45.0D)
         return false; 
       return (EntityEvoker.this.getLevel() >= 3);
     }
@@ -523,7 +523,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     public boolean shouldExecute() {
       if (!super.shouldExecute())
         return false; 
-      if (EntityEvoker.this.getAttackTarget() != null && EntityEvoker.this.getDistance((Entity)EntityEvoker.this.getAttackTarget()) > 36.576D)
+      if (EntityEvoker.this.getAttackTarget() != null && EntityEvoker.this.getDistance(EntityEvoker.this.getAttackTarget()) > 36.576D)
         return false; 
       return (EntityEvoker.this.getLevel() >= 1);
     }
@@ -563,7 +563,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     public boolean shouldExecute() {
       if (!super.shouldExecute())
         return false; 
-      if (EntityEvoker.this.getAttackTarget() != null && EntityEvoker.this.getDistance((Entity)EntityEvoker.this.getAttackTarget()) > 9.144D)
+      if (EntityEvoker.this.getAttackTarget() != null && EntityEvoker.this.getDistance(EntityEvoker.this.getAttackTarget()) > 9.144D)
         return false; 
       return (EntityEvoker.this.getLevel() >= 2);
     }
@@ -603,7 +603,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     public boolean shouldExecute() {
       if (!super.shouldExecute())
         return false; 
-      if (EntityEvoker.this.getAttackTarget() != null && EntityEvoker.this.getDistance((Entity)EntityEvoker.this.getAttackTarget()) > 36.576D)
+      if (EntityEvoker.this.getAttackTarget() != null && EntityEvoker.this.getDistance(EntityEvoker.this.getAttackTarget()) > 36.576D)
         return false; 
       return (EntityEvoker.this.getLevel() >= 5);
     }
@@ -625,13 +625,13 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
       if (!entitylivingbase.world.isRemote && entitylivingbase != null && entitylivingbase.isEntityAlive())
         for (int i = 0; i < (EntityEvoker.this.isHero() ? 18 : 9); i++) {
           if (!EntityEvoker.this.world.isRemote) {
-            EntityMagicMissile entitymagicmissiles = new EntityMagicMissile(EntityEvoker.this.world, (Entity)entitylivingbase, (EntityLivingBase)EntityEvoker.this, EntityEvoker.this.posX, EntityEvoker.this.posY + 2.0D, EntityEvoker.this.posZ);
+            EntityMagicMissile entitymagicmissiles = new EntityMagicMissile(EntityEvoker.this.world, entitylivingbase, EntityEvoker.this, EntityEvoker.this.posX, EntityEvoker.this.posY + 2.0D, EntityEvoker.this.posZ);
             entitymagicmissiles.posY = EntityEvoker.this.posY + 2.0D;
             Random random = new Random();
             entitymagicmissiles.motionX += random.nextDouble() * 2.0D - 1.0D;
             entitymagicmissiles.motionY += random.nextDouble() * 2.0D;
             entitymagicmissiles.motionZ += random.nextDouble() * 2.0D - 1.0D;
-            EntityEvoker.this.world.spawnEntity((Entity)entitymagicmissiles);
+            EntityEvoker.this.world.spawnEntity(entitymagicmissiles);
           } 
         }  
     }
@@ -653,7 +653,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     public boolean shouldExecute() {
       if (!super.shouldExecute())
         return false; 
-      if (EntityEvoker.this.getAttackTarget() != null && EntityEvoker.this.getDistance((Entity)EntityEvoker.this.getAttackTarget()) > 18.288D)
+      if (EntityEvoker.this.getAttackTarget() != null && EntityEvoker.this.getDistance(EntityEvoker.this.getAttackTarget()) > 18.288D)
         return false; 
       return (EntityEvoker.this.getLevel() >= 20);
     }
@@ -682,7 +682,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
         double d1 = EntityEvoker.this.posX - (f2 * 0.4F);
         double d2 = EntityEvoker.this.posY + 1.25D;
         double d3 = EntityEvoker.this.posZ + (f1 * 0.4F);
-        EntityEvoker.this.fireRay((Entity)entitylivingbase, d1, d2, d3);
+        EntityEvoker.this.fireRay(entitylivingbase, d1, d2, d3);
       } 
     }
     
@@ -703,7 +703,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     public boolean shouldExecute() {
       if (!super.shouldExecute())
         return false; 
-      if (EntityEvoker.this.getAttackTarget() != null && EntityEvoker.this.getDistance((Entity)EntityEvoker.this.getAttackTarget()) > 18.288D)
+      if (EntityEvoker.this.getAttackTarget() != null && EntityEvoker.this.getDistance(EntityEvoker.this.getAttackTarget()) > 18.288D)
         return false; 
       return (EntityEvoker.this.getLevel() >= 15);
     }
@@ -732,7 +732,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
         double d1 = EntityEvoker.this.posX - (f2 * 0.4F);
         double d2 = EntityEvoker.this.posY + 1.25D;
         double d3 = EntityEvoker.this.posZ + (f1 * 0.4F);
-        EntityEvoker.this.fireCone((Entity)entitylivingbase, d1, d2, d3);
+        EntityEvoker.this.fireCone(entitylivingbase, d1, d2, d3);
       } 
     }
     
@@ -753,7 +753,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     public boolean shouldExecute() {
       if (!super.shouldExecute())
         return false; 
-      if (EntityEvoker.this.getAttackTarget() != null && EntityEvoker.this.getDistance((Entity)EntityEvoker.this.getAttackTarget()) > ((EntityEvoker.this.isHero() && EntityEvoker.this.getSpecialAttackTimer() <= 0) ? 64.0D : 30.48D))
+      if (EntityEvoker.this.getAttackTarget() != null && EntityEvoker.this.getDistance(EntityEvoker.this.getAttackTarget()) > ((EntityEvoker.this.isHero() && EntityEvoker.this.getSpecialAttackTimer() <= 0) ? 64.0D : 30.48D))
         return false; 
       return (EntityEvoker.this.getLevel() >= 10);
     }
@@ -785,7 +785,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
           double d1 = EntityEvoker.this.posX - (f2 * 0.4F);
           double d2 = EntityEvoker.this.posY + 1.25D;
           double d3 = EntityEvoker.this.posZ + (f1 * 0.4F);
-          EntityEvoker.this.fireLightning((Entity)entitylivingbase, d1, d2, d3);
+          EntityEvoker.this.fireLightning(entitylivingbase, d1, d2, d3);
         } 
       } 
     }
@@ -839,127 +839,127 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
         case 1:
           if (EntityEvoker.this.getLevel() >= 10) {
             for (int j = 0; j < (4 + EntityEvoker.this.rand.nextInt(6)) * (EntityEvoker.this.isHero() ? 2 : 1); j++) {
-              BlockPos blockpos = (new BlockPos((Entity)EntityEvoker.this)).add(-3 + EntityEvoker.this.rand.nextInt(6), EntityEvoker.this.rand.nextInt(4), -3 + EntityEvoker.this.rand.nextInt(6));
+              BlockPos blockpos = (new BlockPos(EntityEvoker.this)).add(-3 + EntityEvoker.this.rand.nextInt(6), EntityEvoker.this.rand.nextInt(4), -3 + EntityEvoker.this.rand.nextInt(6));
               EntityZombie entityvex = new EntityZombie(EntityEvoker.this.world);
               entityvex.moveToBlockPosAndAngles(blockpos, 0.0F, 0.0F);
-              entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(blockpos), (IEntityLivingData)null);
+              entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(blockpos), null);
               if (!EntityEvoker.this.isWild())
                 entityvex.setOwnerId(EntityEvoker.this.getOwnerId()); 
               entityvex.setLimitedLife((int)(EntityEvoker.this.getIntelligence() * (Math.max(EntityEvoker.this.getLevel(), 10))));
               entityvex.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 4000));
               entityvex.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 4000));
-              EntityEvoker.this.world.spawnEntity((Entity)entityvex);
+              EntityEvoker.this.world.spawnEntity(entityvex);
             } 
             return;
           } 
         case 2:
           if (EntityEvoker.this.getLevel() >= 20) {
             for (int j = 0; j < (2 + EntityEvoker.this.rand.nextInt(6)) * (EntityEvoker.this.isHero() ? 2 : 1); j++) {
-              BlockPos blockpos = (new BlockPos((Entity)EntityEvoker.this)).add(-3 + EntityEvoker.this.rand.nextInt(6), EntityEvoker.this.rand.nextInt(4), -3 + EntityEvoker.this.rand.nextInt(6));
+              BlockPos blockpos = (new BlockPos(EntityEvoker.this)).add(-3 + EntityEvoker.this.rand.nextInt(6), EntityEvoker.this.rand.nextInt(4), -3 + EntityEvoker.this.rand.nextInt(6));
               EntitySkeleton entityvex = new EntitySkeleton(EntityEvoker.this.world);
               entityvex.moveToBlockPosAndAngles(blockpos, 0.0F, 0.0F);
-              entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(blockpos), (IEntityLivingData)null);
+              entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(blockpos), null);
               if (!EntityEvoker.this.isWild())
                 entityvex.setOwnerId(EntityEvoker.this.getOwnerId()); 
               entityvex.setLimitedLife((int)(EntityEvoker.this.getIntelligence() * (Math.max(EntityEvoker.this.getLevel(), 10))));
               entityvex.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 4000));
               entityvex.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 4000));
-              EntityEvoker.this.world.spawnEntity((Entity)entityvex);
+              EntityEvoker.this.world.spawnEntity(entityvex);
             } 
             return;
           } 
         case 3:
           if (EntityEvoker.this.getLevel() >= 50) {
             for (int j = 0; j < (2 + EntityEvoker.this.rand.nextInt(4)) * (EntityEvoker.this.isHero() ? 2 : 1); j++) {
-              BlockPos blockpos = (new BlockPos((Entity)EntityEvoker.this)).add(-3 + EntityEvoker.this.rand.nextInt(6), EntityEvoker.this.rand.nextInt(4), -3 + EntityEvoker.this.rand.nextInt(6));
+              BlockPos blockpos = (new BlockPos(EntityEvoker.this)).add(-3 + EntityEvoker.this.rand.nextInt(6), EntityEvoker.this.rand.nextInt(4), -3 + EntityEvoker.this.rand.nextInt(6));
               EntityBlaze entityvex = new EntityBlaze(EntityEvoker.this.world);
               entityvex.moveToBlockPosAndAngles(blockpos, 0.0F, 0.0F);
-              entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(blockpos), (IEntityLivingData)null);
+              entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(blockpos), null);
               if (!EntityEvoker.this.isWild())
                 entityvex.setOwnerId(EntityEvoker.this.getOwnerId()); 
               entityvex.setLimitedLife((int)(EntityEvoker.this.getIntelligence() * (Math.max(EntityEvoker.this.getLevel(), 10))));
               entityvex.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 4000));
               entityvex.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 4000));
-              EntityEvoker.this.world.spawnEntity((Entity)entityvex);
+              EntityEvoker.this.world.spawnEntity(entityvex);
             } 
             return;
           } 
         case 4:
           if (EntityEvoker.this.getLevel() >= 100) {
             for (int j = 0; j < (2 + EntityEvoker.this.rand.nextInt(2)) * (EntityEvoker.this.isHero() ? 2 : 1); j++) {
-              BlockPos blockpos = (new BlockPos((Entity)EntityEvoker.this)).add(-3 + EntityEvoker.this.rand.nextInt(6), EntityEvoker.this.rand.nextInt(4), -3 + EntityEvoker.this.rand.nextInt(6));
+              BlockPos blockpos = (new BlockPos(EntityEvoker.this)).add(-3 + EntityEvoker.this.rand.nextInt(6), EntityEvoker.this.rand.nextInt(4), -3 + EntityEvoker.this.rand.nextInt(6));
               EntityEnderman entityvex = new EntityEnderman(EntityEvoker.this.world);
               entityvex.moveToBlockPosAndAngles(blockpos, 0.0F, 0.0F);
-              entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(blockpos), (IEntityLivingData)null);
+              entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(blockpos), null);
               if (!EntityEvoker.this.isWild())
                 entityvex.setOwnerId(EntityEvoker.this.getOwnerId()); 
               entityvex.setLimitedLife((int)(EntityEvoker.this.getIntelligence() * (Math.max(EntityEvoker.this.getLevel(), 10))));
               entityvex.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 4000));
               entityvex.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 4000));
-              EntityEvoker.this.world.spawnEntity((Entity)entityvex);
+              EntityEvoker.this.world.spawnEntity(entityvex);
             } 
             return;
           } 
         case 5:
           if (EntityEvoker.this.getLevel() >= 150) {
             for (int j = 0; j < 2 * (EntityEvoker.this.isHero() ? 2 : 1); j++) {
-              BlockPos blockpos = (new BlockPos((Entity)EntityEvoker.this)).add(-3 + EntityEvoker.this.rand.nextInt(6), EntityEvoker.this.rand.nextInt(4), -3 + EntityEvoker.this.rand.nextInt(6));
+              BlockPos blockpos = (new BlockPos(EntityEvoker.this)).add(-3 + EntityEvoker.this.rand.nextInt(6), EntityEvoker.this.rand.nextInt(4), -3 + EntityEvoker.this.rand.nextInt(6));
               EntityIceGolem entityvex = new EntityIceGolem(EntityEvoker.this.world);
               entityvex.moveToBlockPosAndAngles(blockpos, 0.0F, 0.0F);
-              entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(blockpos), (IEntityLivingData)null);
+              entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(blockpos), null);
               if (!EntityEvoker.this.isWild())
                 entityvex.setOwnerId(EntityEvoker.this.getOwnerId()); 
               entityvex.setLimitedLife((int)(EntityEvoker.this.getIntelligence() * (Math.max(EntityEvoker.this.getLevel(), 10))));
               entityvex.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 4000));
               entityvex.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 4000));
-              EntityEvoker.this.world.spawnEntity((Entity)entityvex);
+              EntityEvoker.this.world.spawnEntity(entityvex);
             } 
             return;
           } 
         case 6:
           if (EntityEvoker.this.getLevel() >= 200) {
             for (int j = 0; j < 2 * (EntityEvoker.this.isHero() ? 2 : 1); j++) {
-              BlockPos blockpos = (new BlockPos((Entity)EntityEvoker.this)).add(-3 + EntityEvoker.this.rand.nextInt(6), EntityEvoker.this.rand.nextInt(4), -3 + EntityEvoker.this.rand.nextInt(6));
+              BlockPos blockpos = (new BlockPos(EntityEvoker.this)).add(-3 + EntityEvoker.this.rand.nextInt(6), EntityEvoker.this.rand.nextInt(4), -3 + EntityEvoker.this.rand.nextInt(6));
               EntityMagmaGolem entityvex = new EntityMagmaGolem(EntityEvoker.this.world);
               entityvex.moveToBlockPosAndAngles(blockpos, 0.0F, 0.0F);
-              entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(blockpos), (IEntityLivingData)null);
+              entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(blockpos), null);
               if (!EntityEvoker.this.isWild())
                 entityvex.setOwnerId(EntityEvoker.this.getOwnerId()); 
               entityvex.setLimitedLife((int)(EntityEvoker.this.getIntelligence() * (Math.max(EntityEvoker.this.getLevel(), 10))));
               entityvex.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 4000));
               entityvex.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 4000));
-              EntityEvoker.this.world.spawnEntity((Entity)entityvex);
+              EntityEvoker.this.world.spawnEntity(entityvex);
             } 
             return;
           } 
         case 7:
           if (EntityEvoker.this.getLevel() >= 300) {
-            BlockPos blockpos = (new BlockPos((Entity)EntityEvoker.this)).add(-3 + EntityEvoker.this.rand.nextInt(6), EntityEvoker.this.rand.nextInt(4), -3 + EntityEvoker.this.rand.nextInt(6));
+            BlockPos blockpos = (new BlockPos(EntityEvoker.this)).add(-3 + EntityEvoker.this.rand.nextInt(6), EntityEvoker.this.rand.nextInt(4), -3 + EntityEvoker.this.rand.nextInt(6));
             EntityWither entityvex = new EntityWither(EntityEvoker.this.world);
             entityvex.moveToBlockPosAndAngles(blockpos, 0.0F, 0.0F);
-            entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(blockpos), (IEntityLivingData)null);
+            entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(blockpos), null);
             if (!EntityEvoker.this.isWild())
               entityvex.setOwnerId(EntityEvoker.this.getOwnerId()); 
             entityvex.setLimitedLife((int)(EntityEvoker.this.getIntelligence() * (Math.max(EntityEvoker.this.getLevel(), 10))));
             entityvex.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 4000));
             entityvex.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 4000));
-            EntityEvoker.this.world.spawnEntity((Entity)entityvex);
+            EntityEvoker.this.world.spawnEntity(entityvex);
             return;
           } 
           break;
       } 
       for (int i = 0; i < (4 + EntityEvoker.this.rand.nextInt(8)) * (EntityEvoker.this.isHero() ? 2 : 1); i++) {
-        BlockPos blockpos = (new BlockPos((Entity)EntityEvoker.this)).add(-3 + EntityEvoker.this.rand.nextInt(6), EntityEvoker.this.rand.nextInt(4), -3 + EntityEvoker.this.rand.nextInt(6));
+        BlockPos blockpos = (new BlockPos(EntityEvoker.this)).add(-3 + EntityEvoker.this.rand.nextInt(6), EntityEvoker.this.rand.nextInt(4), -3 + EntityEvoker.this.rand.nextInt(6));
         EntityVex entityvex = new EntityVex(EntityEvoker.this.world);
         entityvex.moveToBlockPosAndAngles(blockpos, 0.0F, 0.0F);
-        entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(blockpos), (IEntityLivingData)null);
+        entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(blockpos), null);
         if (!EntityEvoker.this.isWild())
           entityvex.setOwnerId(EntityEvoker.this.getOwnerId()); 
         entityvex.setBoundOrigin(blockpos);
         entityvex.setLimitedLife((int)(EntityEvoker.this.getIntelligence() * (Math.max(EntityEvoker.this.getLevel(), 10))));
         entityvex.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 4000));
         entityvex.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 4000));
-        EntityEvoker.this.world.spawnEntity((Entity)entityvex);
+        EntityEvoker.this.world.spawnEntity(entityvex);
       } 
     }
     
@@ -996,7 +996,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     }
     
     protected void castSpell() {
-      List<Entity> list = EntityEvoker.this.world.getEntitiesWithinAABBExcludingEntity((Entity)EntityEvoker.this, EntityEvoker.this.getEntityBoundingBox().grow(64.0D));
+      List<Entity> list = EntityEvoker.this.world.getEntitiesWithinAABBExcludingEntity(EntityEvoker.this, EntityEvoker.this.getEntityBoundingBox().grow(64.0D));
       if (list != null && !list.isEmpty())
           for (Entity entity : list) {
               if (entity != null && entity instanceof EntityLivingBase && !false) {
@@ -1006,14 +1006,14 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
                   double d4 = entity.posX - d1;
                   double d5 = entity.posY - d2;
                   double d6 = entity.posZ - d3;
-                  EntityLargeFireballOther entitylargefireball = new EntityLargeFireballOther(EntityEvoker.this.world, (EntityLivingBase) EntityEvoker.this, d4, d5, d6);
-                  EntityEvoker.this.world.playEvent((EntityPlayer) null, 1016, new BlockPos((Entity) entitylargefireball), 0);
+                  EntityLargeFireballOther entitylargefireball = new EntityLargeFireballOther(EntityEvoker.this.world, EntityEvoker.this, d4, d5, d6);
+                  EntityEvoker.this.world.playEvent(null, 1016, new BlockPos(entitylargefireball), 0);
                   entitylargefireball.explosionPower = 8;
                   entitylargefireball.posX = d1;
                   entitylargefireball.posY = d2;
                   entitylargefireball.posZ = d3;
                   if (!EntityEvoker.this.world.isRemote)
-                      EntityEvoker.this.world.spawnEntity((Entity) entitylargefireball);
+                      EntityEvoker.this.world.spawnEntity(entitylargefireball);
               }
           }
     }
@@ -1054,7 +1054,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     
     public void resetTask() {
       super.resetTask();
-      EntityEvoker.this.setWololoTarget((EntitySheep)null);
+      EntityEvoker.this.setWololoTarget(null);
     }
     
     protected void castSpell() {
@@ -1123,14 +1123,14 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     public void resetTask() {
       super.resetTask();
       if (EntityEvoker.this.getConvertingTarget() != null && !EntityEvoker.this.getConvertingTarget().isWild())
-        EntityEvoker.this.setConvertingTarget((EntityTameBase)null); 
+        EntityEvoker.this.setConvertingTarget(null);
     }
     
     protected void castSpell() {
       EntityTameBase entitysheep = EntityEvoker.this.getConvertingTarget();
       if (entitysheep != null && entitysheep.isEntityAlive()) {
         entitysheep.spawnExplosionParticle();
-        entitysheep.getNavigator().tryMoveToEntityLiving((Entity)EntityEvoker.this, 1.2D);
+        entitysheep.getNavigator().tryMoveToEntityLiving(EntityEvoker.this, 1.2D);
         entitysheep.incrementConversion((EntityPlayer)EntityEvoker.this.getOwner());
         for (int i1 = 0; i1 < EntityEvoker.this.getLevel() / 10 + 1; i1++)
           entitysheep.incrementConversion((EntityPlayer)EntityEvoker.this.getOwner()); 
@@ -1190,7 +1190,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     
     public void resetTask() {
       super.resetTask();
-      EntityEvoker.this.setAllyTarget((EntityTameBase)null);
+      EntityEvoker.this.setAllyTarget(null);
     }
     
     protected void castSpell() {
@@ -1225,19 +1225,19 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
           EntityEvoker.this.getOwner().addPotionEffect(new PotionEffect(MobEffects.SATURATION, 20));
           EntityEvoker.this.getOwner().addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 1000 * EntityEvoker.this.getLevel()));
           if ((entitysheep instanceof EntityPig && !((EntityPig)entitysheep).getSaddled()) || (entitysheep instanceof EntityCreeper && !((EntityCreeper)entitysheep).getPowered())) {
-            entitysheep.onStruckByLightning((EntityLightningBolt)null);
-            entitysheep.world.addWeatherEffect((Entity)new EntityLightningBolt(entitysheep.world, entitysheep.posX - 0.5D, entitysheep.posY, entitysheep.posZ - 0.5D, true));
+            entitysheep.onStruckByLightning(null);
+            entitysheep.world.addWeatherEffect(new EntityLightningBolt(entitysheep.world, entitysheep.posX - 0.5D, entitysheep.posY, entitysheep.posZ - 0.5D, true));
           } 
           if (entitysheep instanceof EntityRabbit && ((EntityRabbit)entitysheep).getRabbitType() != 99) {
             ((EntityRabbit)entitysheep).setRabbitType(99);
             entitysheep.ticksExisted = 1;
-            entitysheep.world.addWeatherEffect((Entity)new EntityLightningBolt(entitysheep.world, entitysheep.posX - 0.5D, entitysheep.posY, entitysheep.posZ - 0.5D, true));
+            entitysheep.world.addWeatherEffect(new EntityLightningBolt(entitysheep.world, entitysheep.posX - 0.5D, entitysheep.posY, entitysheep.posZ - 0.5D, true));
           } 
           if (entitysheep instanceof EntitySlime && ((EntitySlime)entitysheep).getSlimeSize() <= 1) {
             ((EntitySlime)entitysheep).setSlimeSize((EntityEvoker.this.rand.nextInt(4) == 0) ? 4 : 2);
             entitysheep.ticksExisted = 1;
             entitysheep.playSound(SoundEvents.ENTITY_GENERIC_SMALL_FALL, 2.0F, 1.0F);
-            entitysheep.world.addWeatherEffect((Entity)new EntityLightningBolt(entitysheep.world, entitysheep.posX - 0.5D, entitysheep.posY, entitysheep.posZ - 0.5D, true));
+            entitysheep.world.addWeatherEffect(new EntityLightningBolt(entitysheep.world, entitysheep.posX - 0.5D, entitysheep.posY, entitysheep.posZ - 0.5D, true));
           } 
           resetTask();
         }  
@@ -1286,8 +1286,8 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     protected void castSpell() {
       if (EntityEvoker.this.getLevel() >= 300) {
         EntityEnderDragon entityvex = new EntityEnderDragon(EntityEvoker.this.world);
-        entityvex.copyLocationAndAnglesFrom((Entity)EntityEvoker.this);
-        entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(EntityEvoker.this.getPosition()), (IEntityLivingData)null);
+        entityvex.copyLocationAndAnglesFrom(EntityEvoker.this);
+        entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(EntityEvoker.this.getPosition()), null);
         entityvex.setOwnerId(EntityEvoker.this.getOwnerId());
         entityvex.setIsHero(EntityEvoker.this.isHero());
         entityvex.setLastChance(EntityEvoker.this.hasLastChance());
@@ -1301,12 +1301,12 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
         entityvex.renderYawOffset = entityvex.rotationYaw = entityvex.rotationYawHead + 180.0F;
         NBTTagCompound tag = EntityEvoker.this.serializeNBT();
         entityvex.polymorpherData = tag;
-        EntityEvoker.this.world.spawnEntity((Entity)entityvex);
-        EntityEvoker.this.world.removeEntity((Entity)EntityEvoker.this);
+        EntityEvoker.this.world.spawnEntity(entityvex);
+        EntityEvoker.this.world.removeEntity(EntityEvoker.this);
       } else if (EntityEvoker.this.getLevel() < 300 && EntityEvoker.this.getLevel() >= 200) {
         EntityWither entityvex = new EntityWither(EntityEvoker.this.world);
-        entityvex.copyLocationAndAnglesFrom((Entity)EntityEvoker.this);
-        entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(EntityEvoker.this.getPosition()), (IEntityLivingData)null);
+        entityvex.copyLocationAndAnglesFrom(EntityEvoker.this);
+        entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(EntityEvoker.this.getPosition()), null);
         entityvex.setOwnerId(EntityEvoker.this.getOwnerId());
         entityvex.setIsHero(EntityEvoker.this.isHero());
         entityvex.setLastChance(EntityEvoker.this.hasLastChance());
@@ -1319,12 +1319,12 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
         entityvex.setCustomNameTag(EntityEvoker.this.getName());
         NBTTagCompound tag = EntityEvoker.this.serializeNBT();
         entityvex.polymorpherData = tag;
-        EntityEvoker.this.world.spawnEntity((Entity)entityvex);
-        EntityEvoker.this.world.removeEntity((Entity)EntityEvoker.this);
+        EntityEvoker.this.world.spawnEntity(entityvex);
+        EntityEvoker.this.world.removeEntity(EntityEvoker.this);
       } else if (EntityEvoker.this.getLevel() < 200 && EntityEvoker.this.getLevel() >= 100) {
         EntityGiant entityvex = new EntityGiant(EntityEvoker.this.world);
-        entityvex.copyLocationAndAnglesFrom((Entity)EntityEvoker.this);
-        entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(EntityEvoker.this.getPosition()), (IEntityLivingData)null);
+        entityvex.copyLocationAndAnglesFrom(EntityEvoker.this);
+        entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(EntityEvoker.this.getPosition()), null);
         entityvex.setOwnerId(EntityEvoker.this.getOwnerId());
         entityvex.setIsHero(EntityEvoker.this.isHero());
         entityvex.setLastChance(EntityEvoker.this.hasLastChance());
@@ -1337,12 +1337,12 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
         entityvex.setCustomNameTag(EntityEvoker.this.getName());
         NBTTagCompound tag = EntityEvoker.this.serializeNBT();
         entityvex.polymorpherData = tag;
-        EntityEvoker.this.world.spawnEntity((Entity)entityvex);
-        EntityEvoker.this.world.removeEntity((Entity)EntityEvoker.this);
+        EntityEvoker.this.world.spawnEntity(entityvex);
+        EntityEvoker.this.world.removeEntity(EntityEvoker.this);
       } else {
         EntityIronGolem entityvex = new EntityIronGolem(EntityEvoker.this.world);
-        entityvex.copyLocationAndAnglesFrom((Entity)EntityEvoker.this);
-        entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(EntityEvoker.this.getPosition()), (IEntityLivingData)null);
+        entityvex.copyLocationAndAnglesFrom(EntityEvoker.this);
+        entityvex.onInitialSpawn(EntityEvoker.this.world.getDifficultyForLocation(EntityEvoker.this.getPosition()), null);
         entityvex.setOwnerId(EntityEvoker.this.getOwnerId());
         entityvex.setIsHero(EntityEvoker.this.isHero());
         entityvex.setLastChance(EntityEvoker.this.hasLastChance());
@@ -1355,8 +1355,8 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
         entityvex.setCustomNameTag(EntityEvoker.this.getName());
         NBTTagCompound tag = EntityEvoker.this.serializeNBT();
         entityvex.polymorpherData = tag;
-        EntityEvoker.this.world.spawnEntity((Entity)entityvex);
-        EntityEvoker.this.world.removeEntity((Entity)EntityEvoker.this);
+        EntityEvoker.this.world.spawnEntity(entityvex);
+        EntityEvoker.this.world.removeEntity(EntityEvoker.this);
       } 
     }
     

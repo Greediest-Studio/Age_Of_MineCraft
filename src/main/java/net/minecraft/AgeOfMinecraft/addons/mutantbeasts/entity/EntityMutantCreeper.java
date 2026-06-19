@@ -79,10 +79,10 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
     this.tasks.addTask(1, new JumpGoal());
     this.tasks.addTask(1, new SpawnMinionsGoal());
     this.tasks.addTask(1, new ChargeAttackGoal());
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.3D, 64.0F, 12.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.3D, true));
-    this.tasks.addTask(6, (EntityAIBase)new EntityAIWanderAvoidWater((EntityCreature)this, 1.0D));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.3D, 64.0F, 12.0F));
+    this.tasks.addTask(3, new EntityAIFriendlyAttackMelee(this, 1.3D, true));
+    this.tasks.addTask(6, new EntityAIWanderAvoidWater(this, 1.0D));
+    this.tasks.addTask(7, new EntityAILookIdle(this));
   }
   
   public TextFormatting getTextFormat() {
@@ -143,29 +143,29 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
   }
   
   public boolean getPowered() {
-    return (((Byte) this.dataManager.get(STATUS) & 0x1) != 0);
+    return ((this.dataManager.get(STATUS) & 0x1) != 0);
   }
   
   private void setPowered(boolean powered) {
-    byte b0 = (Byte) this.dataManager.get(STATUS);
+    byte b0 = this.dataManager.get(STATUS);
     this.dataManager.set(STATUS, powered ? 1 : (byte) (b0 & 0xFFFFFFFE));
   }
   
   public boolean isJumpAttacking() {
-    return (((Byte) this.dataManager.get(STATUS) & 0x2) != 0);
+    return ((this.dataManager.get(STATUS) & 0x2) != 0);
   }
   
   private void setJumpAttacking(boolean jumping) {
-    byte b0 = (Byte) this.dataManager.get(STATUS);
+    byte b0 = this.dataManager.get(STATUS);
     this.dataManager.set(STATUS, jumping ? (byte) (b0 | 0x2) : (byte) (b0 & 0xFFFFFFFD));
   }
   
   public boolean isCharging() {
-    return (((Byte) this.dataManager.get(STATUS) & 0x4) != 0);
+    return ((this.dataManager.get(STATUS) & 0x4) != 0);
   }
   
   public void setCharging(boolean flag) {
-    byte b0 = (Byte) this.dataManager.get(STATUS);
+    byte b0 = this.dataManager.get(STATUS);
     this.dataManager.set(STATUS, flag ? (byte) (b0 | 0x4) : (byte) (b0 & 0xFFFFFFFB));
   }
   
@@ -181,7 +181,7 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
   public boolean attackEntityAsMob(Entity entity) {
     if (super.attackEntityAsMob(entity)) {
       if (getPowered()) {
-        this.world.addWeatherEffect((Entity)new EntityLightningBolt(this.world, entity.posX - 0.5D, entity.posY + entity.height, entity.posZ - 0.5D, true));
+        this.world.addWeatherEffect(new EntityLightningBolt(this.world, entity.posX - 0.5D, entity.posY + entity.height, entity.posZ - 0.5D, true));
         entity.onStruckByLightning(new EntityLightningBolt(this.world, entity.posX - 0.5D, entity.posY + entity.height, entity.posZ - 0.5D, true));
       } 
       return true;
@@ -198,7 +198,7 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
   }
   
   protected PathNavigate createNavigator(World worldIn) {
-    return (PathNavigate)new MBGroundPathNavigator((EntityLiving)this, worldIn);
+    return new MBGroundPathNavigator(this, worldIn);
   }
   
   public void fall(float distance, float damageMultiplier) {}
@@ -210,7 +210,7 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
     if (this.world.getDifficulty() == EnumDifficulty.HARD)
       amount *= 1.5D; 
     if (!entity.isEntityAlive() && entity instanceof EntityLivingBase) {
-      ((EntityLivingBase)entity).prevRenderYawOffset = ((EntityLivingBase)entity).renderYawOffset = ((EntityLivingBase)entity).prevRotationYaw = ((EntityLivingBase)entity).rotationYaw = ((EntityLivingBase)entity).prevRotationYawHead = ((EntityLivingBase)entity).rotationYawHead = this.rotationYawHead;
+      ((EntityLivingBase)entity).prevRenderYawOffset = ((EntityLivingBase)entity).renderYawOffset = entity.prevRotationYaw = ((EntityLivingBase)entity).rotationYaw = ((EntityLivingBase)entity).prevRotationYawHead = ((EntityLivingBase)entity).rotationYawHead = this.rotationYawHead;
       float xRatio = MathHelper.sin(this.rotationYawHead * 0.017453292F);
       float zRatio = -MathHelper.cos(this.rotationYawHead * 0.017453292F);
       entity.isAirBorne = true;
@@ -231,20 +231,20 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
         if (hasOwner(player))
           if (!getPowered()) {
             if (this.world.canBlockSeeSky(getPosition())) {
-              this.world.addWeatherEffect((Entity)new EntityLightningBolt(this.world, this.posX - 0.5D, this.posY + 1.625D, this.posZ - 0.5D, false));
+              this.world.addWeatherEffect(new EntityLightningBolt(this.world, this.posX - 0.5D, this.posY + 1.625D, this.posZ - 0.5D, false));
             } else {
               spawnExplosionParticle();
             } 
           } else {
             setCharging(true);
           }  
-        stack.damageItem(1, (EntityLivingBase)player);
+        stack.damageItem(1, player);
       } 
       return true;
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -271,7 +271,7 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
     } 
     if (isCharging()) {
       if (!source.isMagicDamage() && source.getImmediateSource() instanceof EntityLivingBase)
-        source.getImmediateSource().attackEntityFrom(DamageSource.causeThornsDamage((Entity)this), 2.0F); 
+        source.getImmediateSource().attackEntityFrom(DamageSource.causeThornsDamage(this), 2.0F);
       if (!this.world.isRemote && amount > 0.0F && source.getImmediateSource() != null && super.attackEntityFrom(source, amount))
         this.chargeHits--; 
     } 
@@ -299,7 +299,7 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
       if (isJumpAttacking()) {
         if (this.onGround) {
           setJumpAttacking(false);
-          createEngenderModExplosionFireless((Entity)this, this.posX, this.posY + 1.0D, this.posZ, getPowered() ? 10.0F : 5.0F, EngenderConfig.mobs.grief);
+          createEngenderModExplosionFireless(this, this.posX, this.posY + 1.0D, this.posZ, getPowered() ? 10.0F : 5.0F, EngenderConfig.mobs.grief);
         } 
       } else if (isEntityAlive() && !isAIDisabled() && isEntityInsideOpaqueBlock() && this.ticksExisted % 30 == 0) {
         setJumpAttacking(true);
@@ -332,7 +332,7 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
   protected void onDeathUpdate() {
     float explosionPower = getPowered() ? 12.0F : 8.0F;
     float f1 = explosionPower * 1.5F;
-    for (Entity entity : this.world.getEntitiesInAABBexcluding((Entity)this, getEntityBoundingBox().grow(f1), EntitySelectors.CAN_AI_TARGET)) {
+    for (Entity entity : this.world.getEntitiesInAABBexcluding(this, getEntityBoundingBox().grow(f1), EntitySelectors.CAN_AI_TARGET)) {
       double x = this.posX - entity.posX;
       double y = this.posY - entity.posY;
       double z = this.posZ - entity.posZ;
@@ -346,21 +346,21 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
     super.onDeathUpdate();
     if (this.deathTime >= 100) {
       if (!this.world.isRemote) {
-        createEngenderModExplosion((Entity)this, this.posX, this.posY + 1.0D, this.posZ, explosionPower, isBurning(), EngenderConfig.mobs.grief);
+        createEngenderModExplosion(this, this.posX, this.posY + 1.0D, this.posZ, explosionPower, isBurning(), EngenderConfig.mobs.grief);
         if (!this.world.isRemote && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")) {
           int i = getExperiencePoints(this.attackingPlayer);
-          i = ForgeEventFactory.getExperienceDrop((EntityLivingBase)this, this.attackingPlayer, i);
+          i = ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
           while (i > 0) {
             int j = EntityXPOrb.getXPSplit(i);
             i -= j;
-            this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY + getEyeHeight(), this.posZ, j));
+            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + getEyeHeight(), this.posZ, j));
           } 
           this.experienceValue = 0;
         } 
-        EntityUtil.spawnLingeringCloud((EntityLivingBase)this);
+        EntityUtil.spawnLingeringCloud(this);
         CreeperMinionEggEntity egg = new CreeperMinionEggEntity(this.world);
         egg.setPosition(this.posX, this.posY, this.posZ);
-        this.world.spawnEntity((Entity)egg);
+        this.world.spawnEntity(egg);
       } 
       super.onDeath(this.deathCause);
       setDead();
@@ -381,7 +381,7 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
   
   public float getExplosionResistance(Explosion explosionIn, World worldIn, BlockPos pos, IBlockState blockStateIn) {
     float f = super.getExplosionResistance(explosionIn, worldIn, pos, blockStateIn);
-    return (getPowered() && EntityWither.canDestroyBlock(blockStateIn.getBlock()) && ForgeEventFactory.onEntityDestroyBlock((EntityLivingBase)this, pos, blockStateIn)) ? Math.min(0.8F, f) : f;
+    return (getPowered() && EntityWither.canDestroyBlock(blockStateIn.getBlock()) && ForgeEventFactory.onEntityDestroyBlock(this, pos, blockStateIn)) ? Math.min(0.8F, f) : f;
   }
   
   public boolean getCanSpawnHere() {
@@ -433,7 +433,7 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
   
   class SpawnMinionsGoal extends EntityAIBase {
     public boolean shouldExecute() {
-      return (EntityMutantCreeper.this.getAttackTarget() != null && EntityMutantCreeper.this.getDistanceSq((Entity)EntityMutantCreeper.this.getAttackTarget()) <= 1024.0D && EntityMutantCreeper.this.onGround && !EntityMutantCreeper.this.isCharging()) ? ((EntityMutantCreeper.this.rand.nextFloat() >= 0.99F)) : false;
+      return (EntityMutantCreeper.this.getAttackTarget() != null && EntityMutantCreeper.this.getDistanceSq(EntityMutantCreeper.this.getAttackTarget()) <= 1024.0D && EntityMutantCreeper.this.onGround && !EntityMutantCreeper.this.isCharging()) ? ((EntityMutantCreeper.this.rand.nextFloat() >= 0.99F)) : false;
     }
     
     public void startExecuting() {
@@ -456,7 +456,7 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
         creeper.setGrowingAge(-18000);
         creeper.setLimitedLife(100);
         creeper.setPowered(EntityMutantCreeper.this.getPowered());
-        EntityMutantCreeper.this.world.spawnEntity((Entity)creeper);
+        EntityMutantCreeper.this.world.spawnEntity(creeper);
       } 
     }
     
@@ -473,11 +473,11 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
     public boolean shouldExecute() {
       EntityLivingBase target = EntityMutantCreeper.this.getAttackTarget();
       boolean attemptHeal = (EntityMutantCreeper.this.getMaxHealth() - EntityMutantCreeper.this.getHealth() >= EntityMutantCreeper.this.getMaxHealth() / 6.0F);
-      return EntityMutantCreeper.this.isCharging() ? true : ((target != null && EntityMutantCreeper.this.onGround && attemptHeal && EntityMutantCreeper.this.getDistanceSq((Entity)target) >= 25.0D && EntityMutantCreeper.this.getDistanceSq((Entity)target) <= 1024.0D) ? ((EntityMutantCreeper.this.rand.nextFloat() * 100.0F < 0.7F)) : false);
+      return EntityMutantCreeper.this.isCharging() ? true : ((target != null && EntityMutantCreeper.this.onGround && attemptHeal && EntityMutantCreeper.this.getDistanceSq(target) >= 25.0D && EntityMutantCreeper.this.getDistanceSq(target) <= 1024.0D) ? ((EntityMutantCreeper.this.rand.nextFloat() * 100.0F < 0.7F)) : false);
     }
     
     public boolean shouldContinueExecuting() {
-      if (EntityMutantCreeper.this.canSummonLightning && EntityMutantCreeper.this.getAttackTarget() != null && EntityMutantCreeper.this.getDistanceSq((Entity)EntityMutantCreeper.this.getAttackTarget()) < 25.0D)
+      if (EntityMutantCreeper.this.canSummonLightning && EntityMutantCreeper.this.getAttackTarget() != null && EntityMutantCreeper.this.getDistanceSq(EntityMutantCreeper.this.getAttackTarget()) < 25.0D)
         return false; 
       return (EntityMutantCreeper.this.chargeTime < 100 && EntityMutantCreeper.this.chargeHits > 0);
     }
@@ -494,11 +494,11 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
     public void updateTask() {}
     
     public void resetTask() {
-      if (EntityMutantCreeper.this.canSummonLightning && EntityMutantCreeper.this.getAttackTarget() != null && EntityMutantCreeper.this.getDistanceSq((Entity)EntityMutantCreeper.this.getAttackTarget()) < 25.0D && EntityMutantCreeper.this.world.canBlockSeeSky(EntityMutantCreeper.this.getPosition())) {
-        EntityMutantCreeper.this.world.spawnEntity((Entity)new EntityLightningBolt(EntityMutantCreeper.this.world, EntityMutantCreeper.this.posX, EntityMutantCreeper.this.posY, EntityMutantCreeper.this.posZ, false));
+      if (EntityMutantCreeper.this.canSummonLightning && EntityMutantCreeper.this.getAttackTarget() != null && EntityMutantCreeper.this.getDistanceSq(EntityMutantCreeper.this.getAttackTarget()) < 25.0D && EntityMutantCreeper.this.world.canBlockSeeSky(EntityMutantCreeper.this.getPosition())) {
+        EntityMutantCreeper.this.world.spawnEntity(new EntityLightningBolt(EntityMutantCreeper.this.world, EntityMutantCreeper.this.posX, EntityMutantCreeper.this.posY, EntityMutantCreeper.this.posZ, false));
       } else if (EntityMutantCreeper.this.chargeTime >= 100) {
         EntityMutantCreeper.this.heal(EntityMutantCreeper.this.getMaxHealth() / 4.0F);
-        EntityMutantCreeper.this.world.setEntityState((Entity)EntityMutantCreeper.this, (byte)6);
+        EntityMutantCreeper.this.world.setEntityState(EntityMutantCreeper.this, (byte)6);
       } 
       EntityMutantCreeper.this.chargeTime = 0;
       EntityMutantCreeper.this.chargeHits = 4 + EntityMutantCreeper.this.rand.nextInt(3);

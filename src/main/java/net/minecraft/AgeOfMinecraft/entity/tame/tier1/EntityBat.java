@@ -40,9 +40,9 @@ public class EntityBat extends EntityTameBase implements EntityFlying, Light, Fl
   
   public EntityBat(World worldIn) {
     super(worldIn);
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
     setIsBatHanging(true);
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 2.0D, 16.0F, 8.0F));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 2.0D, 16.0F, 8.0F));
     this.experienceValue = 1;
     setSize(0.5F, 0.9F);
   }
@@ -139,11 +139,11 @@ public class EntityBat extends EntityTameBase implements EntityFlying, Light, Fl
   }
   
   public boolean getIsBatHanging() {
-    return (((Byte) this.dataManager.get(HANGING) & 0x1) != 0);
+    return ((this.dataManager.get(HANGING) & 0x1) != 0);
   }
   
   public void setIsBatHanging(boolean isHanging) {
-    byte b0 = (Byte) this.dataManager.get(HANGING);
+    byte b0 = this.dataManager.get(HANGING);
     if (isHanging) {
       this.dataManager.set(HANGING, (byte) (b0 | 0x1));
     } else {
@@ -176,18 +176,18 @@ public class EntityBat extends EntityTameBase implements EntityFlying, Light, Fl
   
   protected void updateAITasks() {
     super.updateAITasks();
-    BlockPos blockpos = new BlockPos((Entity)this);
+    BlockPos blockpos = new BlockPos(this);
     BlockPos blockpos1 = blockpos.up();
     if (getIsBatHanging()) {
       if (!this.world.getBlockState(blockpos1).isNormalCube()) {
         setIsBatHanging(false);
-        this.world.playEvent((EntityPlayer)null, 1025, blockpos, 0);
+        this.world.playEvent(null, 1025, blockpos, 0);
       } else {
         if (this.rand.nextInt(200) == 0)
           this.rotationYawHead = this.rand.nextInt(360); 
-        if (this.world.getNearestPlayerNotCreative((Entity)this, 4.0D) != null) {
+        if (this.world.getNearestPlayerNotCreative(this, 4.0D) != null) {
           setIsBatHanging(false);
-          this.world.playEvent((EntityPlayer)null, 1025, blockpos, 0);
+          this.world.playEvent(null, 1025, blockpos, 0);
         } 
       } 
     } else {
@@ -198,7 +198,7 @@ public class EntityBat extends EntityTameBase implements EntityFlying, Light, Fl
       if (this.rand.nextInt(100) == 0 && this.world.getBlockState(blockpos1).isNormalCube())
         setIsBatHanging(true); 
       if (getActivePotionEffect(MobEffects.LUCK) == null)
-        if (this.world.getClosestPlayerToEntity((Entity)this, 200.0D) != null && getAttackTarget() == null && this.world.getClosestPlayerToEntity((Entity)this, 200.0D) == getOwner() && getDistanceSq((Entity)getOwner()) > 200.0D) {
+        if (this.world.getClosestPlayerToEntity(this, 200.0D) != null && getAttackTarget() == null && this.world.getClosestPlayerToEntity(this, 200.0D) == getOwner() && getDistanceSq(getOwner()) > 200.0D) {
           double d01 = (getOwner()).posX - this.posX;
           double d11 = Flying.clampFlightY((getOwner()).posY) - this.posY;
           double d21 = (getOwner()).posZ - this.posZ;
@@ -206,14 +206,14 @@ public class EntityBat extends EntityTameBase implements EntityFlying, Light, Fl
           this.motionX = d01 / f2 * 0.5D * 0.5D + this.motionX * 0.5D;
           this.motionY = d11 / f2 * 0.5D * 0.5D + this.motionZ * 0.5D;
           this.motionZ = d21 / f2 * 0.5D * 0.5D + this.motionZ * 0.5D;
-          faceEntity((Entity)getOwner(), 180.0F, 30.0F);
+          faceEntity(getOwner(), 180.0F, 30.0F);
         } else if (getAttackTarget() != null) {
           double d01 = (getAttackTarget()).posX - this.posX;
           double d11 = (getAttackTarget()).posZ - this.posZ;
           float f2 = MathHelper.sqrt(d01 * d01 + d11 * d11);
           this.motionX = d01 / f2 * 0.5D * 0.5D + this.motionX;
           this.motionZ = d11 / f2 * 0.5D * 0.5D + this.motionZ;
-          faceEntity((Entity)getAttackTarget(), 180.0F, 30.0F);
+          faceEntity(getAttackTarget(), 180.0F, 30.0F);
           if (this.posY < Flying.MAX_FLIGHT_TARGET_Y && this.posY < Flying.clampFlightY((getAttackTarget()).posY))
             this.motionY += 0.25D - this.motionY; 
         } else {
@@ -273,7 +273,7 @@ public class EntityBat extends EntityTameBase implements EntityFlying, Light, Fl
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
     super.writeEntityToNBT(tagCompound);
-    tagCompound.setByte("BatFlags", (Byte) this.dataManager.get(HANGING));
+    tagCompound.setByte("BatFlags", this.dataManager.get(HANGING));
   }
   
   public float getEyeHeight() {

@@ -2,12 +2,10 @@ package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
 import com.shinoow.abyssalcraft.client.model.entity.ModelChagarothSpawn;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityLesserDreadbeast;
-import net.minecraft.AgeOfMinecraft.renders.LayerLearningBook;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,8 +18,8 @@ public class RenderLesserDreadbeast extends RenderLiving<EntityLesserDreadbeast>
   private static final ResourceLocation mobTexture = new ResourceLocation("abyssalcraft:textures/model/elite/lesser_dreadbeast.png");
   
   public RenderLesserDreadbeast(RenderManager manager) {
-    super(manager, (ModelBase)new ModelChagarothSpawn(), 1.5F);
-    addLayer((LayerRenderer)new LayerLearningBook(this));
+    super(manager, new ModelChagarothSpawn(), 1.5F);
+    
   }
   
   protected void preRenderCallback(EntityLesserDreadbeast entitylivingbaseIn, float partialTickTime) {

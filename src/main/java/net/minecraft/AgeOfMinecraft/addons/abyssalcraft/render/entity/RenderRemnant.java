@@ -2,7 +2,6 @@ package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityRemnant;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.model.ModelRemnant;
-import net.minecraft.AgeOfMinecraft.renders.LayerLearningBook;
 import net.minecraft.AgeOfMinecraft.renders.LayerMobCape;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -39,10 +38,10 @@ public class RenderRemnant extends RenderLiving<EntityRemnant> {
   }
   
   public RenderRemnant(RenderManager manager, ModelRemnant model) {
-    super(manager, (ModelBase)model, 0.5F);
+    super(manager, model, 0.5F);
     addLayer((LayerRenderer)new LayerCustomHead(model.head));
-    addLayer((LayerRenderer)new LayerLearningBook(this));
-    addLayer((LayerRenderer)new LayerMobCape((RenderLivingBase)this));
+    
+    addLayer((LayerRenderer)new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityRemnant entity) {

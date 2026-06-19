@@ -16,7 +16,7 @@ public class RenderWitherStormTentacle extends RenderLiving<EntityWitherStormTen
   private static final ResourceLocation witherStormTextures = new ResourceLocation("ageofminecraft", "textures/entities/wither_storm_hue.png");
   
   public RenderWitherStormTentacle(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)new ModelWitherStormTentecle(), 3.0F);
+    super(renderManagerIn, new ModelWitherStormTentecle(), 3.0F);
   }
   
   protected ResourceLocation getEntityTexture(EntityWitherStormTentacle entity) {

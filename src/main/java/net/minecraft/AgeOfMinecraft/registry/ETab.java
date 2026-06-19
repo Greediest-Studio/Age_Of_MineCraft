@@ -23,40 +23,40 @@ public class ETab {
     public static void init() {
     engender = new CreativeTabs("ageofminecraft") {
         public ItemStack createIcon() {
-          return new ItemStack((Item)EItem.artifact1);
+          return new ItemStack(EItem.artifact1);
         }
       };
     vanilla = new CreativeTabs("ageofminecraft.vanilla") {
         public ItemStack createIcon() {
-          return new ItemStack((Item)EItem.enderdragonItem);
+          return new ItemStack(EItem.enderdragonItem);
         }
       };
     storymode = new CreativeTabs("ageofminecraft.storymode") {
         public ItemStack createIcon() {
-          return new ItemStack((Item)EItem.witherStormItem);
+          return new ItemStack(EItem.witherStormItem);
         }
       };
     dungeons = new CreativeTabs("ageofminecraft.dungeons") {
         public ItemStack createIcon() {
-          return new ItemStack((Item)EItem.skeletonItem);
+          return new ItemStack(EItem.skeletonItem);
         }
       };
     if (Loader.isModLoaded("abyssalcraft"))
       abyssal = new CreativeTabs("ageofabyssalcraft") {
           public ItemStack createIcon() {
-            return new ItemStack((Item)EItem.jzaharItem);
+            return new ItemStack(EItem.jzaharItem);
           }
         }; 
     if (Loader.isModLoaded("draconicevolution"))
       draconic = new CreativeTabs("ageofchaos") {
           public ItemStack createIcon() {
-            return new ItemStack((Item)EItem.chaosGuardianItem);
+            return new ItemStack(EItem.chaosGuardianItem);
           }
         }; 
     if (Loader.isModLoaded("mutantbeasts"))
       mutant = new CreativeTabs("ageofmutants") {
           public ItemStack createIcon() {
-            return new ItemStack((Item)EItem.mutantZombieItem);
+            return new ItemStack(EItem.mutantZombieItem);
           }
         }; 
   }

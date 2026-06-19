@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.shinoow.abyssalcraft.api.AbyssalCraftAPI;
 import com.shinoow.abyssalcraft.api.entity.EntityUtil;
@@ -39,14 +38,14 @@ public class EntitySquads extends EntityThrowable {
       if (list != null && !list.isEmpty())
           for (EntityLivingBase entity1 : list) {
               if (entity1 != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart) {
-                  getThrower().attackEntityAsMob((Entity) entity1);
+                  getThrower().attackEntityAsMob(entity1);
                   if (this.rand.nextBoolean() && !EntityUtil.isEntityCoralium(entity1))
                       entity1.addPotionEffect(new PotionEffect(AbyssalCraftAPI.coralium_plague, 200));
                   if (this.rand.nextInt(2) == 0)
                       entity1.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 100));
                   if (this.rand.nextInt(2) == 0)
                       entity1.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100));
-                  applyEnchantments(getThrower(), (Entity) entity1);
+                  applyEnchantments(getThrower(), entity1);
                   setDead();
               }
           }
@@ -54,8 +53,8 @@ public class EntitySquads extends EntityThrowable {
     if (!this.world.isRemote && result.entityHit != null)
       if (result.entityHit instanceof EntityLivingBase && !this.world.isRemote && getThrower() != null && getThrower() instanceof EntityTameBase && !false) {
         if (ACConfig.hardcoreMode && result.entityHit instanceof net.minecraft.entity.player.EntityPlayer)
-          result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage((Entity)this, (Entity)getThrower()).setDamageBypassesArmor().setDamageIsAbsolute(), 2.0F); 
-        ((EntityTameBase)getThrower()).attackEntityAsMob(result.entityHit);
+          result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, getThrower()).setDamageBypassesArmor().setDamageIsAbsolute(), 2.0F);
+        getThrower().attackEntityAsMob(result.entityHit);
         if (this.rand.nextBoolean() && !EntityUtil.isEntityCoralium((EntityLivingBase)result.entityHit))
           ((EntityLivingBase)result.entityHit).addPotionEffect(new PotionEffect(AbyssalCraftAPI.coralium_plague, 200)); 
         if (this.rand.nextInt(2) == 0)
@@ -72,7 +71,7 @@ public class EntitySquads extends EntityThrowable {
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive())
-          onImpact(new RayTraceResult((Entity)entity1)); 
+          onImpact(new RayTraceResult(entity1));
       }  
   }
 }

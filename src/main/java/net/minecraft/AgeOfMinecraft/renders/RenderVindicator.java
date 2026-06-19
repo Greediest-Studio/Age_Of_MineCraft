@@ -37,9 +37,9 @@ public class RenderVindicator extends RenderLiving<EntityVindicator> {
   public RenderVindicator(RenderManager p_i47189_1_) {
     super(p_i47189_1_, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.5F);
     addLayer(new LayerCustomHeadEngender(regularmodel.head, cmmmodel.Head));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
-    addLayer((LayerRenderer)new LayerHeldItem((RenderLivingBase)this) {
+    
+    addLayer(new LayerMobCape(this));
+    addLayer((LayerRenderer)new LayerHeldItem(this) {
           public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
             if (((EntityVindicator)entitylivingbaseIn).isAggressive())
               super.doRenderLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale); 
@@ -83,7 +83,7 @@ public class RenderVindicator extends RenderLiving<EntityVindicator> {
   }
   
   protected void preRenderCallback(EntityVindicator entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel;
+    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
     float f = 0.9375F;
     if (!EngenderConfig.mobs.useMobTalkerModels) {
       GlStateManager.scale(f, f, f);

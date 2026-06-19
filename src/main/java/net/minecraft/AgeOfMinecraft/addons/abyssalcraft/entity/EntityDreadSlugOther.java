@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.shinoow.abyssalcraft.api.AbyssalCraftAPI;
 import com.shinoow.abyssalcraft.api.entity.EntityUtil;
@@ -32,7 +31,7 @@ public class EntityDreadSlugOther extends EntityThrowable {
   protected void onImpact(RayTraceResult result) {
     if (!this.world.isRemote && result.entityHit != null)
       if (result.entityHit instanceof EntityLivingBase && getThrower() != null && getThrower() instanceof EntityTameBase && !false) {
-        ((EntityTameBase)getThrower()).inflictEngenderMobDamage((EntityLivingBase)result.entityHit, " was pummeled by ", DamageSource.causeThrownDamage((Entity)this, (Entity)getThrower()), 4.0F);
+        ((EntityTameBase)getThrower()).inflictEngenderMobDamage((EntityLivingBase)result.entityHit, " was pummeled by ", DamageSource.causeThrownDamage(this, getThrower()), 4.0F);
         if (!EntityUtil.isEntityDread((EntityLivingBase)result.entityHit))
           ((EntityLivingBase)result.entityHit).addPotionEffect(new PotionEffect(AbyssalCraftAPI.dread_plague, 200)); 
         setDead();
@@ -41,7 +40,7 @@ public class EntityDreadSlugOther extends EntityThrowable {
       if (isBeingRidden())
         for (Entity entity : getPassengers()) {
           entity.playSound(ESound.amalgamate, 2.0F, 1.5F);
-          entity.copyLocationAndAnglesFrom((Entity)this);
+          entity.copyLocationAndAnglesFrom(this);
           entity.posY += 3.0D;
         }  
       setDead();
@@ -54,7 +53,7 @@ public class EntityDreadSlugOther extends EntityThrowable {
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive())
-          onImpact(new RayTraceResult((Entity)entity1)); 
+          onImpact(new RayTraceResult(entity1));
       }  
   }
 }

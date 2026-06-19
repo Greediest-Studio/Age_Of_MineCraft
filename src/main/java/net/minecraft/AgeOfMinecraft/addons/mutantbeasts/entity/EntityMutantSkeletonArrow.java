@@ -74,7 +74,7 @@ public class EntityMutantSkeletonArrow extends Entity {
   }
   
   public double getTargetX() {
-    return (Integer) this.dataManager.get(TARGET_X) / 10000.0D;
+    return this.dataManager.get(TARGET_X) / 10000.0D;
   }
   
   public void setTargetX(double x) {
@@ -82,7 +82,7 @@ public class EntityMutantSkeletonArrow extends Entity {
   }
   
   public double getTargetY() {
-    return (Integer) this.dataManager.get(TARGET_Y) / 10000.0D;
+    return this.dataManager.get(TARGET_Y) / 10000.0D;
   }
   
   public void setTargetY(double y) {
@@ -90,7 +90,7 @@ public class EntityMutantSkeletonArrow extends Entity {
   }
   
   public double getTargetZ() {
-    return (Integer) this.dataManager.get(TARGET_Z) / 10000.0D;
+    return this.dataManager.get(TARGET_Z) / 10000.0D;
   }
   
   public void setTargetZ(double z) {
@@ -98,7 +98,7 @@ public class EntityMutantSkeletonArrow extends Entity {
   }
   
   public float getSpeed() {
-    return (Float) this.dataManager.get(SPEED) / 10.0F;
+    return this.dataManager.get(SPEED) / 10.0F;
   }
   
   public void setSpeed(float speed) {
@@ -106,7 +106,7 @@ public class EntityMutantSkeletonArrow extends Entity {
   }
   
   public int getClones() {
-    return (Integer) this.dataManager.get(CLONES);
+    return this.dataManager.get(CLONES);
   }
   
   public void setClones(int clones) {
@@ -167,14 +167,14 @@ public class EntityMutantSkeletonArrow extends Entity {
       double y = this.posY + dy * i * 0.5D;
       double z = this.posZ + dz * i * 0.5D;
       AxisAlignedBB box = (new AxisAlignedBB(x, y, z, x, y, z)).grow(0.3D);
-      this.pointedEntities.addAll(this.world.getEntitiesInAABBexcluding((Entity)this.shooter, box, Entity::canBeCollidedWith));
+      this.pointedEntities.addAll(this.world.getEntitiesInAABBexcluding(this.shooter, box, Entity::canBeCollidedWith));
     } 
   }
   
   protected void handleEntities() {
     this.pointedEntities.remove(this);
     for (Entity entity : this.pointedEntities) {
-      DamageSource damageSource = (new EntityDamageSourceIndirect("arrow", this, (Entity)this.shooter) {
+      DamageSource damageSource = (new EntityDamageSourceIndirect("arrow", this, this.shooter) {
           public Vec3d getDamageLocation() {
             return null;
           }
@@ -199,12 +199,12 @@ public class EntityMutantSkeletonArrow extends Entity {
   
   public void writeEntityToNBT(NBTTagCompound compound) {
     compound.setInteger("TicksExisted", this.ticksExisted);
-    compound.setTag("Target", (NBTBase)newDoubleNBTList(new double[] { getTargetX(), getTargetY(), getTargetZ() }));
+    compound.setTag("Target", newDoubleNBTList(new double[] { getTargetX(), getTargetY(), getTargetZ() }));
     compound.setFloat("Speed", getSpeed());
     compound.setInteger("Clones", getClones());
     compound.setInteger("Damage", this.damage);
     if (this.potionEffect != null)
-      compound.setTag("Effect", (NBTBase)this.potionEffect.writeCustomPotionEffectToNBT(new NBTTagCompound())); 
+      compound.setTag("Effect", this.potionEffect.writeCustomPotionEffectToNBT(new NBTTagCompound()));
   }
   
   public void readEntityFromNBT(NBTTagCompound compound) {

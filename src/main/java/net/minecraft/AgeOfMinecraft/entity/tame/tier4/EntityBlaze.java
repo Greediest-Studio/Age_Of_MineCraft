@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier4;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -71,12 +70,12 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
     this.isOffensive = true;
     this.isImmuneToFire = true;
     this.experienceValue = 10;
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.0D, 48.0F, 8.0F));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.0D, 48.0F, 8.0F));
     this.tasks.addTask(4, new AIFireballAttack(this));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 1.0D));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIWanderAvoidWaterFlying((EntityCreature)this, 1.0D));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
-    this.moveHelper = (EntityMoveHelper)new EntityFlyHelper((EntityLiving)this);
+    this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
+    this.tasks.addTask(3, new EntityAIWanderAvoidWaterFlying(this, 1.0D));
+    this.tasks.addTask(7, new EntityAILookIdle(this));
+    this.moveHelper = new EntityFlyHelper(this);
     if (EngenderConfig.mobs.useMobTalkerModels) {
       setSize(0.5F, 1.95F);
     } else {
@@ -93,7 +92,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
     pathnavigateflying.setCanOpenDoors(true);
     pathnavigateflying.setCanFloat(true);
     pathnavigateflying.setCanEnterDoors(true);
-    return (PathNavigate)pathnavigateflying;
+    return pathnavigateflying;
   }
   
   protected void applyEntityAttributes() {
@@ -166,12 +165,12 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return I18n.translateToLocal("entity." + str + ".cmm.name");
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name");
@@ -182,7 +181,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
     if (!this.world.isRemote)
       for (int i = 0; i < 1 + this.rand.nextInt(2); i++) {
         EntityBlaze baby = new EntityBlaze(this.world);
-        baby.copyLocationAndAnglesFrom((Entity)this);
+        baby.copyLocationAndAnglesFrom(this);
         baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
         baby.setGrowingAge(-72000);
         baby.setChild(true);
@@ -192,7 +191,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
         if (isMarried())
           for (int e = 0; e < 10 + this.rand.nextInt(10); e++)
             baby.levelUp();  
-        this.world.spawnEntity((Entity)baby);
+        this.world.spawnEntity(baby);
       }  
   }
   
@@ -220,7 +219,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
                   }
           }
     } 
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 256.0D && getSpecialAttackTimer() <= 0 && isHero())
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) < 256.0D && getSpecialAttackTimer() <= 0 && isHero())
       performSpecialAttack(); 
     if (!this.onGround && this.motionY < 0.0D && isEntityAlive())
       this.motionY *= 0.6D; 
@@ -277,7 +276,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
   }
   
   public boolean isCharged() {
-    return (((Byte) this.dataManager.get(ON_FIRE) & 0x1) != 0);
+    return ((this.dataManager.get(ON_FIRE) & 0x1) != 0);
   }
   
   public boolean interact(EntityPlayer player, EnumHand hand) {
@@ -360,7 +359,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -404,11 +403,11 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
       } 
       this.prevLimbSwingAmount = this.limbSwingAmount;
       if (((EntityLivingBase)getControllingPassenger()).moveStrafing != 0.0F && this.ticksExisted % 40 == 0 && !this.world.isRemote) {
-        this.world.playEvent((EntityPlayer)null, 1018, new BlockPos((int)this.posX, (int)this.posY, (int)this.posZ), 0);
+        this.world.playEvent(null, 1018, new BlockPos((int)this.posX, (int)this.posY, (int)this.posZ), 0);
         Vec3d vec3 = getLook(1.0F);
-        EntitySmallFireballOther entitysmallfireball = new EntitySmallFireballOther(this.world, (EntityLivingBase)this, this.posX + vec3.x * 16.0D - this.posX + vec3.x, this.posY + getEyeHeight() + vec3.y * 16.0D - this.posY + getEyeHeight() + vec3.y, this.posZ + vec3.z * 16.0D - this.posZ + vec3.z);
+        EntitySmallFireballOther entitysmallfireball = new EntitySmallFireballOther(this.world, this, this.posX + vec3.x * 16.0D - this.posX + vec3.x, this.posY + getEyeHeight() + vec3.y * 16.0D - this.posY + getEyeHeight() + vec3.y, this.posZ + vec3.z * 16.0D - this.posZ + vec3.z);
         entitysmallfireball.posY = this.posY + (this.height / 2.0F) + 0.5D;
-        this.world.spawnEntity((Entity)entitysmallfireball);
+        this.world.spawnEntity(entitysmallfireball);
         swingArm(EnumHand.MAIN_HAND);
         float dm = (float)getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
         entitysmallfireball.damage = dm * 0.6F;
@@ -444,7 +443,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
   }
   
   public void setOnFire(boolean onFire) {
-    byte b0 = (Byte) this.dataManager.get(ON_FIRE);
+    byte b0 = this.dataManager.get(ON_FIRE);
     if (onFire && !isWet()) {
       b0 = (byte)(b0 | 0x1);
     } else {
@@ -454,7 +453,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
   }
   
   public boolean attackEntityFrom(DamageSource source, float amount) {
-    if (amount == 0.0F && source.getDamageType() == "thrown" && source instanceof EntityDamageSourceIndirect && ((EntityDamageSourceIndirect)source).getTrueSource() instanceof net.minecraft.entity.projectile.EntitySnowball)
+    if (amount == 0.0F && source.getDamageType() == "thrown" && source instanceof EntityDamageSourceIndirect && source.getTrueSource() instanceof net.minecraft.entity.projectile.EntitySnowball)
       amount = 3.0F; 
     return super.attackEntityFrom(source, amount);
   }
@@ -507,12 +506,12 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
     public void updateTask() {
       this.attackTime--;
       EntityLivingBase entitylivingbase = this.blaze.getAttackTarget();
-      this.blaze.getLookHelper().setLookPositionWithEntity((Entity)entitylivingbase, this.blaze.getHorizontalFaceSpeed(), this.blaze.getVerticalFaceSpeed());
-      double d0 = this.blaze.getDistance((Entity)entitylivingbase);
+      this.blaze.getLookHelper().setLookPositionWithEntity(entitylivingbase, this.blaze.getHorizontalFaceSpeed(), this.blaze.getVerticalFaceSpeed());
+      double d0 = this.blaze.getDistance(entitylivingbase);
       if (d0 < 3.0D) {
         if (this.attackTime <= 0) {
           this.attackTime = 20;
-          this.blaze.attackEntityAsMob((Entity)entitylivingbase);
+          this.blaze.attackEntityAsMob(entitylivingbase);
         } 
         this.blaze.getMoveHelper().setMoveTo(entitylivingbase.posX, Flying.clampFlightY(entitylivingbase.posY), entitylivingbase.posZ, 1.0D);
       } else if (d0 < getFollowDistance()) {
@@ -533,11 +532,11 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
           } 
           if (this.attackStep > 1) {
             float f = MathHelper.sqrt(MathHelper.sqrt(d0)) * 0.5F;
-            this.blaze.world.playEvent((EntityPlayer)null, 1018, new BlockPos((int)this.blaze.posX, (int)this.blaze.posY, (int)this.blaze.posZ), 0);
+            this.blaze.world.playEvent(null, 1018, new BlockPos((int)this.blaze.posX, (int)this.blaze.posY, (int)this.blaze.posZ), 0);
             for (int i = 0; i < 1; i++) {
-              EntitySmallFireballOther entitysmallfireball = new EntitySmallFireballOther(this.blaze.world, (EntityLivingBase)this.blaze, d1 + (this.blaze.isHero() ? 0.0D : (this.blaze.getRNG().nextGaussian() * f)), d2, d3 + (this.blaze.isHero() ? 0.0D : (this.blaze.getRNG().nextGaussian() * f)));
+              EntitySmallFireballOther entitysmallfireball = new EntitySmallFireballOther(this.blaze.world, this.blaze, d1 + (this.blaze.isHero() ? 0.0D : (this.blaze.getRNG().nextGaussian() * f)), d2, d3 + (this.blaze.isHero() ? 0.0D : (this.blaze.getRNG().nextGaussian() * f)));
               entitysmallfireball.posY = this.blaze.posY + (this.blaze.height / 2.0F) + 0.5D;
-              this.blaze.world.spawnEntity((Entity)entitysmallfireball);
+              this.blaze.world.spawnEntity(entitysmallfireball);
             } 
           } 
         } 

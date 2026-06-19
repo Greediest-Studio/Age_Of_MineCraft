@@ -713,8 +713,8 @@ public class ModelMutantSkeleton extends ModelBase {
     
     public void setAngles(float PI, boolean middleSpine) {
       resetAngles(this.middle);
-      resetAngles((ModelRenderer[])this.side1);
-      resetAngles((ModelRenderer[])this.side2);
+      resetAngles(this.side1);
+      resetAngles(this.side2);
       this.middle.rotateAngleX = PI / 18.0F;
       (this.side1[0]).rotateAngleY = -PI / 4.5F;
       (this.side2[0]).rotateAngleY = PI / 4.5F;

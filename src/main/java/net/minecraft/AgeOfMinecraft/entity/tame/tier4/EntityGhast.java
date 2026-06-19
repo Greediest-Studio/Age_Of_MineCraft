@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier4;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import java.util.Random;
@@ -67,10 +66,10 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
     this.isOffensive = true;
     this.moveHelper = new GhastMoveHelper(this);
     this.tasks.addTask(0, new AIFireballAttack(this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.0D, EngenderConfig.mobs.useMobTalkerModels ? 64.0F : 100.0F, EngenderConfig.mobs.useMobTalkerModels ? 9.0F : 16.0F));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.0D, EngenderConfig.mobs.useMobTalkerModels ? 64.0F : 100.0F, EngenderConfig.mobs.useMobTalkerModels ? 9.0F : 16.0F));
     this.tasks.addTask(2, new AIRandomFly(this));
     this.tasks.addTask(3, new AILookAround());
-    this.tasks.addTask(4, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(4, new EntityAILookIdle(this));
     this.experienceValue = 20;
   }
   
@@ -108,7 +107,7 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
   
   @SideOnly(Side.CLIENT)
   public boolean isAttacking() {
-    return (Boolean) this.dataManager.get(ATTACKING);
+    return this.dataManager.get(ATTACKING);
   }
   
   public EnumTier getTier() {
@@ -123,12 +122,12 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return I18n.translateToLocal("entity." + str + ".cmm.name");
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name");
@@ -143,11 +142,11 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
   }
   
   public boolean isFlying() {
-    return (Boolean) this.dataManager.get(SHOULD_FLY);
+    return this.dataManager.get(SHOULD_FLY);
   }
   
   public void performSpecialAttack() {
-    playSound(getHurtSound((DamageSource)null), getSoundVolume(), getSoundPitch());
+    playSound(getHurtSound(null), getSoundVolume(), getSoundPitch());
     setSpecialAttackTimer(1200);
   }
   
@@ -160,7 +159,7 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
     if (!this.world.isRemote)
       for (int i = 0; i < 1; i++) {
         EntityGhast baby = new EntityGhast(this.world);
-        baby.copyLocationAndAnglesFrom((Entity)this);
+        baby.copyLocationAndAnglesFrom(this);
         baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
         baby.setGrowingAge(-60000);
         baby.setChild(true);
@@ -170,7 +169,7 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
         if (isMarried())
           for (int e = 0; e < 10 + this.rand.nextInt(10); e++)
             baby.levelUp();  
-        this.world.spawnEntity((Entity)baby);
+        this.world.spawnEntity(baby);
       }  
   }
   
@@ -182,21 +181,21 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
       this.rotationPitch = EngenderConfig.mobs.useMobTalkerModels ? passenger.rotationPitch : 0.0F;
     } 
     if (isHero() && getSpecialAttackTimer() > 1100) {
-      playSound(getHurtSound((DamageSource)null), getSoundVolume(), getSoundPitch());
+      playSound(getHurtSound(null), getSoundVolume(), getSoundPitch());
       List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(64.0D, 64.0D, 64.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
           for (EntityLivingBase entity : list) {
               if (entity != null)
                   if (!false) {
                       if (getSpecialAttackTimer() > 1190 && entity instanceof EntityCreature && !(entity instanceof EntityTameBase))
-                          ((EntityCreature) entity).tasks.addTask(0, (EntityAIBase) new EntityAIAvoidEntitySPC((EntityCreature) entity, EntityGhast.class, 128.0F, 1.5D, 1.5D));
+                          ((EntityCreature) entity).tasks.addTask(0, new EntityAIAvoidEntitySPC((EntityCreature) entity, EntityGhast.class, 128.0F, 1.5D, 1.5D));
                       entity.hurtResistantTime = 0;
                       inflictEngenderMobDamage(entity, "'s ears exploded thanks to ", DamageSource.WITHER, 0.25F);
                       entity.addVelocity(this.rand.nextGaussian() * 0.05D, this.rand.nextGaussian() * 0.05D, this.rand.nextGaussian() * 0.05D);
                   }
           }
     } 
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 2048.0D && getSpecialAttackTimer() <= 0 && isHero())
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) < 2048.0D && getSpecialAttackTimer() <= 0 && isHero())
       performSpecialAttack(); 
     if (!EngenderConfig.mobs.useMobTalkerModels && this.eleanor)
       this.eleanor = false; 
@@ -209,8 +208,8 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
       this.motionY *= 0.6D; 
     if (!isFlying() && (isInWater() || isInLava()) && getRNG().nextFloat() < 0.8F && isEntityAlive())
       getJumpHelper().setJumping(); 
-    if (getAttackTarget() != null && getOwner() != null && !canEntityBeSeen((Entity)getAttackTarget()) && this.rand.nextInt(80) == 0)
-      playSound(getHurtSound((DamageSource)null), getSoundVolume(), getSoundPitch() + 0.25F); 
+    if (getAttackTarget() != null && getOwner() != null && !canEntityBeSeen(getAttackTarget()) && this.rand.nextInt(80) == 0)
+      playSound(getHurtSound(null), getSoundVolume(), getSoundPitch() + 0.25F);
     if (getOwner() != null)
       if (getAttackTarget() == null && this.ticksExisted % 10 == 0) {
         double d0 = getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue();
@@ -218,7 +217,7 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
         if (list != null && !list.isEmpty())
           for (int i1 = 0; i1 < list.size(); i1++) {
             Entity entity = list.get(i1);
-            if (entity != null && entity.isEntityAlive() && canEntityBeSeen(entity) && !false && entity.getDistanceSq((Entity)getOwner()) <= 256.0D) {
+            if (entity != null && entity.isEntityAlive() && canEntityBeSeen(entity) && !false && entity.getDistanceSq(getOwner()) <= 256.0D) {
               setAttackTarget((EntityLivingBase)entity);
             } else {
               list.remove(entity);
@@ -281,7 +280,7 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
     if (entity instanceof EntityLivingBase && EngenderConfig.mobs.useMobTalkerModels && this.eleanor && amount < 50.0F) {
       EntityLivingBase creature = (EntityLivingBase)entity;
       creature.attackEntityFrom(DamageSource.GENERIC.setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), amount);
-      creature.knockBack((Entity)this, amount * 0.1F, -MathHelper.sin(creature.rotationYawHead * 0.017453292F), MathHelper.cos(creature.rotationYawHead * 0.017453292F));
+      creature.knockBack(this, amount * 0.1F, -MathHelper.sin(creature.rotationYawHead * 0.017453292F), MathHelper.cos(creature.rotationYawHead * 0.017453292F));
     } 
     if (this.eleanor && (source.isFireDamage() || source.isExplosion() || source.isProjectile() || source.isMagicDamage() || amount < 50.0F))
       return false; 
@@ -374,7 +373,7 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -410,7 +409,7 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
     public void updateTask() {
       EntityLivingBase entitylivingbase = this.ghast.getAttackTarget();
       double d0 = 100.0D;
-      if (entitylivingbase != null && entitylivingbase.getDistanceSq((Entity)this.ghast) < d0 * d0) {
+      if (entitylivingbase != null && entitylivingbase.getDistanceSq(this.ghast) < d0 * d0) {
         World world = this.ghast.world;
         this.attackTimer++;
         if (this.ghast.moralRaisedTimer > 200)
@@ -424,21 +423,21 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
           double d3 = entitylivingbase.posY + ((entitylivingbase.height > 8.0F) ? 7.0D : (entitylivingbase.height * 0.5D)) - this.ghast.posY + 1.0D;
           double d4 = entitylivingbase.posZ + entitylivingbase.motionZ * 10.0D - this.ghast.posZ + vec3.z * d1;
           if (this.ghast.isChild()) {
-            EntitySmallFireballOther entitylargefireball = new EntitySmallFireballOther(world, (EntityLivingBase)this.ghast, d2, d3, d4);
+            EntitySmallFireballOther entitylargefireball = new EntitySmallFireballOther(world, this.ghast, d2, d3, d4);
             entitylargefireball.posX = this.ghast.posX + vec3.x * d1;
             entitylargefireball.posY = this.ghast.posY + 1.0D;
             entitylargefireball.posZ = this.ghast.posZ + vec3.z * d1;
             float dm = (float)this.ghast.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
             entitylargefireball.damage = dm;
             this.ghast.playSound(SoundEvents.ENTITY_GHAST_SHOOT, 10.0F, 1.5F);
-            world.spawnEntity((Entity)entitylargefireball);
+            world.spawnEntity(entitylargefireball);
             if (this.ghast.moralRaisedTimer > 200) {
               this.attackTimer = -15;
             } else {
               this.attackTimer = -30;
             } 
           } else {
-            EntityLargeFireballOther entitylargefireball = new EntityLargeFireballOther(world, (EntityLivingBase)this.ghast, d2, d3, d4);
+            EntityLargeFireballOther entitylargefireball = new EntityLargeFireballOther(world, this.ghast, d2, d3, d4);
             entitylargefireball.explosionPower = this.ghast.getFireballStrength() * (this.ghast.isHero() ? 2 : 1);
             entitylargefireball.posX = this.ghast.posX + vec3.x * d1;
             entitylargefireball.posY = this.ghast.posY + 1.0D;
@@ -446,7 +445,7 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
             float dm = (float)this.ghast.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
             entitylargefireball.damage = dm;
             this.ghast.playSound(SoundEvents.ENTITY_GHAST_SHOOT, 10.0F, 1.0F);
-            world.spawnEntity((Entity)entitylargefireball);
+            world.spawnEntity(entitylargefireball);
             if (this.ghast.moralRaisedTimer > 200) {
               this.attackTimer = -20;
             } else {
@@ -483,7 +482,7 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
       } else {
         EntityLivingBase entitylivingbase = this.parentEntity.getAttackTarget();
         this.parentEntity.renderYawOffset = this.parentEntity.rotationYaw = this.parentEntity.rotationYawHead;
-        this.parentEntity.getLookHelper().setLookPositionWithEntity((Entity)entitylivingbase, 180.0F, EngenderConfig.mobs.useMobTalkerModels ? 40.0F : 180.0F);
+        this.parentEntity.getLookHelper().setLookPositionWithEntity(entitylivingbase, 180.0F, EngenderConfig.mobs.useMobTalkerModels ? 40.0F : 180.0F);
       } 
     }
   }
@@ -547,7 +546,7 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
     private int courseChangeCooldown;
     
     public GhastMoveHelper(EntityGhast ghast) {
-      super((EntityLiving)ghast);
+      super(ghast);
       this.parentEntity = ghast;
     }
     
@@ -614,7 +613,7 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
       AxisAlignedBB axisalignedbb = this.parentEntity.getEntityBoundingBox();
       for (int i = 1; i < p_179926_7_; i++) {
         axisalignedbb = axisalignedbb.offset(d0, d1, d2);
-        if (!this.parentEntity.world.getCollisionBoxes((Entity)this.parentEntity, axisalignedbb).isEmpty())
+        if (!this.parentEntity.world.getCollisionBoxes(this.parentEntity, axisalignedbb).isEmpty())
           return false; 
       } 
       return true;

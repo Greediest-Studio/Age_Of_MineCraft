@@ -119,10 +119,10 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
     this.tasks.addTask(1, new RoarGoal());
     this.tasks.addTask(1, new ThrowAttackGoal());
     this.tasks.addTask(1, new TossAttackGoal());
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.2D, 64.0F, 12.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.2D, true));
-    this.tasks.addTask(6, (EntityAIBase)new EntityAIWanderAvoidWater((EntityCreature)this, 1.0D));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.2D, 64.0F, 12.0F));
+    this.tasks.addTask(3, new EntityAIFriendlyAttackMelee(this, 1.2D, true));
+    this.tasks.addTask(6, new EntityAIWanderAvoidWater(this, 1.0D));
+    this.tasks.addTask(7, new EntityAILookIdle(this));
   }
   
   public TextFormatting getTextFormat() {
@@ -166,14 +166,14 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
     if (!stack.isEmpty() && stack.getItem() == Items.TOTEM_OF_UNDYING) {
       setLives(getLives() + 2);
       stack.shrink(1);
-      (Minecraft.getMinecraft()).effectRenderer.emitParticleAtEntity((Entity)this, EnumParticleTypes.TOTEM, 30);
+      (Minecraft.getMinecraft()).effectRenderer.emitParticleAtEntity(this, EnumParticleTypes.TOTEM, 30);
       playSound(SoundEvents.ITEM_TOTEM_USE, 1.0F, 1.0F);
       performSpecialAttack();
       return true;
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -275,7 +275,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
   }
   
   public int getZombieType() {
-    return (Integer) getDataManager().get(ZOMBIE_VARIANT) - 1;
+    return getDataManager().get(ZOMBIE_VARIANT) - 1;
   }
   
   public void setZombieType(int villagerType) {
@@ -303,7 +303,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
   }
   
   protected PathNavigate createNavigator(World worldIn) {
-    return (PathNavigate)new MBGroundPathNavigator((EntityLiving)this, worldIn);
+    return new MBGroundPathNavigator(this, worldIn);
   }
   
   protected float updateDistance(float renderYawOffset, float distance) {
@@ -311,7 +311,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
   }
   
   public int getLives() {
-    return (Integer) this.dataManager.get(LIVES);
+    return this.dataManager.get(LIVES);
   }
   
   private void setLives(int lives) {
@@ -319,20 +319,20 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
   }
   
   public boolean hasThrowAttackHit() {
-    return ((Byte) this.dataManager.get(THROW_ATTACK_STATE) != 0);
+    return (this.dataManager.get(THROW_ATTACK_STATE) != 0);
   }
   
   public void setThrowAttackHit(boolean hit) {
-    byte b0 = (Byte) this.dataManager.get(THROW_ATTACK_STATE);
+    byte b0 = this.dataManager.get(THROW_ATTACK_STATE);
     this.dataManager.set(THROW_ATTACK_STATE, hit ? 1 : (byte) (b0 & 0xFFFFFFFE));
   }
   
   public boolean isThrowAttackFinished() {
-    return (((Byte) this.dataManager.get(THROW_ATTACK_STATE) & 0x2) != 0);
+    return ((this.dataManager.get(THROW_ATTACK_STATE) & 0x2) != 0);
   }
   
   public void setThrowAttackFinished(boolean finished) {
-    byte b0 = (Byte) this.dataManager.get(THROW_ATTACK_STATE);
+    byte b0 = this.dataManager.get(THROW_ATTACK_STATE);
     this.dataManager.set(THROW_ATTACK_STATE, finished ? (byte) (b0 | 0x2) : (byte) (b0 & 0xFFFFFFFD));
   }
   
@@ -362,7 +362,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
     if (player.getHeldItem(hand).getItem() == Items.FLINT_AND_STEEL && this.deathTime > 0 && !isBurning() && !isWet()) {
       setFire(8);
       player.swingArm(hand);
-      player.getHeldItem(hand).damageItem(1, (EntityLivingBase)player);
+      player.getHeldItem(hand).damageItem(1, player);
       this.world.playSound(player, getPosition(), SoundEvents.ITEM_FLINTANDSTEEL_USE, getSoundCategory(), 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
       return EnumActionResult.SUCCESS;
     } 
@@ -410,15 +410,15 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
       EntityLivingBase entityLivingBase = getAttackTarget();
       if (!entityLivingBase.isEntityAlive()) {
         setAttackTarget(null);
-      } else if (getDistanceSq((Entity)entityLivingBase) < 49.0D) {
-        int chance = (!canEntityBeSeen((Entity)entityLivingBase) || (getLastDamageSource() != null && getLastDamageSource().isProjectile())) ? 5 : 20;
+      } else if (getDistanceSq(entityLivingBase) < 49.0D) {
+        int chance = (!canEntityBeSeen(entityLivingBase) || (getLastDamageSource() != null && getLastDamageSource().isProjectile())) ? 5 : 20;
         if (this.attackID == 0 && (this.onGround || this.world.containsAnyLiquid(getEntityBoundingBox())) && this.rand.nextInt(chance) == 0)
           setAttackID(4); 
-        if (this.attackID == 0 && getDistanceSq((Entity)entityLivingBase) < 1.0D && this.rand.nextInt(125) == 0 && canEntityBeSeen((Entity)entityLivingBase))
+        if (this.attackID == 0 && getDistanceSq(entityLivingBase) < 1.0D && this.rand.nextInt(125) == 0 && canEntityBeSeen(entityLivingBase))
           setAttackID(5); 
       } 
     } 
-    if (ForgeEventFactory.getMobGriefingEvent(this.world, (Entity)this)) {
+    if (ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
       int x = MathHelper.floor(this.posX);
       int y = MathHelper.floor(this.posY);
       int z = MathHelper.floor(this.posZ);
@@ -427,7 +427,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
           for (int k = 0; k <= 3; k++) {
             BlockPos blockpos = new BlockPos(x + i, y + k, z + j);
             IBlockState iblockstate = this.world.getBlockState(blockpos);
-            if ((iblockstate.getBlock() instanceof net.minecraft.block.BlockLeaves || iblockstate.getBlock() instanceof net.minecraft.block.BlockGlass) && ForgeEventFactory.onEntityDestroyBlock((EntityLivingBase)this, blockpos, iblockstate))
+            if ((iblockstate.getBlock() instanceof net.minecraft.block.BlockLeaves || iblockstate.getBlock() instanceof net.minecraft.block.BlockGlass) && ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate))
               this.world.destroyBlock(blockpos, false); 
           } 
         } 
@@ -474,8 +474,8 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
   
   public void onLivingUpdate() {
     super.onLivingUpdate();
-    if (this.attackID == 0 && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && !false && getDistanceSq((Entity)getAttackTarget()) < (this.width * this.width + (getAttackTarget()).width * (getAttackTarget()).width) + 36.0D)
-      attackEntityAsMob((Entity)getAttackTarget()); 
+    if (this.attackID == 0 && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && !false && getDistanceSq(getAttackTarget()) < (this.width * this.width + (getAttackTarget()).width * (getAttackTarget()).width) + 36.0D)
+      attackEntityAsMob(getAttackTarget());
     if (!this.world.isRemote && getAttackTarget() != null && this.attackID == 0 && getSpecialAttackTimer() <= 0 && isHero())
       performSpecialAttack(); 
     if (this.motionX * this.motionX + this.motionZ * this.motionZ != 0.0D && this.rand.nextInt(5) == 0) {
@@ -522,15 +522,15 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
   protected void updateMeleeGrounds() {
     if (!this.seismicWavesList.isEmpty()) {
       Shockwave wave = this.seismicWavesList.remove(0);
-      wave.affectBlocks(this.world, (EntityLivingBase)this);
+      wave.affectBlocks(this.world, this);
       AxisAlignedBB box = new AxisAlignedBB(wave.getX(), (wave.getY() + 1), wave.getZ(), (wave.getX() + 3), (wave.getY() + 2), (wave.getZ() + 3));
       if (wave.isFirst()) {
         double addScale = this.rand.nextDouble() * 0.75D;
         box.grow(0.25D + addScale, 0.25D + addScale * 0.5D, 0.25D + addScale);
       } 
-      for (Entity entity : this.world.getEntitiesInAABBexcluding((Entity)this, box, EntitySelectors.CAN_AI_TARGET)) {
+      for (Entity entity : this.world.getEntitiesInAABBexcluding(this, box, EntitySelectors.CAN_AI_TARGET)) {
         if (entity instanceof EntityLivingBase && !false) {
-          DamageSource source = DamageSource.causeMobDamage((EntityLivingBase)this).setDamageIsAbsolute();
+          DamageSource source = DamageSource.causeMobDamage(this).setDamageIsAbsolute();
           inflictEngenderMobDamage((EntityLivingBase)entity, " was smashed by ", source, wave.isFirst() ? (12 + this.rand.nextInt(12)) : (6 + this.rand.nextInt(6)));
           double x = entity.posX - this.posX;
           double z = entity.posZ - this.posZ;
@@ -540,7 +540,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
           entity.motionZ = z / d * 0.4D;
           if (entity instanceof EntityLivingBase) {
             EntityUtil.sendPlayerVelocityPacket(entity);
-            EntityUtil.knockBackBlockingPlayer((Entity)this);
+            EntityUtil.knockBackBlockingPlayer(this);
             if (this.rand.nextInt(5) == 0)
               inflictCustomStatusEffect(this.world.getDifficulty(), (EntityLivingBase)entity, MobEffects.HUNGER, 160, 1); 
           } 
@@ -594,7 +594,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
         while (i > 0 && !this.world.isRemote) {
           int j = EntityXPOrb.getXPSplit(i);
           i -= j;
-          this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+          this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
         } 
       } else {
         this.deathTicks++;
@@ -611,7 +611,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
             setLives(getLives() - 1);
             if (this.lastAttacker != null) {
               setRevengeTarget(this.lastAttacker);
-              this.lastAttacker.setRevengeTarget((EntityLivingBase)this);
+              this.lastAttacker.setRevengeTarget(this);
             } 
             setHealth(Math.round(getMaxHealth() / 3.75F));
           } 
@@ -625,7 +625,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
     if (this.vanishTime >= 100 && getLives() > 0) {
       if (!this.world.isRemote) {
         if (EngenderConfig.general.useMessage && !isWild() && getOwner() instanceof EntityPlayerMP) {
-          ((EntityPlayerMP)getOwner()).sendMessage(getCombatTracker().getDeathMessage());
+          getOwner().sendMessage(getCombatTracker().getDeathMessage());
           this.world.playSound((EntityPlayer)getOwner(), getOwner().getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), getSoundPitch());
         } 
         setLives(0);
@@ -639,11 +639,11 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
   }
   
   public void attackWithAdditionalEffects(Entity entity) {
-    float f = this.world.getDifficultyForLocation(new BlockPos((Entity)this)).getAdditionalDifficulty();
+    float f = this.world.getDifficultyForLocation(new BlockPos(this)).getAdditionalDifficulty();
     if (isBurning() && this.rand.nextFloat() < f * 0.5F)
       entity.setFire(5 * (int)f); 
     if (getZombieType() == 1 && entity instanceof EntityLivingBase) {
-      ((EntityLivingBase)entity).motionY += 0.2D;
+      entity.motionY += 0.2D;
       inflictCustomStatusEffect((this.world.getDifficulty() == EnumDifficulty.PEACEFUL) ? EnumDifficulty.PEACEFUL : EnumDifficulty.EASY, (EntityLivingBase)entity, MobEffects.HUNGER, 200 * (int)f, 0);
       if (this.world.getDifficulty() == EnumDifficulty.HARD)
         inflictCustomStatusEffect((this.world.getDifficulty() == EnumDifficulty.PEACEFUL) ? EnumDifficulty.PEACEFUL : EnumDifficulty.EASY, (EntityLivingBase)entity, MobEffects.WEAKNESS, 200, 0); 
@@ -671,7 +671,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
     livingdata = super.onInitialSpawn(difficulty, livingdata);
     setAttackID(6);
     setLives(3);
-    Biome biome = this.world.getBiome(new BlockPos((Entity)this));
+    Biome biome = this.world.getBiome(new BlockPos(this));
     if (biome instanceof net.minecraft.world.biome.BiomeDesert && this.rand.nextInt(2) != 0) {
       setZombieType(1);
       this.isImmuneToFire = true;
@@ -706,26 +706,26 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
       EntityZombie entityzombie = new EntityZombie(this.world);
       entityzombie.rotationPitch = entityvillager.rotationPitch;
       entityzombie.renderYawOffset = entityzombie.rotationYaw = entityzombie.rotationYawHead = entityvillager.rotationYawHead;
-      entityzombie.copyLocationAndAnglesFrom((Entity)entityLivingIn);
-      this.world.removeEntity((Entity)entityLivingIn);
-      entityzombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityzombie)), null);
+      entityzombie.copyLocationAndAnglesFrom(entityLivingIn);
+      this.world.removeEntity(entityLivingIn);
+      entityzombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityzombie)), null);
       entityzombie.setVillagerType(entityvillager.getProfession());
       entityzombie.setNoAI(entityvillager.isAIDisabled());
       if (!isWild())
         entityzombie.setOwnerId(getOwnerId()); 
       if (entityvillager.hasCustomName())
         entityzombie.setCustomNameTag(entityvillager.getCustomNameTag()); 
-      this.world.spawnEntity((Entity)entityzombie);
-      this.world.playEvent((EntityPlayer)null, 1026, new BlockPos((int)this.posX, (int)this.posY, (int)this.posZ), 0);
+      this.world.spawnEntity(entityzombie);
+      this.world.playEvent(null, 1026, new BlockPos((int)this.posX, (int)this.posY, (int)this.posZ), 0);
     } 
     if (entityLivingIn instanceof net.minecraft.entity.passive.EntityVillager) {
       net.minecraft.entity.passive.EntityVillager entityvillager = (net.minecraft.entity.passive.EntityVillager)entityLivingIn;
       EntityZombie entityzombie = new EntityZombie(this.world);
       entityzombie.rotationPitch = entityvillager.rotationPitch;
       entityzombie.renderYawOffset = entityzombie.rotationYaw = entityzombie.rotationYawHead = entityvillager.rotationYawHead;
-      entityzombie.copyLocationAndAnglesFrom((Entity)entityLivingIn);
-      this.world.removeEntity((Entity)entityLivingIn);
-      entityzombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityzombie)), null);
+      entityzombie.copyLocationAndAnglesFrom(entityLivingIn);
+      this.world.removeEntity(entityLivingIn);
+      entityzombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityzombie)), null);
       entityzombie.setVillagerType(entityvillager.getProfession());
       entityzombie.setGrowingAge(((net.minecraft.entity.passive.EntityVillager)entityLivingIn).getGrowingAge());
       entityzombie.setNoAI(entityvillager.isAIDisabled());
@@ -733,8 +733,8 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
         entityzombie.setOwnerId(getOwnerId()); 
       if (entityvillager.hasCustomName())
         entityzombie.setCustomNameTag(entityvillager.getCustomNameTag()); 
-      this.world.spawnEntity((Entity)entityzombie);
-      this.world.playEvent((EntityPlayer)null, 1026, new BlockPos((int)this.posX, (int)this.posY, (int)this.posZ), 0);
+      this.world.spawnEntity(entityzombie);
+      this.world.playEvent(null, 1026, new BlockPos((int)this.posX, (int)this.posY, (int)this.posZ), 0);
     } 
   }
   
@@ -749,7 +749,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
   private void setAttackID(int id) {
     this.attackID = id;
     this.attackTick = 0;
-    this.world.setEntityState((Entity)this, (byte)id);
+    this.world.setEntityState(this, (byte)id);
   }
   
   public boolean getCanSpawnHere() {
@@ -759,7 +759,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
   public String getName() {
     if (hasCustomName())
       return getCustomNameTag(); 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     switch (getZombieType()) {
@@ -783,9 +783,9 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
       for (FriendlyZombieSummon resurrect : this.resurrections) {
         NBTTagCompound compound1 = NBTUtil.createPosTag(resurrect.getPosition());
         compound1.setInteger("Tick", resurrect.getTick());
-        nbtTagList.appendTag((NBTBase)compound1);
+        nbtTagList.appendTag(compound1);
       } 
-      compound.setTag("Resurrections", (NBTBase)nbtTagList);
+      compound.setTag("Resurrections", nbtTagList);
     } 
   }
   
@@ -865,7 +865,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
     
     public void updateTask() {
       if (EntityMutantZombie.this.attackTick < 8)
-        EntityMutantZombie.this.getLookHelper().setLookPositionWithEntity((Entity)this.attackTarget, 30.0F, 30.0F); 
+        EntityMutantZombie.this.getLookHelper().setLookPositionWithEntity(this.attackTarget, 30.0F, 30.0F);
       if (EntityMutantZombie.this.attackTick == 8) {
         double x = this.attackTarget.posX - EntityMutantZombie.this.posX;
         double z = this.attackTarget.posZ - EntityMutantZombie.this.posZ;
@@ -874,8 +874,8 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
         this.dirZ = z / d;
       } 
       if (EntityMutantZombie.this.getAttackTarget() != null && EntityMutantZombie.this.attackTick == 12) {
-        if (this.attackTarget != null && EntityMutantZombie.this.getDistance((Entity)this.attackTarget) <= EntityMutantZombie.this.width + this.attackTarget.width + 9.0F)
-          EntityMutantZombie.this.inflictEngenderMobDamage(this.attackTarget, " was smashed by ", DamageSource.causeMobDamage((EntityLivingBase)EntityMutantZombie.this), (float)EntityMutantZombie.this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()); 
+        if (this.attackTarget != null && EntityMutantZombie.this.getDistance(this.attackTarget) <= EntityMutantZombie.this.width + this.attackTarget.width + 9.0F)
+          EntityMutantZombie.this.inflictEngenderMobDamage(this.attackTarget, " was smashed by ", DamageSource.causeMobDamage(EntityMutantZombie.this), (float)EntityMutantZombie.this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
         int x = MathHelper.floor(EntityMutantZombie.this.posX + this.dirX * 2.0D);
         int y = MathHelper.floor((EntityMutantZombie.this.getEntityBoundingBox()).minY);
         int z = MathHelper.floor(EntityMutantZombie.this.posZ + this.dirZ * 2.0D);
@@ -905,7 +905,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
       if (EntityMutantZombie.this.getAttackID() == 6)
         return true; 
       this.attackTarget = EntityMutantZombie.this.getAttackTarget();
-      return (this.attackTarget != null && EntityMutantZombie.this.onGround && EntityMutantZombie.this.getDistanceSq((Entity)this.attackTarget) > 16.0D) ? ((EntityMutantZombie.this.rand.nextFloat() * 100.0F < 0.35F)) : false;
+      return (this.attackTarget != null && EntityMutantZombie.this.onGround && EntityMutantZombie.this.getDistanceSq(this.attackTarget) > 16.0D) ? ((EntityMutantZombie.this.rand.nextFloat() * 100.0F < 0.35F)) : false;
     }
     
     public void startExecuting() {
@@ -921,10 +921,10 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
     
     public void updateTask() {
       if (this.attackTarget != null && EntityMutantZombie.this.attackTick < 75)
-        EntityMutantZombie.this.getLookHelper().setLookPositionWithEntity((Entity)this.attackTarget, 30.0F, 30.0F); 
+        EntityMutantZombie.this.getLookHelper().setLookPositionWithEntity(this.attackTarget, 30.0F, 30.0F);
       if (EntityMutantZombie.this.attackTick == 10) {
         EntityMutantZombie.this.playSound(MBSoundEvents.ENTITY_MUTANT_ZOMBIE_ROAR, 10.0F, EntityMutantZombie.this.getSoundPitch());
-        for (Entity entity : EntityMutantZombie.this.world.getEntitiesInAABBexcluding((Entity)EntityMutantZombie.this, EntityMutantZombie.this.getEntityBoundingBox().grow((EntityMutantZombie.this.getSpecialAttackTimer() <= 0 && EntityMutantZombie.this.isHero()) ? 32.0D : 16.0D), EntitySelectors.CAN_AI_TARGET)) {
+        for (Entity entity : EntityMutantZombie.this.world.getEntitiesInAABBexcluding(EntityMutantZombie.this, EntityMutantZombie.this.getEntityBoundingBox().grow((EntityMutantZombie.this.getSpecialAttackTimer() <= 0 && EntityMutantZombie.this.isHero()) ? 32.0D : 16.0D), EntitySelectors.CAN_AI_TARGET)) {
           if (entity instanceof EntityLivingBase && !false) {
             double x = entity.posX - EntityMutantZombie.this.posX;
             double z = entity.posZ - EntityMutantZombie.this.posZ;
@@ -982,7 +982,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
       EntityMutantZombie.this.attackTick = 0;
       EntityMutantZombie.this.navigator.clearPath();
       this.attackTarget.dismountRidingEntity();
-      EntityMutantZombie.this.inflictEngenderMobDamage(this.attackTarget, " got tossed by ", (DamageSource)new EntityDamageSource("throw", (Entity)EntityMutantZombie.this), 4.0F);
+      EntityMutantZombie.this.inflictEngenderMobDamage(this.attackTarget, " got tossed by ", new EntityDamageSource("throw", EntityMutantZombie.this), 4.0F);
       this.attackTarget.renderYawOffset = this.attackTarget.rotationYaw = this.attackTarget.rotationYawHead = (float)MathHelper.atan2(this.attackTarget.motionZ, this.attackTarget.motionX) * 57.295776F - 90.0F;
     }
     
@@ -991,7 +991,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
     }
     
     public void updateTask() {
-      EntityMutantZombie.this.getLookHelper().setLookPositionWithEntity((Entity)this.attackTarget, 30.0F, 30.0F);
+      EntityMutantZombie.this.getLookHelper().setLookPositionWithEntity(this.attackTarget, 30.0F, 30.0F);
       if (EntityMutantZombie.this.attackTick == 2) {
         double x = this.attackTarget.posX - EntityMutantZombie.this.posX;
         double z = this.attackTarget.posZ - EntityMutantZombie.this.posZ;
@@ -1015,7 +1015,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
         if ((d2 < d1 || EntityMutantZombie.this.onGround || EntityMutantZombie.this.posY >= this.attackTarget.posY) && this.hit == -1) {
           this.hit = 0;
           EntityMutantZombie.this.setThrowAttackHit(true);
-          EntityMutantZombie.this.inflictEngenderMobDamage(this.attackTarget, " was smashed by ", (DamageSource)new EntityDamageSource("throw", (Entity)EntityMutantZombie.this), (float)EntityMutantZombie.this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * EntityMutantZombie.this.height);
+          EntityMutantZombie.this.inflictEngenderMobDamage(this.attackTarget, " was smashed by ", new EntityDamageSource("throw", EntityMutantZombie.this), (float)EntityMutantZombie.this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * EntityMutantZombie.this.height);
           double x = this.attackTarget.posX - EntityMutantZombie.this.posX;
           double z = this.attackTarget.posZ - EntityMutantZombie.this.posZ;
           double d = Math.sqrt(x * x + z * z);
@@ -1065,7 +1065,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
       EntityMutantZombie.this.attackTick = 0;
       EntityMutantZombie.this.navigator.clearPath();
       this.attackTarget.dismountRidingEntity();
-      EntityMutantZombie.this.inflictEngenderMobDamage(this.attackTarget, " got tossed by ", (DamageSource)new EntityDamageSource("throw", (Entity)EntityMutantZombie.this), 5.0F);
+      EntityMutantZombie.this.inflictEngenderMobDamage(this.attackTarget, " got tossed by ", new EntityDamageSource("throw", EntityMutantZombie.this), 5.0F);
       this.attackTarget.renderYawOffset = this.attackTarget.rotationYaw = this.attackTarget.rotationYawHead = (float)MathHelper.atan2(this.attackTarget.motionZ, this.attackTarget.motionX) * 57.295776F - 90.0F;
     }
     
@@ -1074,7 +1074,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
     }
     
     public void updateTask() {
-      EntityMutantZombie.this.getLookHelper().setLookPositionWithEntity((Entity)this.attackTarget, 30.0F, 30.0F);
+      EntityMutantZombie.this.getLookHelper().setLookPositionWithEntity(this.attackTarget, 30.0F, 30.0F);
       if (EntityMutantZombie.this.attackTick == 1) {
         double x = this.attackTarget.posX - EntityMutantZombie.this.posX;
         double z = this.attackTarget.posZ - EntityMutantZombie.this.posZ;

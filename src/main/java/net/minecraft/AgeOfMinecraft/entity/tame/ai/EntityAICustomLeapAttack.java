@@ -51,7 +51,7 @@ public class EntityAICustomLeapAttack extends EntityAIBase {
     this.leapTarget = this.leaper.getAttackTarget();
     if (this.leapTarget == null)
       return false; 
-    double d0 = this.leaper.getDistanceSq((Entity)this.leapTarget);
+    double d0 = this.leaper.getDistanceSq(this.leapTarget);
     return (d0 >= this.minDistance && d0 <= this.maxDistance) ? (!this.leaper.onGround ? false : ((this.leaper.getRNG().nextInt(2) == 0))) : false;
   }
   
@@ -66,9 +66,9 @@ public class EntityAICustomLeapAttack extends EntityAIBase {
     this.leaper.motionX += d0 / f * this.leapMotionX * this.leapMotionXGeneralPercent + this.leaper.motionX * this.leapMotionXPercent;
     this.leaper.motionZ += d1 / f * this.leapMotionZ * this.leapMotionZGeneralPercent + this.leaper.motionZ * this.leapMotionZPercent;
     this.leaper.motionY = this.leapMotionY;
-    ForgeHooks.onLivingJump((EntityLivingBase)this.leaper);
-    double dou = this.leaper.getDistanceSq((Entity)this.leapTarget);
+    ForgeHooks.onLivingJump(this.leaper);
+    double dou = this.leaper.getDistanceSq(this.leapTarget);
     if (dou <= this.minDistance + 16.0D)
-      this.leaper.attackEntityAsMob((Entity)this.leapTarget); 
+      this.leaper.attackEntityAsMob(this.leapTarget);
   }
 }

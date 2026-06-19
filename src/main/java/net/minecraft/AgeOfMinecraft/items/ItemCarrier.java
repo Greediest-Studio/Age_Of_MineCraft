@@ -85,7 +85,7 @@ public class ItemCarrier extends ItemBEItem {
     newItem.motionY = location.motionY;
     newItem.motionZ = location.motionZ;
     newItem.setItem(itemstack);
-    return (Entity)newItem;
+    return newItem;
   }
   
   public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
@@ -97,14 +97,14 @@ public class ItemCarrier extends ItemBEItem {
       if (!stack.getTagCompound().hasKey("Entity") && mob != null && mob.isEntityAlive() && mob.getPassengers().isEmpty() && mob.getRidingEntity() == null) {
         mob.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 2.0F);
         mob.playSound(SoundEvents.ENTITY_ZOMBIE_ATTACK_DOOR_WOOD, 1.0F, 2.0F);
-        mob.world.setEntityState((Entity)mob, (byte)20);
+        mob.world.setEntityState(mob, (byte)20);
         player.swingArm(hand);
         if (!player.world.isRemote) {
           mob.setGuardBlock(null);
           if (mob instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityJzahar)
             SpecialTextUtil.JzaharGroup(player.world, I18n.translateToLocal("message.jzahar.collect"));
           NBTTagCompound tag = mob.serializeNBT();
-          item.getTagCompound().setTag("Entity", (NBTBase)tag);
+          item.getTagCompound().setTag("Entity", tag);
           item.getTagCompound().setString("EntityName", mob.getName());
           if (mob.isABoss())
             item.getTagCompound().setBoolean("IsBoss", true); 
@@ -151,7 +151,7 @@ public class ItemCarrier extends ItemBEItem {
         entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
       } 
       if (!player.world.isRemote && entityliving instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityShulker)
-        entityliving.startRiding((Entity)player); 
+        entityliving.startRiding(player);
       entity.world.setEntityState(entity, (byte)20);
       entity.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0F, 2.0F);
       entity.playSound(SoundEvents.BLOCK_GLASS_BREAK, 1.0F, 2.0F);
@@ -192,14 +192,14 @@ public class ItemCarrier extends ItemBEItem {
         entityliving.rotationYawHead = entityliving.rotationYaw;
         entityliving.renderYawOffset = entityliving.rotationYaw;
         entityliving.playLivingSound();
-        entityliving.world.setEntityState((Entity)entityliving, (byte)20);
+        entityliving.world.setEntityState(entityliving, (byte)20);
         entityliving.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0F, 2.0F);
         entityliving.playSound(SoundEvents.BLOCK_GLASS_BREAK, 1.0F, 2.0F);
         entityliving.playSound(ESound.createMob, 1.0F, 1.0F);
         stack.getTagCompound().removeTag("Entity");
         stack.getTagCompound().removeTag("EntityName");
         if (!worldIn.isRemote)
-          worldIn.spawnEntity((Entity)entityliving); 
+          worldIn.spawnEntity(entityliving);
       } 
     } 
     return entity;

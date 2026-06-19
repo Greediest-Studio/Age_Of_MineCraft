@@ -17,7 +17,7 @@ public class RenderParrot extends RenderLiving<EntityParrot> {
   public static final ResourceLocation[] PARROT_TEXTURES = new ResourceLocation[] { new ResourceLocation("textures/entity/parrot/parrot_red_blue.png"), new ResourceLocation("textures/entity/parrot/parrot_blue.png"), new ResourceLocation("textures/entity/parrot/parrot_green.png"), new ResourceLocation("textures/entity/parrot/parrot_yellow_blue.png"), new ResourceLocation("textures/entity/parrot/parrot_grey.png") };
   
   public RenderParrot(RenderManager p_i47375_1_) {
-    super(p_i47375_1_, (ModelBase)new ModelParrot(), 0.3F);
+    super(p_i47375_1_, new ModelParrot(), 0.3F);
   }
   
   protected ResourceLocation getEntityTexture(EntityParrot entity) {

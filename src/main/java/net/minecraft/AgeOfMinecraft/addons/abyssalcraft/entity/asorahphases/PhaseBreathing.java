@@ -46,23 +46,23 @@ public class PhaseBreathing extends PhaseBaseFriendly {
   
   public void doLocalUpdate() {
     if (this.dragon.getAttackTarget() != null)
-      this.dragon.faceEntity((Entity)this.dragon.getAttackTarget(), 10.0F, 20.0F); 
+      this.dragon.faceEntity(this.dragon.getAttackTarget(), 10.0F, 20.0F);
     if (this.dragon.getOwner() != null)
       this.dragon.setPositionAndUpdate((this.dragon.getOwner()).posX, (this.dragon.getOwner()).posY + 4.0D, (this.dragon.getOwner()).posZ); 
     this.flameTicks++;
-    if (!this.dragon.world.isRemote && this.dragon.getAttackTarget() != null && this.dragon.getAttackTarget().isEntityAlive() && this.dragon.getAttackTarget().canEntityBeSeen((Entity)this.dragon) && this.dragon.getRNG().nextInt(100) == 0) {
+    if (!this.dragon.world.isRemote && this.dragon.getAttackTarget() != null && this.dragon.getAttackTarget().isEntityAlive() && this.dragon.getAttackTarget().canEntityBeSeen(this.dragon) && this.dragon.getRNG().nextInt(100) == 0) {
       double d6 = this.dragon.dragonPartHead.posX;
       double d7 = this.dragon.dragonPartHead.posY + 2.0D;
       double d8 = this.dragon.dragonPartHead.posZ;
       double d9 = (this.dragon.getAttackTarget()).posX - d6;
       double d10 = (this.dragon.getAttackTarget()).posY + 1.0D - d7;
       double d11 = (this.dragon.getAttackTarget()).posZ - d8;
-      this.dragon.world.playEvent((EntityPlayer)null, 1016, new BlockPos((Entity)this.dragon), 0);
-      EntityCoraliumChargeOther entitydragonfireball = new EntityCoraliumChargeOther(this.dragon.world, (EntityLivingBase)this.dragon, d9, d10, d11);
+      this.dragon.world.playEvent(null, 1016, new BlockPos(this.dragon), 0);
+      EntityCoraliumChargeOther entitydragonfireball = new EntityCoraliumChargeOther(this.dragon.world, this.dragon, d9, d10, d11);
       entitydragonfireball.posX = d6;
       entitydragonfireball.posY = d7;
       entitydragonfireball.posZ = d8;
-      this.dragon.world.spawnEntity((Entity)entitydragonfireball);
+      this.dragon.world.spawnEntity(entitydragonfireball);
     } 
     if (this.flameTicks >= 200)
       if (this.flameCount >= 4) {

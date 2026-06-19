@@ -2,7 +2,6 @@ package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
 import com.shinoow.abyssalcraft.client.model.entity.ModelDreadling;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDreadling;
-import net.minecraft.AgeOfMinecraft.renders.LayerLearningBook;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -23,9 +22,9 @@ public class RenderDreadling extends RenderLiving<EntityDreadling> {
   }
   
   public RenderDreadling(RenderManager manager, ModelDreadling model) {
-    super(manager, (ModelBase)model, 0.5F);
+    super(manager, model, 0.5F);
     addLayer((LayerRenderer)new LayerCustomHead(model.head));
-    addLayer((LayerRenderer)new LayerLearningBook(this));
+    
   }
   
   protected ResourceLocation getEntityTexture(EntityDreadling entity) {

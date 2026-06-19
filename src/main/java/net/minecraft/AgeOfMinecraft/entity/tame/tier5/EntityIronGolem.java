@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier5;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import java.util.UUID;
@@ -72,12 +71,12 @@ public class EntityIronGolem extends EntityTameBase implements Armored {
     } 
     this.experienceValue = 20;
     this.isOffensive = true;
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIOpenDoor((EntityLiving)this, true));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.0D, 48.0F, 8.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.0D, true));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.67D, 80));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(0, new EntityAIOpenDoor(this, true));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.0D, 48.0F, 8.0F));
+    this.tasks.addTask(3, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.67D, 80));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
   }
   
   public String getDescName() {
@@ -140,12 +139,12 @@ public class EntityIronGolem extends EntityTameBase implements Armored {
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return I18n.translateToLocal("entity." + str + ".cmm.name");
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name");
@@ -156,7 +155,7 @@ public class EntityIronGolem extends EntityTameBase implements Armored {
     if (!this.world.isRemote)
       for (int i = 0; i < 1; i++) {
         EntityIronGolem baby = new EntityIronGolem(this.world);
-        baby.copyLocationAndAnglesFrom((Entity)this);
+        baby.copyLocationAndAnglesFrom(this);
         baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
         baby.setGrowingAge(-100000);
         baby.setChild(true);
@@ -166,18 +165,18 @@ public class EntityIronGolem extends EntityTameBase implements Armored {
         if (isMarried())
           for (int e = 0; e < 10 + this.rand.nextInt(10); e++)
             baby.levelUp();  
-        this.world.spawnEntity((Entity)baby);
+        this.world.spawnEntity(baby);
       }  
   }
   
   protected void updateAITasks() {
     super.updateAITasks();
-    if (this.hurtResistantTime <= 0 && !isInvisible() && this.holdRoseTick > 0 && !isRiding() && !isBeingRidden() && !this.tasks.taskEntries.contains(new EntityAIWatchClosest2((EntityLiving)this, EntityPlayer.class, 8.0F, 1.0F))) {
-      this.tasks.addTask(6, (EntityAIBase)new EntityAIWatchClosest2((EntityLiving)this, EntityPlayer.class, 8.0F, 1.0F));
+    if (this.hurtResistantTime <= 0 && !isInvisible() && this.holdRoseTick > 0 && !isRiding() && !isBeingRidden() && !this.tasks.taskEntries.contains(new EntityAIWatchClosest2(this, EntityPlayer.class, 8.0F, 1.0F))) {
+      this.tasks.addTask(6, new EntityAIWatchClosest2(this, EntityPlayer.class, 8.0F, 1.0F));
     } else {
-      this.tasks.removeTask((EntityAIBase)new EntityAIWatchClosest2((EntityLiving)this, EntityPlayer.class, 8.0F, 1.0F));
+      this.tasks.removeTask(new EntityAIWatchClosest2(this, EntityPlayer.class, 8.0F, 1.0F));
     } 
-    if (this.hurtResistantTime <= 0 && !isInvisible() && this.world.getClosestPlayerToEntity((Entity)this, 8.0D) != null && false && getAttackTarget() == null && this.rand.nextInt(100) == 0 && this.holdRoseTick == 0 && !isBeingRidden() && getJukeboxToDanceTo() == null)
+    if (this.hurtResistantTime <= 0 && !isInvisible() && this.world.getClosestPlayerToEntity(this, 8.0D) != null && false && getAttackTarget() == null && this.rand.nextInt(100) == 0 && this.holdRoseTick == 0 && !isBeingRidden() && getJukeboxToDanceTo() == null)
       setHoldingRose(true); 
   }
   
@@ -206,11 +205,11 @@ public class EntityIronGolem extends EntityTameBase implements Armored {
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (getHoldRoseTick() > 0) {
         if (!this.world.isRemote) {
-          dropItemWithOffset(Item.getItemFromBlock((Block)Blocks.RED_FLOWER), 1, BlockFlower.EnumFlowerType.POPPY.getMeta());
+          dropItemWithOffset(Item.getItemFromBlock(Blocks.RED_FLOWER), 1, BlockFlower.EnumFlowerType.POPPY.getMeta());
           setHoldingRose(false);
         } 
       } else if (!isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote) {
-        player.startRiding((Entity)this);
+        player.startRiding(this);
       } 
       return true;
     } 
@@ -260,7 +259,7 @@ public class EntityIronGolem extends EntityTameBase implements Armored {
         this.motionY = 0.0D;
         this.motionZ = 0.0D;
       } 
-      List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(1.0D));
+      List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(1.0D));
         for (Entity entity : list) {
             if (entity instanceof EntityLivingBase && !false && !this.world.isRemote && this.ticksExisted % 10 == 0)
                 attackEntityAsMob(entity);
@@ -280,7 +279,7 @@ public class EntityIronGolem extends EntityTameBase implements Armored {
   
   public void onLivingUpdate() {
     super.onLivingUpdate();
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 64.0D && getSpecialAttackTimer() <= 0 && this.onGround && isHero())
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) < 64.0D && getSpecialAttackTimer() <= 0 && this.onGround && isHero())
       performSpecialAttack(); 
     if (this.motionX * this.motionX + this.motionZ * this.motionZ != 0.0D && this.rand.nextInt(5) == 0) {
       int i = MathHelper.floor(this.posX);
@@ -298,17 +297,17 @@ public class EntityIronGolem extends EntityTameBase implements Armored {
       net.minecraft.entity.passive.EntityVillager entityvillager = new net.minecraft.entity.passive.EntityVillager(this.world);
       entityvillager.copyLocationAndAnglesFrom(entityIn);
       entityvillager.setProfession(((EntityZombieVillager)entityIn).getProfession());
-      entityvillager.finalizeMobSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)entityvillager)), (IEntityLivingData)null, false);
+      entityvillager.finalizeMobSpawn(this.world.getDifficultyForLocation(new BlockPos(entityvillager)), null, false);
       entityvillager.setLookingForHome();
       if (((EntityZombieVillager)entityIn).isChild())
         entityvillager.setGrowingAge(-24000); 
       this.world.removeEntity(entityIn);
       entityvillager.setNoAI(((EntityZombieVillager)entityIn).isAIDisabled());
-      if (((EntityZombieVillager)entityIn).hasCustomName())
-        entityvillager.setCustomNameTag(((EntityZombieVillager)entityIn).getCustomNameTag()); 
-      this.world.spawnEntity((Entity)entityvillager);
+      if (entityIn.hasCustomName())
+        entityvillager.setCustomNameTag(entityIn.getCustomNameTag());
+      this.world.spawnEntity(entityvillager);
       entityvillager.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 200, 0));
-      this.world.playEvent((EntityPlayer)null, 1027, new BlockPos((int)((EntityZombieVillager)entityIn).posX, (int)((EntityZombieVillager)entityIn).posY, (int)((EntityZombieVillager)entityIn).posZ), 0);
+      this.world.playEvent(null, 1027, new BlockPos((int) entityIn.posX, (int) entityIn.posY, (int) entityIn.posZ), 0);
       if (entityvillager.getProfession() == 5)
         entityvillager.onKillCommand(); 
       return true;
@@ -322,11 +321,11 @@ public class EntityIronGolem extends EntityTameBase implements Armored {
       this.world.removeEntity(entityIn);
       entityvillager.setNoAI(((EntityZombie)entityIn).isAIDisabled());
       entityvillager.setOwnerId(getOwnerId());
-      if (((EntityZombie)entityIn).hasCustomName())
-        entityvillager.setCustomNameTag(((EntityZombie)entityIn).getCustomNameTag()); 
-      this.world.spawnEntity((Entity)entityvillager);
+      if (entityIn.hasCustomName())
+        entityvillager.setCustomNameTag(entityIn.getCustomNameTag());
+      this.world.spawnEntity(entityvillager);
       entityvillager.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 200, 0));
-      this.world.playEvent((EntityPlayer)null, 1027, new BlockPos((int)((EntityZombie)entityIn).posX, (int)((EntityZombie)entityIn).posY, (int)((EntityZombie)entityIn).posZ), 0);
+      this.world.playEvent(null, 1027, new BlockPos((int) entityIn.posX, (int) entityIn.posY, (int) entityIn.posZ), 0);
       return true;
     } 
     if (entityIn instanceof EntityVillager && !isWild() && !false) {
@@ -336,7 +335,7 @@ public class EntityIronGolem extends EntityTameBase implements Armored {
       return true;
     } 
     this.attackTimer = 10;
-    this.world.setEntityState((Entity)this, (byte)4);
+    this.world.setEntityState(this, (byte)4);
     playSound(SoundEvents.ENTITY_IRONGOLEM_ATTACK, 1.0F, 1.0F);
     AttributeModifier irongolemrandomizer = (new AttributeModifier(UUID.fromString("B9766B59-8566-4402-BC1F-3EE2A276D839"), "Iron Golem randomizer", this.rand.nextDouble() * 2.5D, 1)).setSaved(false);
     IAttributeInstance iattributeinstanceattack = getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
@@ -357,7 +356,7 @@ public class EntityIronGolem extends EntityTameBase implements Armored {
     if (this.world.getDifficulty() == EnumDifficulty.HARD)
       amount *= 1.5D; 
     if (!entity.isEntityAlive() && entity instanceof EntityLivingBase) {
-      ((EntityLivingBase)entity).prevRenderYawOffset = ((EntityLivingBase)entity).renderYawOffset = ((EntityLivingBase)entity).prevRotationYaw = ((EntityLivingBase)entity).rotationYaw = ((EntityLivingBase)entity).prevRotationYawHead = ((EntityLivingBase)entity).rotationYawHead = this.rotationYawHead;
+      ((EntityLivingBase)entity).prevRenderYawOffset = ((EntityLivingBase)entity).renderYawOffset = entity.prevRotationYaw = ((EntityLivingBase)entity).rotationYaw = ((EntityLivingBase)entity).prevRotationYawHead = ((EntityLivingBase)entity).rotationYawHead = this.rotationYawHead;
       float xRatio = MathHelper.sin(this.rotationYawHead * 0.017453292F);
       float zRatio = -MathHelper.cos(this.rotationYawHead * 0.017453292F);
       entity.isAirBorne = true;
@@ -369,7 +368,7 @@ public class EntityIronGolem extends EntityTameBase implements Armored {
       entity.motionY /= 2.0D;
       entity.motionY += amount;
       if (entity instanceof EntityPlayerMP)
-        ((EntityPlayerMP)entity).connection.sendPacket((Packet)new SPacketEntityVelocity(entity)); 
+        ((EntityPlayerMP)entity).connection.sendPacket(new SPacketEntityVelocity(entity));
     } 
     entity.motionY += amount;
   }
@@ -390,7 +389,7 @@ public class EntityIronGolem extends EntityTameBase implements Armored {
   
   public void setHoldingRose(boolean p_70851_1_) {
     this.holdRoseTick = p_70851_1_ ? 100 : 0;
-    this.world.setEntityState((Entity)this, (byte)(p_70851_1_ ? 11 : 12));
+    this.world.setEntityState(this, (byte)(p_70851_1_ ? 11 : 12));
   }
   
   public boolean takesFallDamage() {
@@ -401,12 +400,12 @@ public class EntityIronGolem extends EntityTameBase implements Armored {
     if (getSpecialAttackTimer() <= 0 && isHero() && getAttackTarget() != null) {
       setSpecialAttackTimer(300);
       playSound(ESound.golemSmash, 10.0F, 1.0F);
-      createEngenderModExplosionFireless((Entity)this, this.posX, this.posY - 2.0D, this.posZ, 3.0F, false);
+      createEngenderModExplosionFireless(this, this.posX, this.posY - 2.0D, this.posZ, 3.0F, false);
       List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(24.0D, 3.0D, 24.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
           for (EntityLivingBase entity : list) {
               if (entity != null && !false) {
-                  inflictEngenderMobDamage(entity, " was smashed by ", DamageSource.causeExplosionDamage((EntityLivingBase) this), (entity instanceof net.minecraft.entity.monster.IMob) ? 24.0F : 12.0F);
+                  inflictEngenderMobDamage(entity, " was smashed by ", DamageSource.causeExplosionDamage(this), (entity instanceof net.minecraft.entity.monster.IMob) ? 24.0F : 12.0F);
                   entity.isAirBorne = true;
                   float f = MathHelper.sqrt(MathHelper.sin(this.rotationYaw * 0.017453292F) * MathHelper.sin(this.rotationYaw * 0.017453292F) + -MathHelper.cos(this.rotationYaw * 0.017453292F) * -MathHelper.cos(this.rotationYaw * 0.017453292F));
                   entity.motionX /= 2.0D;

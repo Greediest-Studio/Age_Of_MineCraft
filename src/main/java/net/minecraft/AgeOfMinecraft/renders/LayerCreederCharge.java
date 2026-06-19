@@ -46,7 +46,7 @@ public class LayerCreederCharge implements LayerRenderer<EntityCreeder> {
       GlStateManager.color(0.75F + ran, 0.75F + ran, 0.75F + ran, 1.0F);
       GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
       this.creeperModel.setModelAttributes(this.creeperRenderer.getMainModel());
-      this.creeperModel.render((Entity)entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+      this.creeperModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
       GlStateManager.matrixMode(5890);
       GlStateManager.loadIdentity();
       GlStateManager.matrixMode(5888);

@@ -42,14 +42,14 @@ public class RenderCreeper extends RenderLiving<EntityCreeper> {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.5F);
     addLayer(new LayerCreeperCharge(this));
     addLayer(new LayerCreeperGlow(this));
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
     addLayer(new LayerCustomHeadEngender(regularmodel.head, cmmmodel.Head));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    
+    addLayer(new LayerMobCape(this));
   }
   
   protected void preRenderCallback(EntityCreeper entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = (entitylivingbaseIn.getIllusionFormTime() > 0) ? (ModelBase)disguisemodel : (EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel);
+    this.mainModel = (entitylivingbaseIn.getIllusionFormTime() > 0) ? disguisemodel : (EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel);
     float f = entitylivingbaseIn.getCreeperFlashIntensity(partialTickTime);
     float f1 = 1.0F + MathHelper.sin(f * 100.0F) * f * 0.01F;
     f = MathHelper.clamp(f, 0.0F, 1.0F);

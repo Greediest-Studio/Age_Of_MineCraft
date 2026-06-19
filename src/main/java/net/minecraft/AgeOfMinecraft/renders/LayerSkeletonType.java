@@ -30,10 +30,10 @@ public class LayerSkeletonType implements LayerRenderer<EntitySkeleton> {
   public void doRenderLayer(EntitySkeleton entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
     if (!EngenderConfig.mobs.useMobTalkerModels && entitylivingbaseIn.getSkeletonType() == 2 && !entitylivingbaseIn.isInvisible()) {
       this.layerModel.setModelAttributes(this.renderer.getMainModel());
-      this.layerModel.setLivingAnimations((EntityLivingBase)entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks);
+      this.layerModel.setLivingAnimations(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks);
       GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
       this.renderer.bindTexture(entitylivingbaseIn.isAntiMob() ? antiSTRAY_CLOTHES_TEXTURES : STRAY_CLOTHES_TEXTURES);
-      this.layerModel.render((Entity)entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+      this.layerModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
     } 
   }
   

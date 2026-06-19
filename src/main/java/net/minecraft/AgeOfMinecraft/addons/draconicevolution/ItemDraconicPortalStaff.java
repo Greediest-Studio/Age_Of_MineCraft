@@ -79,7 +79,7 @@ public class ItemDraconicPortalStaff extends ItemBEItem {
     if (!playerIn.capabilities.isCreativeMode && !flag)
       return !flag ? new ActionResult(EnumActionResult.FAIL, itemStackIn) : new ActionResult(EnumActionResult.PASS, itemStackIn); 
     playerIn.setActiveHand(hand);
-    playerIn.world.playSound(playerIn, new BlockPos((Entity)playerIn), SoundEvents.BLOCK_ANVIL_DESTROY, SoundCategory.PLAYERS, 100.0F, 0.5F);
+    playerIn.world.playSound(playerIn, new BlockPos(playerIn), SoundEvents.BLOCK_ANVIL_DESTROY, SoundCategory.PLAYERS, 100.0F, 0.5F);
     return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
   }
   
@@ -93,12 +93,12 @@ public class ItemDraconicPortalStaff extends ItemBEItem {
   
   public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityPlayer playerIn) {
     playerIn.addExhaustion(10.0F);
-    playerIn.getCooldownTracker().setCooldown((Item)this, 1500 + stack.getMetadata() * 500);
+    playerIn.getCooldownTracker().setCooldown(this, 1500 + stack.getMetadata() * 500);
     EntityDraconicPortal portal = new EntityDraconicPortal(worldIn);
     portal.setLocationAndAngles((int)playerIn.posX, (int)playerIn.posY, (int)playerIn.posZ, 0.0F, 0.0F);
     portal.setOwnerId(playerIn.getUniqueID());
     if (!worldIn.isRemote) {
-      worldIn.spawnEntity((Entity)portal);
+      worldIn.spawnEntity(portal);
       portal.setMetaData(stack.getMetadata());
       portal.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1000.0D + portal.getMetaData() * 1000.0D);
       portal.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(20.0D + portal.getMetaData() * 10.0D);
@@ -111,6 +111,6 @@ public class ItemDraconicPortalStaff extends ItemBEItem {
   public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
     if (isInCreativeTab(tab))
       for (int i = 0; i <= 4; i++)
-        items.add(new ItemStack((Item)this, 1, i));  
+        items.add(new ItemStack(this, 1, i));
   }
 }

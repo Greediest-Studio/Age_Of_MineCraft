@@ -2,12 +2,10 @@ package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
 import com.shinoow.abyssalcraft.client.model.entity.ModelLesserShoggoth;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityLesserShoggoth;
-import net.minecraft.AgeOfMinecraft.renders.LayerLearningBook;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -26,8 +24,8 @@ public class RenderLesserShoggoth extends RenderLiving<EntityLesserShoggoth> {
   private static final ResourceLocation darkResource = new ResourceLocation("abyssalcraft:textures/model/shoggoth/shadowshoggoth.png");
   
   public RenderLesserShoggoth(RenderManager manager) {
-    super(manager, (ModelBase)new ModelLesserShoggoth(), 2.0F);
-    addLayer((LayerRenderer)new LayerLearningBook(this));
+    super(manager, new ModelLesserShoggoth(), 2.0F);
+    
   }
   
   protected void renderModel(EntityLesserShoggoth entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {

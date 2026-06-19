@@ -36,8 +36,6 @@ import net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntityVex;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityEnderman;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityGhast;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEvoker;
-import net.minecraft.AgeOfMinecraft.events.EngenderGeneralEvent;
-import net.minecraft.AgeOfMinecraft.items.ItemLearningBook;
 import net.minecraft.AgeOfMinecraft.registry.EItem;
 import net.minecraft.AgeOfMinecraft.registry.ESetup;
 import net.minecraft.AgeOfMinecraft.registry.ESound;
@@ -52,7 +50,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -62,7 +59,6 @@ import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIBreakDoor;
 import net.minecraft.entity.ai.EntityAIOpenDoor;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
@@ -73,7 +69,6 @@ import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityBoat;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -89,16 +84,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.Packet;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.pathfinding.FlyingNodeProcessor;
-import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigateGround;
@@ -116,7 +108,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.BossInfo;
@@ -164,17 +155,17 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   
   private static final DataParameter<Integer> HEROSPECIALATTACKTIMER = EntityDataManager.createKey(EntityTameBase.class, DataSerializers.VARINT);
   
-  public static final IAttribute STRENGTH = (IAttribute)(new RangedAttribute((IAttribute)null, "engender.strength", 9.0D, 1.0D, 100.0D)).setDescription("Mob Strength").setShouldWatch(true);
+  public static final IAttribute STRENGTH = (new RangedAttribute(null, "engender.strength", 9.0D, 1.0D, 100.0D)).setDescription("Mob Strength").setShouldWatch(true);
   
-  public static final IAttribute STAMINA = (IAttribute)(new RangedAttribute((IAttribute)null, "engender.stamina", 9.0D, 1.0D, 100.0D)).setDescription("Mob Stamina").setShouldWatch(true);
+  public static final IAttribute STAMINA = (new RangedAttribute(null, "engender.stamina", 9.0D, 1.0D, 100.0D)).setDescription("Mob Stamina").setShouldWatch(true);
   
-  public static final IAttribute INTELLIGENCE = (IAttribute)(new RangedAttribute((IAttribute)null, "engender.intelligence", 9.0D, 1.0D, 100.0D)).setDescription("Mob Intelligence").setShouldWatch(true);
+  public static final IAttribute INTELLIGENCE = (new RangedAttribute(null, "engender.intelligence", 9.0D, 1.0D, 100.0D)).setDescription("Mob Intelligence").setShouldWatch(true);
   
-  public static final IAttribute DEXTERITY = (IAttribute)(new RangedAttribute((IAttribute)null, "engender.dexterity", 9.0D, 1.0D, 100.0D)).setDescription("Mob Dexterity").setShouldWatch(true);
+  public static final IAttribute DEXTERITY = (new RangedAttribute(null, "engender.dexterity", 9.0D, 1.0D, 100.0D)).setDescription("Mob Dexterity").setShouldWatch(true);
   
-  public static final IAttribute AGILITY = (IAttribute)(new RangedAttribute((IAttribute)null, "engender.agility", 9.0D, 1.0D, 100.0D)).setDescription("Mob Agility").setShouldWatch(true);
+  public static final IAttribute AGILITY = (new RangedAttribute(null, "engender.agility", 9.0D, 1.0D, 100.0D)).setDescription("Mob Agility").setShouldWatch(true);
   
-  public static final IAttribute FITTNESS = (IAttribute)(new RangedAttribute((IAttribute)null, "engender.fittness", 1.0D, 0.75D, 1.5D)).setDescription("Mob Fittness").setShouldWatch(true);
+  public static final IAttribute FITTNESS = (new RangedAttribute(null, "engender.fittness", 1.0D, 0.75D, 1.5D)).setDescription("Mob Fittness").setShouldWatch(true);
   
   private static final DataParameter<Integer> AGE = EntityDataManager.createKey(EntityTameBase.class, DataSerializers.VARINT);
   
@@ -232,7 +223,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   
   public int convertionDelay;
   
-  protected Block spawnableBlock = (Block)Blocks.GRASS;
+  protected Block spawnableBlock = Blocks.GRASS;
   
   protected int inLove;
   
@@ -243,19 +234,9 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   public int holdRoseTick;
   
   public int lastChanceInvul;
-  
-  public float pageFlip;
-  
-  public float pageFlipPrev;
-  
+
   public float bookSpread;
-  
-  public float bookSpreadPrev;
-  
-  public float flipT;
-  
-  public float flipA;
-  
+
   public int deathTicks;
   
   protected int blockTimer;
@@ -268,7 +249,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   
   public String fakeTeam;
   
-  protected BossInfoServer bossInfo = new BossInfoServer((ITextComponent)new TextComponentTranslation(getName(), new Object[0]), BossInfo.Color.WHITE, BossInfo.Overlay.PROGRESS);
+  protected BossInfoServer bossInfo = new BossInfoServer(new TextComponentTranslation(getName(), new Object[0]), BossInfo.Color.WHITE, BossInfo.Overlay.PROGRESS);
   
   private EnumStudy currentStudy = EnumStudy.Physical;
   
@@ -276,13 +257,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   
   public NBTTagCompound polymorpherData;
   
-  public static final Item[] books = new Item[] { 
-      null, (Item)EItem.learningBookBasic, (Item)EItem.learningBookBasicCombat, (Item)EItem.learningBookBasicCooking, (Item)EItem.learningBookBasicExercise, (Item)EItem.learningBookBasicKnowledge, (Item)EItem.learningBookModern, (Item)EItem.learningBookModernCombat, (Item)EItem.learningBookModernBrute, (Item)EItem.learningBookModernCooking, 
-      (Item)EItem.learningBookModernEating, (Item)EItem.learningBookModernExercise, (Item)EItem.learningBookModernRunning, (Item)EItem.learningBookModernKnowledge, (Item)EItem.learningBookModernPacifist, (Item)EItem.learningBookAdvanced, (Item)EItem.learningBookAdvancedCombat, (Item)EItem.learningBookAdvancedBrute, (Item)EItem.learningBookAdvancedWarrior, (Item)EItem.learningBookAdvancedCooking, 
-      (Item)EItem.learningBookAdvancedEating, (Item)EItem.learningBookAdvancedDieting, (Item)EItem.learningBookAdvancedExercise, (Item)EItem.learningBookAdvancedRunning, (Item)EItem.learningBookAdvancedLifting, (Item)EItem.learningBookAdvancedKnowledge, (Item)EItem.learningBookAdvancedPacifist, (Item)EItem.learningBookAdvancedWisdom, (Item)EItem.learningBookComplex, (Item)EItem.learningBookComplexCombat, 
-      (Item)EItem.learningBookComplexBrute, (Item)EItem.learningBookComplexWarrior, (Item)EItem.learningBookComplexCooking, (Item)EItem.learningBookComplexEating, (Item)EItem.learningBookComplexDieting, (Item)EItem.learningBookComplexExercise, (Item)EItem.learningBookComplexRunning, (Item)EItem.learningBookComplexLifting, (Item)EItem.learningBookComplexKnowledge, (Item)EItem.learningBookComplexPacifist, 
-      (Item)EItem.learningBookComplexWisdom, (Item)EItem.learningBookMaster, (Item)EItem.learningBookMasterCombat, (Item)EItem.learningBookMasterBrute, (Item)EItem.learningBookMasterWarrior, (Item)EItem.learningBookMasterCooking, (Item)EItem.learningBookMasterEating, (Item)EItem.learningBookMasterDieting, (Item)EItem.learningBookMasterExercise, (Item)EItem.learningBookMasterRunning, 
-      (Item)EItem.learningBookMasterLifting, (Item)EItem.learningBookMasterKnowledge, (Item)EItem.learningBookMasterPacifist, (Item)EItem.learningBookMasterWisdom, (Item)EItem.learningBookArtifact, (Item)EItem.learningBookArtifactStrength, (Item)EItem.learningBookArtifactStamina, (Item)EItem.learningBookArtifactSpeed, (Item)EItem.learningBookArtifactIntellegence };
+  public static final Item[] books = new Item[] {};
   
   public InventoryBasic basicInventory;
   
@@ -301,14 +276,14 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   private final EntityAIBreakDoor breakDoor;
   
   private final EntityAIOpenDoor openDoor;
-  
+
   public EntityTameBase(World worldIn) {
     super(worldIn);
-    this.breakDoor = new EntityAIBreakDoor((EntityLiving)this);
-    this.openDoor = new EntityAIOpenDoor((EntityLiving)this, true);
-    this.rainbow = new TextFormatting[] { 
-        TextFormatting.RED, TextFormatting.GOLD, TextFormatting.YELLOW, TextFormatting.GREEN, TextFormatting.DARK_GREEN, TextFormatting.AQUA, TextFormatting.BLUE, TextFormatting.DARK_BLUE, TextFormatting.LIGHT_PURPLE, TextFormatting.DARK_PURPLE, 
-        TextFormatting.DARK_RED };
+    this.breakDoor = new EntityAIBreakDoor(this);
+    this.openDoor = new EntityAIOpenDoor(this, true);
+    this.rainbow = new TextFormatting[] {
+            TextFormatting.RED, TextFormatting.GOLD, TextFormatting.YELLOW, TextFormatting.GREEN, TextFormatting.DARK_GREEN, TextFormatting.AQUA, TextFormatting.BLUE, TextFormatting.DARK_BLUE, TextFormatting.LIGHT_PURPLE, TextFormatting.DARK_PURPLE,
+            TextFormatting.DARK_RED };
     this.timeUntilPortal = 100;
     this.basicInventory = new InventoryBasic("Basic inventory", false, 8);
     this.lastChanceInvul = getSpawnTimer();
@@ -319,31 +294,23 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     setDoorAItask((getIntelligence() < 12.0F));
     this.renderYawOffset = this.rotationYaw = this.rotationYawHead = this.rand.nextFloat() * 360.0F;
     this.onGround = true;
-      Arrays.fill(this.inventoryArmorDropChances, 0.0F);
-      Arrays.fill(this.inventoryHandsDropChances, 0.0F);
+    Arrays.fill(this.inventoryArmorDropChances, 0.0F);
+    Arrays.fill(this.inventoryHandsDropChances, 0.0F);
     this.experienceValue = 10;
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIAvoidEntitySPC((EntityCreature)this, EntityLivingBase.class, (Predicate<EntityLivingBase>) p_apply_1_ -> (p_apply_1_ != null && ((EntityTameBase.this.shouldFleeAtLowHealth() && p_apply_1_.isEntityAlive() && EntityTameBase.this.getIntelligence() > 4.0F) || (EntityTameBase.this.isChild() && EngenderConfig.mobs.useMobTalkerModels) || (p_apply_1_ instanceof EntityLiving && p_apply_1_.getHealth() <= 0.0F && p_apply_1_.deathTime <= 0 && !(p_apply_1_ instanceof EntityTameBase)) || (p_apply_1_ instanceof EntityWither && ((EntityWither)p_apply_1_).getInvulTime() > 0))),  16.0F, 1.25D, 1.25D));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIOpenDoor((EntityLiving)this, true));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIMobGirlMate(this, 1.2D));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIFollowWildAdult(this, 1.25D));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIBabyMobGirlFollowParent(this, 1.25D));
-    this.tasks.addTask(13, (EntityAIBase)new EntityAIWatchClosest((EntityLiving)this, EntityLivingBase.class, 8.0F) {
-          public boolean shouldExecute() {
-            if (!EntityTameBase.this.getCurrentBook().isEmpty() || EntityTameBase.this.getAttackTarget() != null || EntityTameBase.this.getCreatureAttribute() != ESetup.WITHER_STORM)
-              return false; 
-            return super.shouldExecute();
-          }
-        });
-    this.targetTasks.addTask(0, new EntityAIFriendlyHurtByTarget((EntityCreature)this, true, new Class[0]));
+    this.tasks.addTask(1, new EntityAIAvoidEntitySPC(this, EntityLivingBase.class, (Predicate<EntityLivingBase>) p_apply_1_ -> (p_apply_1_ != null && ((EntityTameBase.this.shouldFleeAtLowHealth() && p_apply_1_.isEntityAlive() && EntityTameBase.this.getIntelligence() > 4.0F) || (EntityTameBase.this.isChild() && EngenderConfig.mobs.useMobTalkerModels) || (p_apply_1_ instanceof EntityLiving && p_apply_1_.getHealth() <= 0.0F && p_apply_1_.deathTime <= 0 && !(p_apply_1_ instanceof EntityTameBase)) || (p_apply_1_ instanceof EntityWither && ((EntityWither)p_apply_1_).getInvulTime() > 0))),  16.0F, 1.25D, 1.25D));
+    this.tasks.addTask(0, new EntityAIOpenDoor(this, true));
+    this.tasks.addTask(0, new EntityAIMobGirlMate(this, 1.2D));
+    this.tasks.addTask(0, new EntityAIFollowWildAdult(this, 1.25D));
+    this.tasks.addTask(0, new EntityAIBabyMobGirlFollowParent(this, 1.25D));
+    this.tasks.addTask(13, new EntityAIWatchClosest(this, EntityLivingBase.class, 8.0F));
+    this.targetTasks.addTask(0, new EntityAIFriendlyHurtByTarget(this, true));
     this.targetTasks.addTask(0, new EntityAILeaderHurtByTarget(this));
     this.targetTasks.addTask(0, new EntityAILeaderHurtTarget(this));
-    if (getBookID() != 0)
-      setCurrentBook(new ItemStack(books[getBookID()], 1, getBookDurability())); 
     this.renderLocations = new Vec3d[2][4];
     for (int i = 0; i < 4; i++) {
       this.renderLocations[0][i] = new Vec3d(0.0D, 0.0D, 0.0D);
       this.renderLocations[1][i] = new Vec3d(0.0D, 0.0D, 0.0D);
-    } 
+    }
   }
   
   public TextFormatting rainbowText() {
@@ -397,7 +364,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     nbttagcompound.setString("id", getEntityString());
     writeToNBT(nbttagcompound);
     if (p_191994_1_.addShoulderEntity(nbttagcompound)) {
-      this.world.removeEntity((Entity)this);
+      this.world.removeEntity(this);
       return true;
     } 
     return false;
@@ -429,11 +396,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   public ItemStack getCurrentBook() {
     return (getBookID() != 0) ? this.currentReadingBook : ItemStack.EMPTY;
   }
-  
+
   protected boolean isMovementBlocked() {
-    return (getHealth() <= 0.0F || (!getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty() && getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() instanceof ItemLearningBook));
+    return getHealth() <= 0.0F;
   }
-  
+
   public int getHoldRoseTick() {
     return this.holdRoseTick;
   }
@@ -462,7 +429,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public boolean isArmsRaised() {
-    return (Boolean) getDataManager().get(ARMS_RAISED);
+    return getDataManager().get(ARMS_RAISED);
   }
   
   public int timesToConvert() {
@@ -573,105 +540,13 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public final float getEnergy() {
-    return (Float) this.dataManager.get(ENERGY);
+    return this.dataManager.get(ENERGY);
   }
   
   public void setEnergy(float health) {
     this.dataManager.set(ENERGY, health);
   }
-  
-  public void learnLevelUp(ItemLearningBook book) {
-    TextFormatting textFormatting1, STA, INT, DEX, AGL;
-    float STRCAL, STACAL, INTCAL, DEXCAL, AGLCAL;
-    String str1, STAS, INTS, DEXS, AGLS;
-    if (book.isArtifact()) {
-      STRCAL = 100.0F;
-      STACAL = 100.0F;
-      INTCAL = 100.0F;
-      DEXCAL = 100.0F;
-      AGLCAL = 100.0F;
-      setLevel(299);
-    } else {
-      STRCAL = Math.round(this.rand.nextFloat() * book.STRENGTH * 100.0F) / 100.0F;
-      STACAL = Math.round(this.rand.nextFloat() * book.STAMINA * 100.0F) / 100.0F;
-      INTCAL = Math.round(this.rand.nextFloat() * book.INTELEGENCE * 100.0F) / 100.0F;
-      DEXCAL = Math.round(this.rand.nextFloat() * book.DEXTERITY * 100.0F) / 100.0F;
-      AGLCAL = Math.round(this.rand.nextFloat() * book.AGILITY * 100.0F) / 100.0F;
-    } 
-    if (STRCAL + getStrength() < getStrength()) {
-      textFormatting1 = TextFormatting.RED;
-      str1 = "" + STRCAL + " STR ";
-    } else if (STRCAL + getStrength() > getStrength()) {
-      textFormatting1 = TextFormatting.GREEN;
-      str1 = "+" + STRCAL + " STR ";
-    } else {
-      textFormatting1 = TextFormatting.RESET;
-      str1 = "";
-    } 
-    if (STACAL + getStamina() < getStamina()) {
-      STA = TextFormatting.RED;
-      STAS = "" + STACAL + " STA ";
-    } else if (STACAL + getStamina() > getStamina()) {
-      STA = TextFormatting.GREEN;
-      STAS = "+" + STACAL + " STA ";
-    } else {
-      STA = TextFormatting.RESET;
-      STAS = "";
-    } 
-    if (INTCAL + getIntelligence() < getIntelligence()) {
-      INT = TextFormatting.RED;
-      INTS = "" + INTCAL + " INT ";
-    } else if (INTCAL + getIntelligence() > getIntelligence()) {
-      INT = TextFormatting.GREEN;
-      INTS = "+" + INTCAL + " INT ";
-    } else {
-      INT = TextFormatting.RESET;
-      INTS = "";
-    } 
-    if (DEXCAL + getDexterity() < getDexterity()) {
-      DEX = TextFormatting.RED;
-      DEXS = "" + DEXCAL + " DEX ";
-    } else if (DEXCAL + getDexterity() > getDexterity()) {
-      DEX = TextFormatting.GREEN;
-      DEXS = "+" + DEXCAL + " DEX ";
-    } else {
-      DEX = TextFormatting.RESET;
-      DEXS = "";
-    } 
-    if (AGLCAL + getAgility() < getAgility()) {
-      AGL = TextFormatting.RED;
-      AGLS = "" + AGLCAL + " AGL ";
-    } else if (AGLCAL + getAgility() > getAgility()) {
-      AGL = TextFormatting.GREEN;
-      AGLS = "+" + AGLCAL + " AGL ";
-    } else {
-      AGL = TextFormatting.RESET;
-      AGLS = "";
-    } 
-    if (STRCAL + STACAL + INTCAL + DEXCAL + AGLCAL == 0.0F) {
-      textFormatting1 = TextFormatting.RED;
-      str1 = "Nothing...";
-      playSound(SoundEvents.ENTITY_EGG_THROW, 0.5F, 1.0F);
-    } else {
-      this.exptobeadded = (int)(this.exptobeadded + this.rand.nextFloat() * book.EXPERIENCE);
-      if (isHero())
-        this.exptobeadded = (int)(this.exptobeadded + this.rand.nextFloat() * book.EXPERIENCE); 
-      playSound(SoundEvents.ENTITY_ARROW_HIT_PLAYER, 0.5F, 1.0F);
-    } 
-    getCurrentBook().damageItem(1, (EntityLivingBase)this);
-    setStrength(getStrength() + STRCAL);
-    setStamina(getStamina() + STACAL);
-    setIntelligence(getIntelligence() + INTCAL);
-    setDexterity(getDexterity() + DEXCAL);
-    setAgility(getAgility() + AGLCAL);
-    if (book.tier == 6) {
-      if (!this.world.isRemote && !isWild())
-        getOwner().sendMessage((ITextComponent)new TextComponentTranslation(TextFormatting.AQUA + getName() + TextFormatting.RESET + " has read \"" + TextFormatting.GOLD + getCurrentBook().getDisplayName() + TextFormatting.RESET + "\" and has learned: " + textFormatting1 + str1 + TextFormatting.RESET + STA + STAS + TextFormatting.RESET + INT + INTS + TextFormatting.RESET + DEX + DEXS + TextFormatting.RESET + AGL + AGLS, new Object[0])); 
-    } else if (!this.world.isRemote && !isWild()) {
-      getOwner().sendMessage((ITextComponent)new TextComponentTranslation(TextFormatting.AQUA + getName() + TextFormatting.RESET + " has read \"" + TextFormatting.GOLD + getCurrentBook().getDisplayName().substring(15) + TextFormatting.RESET + "\" and has learned: " + textFormatting1 + str1 + TextFormatting.RESET + STA + STAS + TextFormatting.RESET + INT + INTS + TextFormatting.RESET + DEX + DEXS + TextFormatting.RESET + AGL + AGLS, new Object[0]));
-    } 
-  }
-  
+
   @Deprecated
   public EnumStudy getCurrentStudy() {
     return this.currentStudy;
@@ -694,7 +569,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public final float getFakeHealth() {
-    return (Float) this.dataManager.get(FAKE_HEALTH);
+    return this.dataManager.get(FAKE_HEALTH);
   }
   
   public void setFakeHealth(float health) {
@@ -736,18 +611,18 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       setLevel(300);
       playSound(SoundEvents.ENTITY_ARROW_HIT_PLAYER, 0.5F, 1.0F);
       if (!this.world.isRemote)
-        this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY + getEyeHeight(), this.posZ, 10 + this.rand.nextInt(40))); 
+        this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + getEyeHeight(), this.posZ, 10 + this.rand.nextInt(40)));
     } else {
       if (getLevel() > 0 && getLevel() < 300)
         if (getLevel() == 299) {
           if (!this.world.isRemote && !isWild())
-            getOwner().sendMessage((ITextComponent)new TextComponentTranslation(TextFormatting.AQUA + getName() + TextFormatting.RESET + " has reached " + TextFormatting.GOLD + "Max Level" + TextFormatting.RESET + "!", new Object[0])); 
+            getOwner().sendMessage(new TextComponentTranslation(TextFormatting.AQUA + getName() + TextFormatting.RESET + " has reached " + TextFormatting.GOLD + "Max Level" + TextFormatting.RESET + "!", new Object[0]));
           playSound(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, 1.0F, 1.0F);
           if (!this.world.isRemote)
-            this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY + getEyeHeight(), this.posZ, 10 + this.rand.nextInt(40))); 
+            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + getEyeHeight(), this.posZ, 10 + this.rand.nextInt(40)));
         } else {
           if (!this.world.isRemote && !isWild())
-            getOwner().sendMessage((ITextComponent)new TextComponentTranslation(TextFormatting.AQUA + getName() + TextFormatting.RESET + " has reached " + TextFormatting.BLUE + "Level " + (getLevel() + 1) + TextFormatting.RESET + "!", new Object[0])); 
+            getOwner().sendMessage(new TextComponentTranslation(TextFormatting.AQUA + getName() + TextFormatting.RESET + " has reached " + TextFormatting.BLUE + "Level " + (getLevel() + 1) + TextFormatting.RESET + "!", new Object[0]));
           playSound(SoundEvents.ENTITY_PLAYER_LEVELUP, 0.5F, 1.0F);
         }  
       setLevel(getLevel() + 1);
@@ -794,7 +669,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         if (!itemstack.isEmpty() && entityequipmentslot != EntityEquipmentSlot.MAINHAND && entityequipmentslot != EntityEquipmentSlot.OFFHAND)
           if (itemstack.getItem() instanceof net.minecraft.item.ItemArmor) {
             setCurrentStudy(EnumStudy.Combative, (int)damage);
-            itemstack.damageItem((int)damage, (EntityLivingBase)this);
+            itemstack.damageItem((int)damage, this);
           }  
       }  
   }
@@ -805,7 +680,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         setCurrentStudy(EnumStudy.Combative, (int)damage);
         this.blockTimer = 40;
         int i = 1 + MathHelper.floor(damage);
-        this.activeItemStack.damageItem(i, (EntityLivingBase)this);
+        this.activeItemStack.damageItem(i, this);
         playSound(SoundEvents.ITEM_SHIELD_BLOCK, 1.0F, 1.0F);
         if (this.activeItemStack.isEmpty()) {
           EnumHand enumhand = getActiveHand();
@@ -821,7 +696,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public boolean isActiveItemStackBlocking() {
-    return (getAttackTarget() != null && this.blockTimer <= 0 && getHeldItemOffhand() != null && !isHandActive() && getHeldItemOffhand().getItem().getItemUseAction(getHeldItemOffhand()) == EnumAction.BLOCK && getDistanceSq((Entity)getAttackTarget()) < 25.0D);
+    return (getAttackTarget() != null && this.blockTimer <= 0 && getHeldItemOffhand() != null && !isHandActive() && getHeldItemOffhand().getItem().getItemUseAction(getHeldItemOffhand()) == EnumAction.BLOCK && getDistanceSq(getAttackTarget()) < 25.0D);
   }
   
   protected boolean canDropLoot() {
@@ -855,7 +730,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public int getAttackState() {
-    return (Integer) this.dataManager.get(ATTACKSTATE);
+    return this.dataManager.get(ATTACKSTATE);
   }
   
   public void setAttackState(int age) {
@@ -863,7 +738,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public int getPolymorphTime() {
-    return (Integer) this.dataManager.get(POLYMORPH_TIME);
+    return this.dataManager.get(POLYMORPH_TIME);
   }
   
   public void setPolymorphTime(int age) {
@@ -871,7 +746,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public int getIllusionFormTime() {
-    return (Integer) this.dataManager.get(ILLUSION_FORM_TIME);
+    return this.dataManager.get(ILLUSION_FORM_TIME);
   }
   
   public void setIllusionFormTime(int age) {
@@ -879,7 +754,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public int getGhostTime() {
-    return (Integer) this.dataManager.get(GHOST_TIME);
+    return this.dataManager.get(GHOST_TIME);
   }
   
   public void setGhostTime(int age) {
@@ -887,7 +762,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public int getBookID() {
-    return (Integer) this.dataManager.get(BOOK_ID);
+    return this.dataManager.get(BOOK_ID);
   }
   
   public void setBookID(int age) {
@@ -895,7 +770,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public int getBookDurability() {
-    return (Integer) this.dataManager.get(BOOK_DURABILITY);
+    return this.dataManager.get(BOOK_DURABILITY);
   }
   
   public void setBookDurability(int age) {
@@ -907,7 +782,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public boolean isMarried() {
-    return (Boolean) getDataManager().get(IS_MARRIED);
+    return getDataManager().get(IS_MARRIED);
   }
   
   public void setMarried(boolean childZombie) {
@@ -915,7 +790,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public boolean isChild() {
-    return (Boolean) getDataManager().get(IS_CHILD);
+    return getDataManager().get(IS_CHILD);
   }
   
   public void setChild(boolean childZombie) {
@@ -1130,7 +1005,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     this.posY = y;
     this.posZ = z;
     boolean flag = false;
-    BlockPos blockpos = new BlockPos((Entity)this);
+    BlockPos blockpos = new BlockPos(this);
     World world = this.world;
     getRNG();
     if (world.isBlockLoaded(blockpos)) {
@@ -1147,7 +1022,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       } 
       if (flag1) {
         setPositionAndUpdate(this.posX, this.posY, this.posZ);
-        if (world.getCollisionBoxes((Entity)this, getEntityBoundingBox()).isEmpty() && !world.containsAnyLiquid(getEntityBoundingBox()))
+        if (world.getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && !world.containsAnyLiquid(getEntityBoundingBox()))
           flag = true; 
       } 
     } 
@@ -1168,7 +1043,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public int getSpecialAttackTimer() {
-    return (Integer) this.dataManager.get(HEROSPECIALATTACKTIMER);
+    return this.dataManager.get(HEROSPECIALATTACKTIMER);
   }
   
   public void setSpecialAttackTimer(int p_82215_1_) {
@@ -1181,11 +1056,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     ((PathNavigateGround)getNavigator()).setBreakDoors(enabled);
     ((PathNavigateGround)getNavigator()).setEnterDoors(true);
     if (enabled) {
-      this.tasks.removeTask((EntityAIBase)this.openDoor);
-      this.tasks.addTask(1, (EntityAIBase)this.breakDoor);
+      this.tasks.removeTask(this.openDoor);
+      this.tasks.addTask(1, this.breakDoor);
     } else {
-      this.tasks.removeTask((EntityAIBase)this.breakDoor);
-      this.tasks.addTask(1, (EntityAIBase)this.openDoor);
+      this.tasks.removeTask(this.breakDoor);
+      this.tasks.addTask(1, this.openDoor);
     } 
   }
   
@@ -1265,15 +1140,15 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
     super.writeEntityToNBT(tagCompound);
     if (this.polymorpherData != null)
-      tagCompound.setTag("PolymorpherData", (NBTBase)this.polymorpherData); 
+      tagCompound.setTag("PolymorpherData", this.polymorpherData);
     NBTTagList nbttaglist = new NBTTagList();
     NBTTagCompound nbttagcompound = new NBTTagCompound();
     if (hasLimitedLife())
       tagCompound.setInteger("LifeTicks", getLimitedLife()); 
     if (!getCurrentBook().isEmpty())
       getCurrentBook().writeToNBT(nbttagcompound); 
-    nbttaglist.appendTag((NBTBase)nbttagcompound);
-    tagCompound.setTag("CurrentBook", (NBTBase)nbttaglist);
+    nbttaglist.appendTag(nbttagcompound);
+    tagCompound.setTag("CurrentBook", nbttaglist);
     tagCompound.setFloat("FakeHealth", getFakeHealth());
     tagCompound.setFloat("STR", getStrength());
     tagCompound.setFloat("STA", getStamina());
@@ -1289,9 +1164,9 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     tagCompound.setBoolean("IsMarried", isMarried());
     tagCompound.setBoolean("IsBaby", isChild());
     tagCompound.setBoolean("Hero", isHero());
-    tagCompound.setBoolean("LastChance", (Boolean) this.dataManager.get(REBIRTH));
-    tagCompound.setBoolean("Anti", (Boolean) this.dataManager.get(ANTIMOB));
-    tagCompound.setBoolean("SitResting", (Boolean) this.dataManager.get(SITRESTING));
+    tagCompound.setBoolean("LastChance", this.dataManager.get(REBIRTH));
+    tagCompound.setBoolean("Anti", this.dataManager.get(ANTIMOB));
+    tagCompound.setBoolean("SitResting", this.dataManager.get(SITRESTING));
     tagCompound.setInteger("SAT", getSpecialAttackTimer());
     tagCompound.setFloat("EXP", getEXP());
     tagCompound.setFloat("TotalEXP", getTotalEXP());
@@ -1329,7 +1204,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public boolean isSitResting() {
-    return (Boolean) this.dataManager.get(SITRESTING);
+    return this.dataManager.get(SITRESTING);
   }
   
   public void setSitResting(boolean bool) {
@@ -1337,7 +1212,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public boolean isAntiMob() {
-    return (Boolean) this.dataManager.get(ANTIMOB);
+    return this.dataManager.get(ANTIMOB);
   }
   
   public void setIsAntiMob(boolean bool) {
@@ -1345,7 +1220,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public boolean isHero() {
-    return (Boolean) this.dataManager.get(HERO);
+    return this.dataManager.get(HERO);
   }
   
   public void setIsHero(boolean bool) {
@@ -1359,7 +1234,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public boolean hasLastChance() {
-    return (Boolean) this.dataManager.get(REBIRTH);
+    return this.dataManager.get(REBIRTH);
   }
   
   public void setLastChance(boolean bool) {
@@ -1464,11 +1339,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       if (isNoDespawnRequired()) {
         this.idleTime = 0;
       } else {
-        EntityPlayer entityPlayer = this.world.getClosestPlayerToEntity((Entity)this, -1.0D);
+        EntityPlayer entityPlayer = this.world.getClosestPlayerToEntity(this, -1.0D);
         if (entityPlayer != null) {
-          double d0 = ((Entity)entityPlayer).posX - this.posX;
-          double d1 = ((Entity)entityPlayer).posY - this.posY;
-          double d2 = ((Entity)entityPlayer).posZ - this.posZ;
+          double d0 = entityPlayer.posX - this.posX;
+          double d1 = entityPlayer.posY - this.posY;
+          double d2 = entityPlayer.posZ - this.posZ;
           double d3 = d0 * d0 + d1 * d1 + d2 * d2;
           if (canDespawn() && d3 > 50000.0D)
             setDead(); 
@@ -1510,7 +1385,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   
   protected void damageEntity(DamageSource source, float amount) {
     if (!isEntityInvulnerable(source)) {
-      amount = ForgeHooks.onLivingHurt((EntityLivingBase)this, source, amount);
+      amount = ForgeHooks.onLivingHurt(this, source, amount);
       Entity entity = source.getTrueSource();
       if (amount <= 0.0F)
         return; 
@@ -1598,15 +1473,15 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
           heal(getMaxHealth());
           addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 4));
           playSound(getDeathSound(), getSoundVolume(), getSoundPitch());
-          setAttackTarget((EntityLivingBase)null);
+          setAttackTarget(null);
           if (entity instanceof EntityTameBase) {
             ((EntityTameBase)entity).clearActivePotions();
             ((EntityTameBase)entity).heal(getMaxHealth());
-            ((EntityTameBase)entity).setAttackTarget((EntityLivingBase)null);
+            ((EntityTameBase)entity).setAttackTarget(null);
           } 
           if (!isWild()) {
             incrementConversion((EntityPlayer)getOwner());
-            getOwner().sendMessage((ITextComponent)new TextComponentTranslation(getName() + " has been defeated in training by " + entity.getName(), new Object[0]));
+            getOwner().sendMessage(new TextComponentTranslation(getName() + " has been defeated in training by " + entity.getName(), new Object[0]));
           } 
         } 
       } 
@@ -1642,8 +1517,8 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       this.recentlyHit = 100;
       for (int ai = 0; ai <= lootingModifier; ai++) {
         EntityTameBase addon = spawnBaby(this);
-        addon.copyLocationAndAnglesFrom((Entity)this);
-        this.world.spawnEntity((Entity)addon);
+        addon.copyLocationAndAnglesFrom(this);
+        this.world.spawnEntity(addon);
         addon.attackEntityFrom(DamageSource.STARVE, addon.getMaxHealth());
         addon.setHealth(0.0F);
         addon.setDead();
@@ -1669,7 +1544,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     int i = 0;
     f *= (getStrength() + 50.0F) / 100.0F;
     if (entity instanceof net.minecraft.entity.passive.EntityAmbientCreature) {
-      entity.startRiding((Entity)this);
+      entity.startRiding(this);
       playSound(SoundEvents.ENTITY_PLAYER_BURP, 1.0F, 1.5F);
       heal(2.0F);
     } 
@@ -1739,10 +1614,10 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       if (entity instanceof EntityLivingBase) {
         entity.hurtResistantTime = 0;
         entity.motionY = this.height * 0.25D;
-        ((EntityLivingBase)entity).knockBack((Entity)this, i * 0.5F + 0.3F, MathHelper.sin(this.rotationYaw * 0.017453292F), -MathHelper.cos(this.rotationYaw * 0.017453292F));
+        ((EntityLivingBase)entity).knockBack(this, i * 0.5F + 0.3F, MathHelper.sin(this.rotationYaw * 0.017453292F), -MathHelper.cos(this.rotationYaw * 0.017453292F));
       } 
       if (!this.world.isRemote)
-        createEngenderModExplosionFireless((Entity)this, entity.posX, entity.posY, entity.posZ, 7.0F + entity.height + entity.width, false); 
+        createEngenderModExplosionFireless(this, entity.posX, entity.posY, entity.posZ, 7.0F + entity.height + entity.width, false);
     } 
     if (EngenderConfig.mobs.useMobTalkerModels && this instanceof EntityGhast && ((EntityGhast)this).eleanor) {
       i += 30;
@@ -1750,17 +1625,17 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       if (entity instanceof EntityLivingBase) {
         entity.hurtResistantTime = 0;
         entity.motionY = this.height * 0.25D;
-        ((EntityLivingBase)entity).knockBack((Entity)this, i * 0.5F + 0.3F, MathHelper.sin(this.rotationYaw * 0.017453292F), -MathHelper.cos(this.rotationYaw * 0.017453292F));
+        ((EntityLivingBase)entity).knockBack(this, i * 0.5F + 0.3F, MathHelper.sin(this.rotationYaw * 0.017453292F), -MathHelper.cos(this.rotationYaw * 0.017453292F));
       } 
       if (!this.world.isRemote)
-        createEngenderModExplosionFireless((Entity)this, entity.posX, entity.posY, entity.posZ, 7.0F + entity.height + entity.width, false); 
+        createEngenderModExplosionFireless(this, entity.posX, entity.posY, entity.posZ, 7.0F + entity.height + entity.width, false);
     } 
     if (isSneaking() && entity instanceof EntityLiving && ((EntityLiving)entity).getAttackTarget() != this)
       i += 4; 
     if (entity instanceof EntityLivingBase) {
       f += EnchantmentHelper.getModifierForCreature(getHeldItemMainhand(), ((EntityLivingBase)entity).getCreatureAttribute());
       f += EnchantmentHelper.getModifierForCreature(getHeldItemOffhand(), ((EntityLivingBase)entity).getCreatureAttribute());
-      i += EnchantmentHelper.getKnockbackModifier((EntityLivingBase)this);
+      i += EnchantmentHelper.getKnockbackModifier(this);
       if (this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStormHead) {
         i += 3;
         double d2 = entity.posX - this.posX;
@@ -1805,15 +1680,15 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       f *= 10.0F;
       playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 5.0F, 1.0F);
       if (EngenderConfig.general.useMessage && !isWild())
-        getOwner().sendMessage((ITextComponent)new TextComponentTranslation(getName() + " got a critical hit!", new Object[0])); 
+        getOwner().sendMessage(new TextComponentTranslation(getName() + " got a critical hit!", new Object[0]));
     } 
-    boolean flag = entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this), f);
+    boolean flag = entity.attackEntityFrom(DamageSource.causeMobDamage(this), f);
     if (this instanceof net.minecraft.AgeOfMinecraft.entity.tame.other.EntityPortal)
-      flag = entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor(), f); 
+      flag = entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor(), f);
     if (entity instanceof EntityLivingBase && !(entity instanceof EntityTameBase) && getCreatureAttribute() == ((EntityLivingBase)entity).getCreatureAttribute() && ((EntityLivingBase)entity).getCreatureAttribute() != EnumCreatureAttribute.UNDEFINED)
       flag = entity.attackEntityFrom(!isWild() ? DamageSource.causePlayerDamage((EntityPlayer)getOwner()) : new DamageSource("generic"), f); 
     if (entity instanceof EntityPlayer && this.world.getDifficulty() == EnumDifficulty.PEACEFUL)
-      flag = ((EntityPlayer)entity).attackEntityFrom(DamageSource.GENERIC, f); 
+      flag = entity.attackEntityFrom(DamageSource.GENERIC, f);
     if (Loader.isModLoaded("draconicevolution") && entity instanceof EntityGuardianCrystal) {
       flag = entity.attackEntityFrom(!isWild() ? DamageSource.causePlayerDamage((EntityPlayer)getOwner()) : new DamageSource("generic"), f);
       ((EntityGuardianCrystal)entity).shieldTime = 0;
@@ -1828,7 +1703,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         if (aentity != null)
           for (Entity parts : aentity) {
             if (parts instanceof MultiPartEntityPart)
-              flag = ((IEntityMultiPart)entity).attackEntityFromPart((MultiPartEntityPart)parts, DamageSource.causeMobDamage((EntityLivingBase)this), f); 
+              flag = ((IEntityMultiPart)entity).attackEntityFromPart((MultiPartEntityPart)parts, DamageSource.causeMobDamage(this), f);
           }  
       } 
     } 
@@ -1839,7 +1714,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       } 
       if (this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntitySlime)
         playSound(SoundEvents.ENTITY_SLIME_ATTACK, getSoundVolume(), getSoundPitch()); 
-      EntityPlayer player = this.world.getClosestPlayerToEntity((Entity)this, 16.0D);
+      EntityPlayer player = this.world.getClosestPlayerToEntity(this, 16.0D);
       if (isHero()) {
         entity.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1.0F, getSoundPitch());
         if (player != null)
@@ -1857,28 +1732,28 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       ItemStack itemstack1 = entityplayer.isHandActive() ? entityplayer.getActiveItemStack() : null;
       if ((this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityGuardian || !isNonBoss()) && itemstack1 != null && itemstack1.getItem() == Items.SHIELD) {
         entityplayer.getCooldownTracker().setCooldown(Items.SHIELD, 100);
-        this.world.setEntityState((Entity)entityplayer, (byte)30);
+        this.world.setEntityState(entityplayer, (byte)30);
       } 
       if (itemstack != null && itemstack.getItem() instanceof net.minecraft.item.ItemAxe && itemstack1 != null && itemstack1.getItem() == Items.SHIELD) {
-        float f1 = 0.25F + EnchantmentHelper.getEfficiencyModifier((EntityLivingBase)this) * 0.05F;
+        float f1 = 0.25F + EnchantmentHelper.getEfficiencyModifier(this) * 0.05F;
         if (this.rand.nextFloat() < f1) {
           entityplayer.getCooldownTracker().setCooldown(Items.SHIELD, 100);
-          this.world.setEntityState((Entity)entityplayer, (byte)30);
+          this.world.setEntityState(entityplayer, (byte)30);
         } 
       } 
     } 
     if ((entity instanceof EntityLivingBase || (entity instanceof EntityPlayer && !((EntityPlayer)entity).capabilities.disableDamage)) && (entity != this || (!isWild() && entity != getOwner()))) {
       swingArm(EnumHand.MAIN_HAND);
       setCurrentStudy(EnumStudy.Combative, (int)f);
-      applyEnchantments((EntityLivingBase)this, entity);
-      if (entity instanceof EntityLivingBase && !((EntityLivingBase)entity).isNonBoss() && ((EntityLivingBase)entity).getHealth() <= 1.0F)
+      applyEnchantments(this, entity);
+      if (entity instanceof EntityLivingBase && !entity.isNonBoss() && ((EntityLivingBase)entity).getHealth() <= 1.0F)
         ((EntityLivingBase)entity).setHealth(0.0F); 
       if (this instanceof EntityVex)
         ((EntityVex)this).setIsCharging(false); 
       ((EntityLivingBase)entity).limbSwingAmount++;
       if (((EntityLivingBase)entity).getHealth() > 1.0F)
         ((EntityLivingBase)entity).setHealth(((EntityLivingBase)entity).getHealth() - (isHero() ? 0.03F : 0.01F)); 
-      if (entity.isEntityInvulnerable(DamageSource.causeMobDamage((EntityLivingBase)this)) && f >= 6.0F) {
+      if (entity.isEntityInvulnerable(DamageSource.causeMobDamage(this)) && f >= 6.0F) {
         ((EntityLivingBase)entity).setHealth(((EntityLivingBase)entity).getHealth() - f);
       if (entity.height >= 5.0F) {
           entity.playSound(ESound.fleshHitCrushHeavy, 2.0F, 1.0F);
@@ -1886,14 +1761,14 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
           entity.playSound(ESound.fleshHitCrush, 2.0F, 1.0F);
         } 
         if (((EntityLivingBase)entity).getHealth() <= 0.0F)
-          ((EntityLivingBase)entity).onDeath(DamageSource.causeMobDamage((EntityLivingBase)this)); 
+          ((EntityLivingBase)entity).onDeath(DamageSource.causeMobDamage(this));
       } 
     } 
     if (entity instanceof EntityLivingBase && (entity != this || (!isWild() && entity != getOwner())) && flag) {
-      ((EntityLivingBase)entity).knockBack((Entity)this, i * 0.5F + 0.3F, MathHelper.sin(this.rotationYaw * 0.017453292F), -MathHelper.cos(this.rotationYaw * 0.017453292F));
+      ((EntityLivingBase)entity).knockBack(this, i * 0.5F + 0.3F, MathHelper.sin(this.rotationYaw * 0.017453292F), -MathHelper.cos(this.rotationYaw * 0.017453292F));
       if (entity instanceof EntityPlayerMP)
-        ((EntityPlayerMP)entity).connection.sendPacket((Packet)new SPacketEntityVelocity(entity)); 
-      int j = EnchantmentHelper.getFireAspectModifier((EntityLivingBase)this);
+        ((EntityPlayerMP)entity).connection.sendPacket(new SPacketEntityVelocity(entity));
+      int j = EnchantmentHelper.getFireAspectModifier(this);
       if (j > 0)
         entity.setFire(j * 4); 
       if (!getHeldItemMainhand().isEmpty() && getHeldItemMainhand().getItem() != null && !isWild())
@@ -1908,7 +1783,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         getHeldItemMainhand().setItemDamage(0); 
       if (!getHeldItemOffhand().isEmpty() && getHeldItemOffhand().getItem() != null && this instanceof EntityVex && getHeldItemOffhand().getItem() == Items.IRON_SWORD)
         getHeldItemOffhand().setItemDamage(0); 
-      applyEnchantments((EntityLivingBase)this, entity);
+      applyEnchantments(this, entity);
       setCurrentStudy(EnumStudy.Physical, (int)f);
     } 
     setEnergy(getEnergy() - 0.25F);
@@ -1920,7 +1795,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       if (!flag1) {
         if (entity instanceof EntityLivingBase)
           setCurrentStudy(EnumStudy.Combative, (int)((EntityLivingBase)entity).getMaxHealth()); 
-        getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + " was " + (isInvisible() ? "ambushed" : (isSneaking() ? "assassinated" : "slain")) + " by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
+        getOwner().sendMessage(new TextComponentTranslation(entity.getName() + " was " + (isInvisible() ? "ambushed" : (isSneaking() ? "assassinated" : "slain")) + " by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
       } 
     } 
     if (bonus.hasModifier(vslight))
@@ -1964,7 +1839,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       double d6 = entity.posX - d3;
       double d7 = entity.posY - d4;
       double d8 = entity.posZ - d5;
-      EntityPortalLightning entitywitherskull = new EntityPortalLightning(this.world, entity, (EntityLivingBase)this, d6, d7, d8);
+      EntityPortalLightning entitywitherskull = new EntityPortalLightning(this.world, entity, this, d6, d7, d8);
       entitywitherskull.posY = d4;
       entitywitherskull.posX = d3;
       entitywitherskull.posZ = d5;
@@ -1972,7 +1847,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       entitywitherskull.accelerationX = d3;
       entitywitherskull.accelerationZ = d5;
       entitywitherskull.targetEntity = entity;
-      this.world.spawnEntity((Entity)entitywitherskull);
+      this.world.spawnEntity(entitywitherskull);
     } 
   }
   
@@ -2035,7 +1910,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (hasLimitedLife() && !bonus.hasModifier(summondebuff))
       bonus.applyModifier(summondebuff); 
     entity.limbSwingAmount++;
-    damage *= (((isSneaking() || isInvisible() || !canEntityBeSeen((Entity)entity)) && entity instanceof EntityLiving && ((EntityLiving)entity).getAttackTarget() != this) ? 3.0F : 1.0F) * (isHero() ? ((entity instanceof net.minecraft.entity.monster.IMob) ? 3.0F : 1.5F) : 1.0F);
+    damage *= (((isSneaking() || isInvisible() || !canEntityBeSeen(entity)) && entity instanceof EntityLiving && ((EntityLiving)entity).getAttackTarget() != this) ? 3.0F : 1.0F) * (isHero() ? ((entity instanceof net.minecraft.entity.monster.IMob) ? 3.0F : 1.5F) : 1.0F);
     try {
       ReflectionHelper.findField(entity.getClass(), new String[] { "recentlyHit", "recentlyHit" }).setInt(entity, 100);
     } catch (Exception exception) {}
@@ -2053,7 +1928,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       damage *= 10.0F;
       playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 5.0F, 1.0F);
       if (EngenderConfig.general.useMessage && !isWild())
-        getOwner().sendMessage((ITextComponent)new TextComponentTranslation(getName() + " got a critical hit!", new Object[0])); 
+        getOwner().sendMessage(new TextComponentTranslation(getName() + " got a critical hit!", new Object[0]));
     } 
     damage *= getStrengthMultiplier();
     if (entity.isEntityAlive()) {
@@ -2063,7 +1938,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
           if (aentity != null) {
             Entity mob = aentity[this.rand.nextInt((entity.getParts()).length)];
             if (mob instanceof MultiPartEntityPart)
-              if (!((IEntityMultiPart)entity).attackEntityFromPart((MultiPartEntityPart)mob, DamageSource.causeMobDamage((EntityLivingBase)this), damage) && attacktype.getDamageType() == "sans")
+              if (!((IEntityMultiPart)entity).attackEntityFromPart((MultiPartEntityPart)mob, DamageSource.causeMobDamage(this), damage) && attacktype.getDamageType() == "sans")
                 entity.setHealth(entity.getHealth() - 1.0F);  
           } 
         } 
@@ -2094,7 +1969,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
           flag1 = ReflectionHelper.findField(entity.getClass(), new String[] { "dead", "dead" }).getBoolean(entity);
         } catch (Exception exception) {}
         if (EngenderConfig.general.useMessage && !flag1)
-          getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + killmessage + getName() + " (" + getOwner().getName() + ")", new Object[0])); 
+          getOwner().sendMessage(new TextComponentTranslation(entity.getName() + killmessage + getName() + " (" + getOwner().getName() + ")", new Object[0]));
       } 
       if (bonus.hasModifier(vslight))
         bonus.removeModifier(vslight); 
@@ -2152,7 +2027,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public int getGrowingAge() {
-    return (Integer) this.dataManager.get(AGE);
+    return this.dataManager.get(AGE);
   }
   
   public void setGrowingAge(int age) {
@@ -2164,7 +2039,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public int getLevel() {
-    return (Integer) this.dataManager.get(LEVEL);
+    return this.dataManager.get(LEVEL);
   }
   
   public void setLevel(int age) {
@@ -2172,7 +2047,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public float getEXP() {
-    return (Float) this.dataManager.get(EXP);
+    return this.dataManager.get(EXP);
   }
   
   public void setEXP(float age) {
@@ -2180,7 +2055,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public float getTotalEXP() {
-    return (Float) this.dataManager.get(TOTALEXP);
+    return this.dataManager.get(TOTALEXP);
   }
   
   public void setTotalEXP(float age) {
@@ -2210,8 +2085,8 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       List<EntityTameBase> training = this.world.getEntitiesWithinAABB(EntityTameBase.class, getEntityBoundingBox().grow((getAttackState() > 1) ? 1.0D : getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue()), Predicates.and(EntitySelectors.IS_ALIVE, EntitySelectors.NOT_SPECTATING));
       for (int j2 = 0; j2 < 10 && !training.isEmpty(); j2++) {
         EntityTameBase entitylivingbase = training.get(this.rand.nextInt(training.size()));
-        if (entitylivingbase != this && entitylivingbase.isEntityAlive() && canEntityBeSeen((Entity)entitylivingbase) && entitylivingbase.getOwnerId() == getOwnerId() && entitylivingbase.getFakeHealth() > 0.0F) {
-          setAttackTarget((EntityLivingBase)entitylivingbase);
+        if (entitylivingbase != this && entitylivingbase.isEntityAlive() && canEntityBeSeen(entitylivingbase) && entitylivingbase.getOwnerId() == getOwnerId() && entitylivingbase.getFakeHealth() > 0.0F) {
+          setAttackTarget(entitylivingbase);
           break;
         } 
         training.remove(entitylivingbase);
@@ -2397,45 +2272,16 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   public EntityTameBase spawnBaby(EntityTameBase par1idleTimeable) {
     return null;
   }
-  
+
   public boolean processInteract(EntityPlayer player, EnumHand hand) {
     ItemStack itemstack = player.getHeldItem(hand);
     ItemStack heldItem = new ItemStack(itemstack.getItem());
     if (isEntityAlive() && itemstack.getItem() != null && !itemstack.isEmpty() && itemstack.getItem() == EItem.statChecker) {
-      itemstack.getItem().itemInteractionForEntity(itemstack, player, (EntityLivingBase)this, hand);
+      itemstack.getItem().itemInteractionForEntity(itemstack, player, this, hand);
       return true;
-    } 
+    }
     if (hasLimitedLife())
-      return false; 
-    if (itemstack.getItem() != null && !itemstack.isEmpty() && getBookID() == 0 && itemstack.getItem() instanceof ItemLearningBook) {
-      player.swingArm(hand);
-      for (int i = 0; i < books.length; i++) {
-        if (itemstack.getItem() == books[i]) {
-          setBookID(i);
-          break;
-        } 
-      } 
-      setBookDurability(itemstack.getItemDamage());
-      heldItem = new ItemStack(books[getBookID()], 1, getBookDurability());
-      heldItem.setTagCompound(itemstack.getTagCompound());
-      heldItem.setItemDamage(itemstack.getItemDamage());
-      itemstack.shrink(1);
-      return true;
-    } 
-    if (getBookID() != 0 && itemstack.isEmpty()) {
-      player.swingArm(hand);
-      playSound(SoundEvents.ENTITY_PAINTING_PLACE, 1.0F, 1.3F + this.rand.nextFloat() * 0.4F);
-      if (!this.world.isRemote)
-        if (getBookDurability() >= getCurrentBook().getMaxDamage()) {
-          setBookID(0);
-          setBookDurability(0);
-        } else {
-          entityDropItem(new ItemStack(books[getBookID()], 1, getBookDurability()), 1.0F);
-          setBookID(0);
-          setBookDurability(0);
-        }  
-      return true;
-    } 
+      return false;
     if (itemstack.getItem() == Items.SPAWN_EGG) {
       if (!this.world.isRemote) {
         Class<? extends Entity> oclass = EntityList.getClass(ItemMonsterPlacer.getNamedIdFrom(itemstack));
@@ -2443,62 +2289,62 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
           EntityTameBase idleTimeable = spawnBaby(this);
           if (idleTimeable != null) {
             idleTimeable.setOwnerId(getOwnerId());
-            idleTimeable.copyLocationAndAnglesFrom((Entity)this);
-            this.world.spawnEntity((Entity)idleTimeable);
-            idleTimeable.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), (IEntityLivingData)null);
+            idleTimeable.copyLocationAndAnglesFrom(this);
+            this.world.spawnEntity(idleTimeable);
+            idleTimeable.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
             idleTimeable.setGrowingAge(-24000);
             if (itemstack.hasDisplayName())
-              idleTimeable.setCustomNameTag(itemstack.getDisplayName()); 
+              idleTimeable.setCustomNameTag(itemstack.getDisplayName());
             if (!player.capabilities.isCreativeMode)
-              itemstack.shrink(1); 
-          } 
-        } 
-      } 
+              itemstack.shrink(1);
+          }
+        }
+      }
       return true;
-    } 
+    }
     if (isChild()) {
       if (hasOwner(player)) {
         player.swingArm(EnumHand.MAIN_HAND);
         if (getRidingEntity() == null) {
-          startRiding((Entity)player, true);
+          startRiding(player, true);
         } else {
           dismountRidingEntity();
-        } 
-      } 
+        }
+      }
       return true;
-    } 
+    }
     if (hasOwner(player) && getRidingEntity() != null) {
       player.swingArm(EnumHand.MAIN_HAND);
       dismountRidingEntity();
       return true;
-    } 
+    }
     if (EngenderConfig.mobs.breeding && canBeMatedWith() && itemstack.getItem() == Items.GOLDEN_APPLE && itemstack.getMetadata() == ((getTier() == EnumTier.TIER5 || getTier() == EnumTier.TIER6) ? 1 : 0)) {
       if (hasOwner(player))
         if (isInLove()) {
-          player.sendStatusMessage((ITextComponent)new TextComponentTranslation(getName() + " is already horny!!", new Object[0]), true);
+          player.sendStatusMessage(new TextComponentTranslation(getName() + " is already horny!!", new Object[0]), true);
         } else if (getGrowingAge() < 4000) {
-          player.sendStatusMessage((ITextComponent)new TextComponentTranslation(getName() + " can't breed yet as they're too tired!", new Object[0]), true);
+          player.sendStatusMessage(new TextComponentTranslation(getName() + " can't breed yet as they're too tired!", new Object[0]), true);
         } else if (getJukeboxToDanceTo() != null) {
-          player.sendStatusMessage((ITextComponent)new TextComponentTranslation("You can't breed with " + getName() + " as she's already having fun!", new Object[0]), true);
+          player.sendStatusMessage(new TextComponentTranslation("You can't breed with " + getName() + " as she's already having fun!", new Object[0]), true);
         } else if (getAttackTarget() != null) {
-          player.sendStatusMessage((ITextComponent)new TextComponentTranslation("You can't breed with " + getName() + " as it isn't safe yet!", new Object[0]), true);
+          player.sendStatusMessage(new TextComponentTranslation("You can't breed with " + getName() + " as it isn't safe yet!", new Object[0]), true);
         } else if (isInLava()) {
-          player.sendStatusMessage((ITextComponent)new TextComponentTranslation("You can't breed with " + getName() + " as she's swimming in lava!", new Object[0]), true);
+          player.sendStatusMessage(new TextComponentTranslation("You can't breed with " + getName() + " as she's swimming in lava!", new Object[0]), true);
         } else if (isBurning()) {
-          player.sendStatusMessage((ITextComponent)new TextComponentTranslation("You can't breed with " + getName() + " as she's on fire!", new Object[0]), true);
+          player.sendStatusMessage(new TextComponentTranslation("You can't breed with " + getName() + " as she's on fire!", new Object[0]), true);
         } else if (this.isInWeb) {
-          player.sendStatusMessage((ITextComponent)new TextComponentTranslation("You can't breed with " + getName() + " as she's too stuck in a web to do anything!", new Object[0]), true);
+          player.sendStatusMessage(new TextComponentTranslation("You can't breed with " + getName() + " as she's too stuck in a web to do anything!", new Object[0]), true);
         } else if (!isEntityAlive()) {
-          player.sendStatusMessage((ITextComponent)new TextComponentTranslation("You can't breed with a dead girl...", new Object[0]), true);
+          player.sendStatusMessage(new TextComponentTranslation("You can't breed with a dead girl...", new Object[0]), true);
         } else {
           setInLove(player);
           player.swingArm(EnumHand.MAIN_HAND);
           itemstack.shrink(1);
-        }  
+        }
       return true;
-    } 
-    if (itemstack.getItem().itemInteractionForEntity(itemstack, player, (EntityLivingBase)this, hand))
-      return true; 
+    }
+    if (itemstack.getItem().itemInteractionForEntity(itemstack, player, this, hand))
+      return true;
     if (canWearEasterEggs() && !itemstack.isEmpty() && getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty() && (itemstack.getItem() == Items.SKULL || itemstack.getItem() == Items.FISH || itemstack.getItem() == Items.BONE || itemstack.getItem() == Item.getItemFromBlock(Blocks.END_ROD) || itemstack.getItem() == Items.FEATHER)) {
       setItemStackToSlot(EntityEquipmentSlot.HEAD, itemstack);
       playEquipSound(itemstack);
@@ -2508,14 +2354,14 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         heldItem.setItemDamage(itemstack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.HEAD, heldItem);
         itemstack.shrink(1);
-      } 
+      }
       return true;
-    } 
+    }
     if (canWearEasterEggs() && player.isSneaking() && itemstack.isEmpty()) {
       dropEquipmentUndamaged();
       player.swingArm(hand);
       return true;
-    } 
+    }
     if (!itemstack.isEmpty() && getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty() && itemstack.getItem() != Items.NAME_TAG && itemstack.getItem() instanceof ItemFood && getEnergy() <= 100.0F) {
       playSound(SoundEvents.ENTITY_PLAYER_BURP, 1.0F, 1.0F);
       player.swingArm(hand);
@@ -2525,9 +2371,9 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         heldItem.setCount(itemstack.getCount());
         setItemStackToSlot(EntityEquipmentSlot.MAINHAND, heldItem);
         itemstack.shrink(itemstack.getCount());
-      } 
+      }
       return true;
-    } 
+    }
     return interact(player, hand);
   }
   
@@ -2538,16 +2384,9 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   public boolean interact(EntityPlayer player, EnumHand hand) {
     return false;
   }
-  
+
   protected void dropEquipment(boolean wasRecentlyHit, int lootingModifier) {
     super.dropEquipment(wasRecentlyHit, lootingModifier);
-    if (!getCurrentBook().isEmpty()) {
-      playSound(SoundEvents.ENTITY_PAINTING_PLACE, 1.0F, 1.3F + this.rand.nextFloat() * 0.4F);
-      if (!this.world.isRemote)
-        entityDropItem(new ItemStack(books[getBookID()], 1, getBookDurability()), 1.0F); 
-      setBookID(0);
-      setBookDurability(0);
-    }
   }
   
   public int getVerticalFaceSpeed() {
@@ -2563,7 +2402,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     getNavigator().clearPath();
     extinguish();
     clearActivePotions();
-    setAttackTarget((EntityLivingBase)null);
+    setAttackTarget(null);
     if (this.onGround) {
       this.deathTime++;
       this.limbSwingAmount = 0.0F;
@@ -2583,16 +2422,16 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         if (getOwner() != null)
           if (isHero()) {
             for (EntityPlayer entityplayer : this.world.playerEntities)
-              entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
-            ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("A Hero mob has fallen!", new Object[0]));
+              entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
+            getOwner().sendMessage(new TextComponentTranslation("A Hero mob has fallen!", new Object[0]));
           }  
         if (!this.world.isRemote && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")) {
           int i = getExperiencePoints(this.attackingPlayer);
-          i = ForgeEventFactory.getExperienceDrop((EntityLivingBase)this, this.attackingPlayer, i);
+          i = ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
           while (i > 0) {
             int j = EntityXPOrb.getXPSplit(i);
             i -= j;
-            this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY + getEyeHeight(), this.posZ, j));
+            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + getEyeHeight(), this.posZ, j));
           } 
           this.experienceValue = 0;
         } 
@@ -2609,7 +2448,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     } 
     if (!this.world.isRemote && this.deathTime >= (leavesNoCorpse() ? 20 : 600)) {
       spawnExplosionParticle();
-      this.world.removeEntity((Entity)this);
+      this.world.removeEntity(this);
     } 
   }
   
@@ -2633,31 +2472,31 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       while (i > 0 && !this.world.isRemote) {
         int j = EntityXPOrb.getXPSplit(i);
         i -= j;
-        this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+        this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
       } 
     } else if (hasLastChance()) {
       this.lastChanceInvul = 200;
       setHealth(1.0F);
       clearActivePotions();
-      inflictCustomStatusEffect(EnumDifficulty.PEACEFUL, (EntityLivingBase)this, MobEffects.GLOWING, 10, 1);
+      inflictCustomStatusEffect(EnumDifficulty.PEACEFUL, this, MobEffects.GLOWING, 10, 1);
       setRevengeTarget(null);
-      setAttackTarget((EntityLivingBase)null);
+      setAttackTarget(null);
       setEnergy(100.0F);
-      this.world.setEntityState((Entity)this, (byte)35);
+      this.world.setEntityState(this, (byte)35);
       if (!isWild())
-        copyLocationAndAnglesFrom((Entity)getOwner()); 
+        copyLocationAndAnglesFrom(getOwner());
       setLastChance(false);
     } else {
       if (hasLimitedLife())
         onKillCommand(); 
       if (EngenderConfig.general.useMessage && !isWild() && getOwner() instanceof EntityPlayerMP && !(this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStormHead) && !(this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStormTentacle) && !(this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStormTentacleDevourer)) {
         if (!this.world.isRemote)
-          ((EntityPlayerMP)getOwner()).sendMessage(getCombatTracker().getDeathMessage()); 
+          getOwner().sendMessage(getCombatTracker().getDeathMessage());
         this.world.playSound((EntityPlayer)getOwner(), getOwner().getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), getSoundPitch());
-        ForgeHooks.onLivingDeath((EntityLivingBase)this, DamageSource.causeMobDamage(getOwner()));
+        ForgeHooks.onLivingDeath(this, DamageSource.causeMobDamage(getOwner()));
       } 
       dropEquipmentUndamaged();
-      setAttackTarget((EntityLivingBase)null);
+      setAttackTarget(null);
       setRevengeTarget(null);
       if (this instanceof Flying) {
         float xRatio = MathHelper.sin(this.rotationYawHead * 0.017453292F);
@@ -2667,7 +2506,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         this.motionZ -= zRatio / f * ((float)getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() + 1.0F);
       } 
       if (cause.getTrueSource() instanceof EntityPlayerMP)
-        CriteriaTriggers.PLAYER_KILLED_ENTITY.trigger((EntityPlayerMP)cause.getTrueSource(), (Entity)this, cause); 
+        CriteriaTriggers.PLAYER_KILLED_ENTITY.trigger((EntityPlayerMP)cause.getTrueSource(), this, cause);
       super.onDeath(cause);
     } 
   }
@@ -2713,41 +2552,41 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     } 
     super.onKillEntity(entityLivingIn);
     getNavigator().clearPath();
-    getNavigator().tryMoveToEntityLiving((Entity)this, 1.0D);
+    getNavigator().tryMoveToEntityLiving(this, 1.0D);
     if (getAttackTarget() != null && !getAttackTarget().isEntityAlive() && entityLivingIn == getAttackTarget())
-      setAttackTarget((EntityLivingBase)null); 
+      setAttackTarget(null);
     if (Loader.isModLoaded("abyssalcraft") && !this.world.isRemote)
-      if (EngenderMod.canBeTurned((Entity)entityLivingIn)) {
+      if (EngenderMod.canBeTurned(entityLivingIn)) {
         if (passesDreadPlague()) {
           EntityDreadling EntityDephsZombie = new EntityDreadling(this.world);
-          EntityDephsZombie.copyLocationAndAnglesFrom((Entity)entityLivingIn);
-          this.world.removeEntity((Entity)entityLivingIn);
-          EntityDephsZombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)EntityDephsZombie)), (IEntityLivingData)null);
+          EntityDephsZombie.copyLocationAndAnglesFrom(entityLivingIn);
+          this.world.removeEntity(entityLivingIn);
+          EntityDephsZombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(EntityDephsZombie)), null);
           EntityDephsZombie.setOwnerId(getOwnerId());
-          this.world.spawnEntity((Entity)EntityDephsZombie);
-          this.world.playEvent((EntityPlayer)null, 1026, new BlockPos(this.posX, this.posY, this.posZ), 0);
+          this.world.spawnEntity(EntityDephsZombie);
+          this.world.playEvent(null, 1026, new BlockPos(this.posX, this.posY, this.posZ), 0);
         } 
         if (passesCoraliumPlague())
           if (entityLivingIn instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier2.EntitySquid || entityLivingIn instanceof net.minecraft.entity.passive.EntitySquid || entityLivingIn instanceof EntityCoraliumSquid || entityLivingIn instanceof com.shinoow.abyssalcraft.common.entity.EntityCoraliumSquid) {
             EntityCoraliumSquid EntityDephsZombie = new EntityCoraliumSquid(this.world);
-            EntityDephsZombie.copyLocationAndAnglesFrom((Entity)entityLivingIn);
-            this.world.removeEntity((Entity)entityLivingIn);
-            EntityDephsZombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)EntityDephsZombie)), (IEntityLivingData)null);
+            EntityDephsZombie.copyLocationAndAnglesFrom(entityLivingIn);
+            this.world.removeEntity(entityLivingIn);
+            EntityDephsZombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(EntityDephsZombie)), null);
             EntityDephsZombie.setOwnerId(getOwnerId());
             if (entityLivingIn.isChild())
               EntityDephsZombie.setGrowingAge(-60000); 
-            this.world.spawnEntity((Entity)EntityDephsZombie);
-            this.world.playEvent((EntityPlayer)null, 1026, new BlockPos(this.posX, this.posY, this.posZ), 0);
+            this.world.spawnEntity(EntityDephsZombie);
+            this.world.playEvent(null, 1026, new BlockPos(this.posX, this.posY, this.posZ), 0);
           } else {
             EntityAbyssalZombie EntityDephsZombie = new EntityAbyssalZombie(this.world);
-            EntityDephsZombie.copyLocationAndAnglesFrom((Entity)entityLivingIn);
-            this.world.removeEntity((Entity)entityLivingIn);
-            EntityDephsZombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)EntityDephsZombie)), (IEntityLivingData)null);
+            EntityDephsZombie.copyLocationAndAnglesFrom(entityLivingIn);
+            this.world.removeEntity(entityLivingIn);
+            EntityDephsZombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(EntityDephsZombie)), null);
             EntityDephsZombie.setOwnerId(getOwnerId());
             if (entityLivingIn.isChild())
               EntityDephsZombie.setGrowingAge(-60000); 
-            this.world.spawnEntity((Entity)EntityDephsZombie);
-            this.world.playEvent((EntityPlayer)null, 1026, new BlockPos(this.posX, this.posY, this.posZ), 0);
+            this.world.spawnEntity(EntityDephsZombie);
+            this.world.playEvent(null, 1026, new BlockPos(this.posX, this.posY, this.posZ), 0);
           }  
       }  
   }
@@ -2782,7 +2621,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       if (isEntityAlive())
         this.world.spawnParticle(EnumParticleTypes.HEART, this.posX + this.rand.nextGaussian(), this.posY + this.height, this.posZ + this.rand.nextGaussian(), 0.0D, 0.0D, 0.0D);
     } else {
-      this.world.setEntityState((Entity)this, (byte)22);
+      this.world.setEntityState(this, (byte)22);
     } 
   }
   
@@ -2794,7 +2633,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       if (isEntityAlive())
         this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + getEyeHeight(), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d0, d1, d2);
     } else {
-      this.world.setEntityState((Entity)this, (byte)23);
+      this.world.setEntityState(this, (byte)23);
     } 
   }
   
@@ -2811,7 +2650,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         } 
       } 
     } else {
-      this.world.setEntityState((Entity)this, (byte)20);
+      this.world.setEntityState(this, (byte)20);
     } 
   }
   
@@ -2823,7 +2662,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
           this.world.spawnParticle(EnumParticleTypes.END_ROD, true, this.posX + MathHelper.cos(f1) * (Math.min(this.width, 6.0F)), this.posY + this.height + 1.0D, this.posZ + MathHelper.sin(f1) * (Math.min(this.width, 6.0F)), this.motionX, this.motionY, this.motionZ);
       } 
     } else {
-      this.world.setEntityState((Entity)this, (byte)21);
+      this.world.setEntityState(this, (byte)21);
     } 
   }
   
@@ -2841,7 +2680,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   protected int decreaseAirSupply(int air) {
-    int i = EnchantmentHelper.getRespirationModifier((EntityLivingBase)this);
+    int i = EnchantmentHelper.getRespirationModifier(this);
     if (isNotALivingThing())
       return air; 
     return (i > 0 && this.rand.nextInt(i + 1) > 0) ? air : (air - 1);
@@ -2852,7 +2691,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     this.motionZ = 0.0D;
     this.hurtTime = 0;
     this.prevRotationPitchFalling = this.rotationPitchFalling = 0.0F;
-    float[] ret = ForgeHooks.onLivingFall((EntityLivingBase)this, distance, damageMultiplier);
+    float[] ret = ForgeHooks.onLivingFall(this, distance, damageMultiplier);
     if (ret == null)
       return; 
     distance = ret[0];
@@ -2875,7 +2714,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       int l = MathHelper.floor(this.posZ);
       IBlockState iblockstate = this.world.getBlockState(new BlockPos(j, k, l));
       if (iblockstate.getMaterial() != Material.AIR) {
-        SoundType soundtype = iblockstate.getBlock().getSoundType(iblockstate, this.world, new BlockPos(j, k, l), (Entity)this);
+        SoundType soundtype = iblockstate.getBlock().getSoundType(iblockstate, this.world, new BlockPos(j, k, l), this);
         playSound(soundtype.getFallSound(), soundtype.getVolume() * 0.5F, soundtype.getPitch() * 0.75F);
         playSound(soundtype.getFallSound(), soundtype.getVolume() * 0.5F, soundtype.getPitch() * 0.75F);
         playSound(soundtype.getFallSound(), soundtype.getVolume() * 0.5F, soundtype.getPitch() * 0.75F);
@@ -2890,7 +2729,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       setRevengeTarget(null); 
     if (!this.world.isRemote && getRevengeTarget() == null && getAttackTarget() == null)
       if (Maths.chance(75)) {
-        List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue()), Predicates.and((Predicate<Entity>) p_apply_1_ -> p_apply_1_.isEntityAlive(),  EntitySelectors.CAN_AI_TARGET));
+        List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue()), Predicates.and((Predicate<Entity>) Entity::isEntityAlive,  EntitySelectors.CAN_AI_TARGET));
         for (int j2 = 0; j2 < 10 && !list1.isEmpty(); j2++) {
           EntityLivingBase entitylivingbase = list1.get(this.rand.nextInt(list1.size()));
           if (entitylivingbase != this) {
@@ -2914,20 +2753,16 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       this.motionZ = ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.1F);
       if (this.mutationTimer >= 120) {
         this.mutationTimer = -1;
-        this.world.playEvent((EntityPlayer)null, 3000, getPosition(), 0);
+        this.world.playEvent(null, 3000, getPosition(), 0);
         InactMutation();
       } 
     } 
     if (!isWild() && this == getOwner().getLastAttackedEntity())
       getOwner().setLastAttackedEntity(null); 
     if (!isABoss() && !isHero() && getOwnerId() == null && !this.world.isRemote && this.world.getDifficulty() == EnumDifficulty.PEACEFUL)
-      setDead(); 
-    if (getCurrentBook() != ItemStack.EMPTY && getBookDurability() >= getCurrentBook().getMaxDamage()) {
-      setBookID(0);
-      setBookDurability(0);
-    } 
+      setDead();
     if (getAttackTarget() != null && !getAttackTarget().isEntityAlive())
-      setAttackTarget((EntityLivingBase)null); 
+      setAttackTarget(null);
     if (getGhostTime() > 0)
       setGhostTime(getGhostTime() - 1); 
     if (getIllusionFormTime() > 0)
@@ -2936,7 +2771,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       setPolymorphTime(getPolymorphTime() - 1); 
     if (this.polymorpherData != null && (getPolymorphTime() <= 0 || getHealth() <= 0.0F) && !(this instanceof EntityEvoker)) {
       EntityEvoker entityvex = new EntityEvoker(this.world);
-      entityvex.copyLocationAndAnglesFrom((Entity)this);
+      entityvex.copyLocationAndAnglesFrom(this);
       entityvex.playSound(ESound.bugSpecial, 10.0F, 0.5F);
       entityvex.playSound(ESound.blast, 10.0F, 1.0F);
       entityvex.spawnExplosionParticle();
@@ -2947,8 +2782,8 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       entityvex.setLastChance(hasLastChance());
       entityvex.setPolymorphTime((getHealth() <= 0.0F) ? 2000 : 600);
       entityvex.exptobeadded = this.exptobeadded;
-      this.world.spawnEntity((Entity)entityvex);
-      this.world.removeEntity((Entity)this);
+      this.world.spawnEntity(entityvex);
+      this.world.removeEntity(this);
     } 
     if (getLimitedLife() > 0) {
       this.limitedLifespan = true;
@@ -2981,15 +2816,13 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     setAlwaysRenderNameTag(false);
     this.rideCooldownCounter++;
     if (!isEntityAlive() || (getAttackTarget() != null && !getAttackTarget().isEntityAlive()))
-      setAttackTarget((EntityLivingBase)null); 
-    this.currentReadingBook = (getBookID() != 0) ? new ItemStack(books[getBookID()], 1, getBookDurability()) : ItemStack.EMPTY;
+      setAttackTarget(null);
     this.basicInventory.setInventorySlotContents(0, getItemStackFromSlot(EntityEquipmentSlot.HEAD));
     this.basicInventory.setInventorySlotContents(1, getItemStackFromSlot(EntityEquipmentSlot.CHEST));
     this.basicInventory.setInventorySlotContents(2, getItemStackFromSlot(EntityEquipmentSlot.LEGS));
     this.basicInventory.setInventorySlotContents(3, getItemStackFromSlot(EntityEquipmentSlot.FEET));
     this.basicInventory.setInventorySlotContents(4, getItemStackFromSlot(EntityEquipmentSlot.MAINHAND));
     this.basicInventory.setInventorySlotContents(5, getItemStackFromSlot(EntityEquipmentSlot.OFFHAND));
-    this.basicInventory.setInventorySlotContents(6, getCurrentBook());
     if (getTier() == EnumTier.TIER6) {
       setLevel(300);
       setTotalEXP(2.1474836E9F);
@@ -3068,7 +2901,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       for (Entity entity : getPassengers())
         entity.motionY = this.motionY;  
     if (!isEntityAlive()) {
-      setAttackTarget((EntityLivingBase)null);
+      setAttackTarget(null);
       setRevengeTarget(null);
       dismountRidingEntity();
     } 
@@ -3082,38 +2915,12 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (isSitResting())
       getNavigator().clearPath(); 
     if (isRiding() || isBeingRidden() || getAttackTarget() != null || !getNavigator().noPath() || !this.onGround || this.motionX != 0.0D || this.motionY != 0.0D || this.motionZ != 0.0D)
-      setSitResting(false); 
-    if (this.ticksExisted > 20 && getCurrentBook().isEmpty()) {
-      setBookID(0);
-      setBookDurability(0);
-    } 
-    if (getAttackTarget() == null && !getCurrentBook().isEmpty() && getCurrentBook().getItem() instanceof ItemLearningBook) {
-      setSitResting(true);
-      this.rotationPitch = (this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityShulker || this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityGuardian) ? 0.0F : 30.0F;
-      this.rotationYawHead = this.rotationYaw = this.renderYawOffset;
-      if (this.ticksExisted % ((isHero() ? 40 : 80) - (int)getEntityAttribute(INTELLIGENCE).getBaseValue() / 5) == 0) {
-        this.flipT++;
-        int randomRead = this.rand.nextInt((isHero() ? 40 : 80) - (int)getEntityAttribute(INTELLIGENCE).getBaseValue() / 5);
-        if (getCurrentBook().getItem() instanceof ItemLearningBook && randomRead == 1)
-          learnLevelUp((ItemLearningBook)getCurrentBook().getItem()); 
-        if (!getCurrentBook().isEmpty() && !getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty() && getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() instanceof ItemLearningBook)
-          setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY); 
-      } 
-    } 
-    if (getAttackTarget() != null && !getCurrentBook().isEmpty() && getCurrentBook().getItem() instanceof ItemLearningBook) {
-      entityDropItem(new ItemStack(getCurrentBook().getItem(), 1, getCurrentBook().getItemDamage()), getEyeHeight());
-      setCurrentBook(ItemStack.EMPTY);
-      setBookID(0);
-      setBookDurability(0);
-      playSound(SoundEvents.ENTITY_WITCH_THROW, 1.0F, 0.8F + this.rand.nextFloat() * 0.4F);
-    } 
+      setSitResting(false);
     if (!this.world.isRemote && !getHeldItemMainhand().isEmpty() && getHeldItemMainhand().getItem() == Items.BOWL) {
       entityDropItem(new ItemStack(Items.BOWL), getEyeHeight());
       setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
       playSound(SoundEvents.ENTITY_WITCH_THROW, 1.0F, 0.8F + this.rand.nextFloat() * 0.4F);
-    } 
-    if (!getCurrentBook().isEmpty())
-      setBookDurability(getCurrentBook().getItemDamage()); 
+    }
     getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(getKnockbackResistance());
     if (!isWild() && getOwner() instanceof EntityPlayer && isEntityAlive() && 
       getTier() != EnumTier.TIER6 && getEXP() >= (getNextLevelRequirement() * getLevel()))
@@ -3146,7 +2953,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (isBeingRidden() && this.ticksExisted % 60 == 0 && !this.world.isRemote)
       setCurrentStudy(EnumStudy.Physical, 1); 
     if (getAttackTarget() != null && (getAttackTarget() == this || !getAttackTarget().isEntityAlive()))
-      setAttackTarget((EntityLivingBase)null); 
+      setAttackTarget(null);
     if (this.attackTimer > 0)
       this.attackTimer--; 
     if (this.holdRoseTick > 0)
@@ -3191,7 +2998,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       for (int i1 = 0; i1 < list.size(); i1++) {
         EntityTameBase entity = list.get(i1);
         if (entity != null && entity.getClass() == getClass() && !entity.isAntiMob()) {
-          createEngenderModExplosionFireless((Entity)this, this.posX, this.posY, this.posZ, 5.0F * (this.width + this.height) + list.size(), EngenderConfig.mobs.grief);
+          createEngenderModExplosionFireless(this, this.posX, this.posY, this.posZ, 5.0F * (this.width + this.height) + list.size(), EngenderConfig.mobs.grief);
           entity.onKillCommand();
           onKillCommand();
         } 
@@ -3200,22 +3007,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       if (this.deathTime > 0)
         this.deathTime--; 
       this.dead = false;
-    } 
-    this.pageFlipPrev = this.pageFlip;
-    this.bookSpreadPrev = this.bookSpread;
-    if (getBookID() > 0 && isEntityAlive()) {
-      this.bookSpread += 0.05F;
-      if (this.bookSpread == 0.1F)
-        playSound(SoundEvents.ENTITY_PAINTING_PLACE, 1.0F, 1.3F + this.rand.nextFloat() * 0.4F); 
-    } else {
-      this.bookSpread -= 0.1F;
-    } 
-    this.bookSpread = MathHelper.clamp(this.bookSpread, 0.0F, 1.0F);
-    this.pageFlipPrev = this.pageFlip;
-    float f = (this.flipT - this.pageFlip) * 0.4F;
-    f = MathHelper.clamp(f, -0.2F, 0.2F);
-    this.flipA += (f - this.flipA) * 0.9F;
-    this.pageFlip += this.flipA;
+    }
     if (EngenderConfig.mobs.hunger && !this.world.isRemote && isEntityAlive() && getEnergy() <= 0.0F && this.ticksExisted % 100 == 0)
       attackEntityFrom(DamageSource.STARVE, 2.0F); 
     if (EngenderConfig.mobs.regeneration) {
@@ -3230,7 +3022,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         setEnergy(getEnergy() - (float)(5.050000190734863D - getEntityAttribute(STAMINA).getBaseValue() / 20.0D));
       } 
     } 
-    setSneaking((getOwner() != null && isEntityAlive() && (getOwner().isSneaking() || (this.inLove > 0 && this.ticksExisted % 5 == 0 && getDistanceSq((Entity)getOwner()) < 2.0D))));
+    setSneaking((getOwner() != null && isEntityAlive() && (getOwner().isSneaking() || (this.inLove > 0 && this.ticksExisted % 5 == 0 && getDistanceSq(getOwner()) < 2.0D))));
     if (Loader.isModLoaded("abyssalcraft") && isEntityImmuneToAntiMatter() && isPotionActive(AbyssalCraftAPI.antimatter_potion)) {
       removeActivePotionEffect(MobEffects.SLOWNESS);
       removeActivePotionEffect(MobEffects.BLINDNESS);
@@ -3289,7 +3081,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (this.ticksExisted % 50 == 0 && isAMutant())
       heal(2.0F); 
     if (this.convertionInt > 0) {
-      setAttackTarget((EntityLivingBase)null);
+      setAttackTarget(null);
       this.rotationYawHead = this.rotationYaw = this.renderYawOffset = (this.ticksExisted * 5);
       this.convertionDelay--;
       if (this.convertionDelay <= 0) {
@@ -3332,11 +3124,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (getJukeboxToDanceTo() != null && this.ticksExisted % 10 == 0 && isEntityAlive())
       this.world.spawnParticle(EnumParticleTypes.NOTE, this.posX, this.posY + this.height, this.posZ, this.rand.nextDouble(), this.rand.nextDouble(), this.rand.nextDouble());
     if (this.convertionInt > 0 && this.ticksExisted % 10 == 0)
-      this.world.setEntityState((Entity)this, (byte)21); 
+      this.world.setEntityState(this, (byte)21);
     if (this.convertionInt > 0)
       getNavigator().clearPath(); 
     if (getAttackTarget() != null && getAttackTarget() instanceof EntityPlayer && ((EntityPlayer)getAttackTarget()).capabilities.disableDamage)
-      setAttackTarget((EntityLivingBase)null); 
+      setAttackTarget(null);
     if (Loader.isModLoaded("iceandfire")) {
       List<?> list = this.world.loadedEntityList;
       if (!list.isEmpty())
@@ -3345,7 +3137,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
               if (entity.isEntityAlive() && entity instanceof EntityMob) {
                   EntityMob mob = (EntityMob) entity;
                   if (mob.width == 0.8F && mob.height == 1.99F && mob.getAttackTarget() != null)
-                      mob.setAttackTarget((EntityLivingBase) mob);
+                      mob.setAttackTarget(mob);
               }
           }
     } 
@@ -3380,17 +3172,17 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         iattributeinstanceattack.applyModifier(attackingBoostModifier); 
     } 
     if (getAttackTarget() != null)
-      if (getNavigator() instanceof PathNavigateGround && getDistance((Entity)getAttackTarget()) > getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getBaseValue()) {
+      if (getNavigator() instanceof PathNavigateGround && getDistance(getAttackTarget()) > getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getBaseValue()) {
         getMoveHelper().strafe(getFittness(), 0.0F);
-        faceEntity((Entity)getAttackTarget(), getHorizontalFaceSpeed(), getVerticalFaceSpeed());
+        faceEntity(getAttackTarget(), getHorizontalFaceSpeed(), getVerticalFaceSpeed());
       }  
-    if (!isSprinting() && getOwner() != null && getEnergy() > 20.0F && isEntityAlive() && (getOwner().isSprinting() || (getAttackTarget() != null && this.moveForward > 0.0F && (getAttackTarget().getHealth() <= 4.0F || getDistance((Entity)getAttackTarget()) > getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getBaseValue() * 1.5D)))) {
+    if (!isSprinting() && getOwner() != null && getEnergy() > 20.0F && isEntityAlive() && (getOwner().isSprinting() || (getAttackTarget() != null && this.moveForward > 0.0F && (getAttackTarget().getHealth() <= 4.0F || getDistance(getAttackTarget()) > getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getBaseValue() * 1.5D)))) {
       setSprinting(true);
     } else {
       setSprinting(false);
     } 
-    if (isPotionActive(MobEffects.BLINDNESS) || (isPotionActive(MobEffects.NAUSEA) && getAttackTarget() != null && getDistance((Entity)getAttackTarget()) > this.reachWidth))
-      setAttackTarget((EntityLivingBase)null); 
+    if (isPotionActive(MobEffects.BLINDNESS) || (isPotionActive(MobEffects.NAUSEA) && getAttackTarget() != null && getDistance(getAttackTarget()) > this.reachWidth))
+      setAttackTarget(null);
     if (isPotionActive(MobEffects.NAUSEA)) {
       this.rotationYawHead += MathHelper.sin(this.ticksExisted * 0.2F) * 10.0F;
       this.rotationPitch += MathHelper.cos(this.ticksExisted * 0.1F) * 10.0F;
@@ -3438,26 +3230,26 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         playSound(SoundEvents.ENTITY_PLAYER_BURP, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
       } 
     } 
-    if (getRidingEntity() != null && getRidingEntity() instanceof EntityBoat && ((EntityBoat)getRidingEntity()).getControllingPassenger() == this) {
-      ((EntityBoat)getRidingEntity()).rotationYaw = this.rotationYaw;
+    if (getRidingEntity() != null && getRidingEntity() instanceof EntityBoat && getRidingEntity().getControllingPassenger() == this) {
+      getRidingEntity().rotationYaw = this.rotationYaw;
       float f1 = 0.0F;
       if (this.moveForward > 0.0F || getAttackTarget() != null)
         f1 += 0.04F; 
       if (this.moveForward < 0.0F)
         f1 -= 0.005F; 
-      ((EntityBoat)getRidingEntity()).motionX += (MathHelper.sin(-((EntityBoat)getRidingEntity()).rotationYaw * 0.017453292F) * f1);
-      ((EntityBoat)getRidingEntity()).motionZ += (MathHelper.cos(((EntityBoat)getRidingEntity()).rotationYaw * 0.017453292F) * f1);
+      getRidingEntity().motionX += (MathHelper.sin(-getRidingEntity().rotationYaw * 0.017453292F) * f1);
+      getRidingEntity().motionZ += (MathHelper.cos(getRidingEntity().rotationYaw * 0.017453292F) * f1);
     } 
     if (getJukeboxToDanceTo() != null) {
       if (this.ticksExisted % 20 == 0 && this instanceof EntityCreeper && ((EntityCreeper)this).getPowered())
-        this.world.addWeatherEffect((Entity)new EntityLightningBolt(this.world, this.posX - 0.5D, this.posY + 1.9D, this.posZ - 0.5D, true)); 
+        this.world.addWeatherEffect(new EntityLightningBolt(this.world, this.posX - 0.5D, this.posY + 1.9D, this.posZ - 0.5D, true));
       this.renderYawOffset = this.rotationYaw = this.rotationYawHead;
       setSitResting(false);
       getNavigator().clearPath();
       IBlockState iblockstate = this.world.getBlockState(getJukeboxToDanceTo());
       Block block = iblockstate.getBlock();
       if (block != Blocks.JUKEBOX || (block == Blocks.JUKEBOX && !(Boolean) iblockstate.getValue((IProperty) BlockJukebox.HAS_RECORD)) || getDistanceSqToCenter(this.jukeBoxToDanceTo) > 10000.0D)
-        setJukeboxToDanceTo((BlockPos)null); 
+        setJukeboxToDanceTo(null);
     } 
     if (getAttackTarget() == null && getJukeboxToDanceTo() == null && (this.ticksExisted % 40 == 0 || this.ticksExisted < 5)) {
       int i11 = MathHelper.floor(this.posY);
@@ -3479,11 +3271,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       } 
     } 
     if (isChild() && isRiding() && getRidingEntity() instanceof EntityPlayer)
-      if (((EntityPlayer)getRidingEntity()).getRidingEntity() != null && ((EntityPlayer)getRidingEntity()).getRidingEntity() instanceof EntityLivingBase) {
-        this.renderYawOffset = this.rotationYaw = ((EntityLivingBase)((EntityPlayer)getRidingEntity()).getRidingEntity()).rotationYaw;
-        this.rotationYawHead = ((EntityLivingBase)((EntityPlayer)getRidingEntity()).getRidingEntity()).rotationYawHead;
+      if (getRidingEntity().getRidingEntity() != null && getRidingEntity().getRidingEntity() instanceof EntityLivingBase) {
+        this.renderYawOffset = this.rotationYaw = getRidingEntity().getRidingEntity().rotationYaw;
+        this.rotationYawHead = ((EntityLivingBase) getRidingEntity().getRidingEntity()).rotationYawHead;
       } else {
-        this.renderYawOffset = this.rotationYaw = ((EntityPlayer)getRidingEntity()).rotationYaw;
+        this.renderYawOffset = this.rotationYaw = getRidingEntity().rotationYaw;
         this.rotationYawHead = ((EntityPlayer)getRidingEntity()).rotationYawHead;
       }  
     if (this.ticksExisted > getSpawnTimer()) {
@@ -3496,9 +3288,9 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         resetInLove(); 
       if (getGrowingAge() < 4000)
         resetInLove(); 
-      EntityPlayer player = this.world.getClosestPlayerToEntity((Entity)this, 4.0D + this.height + this.width);
+      EntityPlayer player = this.world.getClosestPlayerToEntity(this, 4.0D + this.height + this.width);
       if (EngenderConfig.mobs.useMobTalkerModels && isChild() && !isRiding() && hasOwner(player))
-        getLookHelper().setLookPositionWithEntity((Entity)player, getHorizontalFaceSpeed(), getVerticalFaceSpeed()); 
+        getLookHelper().setLookPositionWithEntity(player, getHorizontalFaceSpeed(), getVerticalFaceSpeed());
       updateArmSwingProgress();
       if ((getLeashed() && !this.onGround) || this.ticksExisted < 20)
         this.fallDistance *= 0.0F; 
@@ -3527,7 +3319,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (isEntityAlive() && this.onGround && getAttackTarget() != null && (getAttackTarget()).posY >= this.posY + 2.0D && this.rand.nextInt(100) == 0) {
       this.motionY = getJumpUpwardsMotion() + 0.20000000298023224D;
       this.isAirBorne = true;
-      ForgeHooks.onLivingJump((EntityLivingBase)this);
+      ForgeHooks.onLivingJump(this);
       double d0 = (getAttackTarget()).posX - this.posX;
       double d1 = (getAttackTarget()).posZ - this.posZ;
       float f1 = MathHelper.sqrt(d0 * d0 + d1 * d1);
@@ -3645,12 +3437,12 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   public void InactMutation() {
     if (getMutant() != null && getFittness() >= 1.5F) {
       EntityTameBase mutant = getMutant();
-      mutant.copyLocationAndAnglesFrom((Entity)this);
-      mutant.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), (IEntityLivingData)null);
+      mutant.copyLocationAndAnglesFrom(this);
+      mutant.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
       mutant.setOwnerId(getOwnerId());
       mutant.setIsHero(isHero());
       mutant.setGrowingAge(getGrowingAge());
-      this.world.spawnEntity((Entity)mutant);
+      this.world.spawnEntity(mutant);
       dropEquipmentUndamaged();
       setDead();
     } else {
@@ -3668,10 +3460,10 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
           return;
         case 3:
           clone = spawnBaby(this);
-          clone.copyLocationAndAnglesFrom((Entity)this);
+          clone.copyLocationAndAnglesFrom(this);
           clone.readEntityFromNBT(serializeNBT());
           clone.setOwnerId(getOwnerId());
-          this.world.spawnEntity((Entity)clone);
+          this.world.spawnEntity(clone);
           return;
         case 4:
           addPotionEffect(new PotionEffect(MobEffects.WITHER, 400, 1));
@@ -3703,7 +3495,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     }
     
     protected PathFinder getPathFinder() {
-      this.nodeProcessor = (NodeProcessor)new FlyingNodeProcessor();
+      this.nodeProcessor = new FlyingNodeProcessor();
       this.nodeProcessor.setCanEnterDoors(true);
       return new PathFinder(this.nodeProcessor);
     }
@@ -3728,13 +3520,13 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         if (canNavigate()) {
           pathFollow();
         } else if (this.currentPath != null && this.currentPath.getCurrentPathIndex() < this.currentPath.getCurrentPathLength()) {
-          Vec3d vec3d = this.currentPath.getVectorFromIndex((Entity)this.entity, this.currentPath.getCurrentPathIndex());
+          Vec3d vec3d = this.currentPath.getVectorFromIndex(this.entity, this.currentPath.getCurrentPathIndex());
           if (MathHelper.floor(this.entity.posX) == MathHelper.floor(vec3d.x) && MathHelper.floor(this.entity.posY) == MathHelper.floor(vec3d.y) && MathHelper.floor(this.entity.posZ) == MathHelper.floor(vec3d.z))
             this.currentPath.setCurrentPathIndex(this.currentPath.getCurrentPathIndex() + 1); 
         } 
         debugPathFinding();
         if (!noPath()) {
-          Vec3d vec3d1 = this.currentPath.getPosition((Entity)this.entity);
+          Vec3d vec3d1 = this.currentPath.getPosition(this.entity);
           this.entity.getMoveHelper().setMoveTo(vec3d1.x, Flying.clampFlightY(vec3d1.y), vec3d1.z, this.speed);
         } 
       } 

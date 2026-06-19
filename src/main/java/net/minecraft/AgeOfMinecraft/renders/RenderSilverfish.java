@@ -32,10 +32,10 @@ public class RenderSilverfish extends RenderLiving<EntitySilverfish> {
   
   public RenderSilverfish(RenderManager p_i46144_1_) {
     super(p_i46144_1_, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.3F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
     addLayer(new LayerCustomHeadEngender(regularmodel.silverfishBodyParts[2], cmmmodel.Head));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    
+    addLayer(new LayerMobCape(this));
   }
   
   protected float getDeathMaxRotation(EntitySilverfish p_180584_1_) {
@@ -43,7 +43,7 @@ public class RenderSilverfish extends RenderLiving<EntitySilverfish> {
   }
   
   protected void preRenderCallback(EntitySilverfish entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel;
+    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
     if (EngenderConfig.mobs.useMobTalkerModels) {
       GlStateManager.scale(0.5F, 0.5F, 0.5F);
       if (entitylivingbaseIn.isSitResting())

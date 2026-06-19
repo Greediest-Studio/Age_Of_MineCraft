@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier4;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
@@ -41,8 +40,8 @@ public class EntitySmallFireballOther extends EntitySmallFireball {
         if (list != null && !list.isEmpty())
             for (EntityLivingBase entity1 : list) {
                 if (entity1 != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart) {
-                    this.shootingEntity.attackEntityAsMob((Entity) entity1);
-                    applyEnchantments(this.shootingEntity, (Entity) entity1);
+                    this.shootingEntity.attackEntityAsMob(entity1);
+                    applyEnchantments(this.shootingEntity, entity1);
                     setDead();
                 }
             }
@@ -52,12 +51,12 @@ public class EntitySmallFireballOther extends EntitySmallFireball {
           if (!movingObject.entityHit.isImmuneToFire() && movingObject.entityHit instanceof net.minecraft.entity.passive.EntityAnimal)
             movingObject.entityHit.setFire(10); 
           copyLocationAndAnglesFrom(movingObject.entityHit);
-          ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)movingObject.entityHit, " was fireballed by ", DamageSource.causeFireballDamage((EntityFireball)this, (Entity)this.shootingEntity), this.damage);
+          ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)movingObject.entityHit, " was fireballed by ", DamageSource.causeFireballDamage(this, this.shootingEntity), this.damage);
           applyEnchantments(this.shootingEntity, movingObject.entityHit);
           if (!movingObject.entityHit.isImmuneToFire())
             movingObject.entityHit.setFire(10); 
           if (this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase && ((EntityTameBase)this.shootingEntity).isHero())
-            EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY, this.posZ, 1.0F, EngenderConfig.mobs.grief, false); 
+            EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, 1.0F, EngenderConfig.mobs.grief, false);
           setDead();
         } 
       } else if (movingObject.entityHit == null) {
@@ -69,7 +68,7 @@ public class EntitySmallFireballOther extends EntitySmallFireball {
           if (this.world.isAirBlock(blockpos)) {
             this.world.setBlockState(blockpos, Blocks.FIRE.getDefaultState());
             if (this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase && ((EntityTameBase)this.shootingEntity).isHero())
-              EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY, this.posZ, 1.0F, EngenderConfig.mobs.grief, false); 
+              EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, 1.0F, EngenderConfig.mobs.grief, false);
             setDead();
           } 
         } 
@@ -95,7 +94,7 @@ public class EntitySmallFireballOther extends EntitySmallFireball {
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (this.shootingEntity != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive())
-          onImpact(new RayTraceResult((Entity)entity1)); 
+          onImpact(new RayTraceResult(entity1));
       }  
   }
 }

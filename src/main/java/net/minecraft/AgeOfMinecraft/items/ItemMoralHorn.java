@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.items;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import javax.annotation.Nullable;

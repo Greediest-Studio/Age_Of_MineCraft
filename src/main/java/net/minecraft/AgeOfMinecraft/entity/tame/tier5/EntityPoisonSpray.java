@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier5;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
@@ -53,7 +52,7 @@ public class EntityPoisonSpray extends EntitySnowball {
           entityareaeffectcloud.setRadius(2.0F);
           entityareaeffectcloud.setDuration(100);
           playSound(SoundEvents.ENTITY_SMALL_SLIME_SQUISH, 1.0F, 1.0F);
-          this.world.spawnEntity((Entity)entityareaeffectcloud);
+          this.world.spawnEntity(entityareaeffectcloud);
         } 
       } 
     } else {
@@ -65,13 +64,13 @@ public class EntityPoisonSpray extends EntitySnowball {
       entityareaeffectcloud.setRadius(2.0F);
       entityareaeffectcloud.setDuration(100);
       playSound(SoundEvents.ENTITY_SMALL_SLIME_SQUISH, 1.0F, 1.0F);
-      this.world.spawnEntity((Entity)entityareaeffectcloud);
+      this.world.spawnEntity(entityareaeffectcloud);
     } 
     List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
     if (list1 != null && !list1.isEmpty())
         for (EntityLivingBase entity1 : list1) {
             if (!false) {
-                getThrower().attackEntityAsMob((Entity) entity1);
+                getThrower().attackEntityAsMob(entity1);
                 if (b0 > 0 && entity1 instanceof EntityLivingBase)
                     entity1.addPotionEffect(new PotionEffect(MobEffects.POISON, 20 * b0));
             }

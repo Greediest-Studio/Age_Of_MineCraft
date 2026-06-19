@@ -37,7 +37,7 @@ public class RenderMutantEnderman extends RenderLiving<EntityMutantEnderman> {
   private boolean teleportAttack;
   
   public RenderMutantEnderman(RenderManager manager) {
-    super(manager, (ModelBase)new ModelMutantEnderman(), 0.8F);
+    super(manager, new ModelMutantEnderman(), 0.8F);
     addLayer(new EyesLayer());
     addLayer(new GlowLayer());
   }
@@ -49,7 +49,7 @@ public class RenderMutantEnderman extends RenderLiving<EntityMutantEnderman> {
       GlStateManager.enableAlpha();
       GlStateManager.alphaFunc(516, blendFactor);
       bindTexture(DEATH_TEXTURE);
-      this.mainModel.render((Entity)entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+      this.mainModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
       GlStateManager.alphaFunc(516, 0.1F);
       GlStateManager.depthFunc(514);
     } 
@@ -74,7 +74,7 @@ public class RenderMutantEnderman extends RenderLiving<EntityMutantEnderman> {
     this.teleportAttack = false;
     double addX = 0.0D;
     double addZ = 0.0D;
-    this.mainModel = entity.isClone() ? (ModelBase)cloneModel : (ModelBase)endermanModel;
+    this.mainModel = entity.isClone() ? cloneModel : endermanModel;
     cloneModel.isAttacking = entity.isAggressive();
     cloneModel.isCarrying = (entity.heldBlock[1] != 0);
     boolean forcedLook = (entity.getAttackID() == 6);
@@ -112,7 +112,7 @@ public class RenderMutantEnderman extends RenderLiving<EntityMutantEnderman> {
         RenderMutantEnderman.this.bindTexture(entityIn.isAntiMob() ? RenderMutantEnderman.Anti_EYES_TEXTURE : RenderMutantEnderman.EYES_TEXTURE);
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 61680.0F, 0.0F);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderMutantEnderman.this.mainModel.render((Entity)entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+        RenderMutantEnderman.this.mainModel.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
         RenderMutantEnderman.this.setLightmap(entityIn);
         GlStateManager.enableLighting();
       } 
@@ -159,7 +159,7 @@ public class RenderMutantEnderman extends RenderLiving<EntityMutantEnderman> {
         GlStateManager.color(0.9F, 0.3F, 1.0F, getAlpha(entityIn, partialTicks));
         GlStateManager.enableLighting();
         (Minecraft.getMinecraft()).entityRenderer.setupFogColor(true);
-        RenderMutantEnderman.this.getMainModel().render((Entity)entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+        RenderMutantEnderman.this.getMainModel().render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
         (Minecraft.getMinecraft()).entityRenderer.setupFogColor(false);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.matrixMode(5890);

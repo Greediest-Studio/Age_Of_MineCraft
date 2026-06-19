@@ -48,12 +48,12 @@ public class EntityVindicator extends EntityAbstractIllagers {
   
   public EntityVindicator(World worldIn) {
     super(worldIn);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIFriendlyAttackMelee((EntityTameBase)this, 1.0D, true));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 1.0D));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.6D, 80));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader((EntityTameBase)this, 1.0D, 32.0F, 6.0F));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(3, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    this.tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 1.0D));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.6D, 80));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.0D, 32.0F, 6.0F));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
     this.experienceValue = 10;
   }
   
@@ -83,7 +83,7 @@ public class EntityVindicator extends EntityAbstractIllagers {
   }
   
   public EntityTameBase spawnBaby(EntityTameBase par1idleTimeable) {
-    return (EntityTameBase)new EntityVindicator(this.world);
+    return new EntityVindicator(this.world);
   }
   
   protected void applyEntityAttributes() {
@@ -108,12 +108,12 @@ public class EntityVindicator extends EntityAbstractIllagers {
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return I18n.translateToLocal("entity." + str + ".cmm.name");
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name");
@@ -124,8 +124,8 @@ public class EntityVindicator extends EntityAbstractIllagers {
     if (!this.world.isRemote)
       for (int i = 0; i < 1; i++) {
         EntityVindicator baby = new EntityVindicator(this.world);
-        baby.copyLocationAndAnglesFrom((Entity)this);
-        baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), (IEntityLivingData)null);
+        baby.copyLocationAndAnglesFrom(this);
+        baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
         baby.setGrowingAge(-60000);
         baby.setChild(true);
         baby.setIsAntiMob(isAntiMob());
@@ -134,7 +134,7 @@ public class EntityVindicator extends EntityAbstractIllagers {
         if (isMarried())
           for (int e = 0; e < 10 + this.rand.nextInt(10); e++)
             baby.levelUp();  
-        this.world.spawnEntity((Entity)baby);
+        this.world.spawnEntity(baby);
       }  
   }
   
@@ -149,12 +149,12 @@ public class EntityVindicator extends EntityAbstractIllagers {
   
   @SideOnly(Side.CLIENT)
   private boolean getVindicatorFlag(int p_190637_1_) {
-    int i = (Byte) this.dataManager.get(DATA_FLAGS_ID);
+    int i = this.dataManager.get(DATA_FLAGS_ID);
     return ((i & p_190637_1_) != 0);
   }
   
   private void setVindicatorFlag(int p_190638_1_, boolean p_190638_2_) {
-    int i = (Byte) this.dataManager.get(DATA_FLAGS_ID);
+    int i = this.dataManager.get(DATA_FLAGS_ID);
     if (p_190638_2_) {
       i |= p_190638_1_;
     } else {
@@ -237,11 +237,11 @@ public class EntityVindicator extends EntityAbstractIllagers {
       playSound(ESound.heresJohnny, 2.0F, 1.0F);
       this.johnny = true;
       ((PathNavigateGround)getNavigator()).setBreakDoors(true);
-      this.tasks.addTask(1, (EntityAIBase)new EntityAIVindicatorBreakDoor((EntityLiving)this));
+      this.tasks.addTask(1, new EntityAIVindicatorBreakDoor(this));
     } else {
       this.johnny = false;
       ((PathNavigateGround)getNavigator()).setBreakDoors(false);
-      this.tasks.removeTask((EntityAIBase)new EntityAIVindicatorBreakDoor((EntityLiving)this));
+      this.tasks.removeTask(new EntityAIVindicatorBreakDoor(this));
     } 
   }
   

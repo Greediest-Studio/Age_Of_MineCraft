@@ -38,27 +38,27 @@ public class EntityPEGunPellet extends EntityFireball {
   protected void onImpact(RayTraceResult result) {
     if (!this.world.isRemote) {
       if (this.shootingEntity != null && result.entityHit != null && result.entityHit instanceof net.minecraft.entity.monster.EntityEnderman)
-        result.entityHit.attackEntityFrom((new EntityDamageSourceIndirect("blaster", (Entity)this, (Entity)this.shootingEntity)).setDamageBypassesArmor(), 0.0F); 
+        result.entityHit.attackEntityFrom((new EntityDamageSourceIndirect("blaster", this, this.shootingEntity)).setDamageBypassesArmor(), 0.0F);
       if (this.shootingEntity != null && result.entityHit != null && result.entityHit instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityEnderman)
-        result.entityHit.attackEntityFrom((new EntityDamageSourceIndirect("blaster", (Entity)this, (Entity)this.shootingEntity)).setDamageBypassesArmor(), 0.0F); 
+        result.entityHit.attackEntityFrom((new EntityDamageSourceIndirect("blaster", this, this.shootingEntity)).setDamageBypassesArmor(), 0.0F);
       if (this.shootingEntity != null && result.entityHit != null && result.entityHit.isEntityAlive() && !(result.entityHit instanceof net.minecraft.entity.monster.EntityEnderman) && !(result.entityHit instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityEnderman)) {
         result.entityHit.hurtResistantTime = 0;
         if (this.shootingEntity instanceof EntityTameBase && result.entityHit instanceof EntityLivingBase) {
           if (!false) {
             result.entityHit.setFire((int)this.damage);
             if (this.damage >= 10.0F) {
-              result.entityHit.attackEntityFrom((new EntityDamageSourceIndirect("blaster", (Entity)this, (Entity)this.shootingEntity)).setDamageBypassesArmor().setDamageIsAbsolute(), this.damage);
+              result.entityHit.attackEntityFrom((new EntityDamageSourceIndirect("blaster", this, this.shootingEntity)).setDamageBypassesArmor().setDamageIsAbsolute(), this.damage);
             } else {
-              result.entityHit.attackEntityFrom((new EntityDamageSourceIndirect("blaster", (Entity)this, (Entity)this.shootingEntity)).setDamageBypassesArmor(), this.damage);
+              result.entityHit.attackEntityFrom((new EntityDamageSourceIndirect("blaster", this, this.shootingEntity)).setDamageBypassesArmor(), this.damage);
             } 
           } 
         } else {
           result.entityHit.setFire((int)this.damage);
           playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 0.5F, 2.0F);
           if (this.damage >= 10.0F) {
-            result.entityHit.attackEntityFrom((new EntityDamageSourceIndirect("blaster", (Entity)this, (Entity)this.shootingEntity)).setDamageBypassesArmor().setDamageIsAbsolute(), this.damage);
+            result.entityHit.attackEntityFrom((new EntityDamageSourceIndirect("blaster", this, this.shootingEntity)).setDamageBypassesArmor().setDamageIsAbsolute(), this.damage);
           } else {
-            result.entityHit.attackEntityFrom((new EntityDamageSourceIndirect("blaster", (Entity)this, (Entity)this.shootingEntity)).setDamageBypassesArmor(), this.damage);
+            result.entityHit.attackEntityFrom((new EntityDamageSourceIndirect("blaster", this, this.shootingEntity)).setDamageBypassesArmor(), this.damage);
           } 
         } 
         applyEnchantments(this.shootingEntity, result.entityHit);

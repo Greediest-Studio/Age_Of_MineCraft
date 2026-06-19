@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier3;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -65,13 +64,13 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
     super(worldIn);
     this.isOffensive = true;
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.1D, 32.0F, 6.0F));
-      this.tasks.addTask(6, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.2D, true));
-      this.tasks.addTask(7, (EntityAIBase)new EntityAIWanderAvoidWater((EntityCreature)this, 0.8D));
-      this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+      this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.1D, 32.0F, 6.0F));
+      this.tasks.addTask(6, new EntityAIFriendlyAttackMelee(this, 1.2D, true));
+      this.tasks.addTask(7, new EntityAIWanderAvoidWater(this, 0.8D));
+      this.tasks.addTask(8, new EntityAILookIdle(this));
     } else {
       this.moveHelper = new SlimeMoveHelper(this);
-      this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.1D, 32.0F, 6.0F));
+      this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.1D, 32.0F, 6.0F));
       this.tasks.addTask(2, new AISlimeFloat(this));
       this.tasks.addTask(3, new AISlimeAttack(this));
       this.tasks.addTask(4, new AISlimeFaceRandom(this));
@@ -141,7 +140,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
   }
   
   public int getSlimeSize() {
-    return (Integer) this.dataManager.get(SLIME_SIZE);
+    return this.dataManager.get(SLIME_SIZE);
   }
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
@@ -176,14 +175,14 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
     if (!this.world.isRemote)
       for (int i = 0; i < 2 + this.rand.nextInt(3); i++) {
         EntitySlime baby = createInstance();
-        baby.copyLocationAndAnglesFrom((Entity)this);
-        baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), (IEntityLivingData)null);
+        baby.copyLocationAndAnglesFrom(this);
+        baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
         baby.setChild(true);
         baby.setIsAntiMob(isAntiMob());
         baby.setIsHero(isHero());
         baby.setOwnerId(getOwnerId());
         baby.setSlimeSize(getSlimeSize() / 2);
-        this.world.spawnEntity((Entity)baby);
+        this.world.spawnEntity(baby);
       }  
   }
   
@@ -264,7 +263,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
         entityslime.setOwnerId(getOwnerId());
         entityslime.setSlimeSize(i / 2);
         entityslime.setLocationAndAngles(this.posX + f, this.posY, this.posZ + f1, this.rand.nextFloat() * 360.0F, 0.0F);
-        this.world.spawnEntity((Entity)entityslime);
+        this.world.spawnEntity(entityslime);
       } 
     } 
     super.setDead();
@@ -282,10 +281,10 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
   
   public void fall(float distance, float damageMultiplier) {
     this.moveStrafing = this.moveForward = 0.0F;
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 64.0D * getSlimeSize() && getSpecialAttackTimer() <= 0 && isHero()) {
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) < 64.0D * getSlimeSize() && getSpecialAttackTimer() <= 0 && isHero()) {
       setSpecialAttackTimer(100 * getSlimeSize());
       playSound(ESound.golemSmash, 10.0F, 2.0F - getSlimeSize() * 0.25F);
-      createEngenderModExplosionFireless((Entity)this, this.posX, this.posY - 0.5D, this.posZ, getSlimeSize(), false);
+      createEngenderModExplosionFireless(this, this.posX, this.posY - 0.5D, this.posZ, getSlimeSize(), false);
       if (getAttackTarget() != null && !false) {
         double d01 = (getAttackTarget()).posX - this.posX;
         double d11 = (getAttackTarget()).posZ - this.posZ;
@@ -294,9 +293,9 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
         this.motionX = d01 / f21 * hor * hor + this.motionX * hor;
         this.motionZ = d11 / f21 * hor * hor + this.motionZ * hor;
         this.motionY = 0.6000000238418579D;
-        double dou = getDistanceSq((Entity)getAttackTarget());
+        double dou = getDistanceSq(getAttackTarget());
         if (dou <= 16.0D)
-          attackEntityAsMob((Entity)getAttackTarget()); 
+          attackEntityAsMob(getAttackTarget());
       } 
       List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(16.0D * getSlimeSize()), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
@@ -304,7 +303,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
               if (entity != null)
                   if (!false) {
                       entity.motionY += 0.75D;
-                      attackEntityAsMob((Entity) entity);
+                      attackEntityAsMob(entity);
                   }
           }
     } 
@@ -315,7 +314,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
     collideWithNearbyEntities();
     if (isRiding() && getRidingEntity() instanceof EntityLivingBase)
       this.renderYawOffset = this.rotationYaw = this.rotationYawHead = ((EntityLivingBase)getRidingEntity()).rotationYawHead; 
-    if (getAttackTarget() != null && !this.onGround && EngenderConfig.mobs.useMobTalkerModels && getDistanceSq((Entity)getAttackTarget()) > ((getAttackTarget()).width * (getAttackTarget()).width) + 16.0D) {
+    if (getAttackTarget() != null && !this.onGround && EngenderConfig.mobs.useMobTalkerModels && getDistanceSq(getAttackTarget()) > ((getAttackTarget()).width * (getAttackTarget()).width) + 16.0D) {
       double d0 = (getAttackTarget()).posX - this.posX;
       double d1 = (getAttackTarget()).posZ - this.posZ;
       double d3 = d0 * d0 + d1 * d1;
@@ -333,7 +332,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
         if (!isSneaking())
           getJumpHelper().setJumping(); 
       }  
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 32.0D * getSlimeSize() && getSpecialAttackTimer() <= 0 && this.onGround && isHero())
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) < 32.0D * getSlimeSize() && getSpecialAttackTimer() <= 0 && this.onGround && isHero())
       performSpecialAttack(); 
   }
   
@@ -341,12 +340,12 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return (getSlimeSize() >= 4) ? I18n.translateToLocal("entity.SlimeHelpful.cmm4.name") : (isSmallSlime() ? I18n.translateToLocal("entity.SlimeHelpful.cmm1.name") : I18n.translateToLocal("entity.SlimeHelpful.cmm2.name"));
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name");
@@ -356,7 +355,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
     super.applyEntityCollision(entityIn);
     if (entityIn instanceof EntityLivingBase) {
       EntityLivingBase entity = (EntityLivingBase)entityIn;
-      if (this.ticksExisted > 10 && canEntityBeSeen((Entity)entity) && getDistanceSq((Entity)entity) < this.width * 1.5D * this.width * 1.5D && attackEntityAsMob((Entity)entity))
+      if (this.ticksExisted > 10 && canEntityBeSeen(entity) && getDistanceSq(entity) < this.width * 1.5D * this.width * 1.5D && attackEntityAsMob(entity))
         playSound(SoundEvents.ENTITY_SLIME_ATTACK, getSoundVolume(), getSoundPitch()); 
     } 
   }
@@ -458,7 +457,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
       if (hasOwner(player) && EngenderConfig.mobs.useMobTalkerModels) {
         player.swingArm(EnumHand.MAIN_HAND);
         if (getRidingEntity() == null) {
-          startRiding((Entity)player, true);
+          startRiding(player, true);
         } else {
           dismountRidingEntity();
         } 
@@ -467,7 +466,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
     } 
     if (stack.isEmpty() && getRidingEntity() == null && !isSmallSlime()) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -530,7 +529,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
     playSound(getJumpSound(), getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) / (EngenderConfig.mobs.useMobTalkerModels ? 1.35F : 1.1F));
     this.motionY += 0.42D;
     this.isAirBorne = true;
-    ForgeHooks.onLivingJump((EntityLivingBase)this);
+    ForgeHooks.onLivingJump(this);
   }
   
   public double getMountedYOffset() {
@@ -585,10 +584,10 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
     }
     
     public void updateTask() {
-      this.slime.faceEntity((Entity)this.slime.getAttackTarget(), 10.0F, 10.0F);
+      this.slime.faceEntity(this.slime.getAttackTarget(), 10.0F, 10.0F);
       ((EntitySlime.SlimeMoveHelper)this.slime.getMoveHelper()).setDirection(this.slime.rotationYaw, this.slime.canDamagePlayer());
-      if (this.slime.ticksExisted % 10 == 0 && this.slime.canEntityBeSeen((Entity)this.slime.getAttackTarget()) && this.slime.getDistanceSq((Entity)this.slime.getAttackTarget()) < this.slime.width * 1.5D * this.slime.width * 1.5D && this.slime.getAttackTarget() != null)
-        this.slime.attackEntityAsMob((Entity)this.slime.getAttackTarget()); 
+      if (this.slime.ticksExisted % 10 == 0 && this.slime.canEntityBeSeen(this.slime.getAttackTarget()) && this.slime.getDistanceSq(this.slime.getAttackTarget()) < this.slime.width * 1.5D * this.slime.width * 1.5D && this.slime.getAttackTarget() != null)
+        this.slime.attackEntityAsMob(this.slime.getAttackTarget());
     }
   }
   
@@ -664,7 +663,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
     private boolean isAggressive;
     
     public SlimeMoveHelper(EntitySlime slimeIn) {
-      super((EntityLiving)slimeIn);
+      super(slimeIn);
       this.slime = slimeIn;
       this.yRot = 180.0F * slimeIn.rotationYaw / 3.1415927F;
     }

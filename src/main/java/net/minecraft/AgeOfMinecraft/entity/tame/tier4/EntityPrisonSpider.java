@@ -34,7 +34,7 @@ public class EntityPrisonSpider extends EntitySpider {
   }
   
   public EntityTameBase spawnBaby(EntityTameBase par1idleTimeable) {
-    return (EntityTameBase)new EntityPrisonSpider(this.world);
+    return new EntityPrisonSpider(this.world);
   }
   
   public boolean attackEntityAsMob(Entity p_70652_1_) {

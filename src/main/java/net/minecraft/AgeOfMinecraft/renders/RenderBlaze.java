@@ -58,15 +58,15 @@ public class RenderBlaze extends RenderLiving<EntityBlaze> {
   
   public RenderBlaze(RenderManager renderManagerIn) {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.5F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
     addLayer(new LayerCustomHeadEngender(regularmodel.blazeHead, cmmmodel.Head));
     addLayer(this.helditems);
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    
+    addLayer(new LayerMobCape(this));
   }
   
   protected void preRenderCallback(EntityBlaze entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = (entitylivingbaseIn.getIllusionFormTime() > 0) ? (ModelBase)disguisemodel : (EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel);
+    this.mainModel = (entitylivingbaseIn.getIllusionFormTime() > 0) ? disguisemodel : (EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel);
     this.layerRenderers.remove(this.helditems);
     this.helditems.modelRenderer1 = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel.RArm : regularmodel.blazeSticks[0];
     this.helditems.modelRenderer2 = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel.LArm : regularmodel.blazeSticks[3];
@@ -188,8 +188,8 @@ public class RenderBlaze extends RenderLiving<EntityBlaze> {
               } else if (nbttagcompound.hasKey("SkullOwner", 8)) {
                 String s = nbttagcompound.getString("SkullOwner");
                 if (!StringUtils.isBlank(s)) {
-                  gameprofile = TileEntitySkull.updateGameProfile(new GameProfile((UUID)null, s));
-                  nbttagcompound.setTag("SkullOwner", (NBTBase)NBTUtil.writeGameProfile(new NBTTagCompound(), gameprofile));
+                  gameprofile = TileEntitySkull.updateGameProfile(new GameProfile(null, s));
+                  nbttagcompound.setTag("SkullOwner", NBTUtil.writeGameProfile(new NBTTagCompound(), gameprofile));
                 } 
               } 
             } 

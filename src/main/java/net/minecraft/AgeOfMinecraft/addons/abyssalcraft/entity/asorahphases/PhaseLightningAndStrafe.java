@@ -42,8 +42,8 @@ public class PhaseLightningAndStrafe extends PhaseBaseFriendly {
       if (d12 < 100.0D || d12 > 22500.0D)
         findNewTarget(); 
       double d13 = 64.0D;
-      if (this.attackTarget.getDistanceSq((Entity)this.dragon) < d13 * d13) {
-        if (this.dragon.canEntityBeSeen((Entity)this.attackTarget)) {
+      if (this.attackTarget.getDistanceSq(this.dragon) < d13 * d13) {
+        if (this.dragon.canEntityBeSeen(this.attackTarget)) {
           this.fireballCharge++;
           Vec3d vec3d1 = (new Vec3d(this.attackTarget.posX - this.dragon.posX, 0.0D, this.attackTarget.posZ - this.dragon.posZ)).normalize();
           Vec3d vec3d = (new Vec3d(MathHelper.sin(this.dragon.rotationYaw * 0.017453292F), 0.0D, -MathHelper.cos(this.dragon.rotationYaw * 0.017453292F))).normalize();
@@ -51,14 +51,14 @@ public class PhaseLightningAndStrafe extends PhaseBaseFriendly {
           float f = (float)(Math.acos(f1) * 57.29577951308232D);
           f += 0.5F;
           if (this.fireballCharge >= 5 && f >= 0.0F && f < 10.0F) {
-            this.dragon.world.addWeatherEffect((Entity)new EntityLightningBolt(this.dragon.world, this.dragon.dragonPartWing1.posX - 0.5D, this.dragon.dragonPartWing1.posY, this.dragon.dragonPartWing1.posZ - 0.5D, true));
-            this.dragon.world.addWeatherEffect((Entity)new EntityLightningBolt(this.dragon.world, this.dragon.dragonPartWing2.posX - 0.5D, this.dragon.dragonPartWing2.posY, this.dragon.dragonPartWing2.posZ - 0.5D, true));
-            this.dragon.world.addWeatherEffect((Entity)new EntityLightningBolt(this.dragon.world, this.attackTarget.posX - 0.5D, this.attackTarget.posY, this.attackTarget.posZ - 0.5D, false));
-            this.dragon.attackEntityAsMob((Entity)this.attackTarget);
-            this.dragon.attackEntityAsMob((Entity)this.attackTarget);
-            this.dragon.attackEntityAsMob((Entity)this.attackTarget);
-            this.dragon.attackEntityAsMob((Entity)this.attackTarget);
-            this.dragon.attackEntityAsMob((Entity)this.attackTarget);
+            this.dragon.world.addWeatherEffect(new EntityLightningBolt(this.dragon.world, this.dragon.dragonPartWing1.posX - 0.5D, this.dragon.dragonPartWing1.posY, this.dragon.dragonPartWing1.posZ - 0.5D, true));
+            this.dragon.world.addWeatherEffect(new EntityLightningBolt(this.dragon.world, this.dragon.dragonPartWing2.posX - 0.5D, this.dragon.dragonPartWing2.posY, this.dragon.dragonPartWing2.posZ - 0.5D, true));
+            this.dragon.world.addWeatherEffect(new EntityLightningBolt(this.dragon.world, this.attackTarget.posX - 0.5D, this.attackTarget.posY, this.attackTarget.posZ - 0.5D, false));
+            this.dragon.attackEntityAsMob(this.attackTarget);
+            this.dragon.attackEntityAsMob(this.attackTarget);
+            this.dragon.attackEntityAsMob(this.attackTarget);
+            this.dragon.attackEntityAsMob(this.attackTarget);
+            this.dragon.attackEntityAsMob(this.attackTarget);
             this.fireballCharge = 0;
             if (this.currentPath != null)
               while (!this.currentPath.isFinished())

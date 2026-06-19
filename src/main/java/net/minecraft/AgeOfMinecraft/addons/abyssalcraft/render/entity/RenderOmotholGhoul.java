@@ -5,7 +5,6 @@ import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityOmotholGhou
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.model.ModelDG;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.model.ModelDGArmor;
 import net.minecraft.AgeOfMinecraft.renders.LayerArrowCustomSized;
-import net.minecraft.AgeOfMinecraft.renders.LayerLearningBook;
 import net.minecraft.AgeOfMinecraft.renders.LayerMobCape;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -38,13 +37,13 @@ public class RenderOmotholGhoul extends RenderLiving<EntityOmotholGhoul> {
   }
   
   public RenderOmotholGhoul(RenderManager manager, ModelDG model) {
-    super(manager, (ModelBase)model, 0.8F);
-    addLayer(new LayerGhoulHeldItem((RenderLivingBase<?>)this));
-    addLayer((LayerRenderer)new LayerGhoulArmor((RenderLivingBase<?>)this));
+    super(manager, model, 0.8F);
+    addLayer(new LayerGhoulHeldItem(this));
+    addLayer((LayerRenderer)new LayerGhoulArmor(this));
     addLayer((LayerRenderer)new LayerCustomHead(model.Head));
-    addLayer((LayerRenderer)new LayerArrowCustomSized((RenderLivingBase)this, 0.8F));
-    addLayer((LayerRenderer)new LayerLearningBook(this));
-    addLayer((LayerRenderer)new LayerMobCape((RenderLivingBase)this));
+    addLayer((LayerRenderer)new LayerArrowCustomSized(this, 0.8F));
+    
+    addLayer((LayerRenderer)new LayerMobCape(this));
   }
   
   protected void preRenderCallback(EntityOmotholGhoul entitylivingbaseIn, float partialTickTime) {

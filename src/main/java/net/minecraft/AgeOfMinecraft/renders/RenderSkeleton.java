@@ -45,7 +45,7 @@ public class RenderSkeleton extends RenderLiving<EntitySkeleton> {
   
   private static final ResourceLocation antiSTRAY_SKELETON_TEXTURES = new ResourceLocation("ageofminecraft", "textures/entities/anti/stray.png");
   
-  private LayerCustomArmor armor = new LayerCustomArmor((RenderLivingBase<?>)this);
+  private LayerCustomArmor armor = new LayerCustomArmor(this);
   
   private static ModelCMMSkeleton cmmmodel = new ModelCMMSkeleton();
   
@@ -61,19 +61,19 @@ public class RenderSkeleton extends RenderLiving<EntitySkeleton> {
   
   public RenderSkeleton(RenderManager renderManagerIn) {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.5F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 0.9F));
-    addLayer(new LayerSkeletonType((RenderLivingBase<?>)this));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
-    this.armor = new LayerCustomArmor((RenderLivingBase)this) {
+    addLayer(new LayerArrowCustomSized(this, 0.9F));
+    addLayer(new LayerSkeletonType(this));
+    
+    addLayer(new LayerMobCape(this));
+    this.armor = new LayerCustomArmor(this) {
         protected void initArmor() {
           this.modelLeggings = EngenderConfig.mobs.useMobTalkerModels ? RenderSkeleton.cmmleggings : RenderSkeleton.regularleggings;
           this.modelArmor = EngenderConfig.mobs.useMobTalkerModels ? RenderSkeleton.cmmarmor : RenderSkeleton.regulararmor;
         }
       };
     addLayer((LayerRenderer)this.armor);
-    addLayer((LayerRenderer)new LayerElytra((RenderLivingBase)this));
-    addLayer((LayerRenderer)new LayerHeldItem((RenderLivingBase)this));
+    addLayer((LayerRenderer)new LayerElytra(this));
+    addLayer((LayerRenderer)new LayerHeldItem(this));
     addLayer(new LayerCustomHeadEngender(regularmodel.bipedHead, cmmmodel.Head));
   }
   
@@ -116,9 +116,9 @@ public class RenderSkeleton extends RenderLiving<EntitySkeleton> {
   }
   
   private void changeModel() {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel;
+    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
     this.layerRenderers.remove(this.armor);
-    this.armor = new LayerCustomArmor((RenderLivingBase)this) {
+    this.armor = new LayerCustomArmor(this) {
         protected void initArmor() {
           this.modelLeggings = EngenderConfig.mobs.useMobTalkerModels ? RenderSkeleton.cmmleggings : RenderSkeleton.regularleggings;
           this.modelArmor = EngenderConfig.mobs.useMobTalkerModels ? RenderSkeleton.cmmarmor : RenderSkeleton.regulararmor;

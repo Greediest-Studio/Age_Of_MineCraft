@@ -24,10 +24,10 @@ public class RenderWolf extends RenderLiving<EntityWolf> {
   private static final ResourceLocation antianrgyWolfTextures = new ResourceLocation("ageofminecraft", "textures/entities/anti/wolf_angry.png");
   
   public RenderWolf(RenderManager p_i46128_1_) {
-    super(p_i46128_1_, (ModelBase)new ModelWolf(), 0.5F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
+    super(p_i46128_1_, new ModelWolf(), 0.5F);
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
     addLayer(new LayerCustomHeadEngender(((ModelWolf)this.mainModel).wolfHeadMain, ((ModelWolf)this.mainModel).wolfHeadMain));
-    addLayer(new LayerLearningBook(this));
+    
   }
   
   protected float func_180593_a(EntityWolf p_180593_1_, float p_180593_2_) {

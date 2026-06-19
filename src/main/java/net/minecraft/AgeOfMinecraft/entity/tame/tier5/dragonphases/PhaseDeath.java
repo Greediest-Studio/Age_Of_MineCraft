@@ -30,7 +30,7 @@ public class PhaseDeath extends PhaseBaseFriendly {
     if (this.targetLocation == null) {
       BlockPos blockpos = this.dragon.world.getHeight(WorldGenEndPodium.END_PODIUM_LOCATION);
       if (this.dragon.getOwner() != null)
-        blockpos = new BlockPos((Entity)this.dragon.getOwner()); 
+        blockpos = new BlockPos(this.dragon.getOwner());
       this.targetLocation = new Vec3d(blockpos.getX(), blockpos.getY(), blockpos.getZ());
     } 
     double d0 = this.targetLocation.squareDistanceTo(this.dragon.posX, this.dragon.posY, this.dragon.posZ);

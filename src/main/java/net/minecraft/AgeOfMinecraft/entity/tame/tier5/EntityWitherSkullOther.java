@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier5;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
@@ -66,8 +65,8 @@ public class EntityWitherSkullOther extends EntityWitherSkull {
         entityareaeffectcloud.setDuration(40 + this.rand.nextInt(60));
         entityareaeffectcloud.setRadius(3.0F);
         entityareaeffectcloud.setRadiusPerTick((0.0F - entityareaeffectcloud.getRadius()) / entityareaeffectcloud.getDuration());
-        this.world.spawnEntity((Entity)entityareaeffectcloud);
-        EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY, this.posZ, 2.0F, false, (EngenderConfig.mobs.grief && isInvulnerable()));
+        this.world.spawnEntity(entityareaeffectcloud);
+        EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, 2.0F, false, (EngenderConfig.mobs.grief && isInvulnerable()));
         setDead();
       }  
     if (!this.world.isRemote && movingObject.entityHit == null) {
@@ -84,8 +83,8 @@ public class EntityWitherSkullOther extends EntityWitherSkull {
       entityareaeffectcloud.setDuration(40 + this.rand.nextInt(60));
       entityareaeffectcloud.setRadius(3.0F);
       entityareaeffectcloud.setRadiusPerTick((0.0F - entityareaeffectcloud.getRadius()) / entityareaeffectcloud.getDuration());
-      this.world.spawnEntity((Entity)entityareaeffectcloud);
-      EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY, this.posZ, 2.0F, false, (EngenderConfig.mobs.grief && isInvulnerable()));
+      this.world.spawnEntity(entityareaeffectcloud);
+      EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, 2.0F, false, (EngenderConfig.mobs.grief && isInvulnerable()));
       setDead();
     } 
   }
@@ -96,7 +95,7 @@ public class EntityWitherSkullOther extends EntityWitherSkull {
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (this.shootingEntity != null && entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive() && !false)
-          onImpact(new RayTraceResult((Entity)entity1)); 
+          onImpact(new RayTraceResult(entity1));
       }  
   }
 }

@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier6;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -83,9 +82,9 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
     this.isImmuneToFire = true;
     ((PathNavigateGround)getNavigator()).setCanSwim(true);
     this.tasks.addTask(0, new AIDoNothing());
-    this.tasks.addTask(1, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 3.0D, 64.0F, 12.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIAttackRangedAlly(this, 1.0D, 60, 32.0F));
+    this.tasks.addTask(1, new EntityAISwimming(this));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 3.0D, 64.0F, 12.0F));
+    this.tasks.addTask(3, new EntityAIAttackRangedAlly(this, 1.0D, 60, 32.0F));
     this.experienceValue = 500;
     setLevel(300);
   }
@@ -198,7 +197,7 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
   }
   
   public int getSize() {
-    return (Integer) this.dataManager.get(SIZE);
+    return this.dataManager.get(SIZE);
   }
   
   public void Grow(int p_82215_1_) {
@@ -242,9 +241,9 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.1F);
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 0.9F);
-            entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("§4" + getOwner().getName() + "'s Wither Storm has been killed!!!", new Object[0]), true);
+            entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s Wither Storm has been killed!!!", new Object[0]), true);
           } 
-          ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("Your Wither Storm has been destroyed!", new Object[0]));
+          getOwner().sendMessage(new TextComponentTranslation("Your Wither Storm has been destroyed!", new Object[0]));
         }   
   }
   
@@ -269,9 +268,9 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
       playSound(ESound.commandBlockWitherHum, (getSize() >= 5250) ? 0.25F : 5.0F, 1.0F); 
     if (getSize() >= 12500 && !this.world.isRemote) {
       EntityWitherStorm witherstorm = new EntityWitherStorm(this.world);
-      witherstorm.copyLocationAndAnglesFrom((Entity)this);
+      witherstorm.copyLocationAndAnglesFrom(this);
       witherstorm.setNoAI(isAIDisabled());
-      this.world.spawnEntity((Entity)witherstorm);
+      this.world.spawnEntity(witherstorm);
       witherstorm.setOwnerId(getOwnerId());
       if (hasCustomName())
         witherstorm.setCustomNameTag(getCustomNameTag()); 
@@ -303,14 +302,14 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
         BlockPos blockpos = new BlockPos(l1, i11, i2);
         IBlockState iblockstate = this.world.getBlockState(blockpos);
         Block block = iblockstate.getBlock();
-        if (this.world.canBlockSeeSky(blockpos) && !block.isAir(iblockstate, (IBlockAccess)this.world, blockpos) && !this.world.isRemote && this.world.isAreaLoaded(blockpos, blockpos) && block.getBlockHardness(iblockstate, this.world, new BlockPos(l1, i11, i2)) != -1.0F)
+        if (this.world.canBlockSeeSky(blockpos) && !block.isAir(iblockstate, this.world, blockpos) && !this.world.isRemote && this.world.isAreaLoaded(blockpos, blockpos) && block.getBlockHardness(iblockstate, this.world, new BlockPos(l1, i11, i2)) != -1.0F)
           if (EngenderConfig.mobs.grief) {
             Grow(getSize() + 3);
             heal(3.0F);
             if (block.getMaterial(iblockstate).isLiquid()) {
               this.world.setBlockToAir(new BlockPos(l1, i11, i2));
             } else {
-              this.world.spawnEntity((Entity)new EntityFallingBlock(this.world, l1, i11, i2, block.getActualState(iblockstate, (IBlockAccess)this.world, blockpos)));
+              this.world.spawnEntity(new EntityFallingBlock(this.world, l1, i11, i2, block.getActualState(iblockstate, this.world, blockpos)));
             } 
           }  
       } 
@@ -375,14 +374,14 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
       double d21 = this.posZ - entity.posZ;
       float f2 = MathHelper.sqrt(d01 * d01 + d11 * d11 + d21 * d21);
       if (entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityEnderman || entity instanceof net.minecraft.entity.monster.EntityEnderman) {
-        ((EntityLiving)entity).setAttackTarget((EntityLivingBase)this);
+        ((EntityLiving)entity).setAttackTarget(this);
       } else if (entity instanceof net.minecraft.entity.boss.EntityDragon && entity.getHealth() <= 1.0F) {
         ((EntityLiving)entity).spawnExplosionParticle();
-      } else if (entity instanceof EntityTameBase && (entity instanceof EntityWitherStorm || entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityWither || entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEnderDragon || !((EntityTameBase)entity).isNonBoss() || ((EntityTameBase)entity).isHero())) {
-        ((EntityLiving)entity).setAttackTarget((EntityLivingBase)this);
+      } else if (entity instanceof EntityTameBase && (entity instanceof EntityWitherStorm || entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityWither || entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEnderDragon || !entity.isNonBoss() || ((EntityTameBase)entity).isHero())) {
+        ((EntityLiving)entity).setAttackTarget(this);
       } else {
         if (entity instanceof EntityLiving && !entity.isNonBoss())
-          ((EntityLiving)entity).setAttackTarget((EntityLivingBase)this); 
+          ((EntityLiving)entity).setAttackTarget(this);
         entity.motionX = d01 / f2 * 0.5D * 0.5D + entity.motionX * 0.5D;
         entity.motionY = d11 / f2 * 0.5D * 0.5D + entity.motionY * 0.5D;
         entity.motionZ = d21 / f2 * 0.5D * 0.5D + entity.motionZ * 0.5D;
@@ -392,8 +391,8 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
           for (EntityLiving entity1 : list11111) {
               if (entity1 != null && entity1.isEntityAlive() && (!false || entity1 instanceof net.minecraft.entity.passive.EntityAnimal) && !(entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityEnderman) && !(entity instanceof net.minecraft.entity.monster.EntityEnderman) && !(entity1 instanceof EntityTameBase) && !(entity1 instanceof net.minecraft.entity.boss.EntityDragon) && !(entity1 instanceof EntityWitherStorm) && !(entity1 instanceof EntityWitherStormHead) && !(entity1 instanceof EntityWitherStormTentacle) && !(entity1 instanceof EntityWitherStormTentacleDevourer)) {
                   if (!isWild() && EngenderConfig.general.useMessage)
-                      getOwner().sendMessage((ITextComponent) new TextComponentTranslation(entity1.getName() + " was eaten by The Wither Storm (" + getOwner().getName() + ")", new Object[0]));
-                  this.world.setEntityState((Entity) entity1, (byte) 3);
+                      getOwner().sendMessage(new TextComponentTranslation(entity1.getName() + " was eaten by The Wither Storm (" + getOwner().getName() + ")", new Object[0]));
+                  this.world.setEntityState(entity1, (byte) 3);
                   if (!entity1.isNonBoss()) {
                       entity1.setHealth(0.0F);
                   } else {
@@ -463,11 +462,11 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
     if (getInvulTime() > 0) {
       int i = getInvulTime() - 1;
       if (i <= 0) {
-        createEngenderModExplosionFireless((Entity)this, this.posX, this.posY + getEyeHeight(), this.posZ, 7.0F, false);
+        createEngenderModExplosionFireless(this, this.posX, this.posY + getEyeHeight(), this.posZ, 7.0F, false);
         playSound(ESound.commandBlockWitherSpawn, Float.MAX_VALUE, 1.0F);
         for (EntityPlayer entityplayer : this.world.playerEntities) {
           this.world.playSound(null, entityplayer.getPosition(), ESound.commandBlockWitherSpawn, getSoundCategory(), Float.MAX_VALUE, 1.0F);
-          entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("§5A Wither Storm has been summoned in " + this.world.provider.getDimensionType().getName() + "!", new Object[0]), true);
+          entityplayer.sendStatusMessage(new TextComponentTranslation("§5A Wither Storm has been summoned in " + this.world.provider.getDimensionType().getName() + "!", new Object[0]), true);
         } 
       } 
       setInvulTime(i);
@@ -491,13 +490,13 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
                 BlockPos blockpos = new BlockPos(i3, k, l);
                 IBlockState iblockstate = this.world.getBlockState(blockpos);
                 Block block = iblockstate.getBlock();
-                if (!block.isAir(iblockstate, (IBlockAccess)this.world, blockpos) && block.canEntityDestroy(iblockstate, (IBlockAccess)this.world, blockpos, (Entity)this))
+                if (!block.isAir(iblockstate, this.world, blockpos) && block.canEntityDestroy(iblockstate, this.world, blockpos, this))
                   flag = (this.world.destroyBlock(blockpos, true) || flag); 
               } 
             } 
           } 
           if (flag)
-            this.world.playEvent((EntityPlayer)null, 1022, new BlockPos((Entity)this), 0); 
+            this.world.playEvent(null, 1022, new BlockPos(this), 0);
         } 
       } 
       if (this.ticksExisted % 20 == 0)
@@ -554,14 +553,14 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
   }
   
   private void launchWitherSkullToCoords(int p_82209_1_, double p_82209_2_, double p_82209_4_, double p_82209_6_, boolean p_82209_8_) {
-    this.world.playEvent((EntityPlayer)null, 1024, new BlockPos((Entity)this), 0);
+    this.world.playEvent(null, 1024, new BlockPos(this), 0);
     double d3 = getHeadX(p_82209_1_);
     double d4 = getHeadY(p_82209_1_);
     double d5 = getHeadZ(p_82209_1_);
     double d6 = p_82209_2_ - d3;
     double d7 = p_82209_4_ - d4;
     double d8 = p_82209_6_ - d5;
-    EntityWitherStormSkull entitywitherskull = new EntityWitherStormSkull(this.world, (EntityLivingBase)this, d6, d7, d8);
+    EntityWitherStormSkull entitywitherskull = new EntityWitherStormSkull(this.world, this, d6, d7, d8);
     if (p_82209_8_)
       entitywitherskull.setInvulnerable(true); 
     float f = (float)getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
@@ -569,7 +568,7 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
     entitywitherskull.posY = d4;
     entitywitherskull.posX = d3;
     entitywitherskull.posZ = d5;
-    this.world.spawnEntity((Entity)entitywitherskull);
+    this.world.spawnEntity(entitywitherskull);
   }
   
   public void attackEntityWithRangedAttack(EntityLivingBase p_82196_1_, float p_82196_2_) {
@@ -656,7 +655,7 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
   }
   
   public int getInvulTime() {
-    return (Integer) this.dataManager.get(INVULNERABILITY_TIME);
+    return this.dataManager.get(INVULNERABILITY_TIME);
   }
   
   public void setInvulTime(int p_82215_1_) {

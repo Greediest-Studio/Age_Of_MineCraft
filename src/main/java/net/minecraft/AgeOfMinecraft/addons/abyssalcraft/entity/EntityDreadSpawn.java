@@ -44,11 +44,11 @@ public class EntityDreadSpawn extends EntityTameBase implements Light {
   public EntityDreadSpawn(World par1World) {
     super(par1World);
     setSize(0.425F, 0.425F);
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.1D, 32.0F, 9.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.0D, true));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 0.8D));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.8D));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.1D, 32.0F, 9.0F));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    this.tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 0.8D));
+    this.tasks.addTask(4, new EntityAIWander(this, 0.8D));
+    this.tasks.addTask(5, new EntityAILookIdle(this));
     this.isImmuneToFire = true;
     this.isOffensive = true;
   }
@@ -105,7 +105,7 @@ public class EntityDreadSpawn extends EntityTameBase implements Light {
   }
   
   protected PathNavigate createNavigator(World worldIn) {
-    return (PathNavigate)new PathNavigateClimber((EntityLiving)this, worldIn);
+    return new PathNavigateClimber(this, worldIn);
   }
   
   public boolean attackEntityAsMob(Entity par1Entity) {
@@ -114,7 +114,7 @@ public class EntityDreadSpawn extends EntityTameBase implements Light {
       par1Entity instanceof EntityLivingBase)
       ((EntityLivingBase)par1Entity).addPotionEffect(new PotionEffect(AbyssalCraftAPI.dread_plague, 100)); 
     if (ACConfig.hardcoreMode && par1Entity instanceof net.minecraft.entity.player.EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -154,11 +154,11 @@ public class EntityDreadSpawn extends EntityTameBase implements Light {
   }
   
   public boolean isBesideClimbableBlock() {
-    return (((Byte) this.dataManager.get(CLIMBING) & 0x1) != 0);
+    return ((this.dataManager.get(CLIMBING) & 0x1) != 0);
   }
   
   public void setBesideClimbableBlock(boolean par1) {
-    byte b0 = (Byte) this.dataManager.get(CLIMBING);
+    byte b0 = this.dataManager.get(CLIMBING);
     if (par1) {
       b0 = (byte)(b0 | 0x1);
     } else {
@@ -197,12 +197,12 @@ public class EntityDreadSpawn extends EntityTameBase implements Light {
       dreadspawns.size() >= 5 && !hasMerged) {
       hasMerged = true;
       for (int i = 0; i < 5 && false; i++)
-        this.world.removeEntity((Entity)dreadspawns.get(i)); 
+        this.world.removeEntity(dreadspawns.get(i));
       EntityGreaterDreadSpawn greaterspawn = new EntityGreaterDreadSpawn(this.world);
-      greaterspawn.copyLocationAndAnglesFrom((Entity)this);
+      greaterspawn.copyLocationAndAnglesFrom(this);
       greaterspawn.setOwnerId(getOwnerId());
-      this.world.removeEntity((Entity)this);
-      this.world.spawnEntity((Entity)greaterspawn);
+      this.world.removeEntity(this);
+      this.world.spawnEntity(greaterspawn);
       hasMerged = false;
     } 
     List<Entity> list = this.world.getEntitiesWithinAABB(getClass(), getEntityBoundingBox().grow(8.0D));
@@ -211,7 +211,7 @@ public class EntityDreadSpawn extends EntityTameBase implements Light {
             if (entity.isEntityAlive() && entity instanceof EntityDreadSpawn) {
                 EntityDreadSpawn mob = (EntityDreadSpawn) entity;
                 if (false)
-                    getNavigator().tryMoveToEntityLiving((Entity) mob, 1.2D);
+                    getNavigator().tryMoveToEntityLiving(mob, 1.2D);
             }
         }
   }

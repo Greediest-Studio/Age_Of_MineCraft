@@ -1,10 +1,10 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.ai;
 
 import com.google.common.base.Predicate;
-import java.util.Collections;
+
 import java.util.Comparator;
 import java.util.List;
-import javax.annotation.Nullable;
+
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -43,9 +43,9 @@ public class EntityAIFindNearestUnalliedTarget extends EntityAIBase {
         return false;
       if (EntityAIFindNearestUnalliedTarget.this.mob.getAttackTarget() != null)
         return false;
-      return (p_apply_1_.getDistance((Entity)EntityAIFindNearestUnalliedTarget.this.mob) > d0 || EntityAIFindNearestUnalliedTarget.this.mob instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStorm) ? false : EntityAITarget.isSuitableTarget((EntityLiving)EntityAIFindNearestUnalliedTarget.this.mob, p_apply_1_, false, true);
+      return (p_apply_1_.getDistance(EntityAIFindNearestUnalliedTarget.this.mob) > d0 || EntityAIFindNearestUnalliedTarget.this.mob instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStorm) ? false : EntityAITarget.isSuitableTarget(EntityAIFindNearestUnalliedTarget.this.mob, p_apply_1_, false, true);
     };
-    this.sorter = new Sorter((Entity)mobIn);
+    this.sorter = new Sorter(mobIn);
   }
   
   public boolean shouldExecute() {
@@ -65,7 +65,7 @@ public class EntityAIFindNearestUnalliedTarget extends EntityAIBase {
     if (!entitylivingbase.isEntityAlive())
       return false; 
     double d0 = getFollowRange();
-    if (this.mob.getDistance((Entity)entitylivingbase) > d0)
+    if (this.mob.getDistance(entitylivingbase) > d0)
       return false; 
     return (!(entitylivingbase instanceof EntityPlayerMP) || !((EntityPlayerMP)entitylivingbase).interactionManager.isCreative());
   }
@@ -76,7 +76,7 @@ public class EntityAIFindNearestUnalliedTarget extends EntityAIBase {
   }
   
   public void resetTask() {
-    this.mob.setAttackTarget((EntityLivingBase)null);
+    this.mob.setAttackTarget(null);
     super.startExecuting();
   }
   

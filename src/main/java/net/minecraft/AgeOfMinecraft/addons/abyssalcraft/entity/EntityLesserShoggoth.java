@@ -70,13 +70,13 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
   
   public EntityLesserShoggoth(World par1World) {
     super(par1World);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.2D, 32.0F, 6.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.2D, true));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIFleeSun((EntityCreature)this, 1.0D));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 0.8D));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 1.0D));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.2D, 32.0F, 6.0F));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.2D, true));
+    this.tasks.addTask(3, new EntityAIFleeSun(this, 1.0D));
+    this.tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 0.8D));
+    this.tasks.addTask(5, new EntityAIWander(this, 1.0D));
+    this.tasks.addTask(7, new EntityAILookIdle(this));
     setSize(1.9F, 2.35F);
     this.isOffensive = true;
   }
@@ -142,7 +142,7 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
   }
   
   protected PathNavigate createNavigator(World worldIn) {
-    return (PathNavigate)new PathNavigateClimber((EntityLiving)this, worldIn);
+    return new PathNavigateClimber(this, worldIn);
   }
   
   protected void entityInit() {
@@ -163,7 +163,7 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
   }
   
   public int getShoggothType() {
-    return (Integer) this.dataManager.get(TYPE);
+    return this.dataManager.get(TYPE);
   }
   
   public void setShoggothType(int par1) {
@@ -175,7 +175,7 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
   }
   
   public int getFoodLevel() {
-    return (Integer) this.dataManager.get(FOOD);
+    return this.dataManager.get(FOOD);
   }
   
   public void feed() {
@@ -213,12 +213,12 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
       setFoodLevel(0);
       if (!isChild()) {
         EntityLesserShoggoth shoggoth = (EntityLesserShoggoth)spawnBaby(this);
-        shoggoth.copyLocationAndAnglesFrom((Entity)this);
-        shoggoth.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(this.posX, this.posY, this.posZ)), (IEntityLivingData)null);
+        shoggoth.copyLocationAndAnglesFrom(this);
+        shoggoth.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(this.posX, this.posY, this.posZ)), null);
         shoggoth.setGrowingAge(-24000);
         shoggoth.setOwnerId(getOwnerId());
         shoggoth.setShoggothType(getShoggothType());
-        this.world.spawnEntity((Entity)shoggoth);
+        this.world.spawnEntity(shoggoth);
         playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
       } 
     } 
@@ -250,22 +250,22 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
   private void spawnOoze(int x, int y, int z) {
     BlockPos pos = new BlockPos(x, y, z);
     if (ACConfig.shoggothOoze)
-      if ((this.world.getBlockState(pos).getMaterial() == Material.AIR || this.world.getBlockState(pos).getBlock().isReplaceable((IBlockAccess)this.world, pos)) && ACBlocks.shoggoth_ooze.canPlaceBlockAt(this.world, pos) && this.world
+      if ((this.world.getBlockState(pos).getMaterial() == Material.AIR || this.world.getBlockState(pos).getBlock().isReplaceable(this.world, pos)) && ACBlocks.shoggoth_ooze.canPlaceBlockAt(this.world, pos) && this.world
         .getBlockState(pos).getBlock() != ACBlocks.shoggoth_ooze && !this.world.getBlockState(pos).getMaterial().isLiquid()) {
         this.world.setBlockState(pos, ACBlocks.shoggoth_ooze.getDefaultState());
       } else if (this.world.getBlockState(pos).getBlock() == ACBlocks.shoggoth_ooze && (Integer) this.world.getBlockState(pos).getValue((IProperty) BlockShoggothOoze.LAYERS) < 8 && this.ticksExisted % 10 == 0 && this.rand
         .nextInt(5) == 0) {
         IBlockState state = this.world.getBlockState(pos);
-        this.world.setBlockState(pos, state.withProperty((IProperty)BlockShoggothOoze.LAYERS, (Integer) state.getValue((IProperty) BlockShoggothOoze.LAYERS) + 1));
+        this.world.setBlockState(pos, state.withProperty(BlockShoggothOoze.LAYERS, (Integer) state.getValue((IProperty) BlockShoggothOoze.LAYERS) + 1));
       }  
   }
   
   public boolean isBesideClimbableBlock() {
-    return (((Byte) this.dataManager.get(CLIMBING) & 0x1) != 0);
+    return ((this.dataManager.get(CLIMBING) & 0x1) != 0);
   }
   
   public void setBesideClimbableBlock(boolean par1) {
-    byte b0 = (Byte) this.dataManager.get(CLIMBING);
+    byte b0 = this.dataManager.get(CLIMBING);
     if (par1) {
       b0 = (byte)(b0 | 0x1);
     } else {
@@ -298,11 +298,11 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
           addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, 800));
         } 
         if (isInvisible())
-          ((EntityLivingBase)par1Entity).hurtResistantTime = 0; 
+          par1Entity.hurtResistantTime = 0;
         break;
     } 
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -371,7 +371,7 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
       if (hasOwner(player)) {
         player.swingArm(EnumHand.MAIN_HAND);
         if (getRidingEntity() == null) {
-          startRiding((Entity)player, true);
+          startRiding(player, true);
         } else {
           dismountRidingEntity();
         } 
@@ -392,7 +392,7 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -419,7 +419,7 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
         this.motionZ = 0.0D;
       } 
       if (entitylivingbase.moveForward > 0.0F && this.ticksExisted % 7 == 0)
-        playStepSound(new BlockPos((Entity)this), this.world.getBlockState(new BlockPos((Entity)this)).getBlock()); 
+        playStepSound(new BlockPos(this), this.world.getBlockState(new BlockPos(this)).getBlock());
       this.prevLimbSwingAmount = this.limbSwingAmount;
       double d5 = this.posX - this.prevPosX;
       double d7 = this.posZ - this.prevPosZ;

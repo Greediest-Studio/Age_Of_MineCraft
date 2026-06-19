@@ -21,7 +21,7 @@ public class RenderSpiderPig extends RenderLiving<EntitySpiderPig> {
   private static final ResourceLocation SADDLE_TEXTURE = MutantBeasts.getEntityTexture("spider_pig/saddle");
   
   public RenderSpiderPig(RenderManager manager) {
-    super(manager, (ModelBase)new ModelSpiderPig(0.0F), 0.8F);
+    super(manager, new ModelSpiderPig(0.0F), 0.8F);
     addLayer(new SaddleLayer());
   }
   
@@ -60,8 +60,8 @@ public class RenderSpiderPig extends RenderLiving<EntitySpiderPig> {
     public void doRenderLayer(EntitySpiderPig entityIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
       if (!entityIn.isWild()) {
         RenderSpiderPig.this.bindTexture(RenderSpiderPig.SADDLE_TEXTURE);
-        RenderSpiderPig.this.mainModel.setModelAttributes((ModelBase)this.spiderPigModel);
-        this.spiderPigModel.render((Entity)entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+        RenderSpiderPig.this.mainModel.setModelAttributes(this.spiderPigModel);
+        this.spiderPigModel.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
       } 
     }
     

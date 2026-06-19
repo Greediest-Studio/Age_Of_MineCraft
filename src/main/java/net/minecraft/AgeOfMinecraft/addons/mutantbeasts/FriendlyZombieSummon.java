@@ -62,7 +62,7 @@ public class FriendlyZombieSummon {
         zombie.setLimitedLife(900 + mutantZombie.getLevel() * 40);
         zombie.setIsAntiMob(mutantZombie.isAntiMob());
         zombie.setGrowingAge(mutantZombie.getGrowingAge());
-        this.world.spawnEntity((Entity)zombie);
+        this.world.spawnEntity(zombie);
       } else {
         EntityZombie zombie = new EntityZombie(this.world);
         zombie.onInitialSpawn(this.world.getDifficultyForLocation(pos), null);
@@ -74,7 +74,7 @@ public class FriendlyZombieSummon {
         zombie.setIsAntiMob(mutantZombie.isAntiMob());
         zombie.setPosition(this.posX + 0.5D, this.posY - 1.0D, this.posZ + 0.5D);
         zombie.setLimitedLife(900 + mutantZombie.getLevel() * 40);
-        this.world.spawnEntity((Entity)zombie);
+        this.world.spawnEntity(zombie);
       } 
       return false;
     } 
@@ -126,6 +126,6 @@ public class FriendlyZombieSummon {
       return false; 
     if (blockState.getBlock() instanceof net.minecraft.block.BlockDoor)
       return true; 
-    return blockState.getBlock().isPassable((IBlockAccess)world, blockPos);
+    return blockState.getBlock().isPassable(world, blockPos);
   }
 }

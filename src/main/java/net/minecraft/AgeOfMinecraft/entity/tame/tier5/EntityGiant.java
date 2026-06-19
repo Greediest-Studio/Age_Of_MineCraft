@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier5;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -53,11 +52,11 @@ public class EntityGiant extends EntityTameBase implements Massive, Armored {
     this.stepHeight = 3.0F;
     this.isOffensive = true;
     this.isImmuneToFire = true;
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.2D, 48.0F, 8.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.2D, true));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.8D, 80));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.2D, 48.0F, 8.0F));
+    this.tasks.addTask(3, new EntityAIFriendlyAttackMelee(this, 1.2D, true));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.8D, 80));
+    this.tasks.addTask(7, new EntityAILookIdle(this));
     this.experienceValue = 250;
     this.ignoreFrustumCheck = true;
     this.experienceValue = 50;
@@ -107,12 +106,12 @@ public class EntityGiant extends EntityTameBase implements Massive, Armored {
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return I18n.translateToLocal("entity." + str + ".cmm.name");
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name");
@@ -130,7 +129,7 @@ public class EntityGiant extends EntityTameBase implements Massive, Armored {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -166,9 +165,9 @@ public class EntityGiant extends EntityTameBase implements Massive, Armored {
       amount *= 0.75D; 
     if (this.world.getDifficulty() == EnumDifficulty.HARD)
       amount *= 1.5D; 
-    ((EntityLivingBase)entity).knockBack((Entity)this, 1.0F, MathHelper.sin(this.rotationYaw * 0.017453292F), -MathHelper.cos(this.rotationYaw * 0.017453292F));
+    ((EntityLivingBase)entity).knockBack(this, 1.0F, MathHelper.sin(this.rotationYaw * 0.017453292F), -MathHelper.cos(this.rotationYaw * 0.017453292F));
     if (!entity.isEntityAlive() && entity instanceof EntityLivingBase) {
-      ((EntityLivingBase)entity).prevRenderYawOffset = ((EntityLivingBase)entity).renderYawOffset = ((EntityLivingBase)entity).prevRotationYaw = ((EntityLivingBase)entity).rotationYaw = ((EntityLivingBase)entity).prevRotationYawHead = ((EntityLivingBase)entity).rotationYawHead = this.rotationYawHead;
+      ((EntityLivingBase)entity).prevRenderYawOffset = ((EntityLivingBase)entity).renderYawOffset = entity.prevRotationYaw = ((EntityLivingBase)entity).rotationYaw = ((EntityLivingBase)entity).prevRotationYawHead = ((EntityLivingBase)entity).rotationYawHead = this.rotationYawHead;
       float xRatio = MathHelper.sin(this.rotationYawHead * 0.017453292F);
       float zRatio = -MathHelper.cos(this.rotationYawHead * 0.017453292F);
       entity.isAirBorne = true;
@@ -180,7 +179,7 @@ public class EntityGiant extends EntityTameBase implements Massive, Armored {
       entity.motionY /= 2.0D;
       entity.motionY += amount;
       if (entity instanceof EntityPlayerMP)
-        ((EntityPlayerMP)entity).connection.sendPacket((Packet)new SPacketEntityVelocity(entity)); 
+        ((EntityPlayerMP)entity).connection.sendPacket(new SPacketEntityVelocity(entity));
     } 
     entity.motionY += amount;
   }
@@ -221,7 +220,7 @@ public class EntityGiant extends EntityTameBase implements Massive, Armored {
         this.motionY = 0.0D;
         this.motionZ = 0.0D;
       } 
-      List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(2.0D, 0.0D, 2.0D));
+      List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(2.0D, 0.0D, 2.0D));
         for (Entity entity : list) {
             if (entity instanceof EntityLivingBase && !false && !this.world.isRemote && this.ticksExisted % 10 == 0) {
                 attackEntityAsMob(entity);
@@ -258,7 +257,7 @@ public class EntityGiant extends EntityTameBase implements Massive, Armored {
         double d3 = 10.0D;
         this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.posX + (this.rand.nextFloat() * 3.0F * 2.0F) - 3.0D - d0 * d3, this.posY + (this.rand.nextFloat() * 12.0F) - d1 * d3, this.posZ + (this.rand.nextFloat() * 3.0F * 2.0F) - 3.0D - d2 * d3, d0, 0.10000000149011612D, d2);
       }  
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 128.0D && getSpecialAttackTimer() <= 0 && this.onGround && isHero())
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) < 128.0D && getSpecialAttackTimer() <= 0 && this.onGround && isHero())
       performSpecialAttack(); 
     this.stepHeight = 4.0F;
     super.onLivingUpdate();
@@ -287,12 +286,12 @@ public class EntityGiant extends EntityTameBase implements Massive, Armored {
     if (getSpecialAttackTimer() <= 0 && isHero() && getAttackTarget() != null) {
       setSpecialAttackTimer(400);
       playSound(ESound.golemSmash, 10.0F, 0.9F);
-      createEngenderModExplosionFireless((Entity)this, this.posX, this.posY - 2.0D, this.posZ, 3.0F, false);
+      createEngenderModExplosionFireless(this, this.posX, this.posY - 2.0D, this.posZ, 3.0F, false);
       List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(48.0D, 3.0D, 48.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
           for (EntityLivingBase entity : list) {
               if (entity != null && !false) {
-                  inflictEngenderMobDamage(entity, " was smashed by ", DamageSource.causeExplosionDamage((EntityLivingBase) this), 50.0F);
+                  inflictEngenderMobDamage(entity, " was smashed by ", DamageSource.causeExplosionDamage(this), 50.0F);
                   entity.isAirBorne = true;
                   float f = MathHelper.sqrt(MathHelper.sin(this.rotationYaw * 0.017453292F) * MathHelper.sin(this.rotationYaw * 0.017453292F) + -MathHelper.cos(this.rotationYaw * 0.017453292F) * -MathHelper.cos(this.rotationYaw * 0.017453292F));
                   entity.motionX /= 2.0D;

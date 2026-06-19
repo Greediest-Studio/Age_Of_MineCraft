@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier5;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import java.util.UUID;
@@ -62,11 +61,11 @@ public class EntityIceGolem extends EntityTameBase implements IRangedAttackMob, 
     setSize(1.25F, 2.58F);
     this.isOffensive = true;
     this.experienceValue = 20;
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIOpenDoor((EntityLiving)this, true));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.0D, 48.0F, 8.0F));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.67D, 80));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(0, new EntityAIOpenDoor(this, true));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.0D, 48.0F, 8.0F));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.67D, 80));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
   }
   
   public String getDescName() {
@@ -137,7 +136,7 @@ public class EntityIceGolem extends EntityTameBase implements IRangedAttackMob, 
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -179,7 +178,7 @@ public class EntityIceGolem extends EntityTameBase implements IRangedAttackMob, 
         this.motionY = 0.0D;
         this.motionZ = 0.0D;
       } 
-      List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(1.0D));
+      List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(1.0D));
         for (Entity entity : list) {
             if (entity instanceof EntityLivingBase && !false && !this.world.isRemote && this.ticksExisted % 10 == 0)
                 attackEntityAsMob(entity);
@@ -205,14 +204,14 @@ public class EntityIceGolem extends EntityTameBase implements IRangedAttackMob, 
     if (isWet() || this.world.getBiome(new BlockPos(i, 0, k)).getTemperature(new BlockPos(i, j, k)) > 1.0F)
       attackEntityFrom((new DamageSource("melt")).setFireDamage().setDamageBypassesArmor(), 1.0F); 
     if (getAttackTarget() != null)
-      if (getDistanceSq((Entity)getAttackTarget()) > 100.0D || getAttackTarget() instanceof net.minecraft.entity.EntityFlying || (getAttackTarget()).posY > this.posY + 4.0D) {
-        this.tasks.addTask(2, (EntityAIBase)this.aiArrowAttack);
-        this.tasks.removeTask((EntityAIBase)this.aiAttackOnCollide);
+      if (getDistanceSq(getAttackTarget()) > 100.0D || getAttackTarget() instanceof net.minecraft.entity.EntityFlying || (getAttackTarget()).posY > this.posY + 4.0D) {
+        this.tasks.addTask(2, this.aiArrowAttack);
+        this.tasks.removeTask(this.aiAttackOnCollide);
       } else {
-        this.tasks.addTask(2, (EntityAIBase)this.aiAttackOnCollide);
-        this.tasks.removeTask((EntityAIBase)this.aiArrowAttack);
+        this.tasks.addTask(2, this.aiAttackOnCollide);
+        this.tasks.removeTask(this.aiArrowAttack);
       }  
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 64.0D && getSpecialAttackTimer() <= 0 && this.onGround && isHero())
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) < 64.0D && getSpecialAttackTimer() <= 0 && this.onGround && isHero())
       performSpecialAttack(); 
     if (this.motionX * this.motionX + this.motionZ * this.motionZ != 0.0D && this.rand.nextInt(5) == 0) {
       j = MathHelper.floor(this.posY - 0.2D);
@@ -224,7 +223,7 @@ public class EntityIceGolem extends EntityTameBase implements IRangedAttackMob, 
   
   public boolean attackEntityAsMob(Entity entityIn) {
     this.attackTimer = 10;
-    this.world.setEntityState((Entity)this, (byte)5);
+    this.world.setEntityState(this, (byte)5);
     playSound(SoundEvents.ENTITY_IRONGOLEM_ATTACK, 1.0F, 1.0F);
     AttributeModifier irongolemrandomizer = (new AttributeModifier(UUID.fromString("B9766B59-8566-4402-BC1F-3EE2A276D839"), "Iron Golem randomizer", this.rand.nextDouble() * 0.75D, 1)).setSaved(false);
     IAttributeInstance iattributeinstanceattack = getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
@@ -245,7 +244,7 @@ public class EntityIceGolem extends EntityTameBase implements IRangedAttackMob, 
     if (this.world.getDifficulty() == EnumDifficulty.HARD)
       amount *= 1.5D; 
     if (!entity.isEntityAlive() && entity instanceof EntityLivingBase) {
-      ((EntityLivingBase)entity).prevRenderYawOffset = ((EntityLivingBase)entity).renderYawOffset = ((EntityLivingBase)entity).prevRotationYaw = ((EntityLivingBase)entity).rotationYaw = ((EntityLivingBase)entity).prevRotationYawHead = ((EntityLivingBase)entity).rotationYawHead = this.rotationYawHead;
+      ((EntityLivingBase)entity).prevRenderYawOffset = ((EntityLivingBase)entity).renderYawOffset = entity.prevRotationYaw = ((EntityLivingBase)entity).rotationYaw = ((EntityLivingBase)entity).prevRotationYawHead = ((EntityLivingBase)entity).rotationYawHead = this.rotationYawHead;
       float xRatio = MathHelper.sin(this.rotationYawHead * 0.017453292F);
       float zRatio = -MathHelper.cos(this.rotationYawHead * 0.017453292F);
       entity.isAirBorne = true;
@@ -257,7 +256,7 @@ public class EntityIceGolem extends EntityTameBase implements IRangedAttackMob, 
       entity.motionY /= 2.0D;
       entity.motionY += amount;
       if (entity instanceof EntityPlayerMP)
-        ((EntityPlayerMP)entity).connection.sendPacket((Packet)new SPacketEntityVelocity(entity)); 
+        ((EntityPlayerMP)entity).connection.sendPacket(new SPacketEntityVelocity(entity));
     } 
     entity.motionY += amount;
   }
@@ -273,7 +272,7 @@ public class EntityIceGolem extends EntityTameBase implements IRangedAttackMob, 
   }
   
   public void attackEntityWithRangedAttack(EntityLivingBase target, float p_82196_2_) {
-    EntitySnowballHarmful entitysnowball = new EntitySnowballHarmful(this.world, (EntityLivingBase)this);
+    EntitySnowballHarmful entitysnowball = new EntitySnowballHarmful(this.world, this);
     float f2 = this.renderYawOffset * 0.017453292F;
     float f19 = MathHelper.sin(f2);
     float f3 = MathHelper.cos(f2);
@@ -283,10 +282,10 @@ public class EntityIceGolem extends EntityTameBase implements IRangedAttackMob, 
     float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.25F;
     entitysnowball.shoot(d1, d2 + f, d3, 1.6F, 1.0F);
     this.attackTimer = 10;
-    this.world.setEntityState((Entity)this, (byte)5);
+    this.world.setEntityState(this, (byte)5);
     playSound(SoundEvents.ENTITY_IRONGOLEM_ATTACK, 1.0F, 1.0F);
     playSound(SoundEvents.ENTITY_SNOWMAN_SHOOT, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
-    this.world.spawnEntity((Entity)entitysnowball);
+    this.world.spawnEntity(entitysnowball);
     float f21 = MathHelper.sqrt(d1 * d1 + d2 * d2 + d3 * d3);
     entitysnowball.motionX = d1 / f21 * 0.4D + entitysnowball.motionX;
     entitysnowball.motionY = d2 / f21 * 0.4D + entitysnowball.motionY;
@@ -302,13 +301,13 @@ public class EntityIceGolem extends EntityTameBase implements IRangedAttackMob, 
     if (getSpecialAttackTimer() <= 0 && isHero() && getAttackTarget() != null) {
       setSpecialAttackTimer(300);
       playSound(ESound.golemSmash, 10.0F, 1.0F);
-      createEngenderModExplosionFireless((Entity)this, this.posX, this.posY - 2.0D, this.posZ, 3.0F, false);
+      createEngenderModExplosionFireless(this, this.posX, this.posY - 2.0D, this.posZ, 3.0F, false);
       List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(24.0D, 3.0D, 24.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
           for (EntityLivingBase entity : list) {
               if (entity != null && !false) {
                   entity.motionY += 1.5D;
-                  inflictEngenderMobDamage(entity, " was smashed by ", DamageSource.causeExplosionDamage((EntityLivingBase) this), (entity instanceof net.minecraft.entity.monster.IMob) ? 16.0F : 8.0F);
+                  inflictEngenderMobDamage(entity, " was smashed by ", DamageSource.causeExplosionDamage(this), (entity instanceof net.minecraft.entity.monster.IMob) ? 16.0F : 8.0F);
                   entity.isAirBorne = true;
                   float f = MathHelper.sqrt(MathHelper.sin(this.rotationYaw * 0.017453292F) * MathHelper.sin(this.rotationYaw * 0.017453292F) + -MathHelper.cos(this.rotationYaw * 0.017453292F) * -MathHelper.cos(this.rotationYaw * 0.017453292F));
                   entity.motionX /= 2.0D;

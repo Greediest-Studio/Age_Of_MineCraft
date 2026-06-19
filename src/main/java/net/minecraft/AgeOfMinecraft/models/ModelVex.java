@@ -26,12 +26,12 @@ public class ModelVex extends ModelBiped {
     super(p_i47224_1_, 0.0F, 64, 64);
     this.bipedLeftLeg.showModel = false;
     this.bipedHeadwear.showModel = false;
-    this.bipedRightLeg = new ModelRenderer((ModelBase)this, 32, 0);
+    this.bipedRightLeg = new ModelRenderer(this, 32, 0);
     this.bipedRightLeg.addBox(-1.0F, -1.0F, -2.0F, 6, 10, 4, 0.0F);
     this.bipedRightLeg.setRotationPoint(-1.9F, 12.0F, 0.0F);
-    this.rightWing = new ModelRenderer((ModelBase)this, 0, 32);
+    this.rightWing = new ModelRenderer(this, 0, 32);
     this.rightWing.addBox(-20.0F, 0.0F, 0.0F, 20, 12, 1);
-    this.leftWing = new ModelRenderer((ModelBase)this, 0, 32);
+    this.leftWing = new ModelRenderer(this, 0, 32);
     this.leftWing.mirror = true;
     this.leftWing.addBox(0.0F, 0.0F, 0.0F, 20, 12, 1);
   }
@@ -76,7 +76,7 @@ public class ModelVex extends ModelBiped {
     EntityTameBase entity = (EntityTameBase)entityIn;
     if (entity instanceof EntityVex && (
       (EntityVex)entity).isCharging())
-      if (((EntityVex)entity).getPrimaryHand() == EnumHandSide.RIGHT) {
+      if (entity.getPrimaryHand() == EnumHandSide.RIGHT) {
         this.bipedRightArm.rotateAngleX = 3.7699115F;
       } else {
         this.bipedLeftArm.rotateAngleX = 3.7699115F;

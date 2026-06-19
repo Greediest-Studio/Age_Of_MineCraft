@@ -57,7 +57,7 @@ public class EntityEndersoulFragment extends Entity {
   }
   
   public boolean isTamed() {
-    return (Boolean) this.dataManager.get(TAMED);
+    return this.dataManager.get(TAMED);
   }
   
   public void setTamed(boolean tamed) {
@@ -97,7 +97,7 @@ public class EntityEndersoulFragment extends Entity {
       if (getDistanceSq(entity) <= 25.0D) {
         boolean protectedPlayer = isProtected(entity);
         if (entity instanceof EntityLivingBase && this.owner != null && !protectedPlayer)
-          this.owner.inflictEngenderMobDamage((EntityLivingBase)entity, "'s soul was flaied by the soul fragments of ", (DamageSource)new EntityDamageSource("thrown", (Entity)this.owner), 1.0F); 
+          this.owner.inflictEngenderMobDamage((EntityLivingBase)entity, "'s soul was flaied by the soul fragments of ", new EntityDamageSource("thrown", this.owner), 1.0F);
         if (!protectedPlayer) {
           double x = entity.posX - this.posX;
           double z = entity.posZ - this.posZ;
@@ -128,7 +128,7 @@ public class EntityEndersoulFragment extends Entity {
     if (!this.world.isRemote) {
       if (!isTamed() && --this.explodeTick == 0)
         explode(); 
-      if (this.collector != null && getDistanceSq((Entity)this.collector) > 9.0D) {
+      if (this.collector != null && getDistanceSq(this.collector) > 9.0D) {
         float scale = 0.05F;
         addVelocity((this.collector.posX - this.posX) * scale, (this.collector.posY + (this.collector.height / 3.0F) - this.posY) * scale, (this.collector.posZ - this.posZ) * scale);
       } 

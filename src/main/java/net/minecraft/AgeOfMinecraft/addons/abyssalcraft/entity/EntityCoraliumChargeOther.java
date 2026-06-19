@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.shinoow.abyssalcraft.api.AbyssalCraftAPI;
 import java.util.List;
@@ -60,8 +59,8 @@ public class EntityCoraliumChargeOther extends EntityFireball {
   protected void onImpact(RayTraceResult movingObject) {
     if (!this.world.isRemote && movingObject.entityHit != null && this.shootingEntity != null && movingObject.entityHit != this.shootingEntity) {
       if ((movingObject.entityHit instanceof EntityLivingBase && this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase && !false) || (movingObject.entityHit instanceof EntityTameBase && false && ((EntityTameBase)this.shootingEntity).getFakeHealth() > 0.0F)) {
-        ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)movingObject.entityHit, " was destroyed by ", DamageSource.causeFireballDamage(this, (Entity)this.shootingEntity), (float)((EntityTameBase)this.shootingEntity).getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue());
-        EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false);
+        ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)movingObject.entityHit, " was destroyed by ", DamageSource.causeFireballDamage(this, this.shootingEntity), (float) this.shootingEntity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue());
+        EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false);
       } 
       if (this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase && movingObject.entityHit instanceof EntityLivingBase && false) {
         ((EntityLivingBase)movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 400, 3));
@@ -80,13 +79,13 @@ public class EntityCoraliumChargeOther extends EntityFireball {
       entityareaeffectcloud.setRadiusPerTick((3.0F - entityareaeffectcloud.getRadius()) / entityareaeffectcloud.getDuration());
       if (!list.isEmpty())
         for (EntityLivingBase entitylivingbase : list) {
-          if (this.shootingEntity != null && getDistanceSq((Entity)entitylivingbase) < 64.0D)
+          if (this.shootingEntity != null && getDistanceSq(entitylivingbase) < 64.0D)
             entityareaeffectcloud.setPosition(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ); 
         }  
       this.world.playEvent(2006, new BlockPos(this.posX, this.posY, this.posZ), 0);
-      this.world.spawnEntity((Entity)entityareaeffectcloud);
+      this.world.spawnEntity(entityareaeffectcloud);
       if (this.shootingEntity != null)
-        EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false); 
+        EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false);
       setDead();
     } 
     if (!this.world.isRemote && movingObject.entityHit == null) {
@@ -101,13 +100,13 @@ public class EntityCoraliumChargeOther extends EntityFireball {
       entityareaeffectcloud.setRadiusPerTick((3.0F - entityareaeffectcloud.getRadius()) / entityareaeffectcloud.getDuration());
       if (!list.isEmpty())
         for (EntityLivingBase entitylivingbase : list) {
-          if (this.shootingEntity != null && getDistanceSq((Entity)entitylivingbase) < 64.0D)
+          if (this.shootingEntity != null && getDistanceSq(entitylivingbase) < 64.0D)
             entityareaeffectcloud.setPosition(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ); 
         }  
-      this.world.playSound((EntityPlayer)null, getPosition(), SoundEvents.ENTITY_ENDERDRAGON_FIREBALL_EPLD, SoundCategory.MASTER, 1.0F, this.world.rand.nextFloat() * 0.1F + 0.9F);
-      this.world.spawnEntity((Entity)entityareaeffectcloud);
+      this.world.playSound(null, getPosition(), SoundEvents.ENTITY_ENDERDRAGON_FIREBALL_EPLD, SoundCategory.MASTER, 1.0F, this.world.rand.nextFloat() * 0.1F + 0.9F);
+      this.world.spawnEntity(entityareaeffectcloud);
       if (this.shootingEntity != null)
-        EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false); 
+        EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false);
       setDead();
     } 
   }
@@ -118,7 +117,7 @@ public class EntityCoraliumChargeOther extends EntityFireball {
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive())
-          onImpact(new RayTraceResult((Entity)entity1)); 
+          onImpact(new RayTraceResult(entity1));
       }  
   }
 }

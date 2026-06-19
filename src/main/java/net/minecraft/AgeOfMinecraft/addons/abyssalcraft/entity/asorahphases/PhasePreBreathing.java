@@ -25,7 +25,7 @@ public class PhasePreBreathing extends PhaseBaseFriendly {
     if (this.attackingTicks++ >= 40)
       this.dragon.getPhaseManager().setPhase(PhaseListAsorah.SITTING_FLAMING); 
     if (this.dragon.getAttackTarget() != null)
-      this.dragon.faceEntity((Entity)this.dragon.getAttackTarget(), 10.0F, 20.0F); 
+      this.dragon.faceEntity(this.dragon.getAttackTarget(), 10.0F, 20.0F);
   }
   
   public void initPhase() {

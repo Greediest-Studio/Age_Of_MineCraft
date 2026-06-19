@@ -41,7 +41,7 @@ public class ItemPEGun extends ItemBow implements IEnergyContainerItem {
   
   public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
     if (isInCreativeTab(tab)) {
-      ItemStack stack = new ItemStack((Item)this);
+      ItemStack stack = new ItemStack(this);
       addEnergy(stack, getMaxEnergy(stack));
       items.add(stack);
     } 
@@ -56,7 +56,7 @@ public class ItemPEGun extends ItemBow implements IEnergyContainerItem {
   public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {
     ItemStack itemStackIn = player.getHeldItem(hand);
     if (itemStackIn.isEmpty() || (!itemStackIn.isEmpty() && getContainedEnergy(itemStackIn) <= 0.0F)) {
-      player.world.playSound(null, new BlockPos((Entity)player), ESound.pegunjam, SoundCategory.PLAYERS, 0.5F, 1.0F);
+      player.world.playSound(null, new BlockPos(player), ESound.pegunjam, SoundCategory.PLAYERS, 0.5F, 1.0F);
       return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
     } 
     float f = MathHelper.cos((player.rotationYawHead + (180 * (((hand == EnumHand.OFF_HAND) ? 1 : 2) - 1))) * 0.017453292F);
@@ -68,15 +68,15 @@ public class ItemPEGun extends ItemBow implements IEnergyContainerItem {
     double d2 = player.posX + vec3.x * d22 - player.posX + f * 0.35D + vec3.x;
     double d3 = player.posY + 1.25D + vec3.y * d22 - player.posY + 1.25D + vec3.y;
     double d4 = player.posZ + vec3.z * d22 - player.posZ + f1 * 0.35D + vec3.z;
-    EntityPEGunPellet entitywitherskull = new EntityPEGunPellet(worldIn, (EntityLivingBase)player, d2, d3, d4);
+    EntityPEGunPellet entitywitherskull = new EntityPEGunPellet(worldIn, player, d2, d3, d4);
     entitywitherskull.posX = player.posX + f * 0.35D + vec3.x;
     entitywitherskull.posY = player.posY + 1.25D + vec3.y;
     entitywitherskull.posZ = player.posZ + f1 * 0.35D + vec3.z;
     entitywitherskull.damage = getProjectileDamage(itemStackIn);
     if (!worldIn.isRemote)
-      worldIn.spawnEntity((Entity)entitywitherskull); 
-    player.world.playSound(null, new BlockPos((Entity)player), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 0.5F, 0.5F + player.getRNG().nextFloat() * 0.25F);
-    player.world.playSound(null, new BlockPos((Entity)player), ESound.pegunfire, SoundCategory.PLAYERS, 0.5F, 0.6F + player.getRNG().nextFloat() * 0.2F + entitywitherskull.damage / 100.0F);
+      worldIn.spawnEntity(entitywitherskull);
+    player.world.playSound(null, new BlockPos(player), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 0.5F, 0.5F + player.getRNG().nextFloat() * 0.25F);
+    player.world.playSound(null, new BlockPos(player), ESound.pegunfire, SoundCategory.PLAYERS, 0.5F, 0.6F + player.getRNG().nextFloat() * 0.2F + entitywitherskull.damage / 100.0F);
     return new ActionResult<>(EnumActionResult.PASS, itemStackIn);
   }
   

@@ -82,7 +82,7 @@ public abstract class EntitySpellcasterIllager extends EntityAbstractIllagers im
   
   public boolean isSpellcasting() {
     if (this.world.isRemote)
-      return ((Byte) this.dataManager.get(SPELL) > 0);
+      return (this.dataManager.get(SPELL) > 0);
     return (this.spellTicks > 0);
   }
   
@@ -92,7 +92,7 @@ public abstract class EntitySpellcasterIllager extends EntityAbstractIllagers im
   }
   
   protected SpellType getSpellType() {
-    return !this.world.isRemote ? this.activeSpell : SpellType.getFromId((Byte) this.dataManager.get(SPELL));
+    return !this.world.isRemote ? this.activeSpell : SpellType.getFromId(this.dataManager.get(SPELL));
   }
   
   protected void updateAITasks() {
@@ -147,11 +147,11 @@ public abstract class EntitySpellcasterIllager extends EntityAbstractIllagers im
     public void updateTask() {
       EntitySpellcasterIllager.this.navigator.clearPath();
       if (EntitySpellcasterIllager.this.getAttackTarget() != null) {
-        EntitySpellcasterIllager.this.getLookHelper().setLookPositionWithEntity((Entity)EntitySpellcasterIllager.this.getAttackTarget(), EntitySpellcasterIllager.this.getHorizontalFaceSpeed(), EntitySpellcasterIllager.this.getVerticalFaceSpeed());
+        EntitySpellcasterIllager.this.getLookHelper().setLookPositionWithEntity(EntitySpellcasterIllager.this.getAttackTarget(), EntitySpellcasterIllager.this.getHorizontalFaceSpeed(), EntitySpellcasterIllager.this.getVerticalFaceSpeed());
       } else if (EntitySpellcasterIllager.this.getAllyTarget() != null) {
-        EntitySpellcasterIllager.this.getLookHelper().setLookPositionWithEntity((Entity)EntitySpellcasterIllager.this.getAllyTarget(), EntitySpellcasterIllager.this.getHorizontalFaceSpeed(), EntitySpellcasterIllager.this.getVerticalFaceSpeed());
+        EntitySpellcasterIllager.this.getLookHelper().setLookPositionWithEntity(EntitySpellcasterIllager.this.getAllyTarget(), EntitySpellcasterIllager.this.getHorizontalFaceSpeed(), EntitySpellcasterIllager.this.getVerticalFaceSpeed());
       } else if (EntitySpellcasterIllager.this.getConvertingTarget() != null) {
-        EntitySpellcasterIllager.this.getLookHelper().setLookPositionWithEntity((Entity)EntitySpellcasterIllager.this.getConvertingTarget(), 180.0F, EntitySpellcasterIllager.this.getVerticalFaceSpeed());
+        EntitySpellcasterIllager.this.getLookHelper().setLookPositionWithEntity(EntitySpellcasterIllager.this.getConvertingTarget(), 180.0F, EntitySpellcasterIllager.this.getVerticalFaceSpeed());
       } 
     }
   }

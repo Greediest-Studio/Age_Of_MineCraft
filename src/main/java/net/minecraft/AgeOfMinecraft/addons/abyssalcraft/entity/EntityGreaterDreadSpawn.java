@@ -54,10 +54,10 @@ public class EntityGreaterDreadSpawn extends EntityTameBase implements IRangedAt
   public EntityGreaterDreadSpawn(World par1World) {
     super(par1World);
     setSize(0.95F, 0.95F);
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.2D, 48.0F, 16.0F));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 0.8D));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.8D));
-    this.tasks.addTask(6, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.2D, 48.0F, 16.0F));
+    this.tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 0.8D));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.8D));
+    this.tasks.addTask(6, new EntityAILookIdle(this));
     this.isImmuneToFire = true;
     this.isOffensive = true;
   }
@@ -119,7 +119,7 @@ public class EntityGreaterDreadSpawn extends EntityTameBase implements IRangedAt
   }
   
   protected PathNavigate createNavigator(World worldIn) {
-    return (PathNavigate)new PathNavigateClimber((EntityLiving)this, worldIn);
+    return new PathNavigateClimber(this, worldIn);
   }
   
   public boolean attackEntityAsMob(Entity par1Entity) {
@@ -128,7 +128,7 @@ public class EntityGreaterDreadSpawn extends EntityTameBase implements IRangedAt
       par1Entity instanceof EntityLivingBase)
       ((EntityLivingBase)par1Entity).addPotionEffect(new PotionEffect(AbyssalCraftAPI.dread_plague, 100)); 
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -168,11 +168,11 @@ public class EntityGreaterDreadSpawn extends EntityTameBase implements IRangedAt
   }
   
   public boolean isBesideClimbableBlock() {
-    return (((Byte) this.dataManager.get(CLIMBING) & 0x1) != 0);
+    return ((this.dataManager.get(CLIMBING) & 0x1) != 0);
   }
   
   public void setBesideClimbableBlock(boolean par1) {
-    byte b0 = (Byte) this.dataManager.get(CLIMBING);
+    byte b0 = this.dataManager.get(CLIMBING);
     if (par1) {
       b0 = (byte)(b0 | 0x1);
     } else {
@@ -202,12 +202,12 @@ public class EntityGreaterDreadSpawn extends EntityTameBase implements IRangedAt
     if (this.ticksExisted == 1)
       playSound(ESound.amalgamate, 1.0F, 1.0F); 
     if (getAttackTarget() != null)
-      if (getDistanceSq((Entity)getAttackTarget()) > 100.0D || getAttackTarget() instanceof net.minecraft.entity.EntityFlying || (getAttackTarget()).posY > this.posY + 4.0D) {
-        this.tasks.addTask(2, (EntityAIBase)this.aiArrowAttack);
-        this.tasks.removeTask((EntityAIBase)this.aiAttackOnCollide);
+      if (getDistanceSq(getAttackTarget()) > 100.0D || getAttackTarget() instanceof net.minecraft.entity.EntityFlying || (getAttackTarget()).posY > this.posY + 4.0D) {
+        this.tasks.addTask(2, this.aiArrowAttack);
+        this.tasks.removeTask(this.aiAttackOnCollide);
       } else {
-        this.tasks.addTask(2, (EntityAIBase)this.aiAttackOnCollide);
-        this.tasks.removeTask((EntityAIBase)this.aiArrowAttack);
+        this.tasks.addTask(2, this.aiAttackOnCollide);
+        this.tasks.removeTask(this.aiArrowAttack);
       }  
     List<EntityGreaterDreadSpawn> greaterspawns = this.world.getEntitiesWithinAABB(getClass(), getEntityBoundingBox().grow(1.0D));
     if (!this.world.isRemote && 
@@ -215,12 +215,12 @@ public class EntityGreaterDreadSpawn extends EntityTameBase implements IRangedAt
       greaterspawns.size() >= 5 && !hasMerged) {
       hasMerged = true;
       for (int i = 0; i < 5 && false; i++)
-        this.world.removeEntity((Entity)greaterspawns.get(i)); 
+        this.world.removeEntity(greaterspawns.get(i));
       EntityLesserDreadbeast lesserdreadbeast = new EntityLesserDreadbeast(this.world);
-      lesserdreadbeast.copyLocationAndAnglesFrom((Entity)this);
+      lesserdreadbeast.copyLocationAndAnglesFrom(this);
       lesserdreadbeast.setOwnerId(getOwnerId());
-      this.world.removeEntity((Entity)this);
-      this.world.spawnEntity((Entity)lesserdreadbeast);
+      this.world.removeEntity(this);
+      this.world.spawnEntity(lesserdreadbeast);
       hasMerged = false;
     } 
     List<Entity> list = this.world.getEntitiesWithinAABB(getClass(), getEntityBoundingBox().grow(8.0D));
@@ -229,14 +229,14 @@ public class EntityGreaterDreadSpawn extends EntityTameBase implements IRangedAt
             if (entity.isEntityAlive() && entity instanceof EntityGreaterDreadSpawn) {
                 EntityGreaterDreadSpawn mob = (EntityGreaterDreadSpawn) entity;
                 if (false)
-                    getNavigator().tryMoveToEntityLiving((Entity) mob, 1.2D);
+                    getNavigator().tryMoveToEntityLiving(mob, 1.2D);
             }
         }
     if (isEntityAlive() && !this.world.isRemote && this.world.rand.nextInt(2000) == 0) {
       EntityDreadSpawn spawn = new EntityDreadSpawn(this.world);
-      spawn.copyLocationAndAnglesFrom((Entity)this);
+      spawn.copyLocationAndAnglesFrom(this);
       spawn.setOwnerId(getOwnerId());
-      this.world.spawnEntity((Entity)spawn);
+      this.world.spawnEntity(spawn);
     } 
   }
   
@@ -244,25 +244,25 @@ public class EntityGreaterDreadSpawn extends EntityTameBase implements IRangedAt
     if (!this.world.isRemote) {
       EntityDreadSpawn spawn1 = new EntityDreadSpawn(this.world);
       EntityDreadSpawn spawn2 = new EntityDreadSpawn(this.world);
-      spawn1.copyLocationAndAnglesFrom((Entity)this);
-      spawn2.copyLocationAndAnglesFrom((Entity)this);
+      spawn1.copyLocationAndAnglesFrom(this);
+      spawn2.copyLocationAndAnglesFrom(this);
       spawn1.setOwnerId(getOwnerId());
       spawn2.setOwnerId(getOwnerId());
-      this.world.spawnEntity((Entity)spawn1);
-      this.world.spawnEntity((Entity)spawn2);
+      this.world.spawnEntity(spawn1);
+      this.world.spawnEntity(spawn2);
     } 
     super.onDeath(par1DamageSource);
   }
   
   public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
-    EntityDreadSlugOther entitydreadslug = new EntityDreadSlugOther(this.world, (EntityLivingBase)this);
+    EntityDreadSlugOther entitydreadslug = new EntityDreadSlugOther(this.world, this);
     double d0 = target.posX - this.posX;
     double d1 = target.posY + target.getEyeHeight() - 1.100000023841858D - entitydreadslug.posY;
     double d2 = target.posZ - this.posZ;
     float f1 = MathHelper.sqrt(d0 * d0 + d2 * d2) * 0.2F;
     entitydreadslug.shoot(d0, d1 + f1, d2, 1.6F, 4.0F);
     playSound(ESound.amalgamate, 1.0F, 1.25F);
-    this.world.spawnEntity((Entity)entitydreadslug);
+    this.world.spawnEntity(entitydreadslug);
   }
   
   public boolean interact(EntityPlayer player, EnumHand hand) {
@@ -270,7 +270,7 @@ public class EntityGreaterDreadSpawn extends EntityTameBase implements IRangedAt
     ItemStack heldItem = new ItemStack(stack.getItem());
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -310,7 +310,7 @@ public class EntityGreaterDreadSpawn extends EntityTameBase implements IRangedAt
         this.motionZ = 0.0D;
       } 
       if (entitylivingbase.moveForward > 0.0F && this.ticksExisted % 7 == 0)
-        playStepSound(new BlockPos((Entity)this), this.world.getBlockState(new BlockPos((Entity)this)).getBlock()); 
+        playStepSound(new BlockPos(this), this.world.getBlockState(new BlockPos(this)).getBlock());
       this.prevLimbSwingAmount = this.limbSwingAmount;
       double d5 = this.posX - this.prevPosX;
       double d7 = this.posZ - this.prevPosZ;

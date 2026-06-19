@@ -41,7 +41,7 @@ public class EntityIceSpider extends EntitySpider {
   }
   
   public EntityTameBase spawnBaby(EntityTameBase par1idleTimeable) {
-    return (EntityTameBase)new EntityIceSpider(this.world);
+    return new EntityIceSpider(this.world);
   }
   
   public boolean attackEntityAsMob(Entity p_70652_1_) {
@@ -72,12 +72,12 @@ public class EntityIceSpider extends EntitySpider {
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return I18n.translateToLocal("entity." + str + ".cmm.name");
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name");

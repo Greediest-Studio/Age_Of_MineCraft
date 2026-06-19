@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.shinoow.abyssalcraft.api.AbyssalCraftAPI;
 import com.shinoow.abyssalcraft.api.entity.EntityUtil;
@@ -76,13 +75,13 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
   public EntityAbyssalZombie(World par1World) {
     super(par1World);
     setSize(0.5F, 1.95F);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.1D, 32.0F, 9.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.0D, true));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIFleeSun((EntityCreature)this, 1.0D));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 1.0D));
-    this.tasks.addTask(6, (EntityAIBase)new EntityAIWander((EntityCreature)this, 1.0D));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.1D, 32.0F, 9.0F));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    this.tasks.addTask(4, new EntityAIFleeSun(this, 1.0D));
+    this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
+    this.tasks.addTask(6, new EntityAIWander(this, 1.0D));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
     this.isOffensive = true;
   }
   
@@ -123,7 +122,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
     super.onDeath(par1DamageSource);
     if (!this.world.isRemote && getLimitedLife() <= 0)
       for (int i = 0; i < this.helmetCount; i++) {
-        dropItem((Item)Items.LEATHER_HELMET, 1);
+        dropItem(Items.LEATHER_HELMET, 1);
         this.helmetCount--;
       }  
   }
@@ -139,7 +138,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
   }
   
   public int getZombieType() {
-    return (Integer) this.dataManager.get(TYPE);
+    return this.dataManager.get(TYPE);
   }
   
   public void setZombieType(int par1) {
@@ -166,7 +165,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
                       entity.hurtResistantTime = 0;
                       entity.attackEntityFrom(DamageSource.WITHER, 0.05F);
                       if (EngenderConfig.general.useMessage && !entity.isEntityAlive() && !isWild())
-                          getOwner().sendMessage((ITextComponent) new TextComponentTranslation(entity.getName() + " was yelled at to death by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
+                          getOwner().sendMessage(new TextComponentTranslation(entity.getName() + " was yelled at to death by " + getName() + " (" + getOwner().getName() + ")", new Object[0]));
                   }
           }
     } 
@@ -189,13 +188,13 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
       } else {
         playSound(ESound.zombieSpecial, 10.0F, 0.75F);
       }  
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 128.0D && getSpecialAttackTimer() <= 0 && isHero())
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) < 128.0D && getSpecialAttackTimer() <= 0 && isHero())
       performSpecialAttack(); 
     if (this.helmetCount < 0)
       this.helmetCount = 0; 
     if ((isChild() || isHero()) && this.helmetCount != 0) {
       if (!this.world.isRemote)
-        dropItem((Item)Items.LEATHER_HELMET, 1); 
+        dropItem(Items.LEATHER_HELMET, 1);
       this.helmetCount--;
     } 
     if (this.world.isDaytime() && !this.world.isRemote && !isChild() && !isImmuneToFire() && !isHero()) {
@@ -218,7 +217,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
             swingArm(EnumHand.MAIN_HAND);
             swingArm(EnumHand.OFF_HAND);
             this.helmetCount--;
-            setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack((Item)Items.LEATHER_HELMET));
+            setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
             playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
           } else {
             setFire(8);
@@ -231,7 +230,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
   public boolean attackEntityAsMob(Entity par1Entity) {
     boolean flag = super.attackEntityAsMob(par1Entity);
     if (flag) {
-      float f = this.world.getDifficultyForLocation(new BlockPos((Entity)this)).getAdditionalDifficulty();
+      float f = this.world.getDifficultyForLocation(new BlockPos(this)).getAdditionalDifficulty();
       if (getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) != null && (getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() == Items.FLINT_AND_STEEL || getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() == Items.FIRE_CHARGE))
         par1Entity.setFire(12); 
       if (isBurning() && this.rand.nextFloat() < f * 0.5F)
@@ -242,7 +241,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
           ((EntityLivingBase)par1Entity).addPotionEffect(new PotionEffect(AbyssalCraftAPI.coralium_plague, 100));  
     } 
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor().setDamageIsAbsolute(), 1.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -292,7 +291,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
   }
   
   protected void updateEquipmentIfNeeded(EntityItem itemEntity) {
-    if (!InitHandler.INSTANCE.isItemBlacklisted((Entity)this, itemEntity.getItem()))
+    if (!InitHandler.INSTANCE.isItemBlacklisted(this, itemEntity.getItem()))
       super.updateEquipmentIfNeeded(itemEntity); 
   }
   
@@ -317,7 +316,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
           for (EntityChicken entity : list) {
               if (entity != null && !entity.isBeingRidden() && false && isChild() && !this.world.isRemote) {
                   entity.ticksExisted = 0;
-                  startRiding((Entity) entity);
+                  startRiding(entity);
                   playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
                   break;
               }
@@ -441,7 +440,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
     if (Loader.isModLoaded("mutantbeasts")) {
       EntityMutantZombie mutant = new EntityMutantZombie(this.world);
       mutant.setZombieType(3);
-      return (EntityTameBase)mutant;
+      return mutant;
     } 
     return null;
   }

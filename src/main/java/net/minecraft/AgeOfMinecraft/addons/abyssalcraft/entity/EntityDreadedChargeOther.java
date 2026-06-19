@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.shinoow.abyssalcraft.api.AbyssalCraftAPI;
 import com.shinoow.abyssalcraft.api.biome.ACBiomes;
@@ -73,14 +72,14 @@ public class EntityDreadedChargeOther extends EntityFireball {
               Chunk c = this.world.getChunk(getPosition());
               c.getBiomeArray()[(z & 0xF) << 4 | x & 0xF] = (byte)Biome.getIdForBiome(b);
               c.setModified(true);
-              PacketDispatcher.sendToDimension((IMessage)new CleansingRitualMessage(x, z, Biome.getIdForBiome(b)), this.world.provider.getDimension());
+              PacketDispatcher.sendToDimension(new CleansingRitualMessage(x, z, Biome.getIdForBiome(b)), this.world.provider.getDimension());
             } 
           } 
         }  
       if (movingObject.entityHit != null) {
         if (this.shootingEntity != null && movingObject.entityHit instanceof EntityLivingBase && this.shootingEntity instanceof EntityTameBase && !false) {
           this.shootingEntity.attackEntityAsMob(movingObject.entityHit);
-          EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false);
+          EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false);
         } 
         if (this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase && movingObject.entityHit instanceof EntityLivingBase && false) {
           ((EntityLivingBase)movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 400, 3));
@@ -100,15 +99,15 @@ public class EntityDreadedChargeOther extends EntityFireball {
       entityareaeffectcloud.setRadiusPerTick((3.0F - entityareaeffectcloud.getRadius()) / entityareaeffectcloud.getDuration());
       if (!list.isEmpty())
         for (EntityLivingBase entitylivingbase : list) {
-          double d0 = getDistanceSq((Entity)entitylivingbase);
+          double d0 = getDistanceSq(entitylivingbase);
           if (this.shootingEntity != null && d0 < 64.0D)
             entityareaeffectcloud.setPosition(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ); 
         }  
-      this.world.playSound((EntityPlayer)null, getPosition(), SoundEvents.ENTITY_ENDERDRAGON_FIREBALL_EPLD, SoundCategory.MASTER, 1.0F, this.world.rand.nextFloat() * 0.1F + 0.9F);
+      this.world.playSound(null, getPosition(), SoundEvents.ENTITY_ENDERDRAGON_FIREBALL_EPLD, SoundCategory.MASTER, 1.0F, this.world.rand.nextFloat() * 0.1F + 0.9F);
       if (!this.world.isRemote)
-        this.world.spawnEntity((Entity)entityareaeffectcloud); 
+        this.world.spawnEntity(entityareaeffectcloud);
       if (this.shootingEntity != null)
-        EntityTameBase.createEngenderModExplosion((Entity)this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false); 
+        EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false);
       setDead();
     } 
   }
@@ -119,7 +118,7 @@ public class EntityDreadedChargeOther extends EntityFireball {
     if (!list.isEmpty())
       for (EntityLivingBase entity1 : list) {
         if (entity1 instanceof net.minecraft.entity.IEntityMultiPart && entity1 != null && entity1.isEntityAlive())
-          onImpact(new RayTraceResult((Entity)entity1)); 
+          onImpact(new RayTraceResult(entity1));
       }  
   }
 }

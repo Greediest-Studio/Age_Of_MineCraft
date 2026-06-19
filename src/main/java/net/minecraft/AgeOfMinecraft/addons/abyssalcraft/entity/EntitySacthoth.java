@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.shinoow.abyssalcraft.api.AbyssalCraftAPI;
 import com.shinoow.abyssalcraft.api.item.ACItems;
@@ -82,13 +81,13 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
   public EntitySacthoth(World par1World) {
     super(par1World);
     setSize(1.1F, 3.8F);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.0D, 48.0F, 12.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.0D, true));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 0.8D));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.8D));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWatchClosest((EntityLiving)this, EntityPlayer.class, 8.0F));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.0D, 48.0F, 12.0F));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    this.tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 0.8D));
+    this.tasks.addTask(4, new EntityAIWander(this, 0.8D));
+    this.tasks.addTask(5, new EntityAILookIdle(this));
+    this.tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
     this.ignoreFrustumCheck = true;
     this.isImmuneToFire = true;
     this.isOffensive = true;
@@ -144,7 +143,7 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
   }
   
   protected PathNavigate createNavigator(World worldIn) {
-    return (PathNavigate)new PathNavigateClimber((EntityLiving)this, worldIn);
+    return new PathNavigateClimber(this, worldIn);
   }
   
   public boolean canBreatheUnderwater() {
@@ -224,7 +223,7 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
       ((EntityLivingBase)par1Entity).addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 240));
     } 
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 4.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor().setDamageIsAbsolute(), 4.5F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -274,11 +273,11 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
   }
   
   public boolean isBesideClimbableBlock() {
-    return (((Byte) this.dataManager.get(CLIMBING) & 0x1) != 0);
+    return ((this.dataManager.get(CLIMBING) & 0x1) != 0);
   }
   
   public void setBesideClimbableBlock(boolean par1) {
-    byte b0 = (Byte) this.dataManager.get(CLIMBING);
+    byte b0 = this.dataManager.get(CLIMBING);
     if (par1) {
       b0 = (byte)(b0 | 0x1);
     } else {
@@ -317,8 +316,8 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
   }
   
   protected boolean teleportTo(double par1, double par3, double par5) {
-    EnderTeleportEvent event = new EnderTeleportEvent((EntityLivingBase)this, par1, par3, par5, 0.0F);
-    if (MinecraftForge.EVENT_BUS.post((Event)event))
+    EnderTeleportEvent event = new EnderTeleportEvent(this, par1, par3, par5, 0.0F);
+    if (MinecraftForge.EVENT_BUS.post(event))
       return false; 
     double d3 = this.posX;
     double d4 = this.posY;
@@ -342,7 +341,7 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
       } 
       if (flag1) {
         setPosition(this.posX, this.posY, this.posZ);
-        if (this.world.getCollisionBoxes((Entity)this, getEntityBoundingBox()).isEmpty() && !this.world.containsAnyLiquid(getEntityBoundingBox()))
+        if (this.world.getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && !this.world.containsAnyLiquid(getEntityBoundingBox()))
           flag = true; 
       } 
     } 
@@ -374,9 +373,9 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
         if (getOwner() != null) {
           for (EntityPlayer entityplayer : this.world.playerEntities) {
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
-            entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("§4" + getOwner().getName() + "'s Sacthoth has been killed!!!", new Object[0]), true);
+            entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s Sacthoth has been killed!!!", new Object[0]), true);
           } 
-          ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("Your Sacthoth has been destroyed!", new Object[0]));
+          getOwner().sendMessage(new TextComponentTranslation("Your Sacthoth has been destroyed!", new Object[0]));
         }   
     if (this.deathTicks <= 200) {
       float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
@@ -396,31 +395,31 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
         while (i > 0) {
           int j = EntityXPOrb.getXPSplit(i);
           i -= j;
-          this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+          this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
         } 
-        this.world.spawnEntity((Entity)new EntityItem(this.world, this.posX + posneg(3), this.posY + this.rand.nextInt(3), this.posZ + posneg(3), new ItemStack(ACItems.shadow_fragment, 4)));
-        this.world.spawnEntity((Entity)new EntityItem(this.world, this.posX + posneg(3), this.posY + this.rand.nextInt(3), this.posZ + posneg(3), new ItemStack(ACItems.shadow_shard, 2)));
-        this.world.spawnEntity((Entity)new EntityItem(this.world, this.posX + posneg(3), this.posY + this.rand.nextInt(3), this.posZ + posneg(3), new ItemStack(ACItems.shadow_gem)));
-        this.world.spawnEntity((Entity)new EntityItem(this.world, this.posX + posneg(3), this.posY + this.rand.nextInt(3), this.posZ + posneg(3), new ItemStack(ACItems.shard_of_oblivion)));
+        this.world.spawnEntity(new EntityItem(this.world, this.posX + posneg(3), this.posY + this.rand.nextInt(3), this.posZ + posneg(3), new ItemStack(ACItems.shadow_fragment, 4)));
+        this.world.spawnEntity(new EntityItem(this.world, this.posX + posneg(3), this.posY + this.rand.nextInt(3), this.posZ + posneg(3), new ItemStack(ACItems.shadow_shard, 2)));
+        this.world.spawnEntity(new EntityItem(this.world, this.posX + posneg(3), this.posY + this.rand.nextInt(3), this.posZ + posneg(3), new ItemStack(ACItems.shadow_gem)));
+        this.world.spawnEntity(new EntityItem(this.world, this.posX + posneg(3), this.posY + this.rand.nextInt(3), this.posZ + posneg(3), new ItemStack(ACItems.shard_of_oblivion)));
       } 
       if (this.deathTicks >= 150 && this.deathTicks <= 200) {
         if (this.deathTicks >= 150) {
           EntityShadowCreature shadowCreature = new EntityShadowCreature(this.world);
-          shadowCreature.copyLocationAndAnglesFrom((Entity)this);
+          shadowCreature.copyLocationAndAnglesFrom(this);
           shadowCreature.setOwnerId(getOwnerId());
-          this.world.spawnEntity((Entity)shadowCreature);
+          this.world.spawnEntity(shadowCreature);
         } 
         if (this.deathTicks >= 175) {
           EntityShadowMonster shadowMonster = new EntityShadowMonster(this.world);
-          shadowMonster.copyLocationAndAnglesFrom((Entity)this);
+          shadowMonster.copyLocationAndAnglesFrom(this);
           shadowMonster.setOwnerId(getOwnerId());
-          this.world.spawnEntity((Entity)shadowMonster);
+          this.world.spawnEntity(shadowMonster);
         } 
         if (this.deathTicks >= 195) {
           EntityShadowBeast shadowBeast = new EntityShadowBeast(this.world);
-          shadowBeast.copyLocationAndAnglesFrom((Entity)this);
+          shadowBeast.copyLocationAndAnglesFrom(this);
           shadowBeast.setOwnerId(getOwnerId());
-          this.world.spawnEntity((Entity)shadowBeast);
+          this.world.spawnEntity(shadowBeast);
         } 
       } 
       if (this.deathTicks == 200 && !this.world.isRemote) {
@@ -431,7 +430,7 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
                     SpecialTextUtil.JzaharGroup(this.world, false ? I18n.translateToLocal("message.jzaharhelpful.snidecomment.sacthoth") : I18n.translateToLocal("message.jzahar.snidecomment.sacthoth"));
             }
         setDead();
-        this.world.spawnEntity((Entity)new EntityItem(this.world, this.posX, this.posY, this.posZ, new ItemStack(ACItems.sacthoths_soul_harvesting_blade)));
+        this.world.spawnEntity(new EntityItem(this.world, this.posX, this.posY, this.posZ, new ItemStack(ACItems.sacthoths_soul_harvesting_blade)));
       } 
     } 
   }
@@ -442,7 +441,7 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
   
   protected void collideWithEntity(Entity par1Entity) {
     if (this.deathTicks == 0)
-      par1Entity.applyEntityCollision((Entity)this); 
+      par1Entity.applyEntityCollision(this);
   }
   
   public boolean interact(EntityPlayer player, EnumHand hand) {
@@ -450,7 +449,7 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
     ItemStack heldItem = new ItemStack(stack.getItem());
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -528,14 +527,14 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
     if (!isInvisible())
       for (int i = 0; i < 3 && ACConfig.particleEntity && this.world.provider.getDimension() != ACLib.dark_realm_id; i++)
         this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
-    List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().grow(30.0D, 30.0D, 30.0D));
+    List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(30.0D, 30.0D, 30.0D));
     if (list != null)
         for (Entity entity : list) {
             if (entity instanceof EntityPlayer && !false && !entity.isDead && this.deathTicks == 0 && !((EntityPlayer) entity).capabilities.isCreativeMode)
                 ((EntityPlayer) entity).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 40));
         }
-    EntityPlayer player = this.world.getClosestPlayerToEntity((Entity)this, 160.0D);
-    if (player != null && !false && player.getDistance((Entity)this) >= 50.0D && !player.capabilities.isCreativeMode) {
+    EntityPlayer player = this.world.getClosestPlayerToEntity(this, 160.0D);
+    if (player != null && !false && player.getDistance(this) >= 50.0D && !player.capabilities.isCreativeMode) {
       if (player.posX - this.posX > 50.0D)
         teleportTo(player.posX + 30.0D, player.posY, player.posZ); 
       if (player.posX - this.posX < -50.0D)
@@ -549,14 +548,14 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
       if (player.posY - this.posY < -50.0D)
         teleportTo(player.posX, player.posY, player.posZ); 
     } 
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) <= 100.0D && this.shadowFlameShootTimer <= (isHero() ? -100 : -300))
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) <= 100.0D && this.shadowFlameShootTimer <= (isHero() ? -100 : -300))
       this.shadowFlameShootTimer = 100; 
     if (getAttackTarget() != null)
-      faceEntity((Entity)getAttackTarget(), 10.0F, 180.0F); 
+      faceEntity(getAttackTarget(), 10.0F, 180.0F);
     if (this.shadowFlameShootTimer > 0) {
       this.motionX *= 0.05D;
       this.motionZ *= 0.05D;
-      this.world.setEntityState((Entity)this, (byte)23);
+      this.world.setEntityState(this, (byte)23);
       if (this.ticksExisted % 5 == 0)
         this.world.playSound(null, new BlockPos(this.posX + 0.5D, this.posY + getEyeHeight(), this.posZ + 0.5D), SoundEvents.ENTITY_GHAST_SHOOT, getSoundCategory(), 1.5F + getRNG().nextFloat(), getRNG().nextFloat() * 0.5F + 0.3F); 
       Entity target = getHeadLookTarget();
@@ -565,14 +564,14 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
         if (list1 != null && !list1.isEmpty())
             for (EntityLivingBase entity : list1) {
                 if (entity != null && !false && this.rand.nextInt(3) == 0)
-                    if (entity.attackEntityFrom((new DamageSource("shadow")).setDamageBypassesArmor().setDamageIsAbsolute().setMagicDamage(), (float) (15.0D - getDistance((Entity) entity)) * 3.0F)) {
+                    if (entity.attackEntityFrom((new DamageSource("shadow")).setDamageBypassesArmor().setDamageIsAbsolute().setMagicDamage(), (float) (15.0D - getDistance(entity)) * 3.0F)) {
                         entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 1600));
                         entity.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 1600));
                         entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 800, 1));
                         entity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 800));
                         entity.addPotionEffect(new PotionEffect(MobEffects.WITHER, 400, 1));
                     } else {
-                        attackEntityAsMob((Entity) entity);
+                        attackEntityAsMob(entity);
                         entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 400));
                         entity.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 400));
                         entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 200));
@@ -639,7 +638,7 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
     double rz = (hitpos == null) ? range : Math.min(range, Math.abs(this.posZ - hitpos.getZ()));
     Vec3d destVec = srcVec.add(lookVec.x * range, lookVec.y * range, lookVec.z * range);
     float var9 = 8.0F;
-    List<Entity> possibleList = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().offset(lookVec.x * rx, lookVec.y * ry, lookVec.z * rz).grow(var9, var9, var9));
+    List<Entity> possibleList = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().offset(lookVec.x * rx, lookVec.y * ry, lookVec.z * rz).grow(var9, var9, var9));
     double hitDist = 0.0D;
     for (Entity possibleEntity : possibleList) {
       if (possibleEntity != this && possibleEntity instanceof EntityLivingBase && !false) {
@@ -686,7 +685,7 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
         this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, px + getRNG().nextDouble() - 0.5D, py + getRNG().nextDouble() - 0.5D, pz + getRNG().nextDouble() - 0.5D, dx, dy, dz);
       } 
     } else {
-      this.world.setEntityState((Entity)this, (byte)23);
+      this.world.setEntityState(this, (byte)23);
     } 
   }
   

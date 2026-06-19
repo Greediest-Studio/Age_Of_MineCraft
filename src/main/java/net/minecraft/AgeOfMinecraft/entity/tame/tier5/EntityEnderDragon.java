@@ -1,9 +1,8 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier5;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
-import java.util.Iterator;
+
 import java.util.List;
 import java.util.Random;
 import javax.annotation.Nullable;
@@ -261,7 +260,7 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
   }
   
   public boolean isCarryingCrystal() {
-    return (Boolean) getDataManager().get(CARRIES_CRYSTAL);
+    return getDataManager().get(CARRIES_CRYSTAL);
   }
   
   public void setCarryingCrystal(boolean childZombie) {
@@ -325,7 +324,7 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -406,7 +405,7 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
   }
   
   protected EntityBodyHelper createBodyHelper() {
-    return (EntityBodyHelper)new EntityBodyHelperDragon((EntityLivingBase)this);
+    return new EntityBodyHelperDragon(this);
   }
   
   public void onKillEntity(EntityLivingBase entityLivingIn) {
@@ -417,7 +416,7 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
     if (this.posX == 0.0D && this.posY == 0.0D && this.posZ == 0.0D) {
       EntityEnderDragon entityliving = new EntityEnderDragon(this.world);
       if (!isWild()) {
-        entityliving.copyLocationAndAnglesFrom((Entity)getOwner());
+        entityliving.copyLocationAndAnglesFrom(getOwner());
       } else {
         entityliving.setPosition(0.0D, 64.0D, 0.0D);
       } 
@@ -431,8 +430,8 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
       entityliving.setDexterity(getDexterity());
       entityliving.setIsHero(isHero());
       entityliving.setLastChance(hasLastChance());
-      this.world.removeEntity((Entity)this);
-      this.world.spawnEntity((Entity)entityliving);
+      this.world.removeEntity(this);
+      this.world.spawnEntity(entityliving);
     } 
     if (this.convertionInt > 0) {
       this.phaseManager.setPhase(PhaseList.LANDING);
@@ -441,7 +440,7 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
       this.motionZ *= 0.75D;
     } 
     if (getPhaseManager().getCurrentPhase() == PhaseList.LANDING_APPROACH) {
-      setAttackTarget((EntityLivingBase)null);
+      setAttackTarget(null);
       double d0 = (isWild() ? 0.0D : (getOwner()).posX) - this.posX;
       double d1 = (isWild() ? this.world.getTopSolidOrLiquidBlock(WorldGenEndPodium.END_PODIUM_LOCATION).getY() : ((getOwner()).posY + 4.0D)) - this.posY;
       double d2 = (isWild() ? 0.0D : (getOwner()).posZ) - this.posZ;
@@ -456,10 +455,10 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
       setLocationAndAngles(this.sitPosX, this.sitPosY, this.sitPosZ, this.rotationYaw, this.rotationPitch);
       this.motionX = this.motionY = this.motionZ = 0.0D;
       if (getAttackTarget() != null && this.phaseManager.getCurrentPhase() != PhaseList.LANDING_APPROACH && this.phaseManager.getCurrentPhase() != PhaseList.LANDING) {
-        faceEntity((Entity)getAttackTarget(), 10.0F, 90.0F);
+        faceEntity(getAttackTarget(), 10.0F, 90.0F);
         this.renderYawOffset = this.rotationYaw = this.rotationYawHead + 180.0F;
       } 
-      if (!isWild() && getDistanceSq((Entity)getOwner()) > 10000.0D) {
+      if (!isWild() && getDistanceSq(getOwner()) > 10000.0D) {
         this.sitPosX = (getOwner()).posX;
         this.sitPosY = (getOwner()).posY + 12.0D;
         this.sitPosZ = (getOwner()).posZ;
@@ -473,7 +472,7 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
       this.phaseManager.setPhase(PhaseList.DYING); 
     if (getHealth() <= getMaxHealth() / 5.0F && !this.phaseManager.getCurrentPhase().getIsStationary()) {
       this.phaseManager.setPhase(PhaseList.LANDING_APPROACH);
-      setAttackTarget((EntityLivingBase)null);
+      setAttackTarget(null);
     } 
     if (getJukeboxToDanceTo() != null) {
       Vec3d vec3d = getHeadLookVec(1.0F).normalize();
@@ -504,8 +503,8 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
         List<EntityTameBase> list = this.world.getEntitiesWithinAABB(EntityTameBase.class, getEntityBoundingBox().grow(getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue()), Predicates.and(EntitySelectors.IS_ALIVE, EntitySelectors.NOT_SPECTATING));
         for (int j2 = 0; j2 < 10 && !list.isEmpty(); j2++) {
           EntityTameBase entitylivingbase = list.get(this.rand.nextInt(list.size()));
-          if (entitylivingbase != this && entitylivingbase.isEntityAlive() && canEntityBeSeen((Entity)entitylivingbase) && entitylivingbase.getOwnerId() == getOwnerId() && entitylivingbase.getFakeHealth() > 0.0F) {
-            setAttackTarget((EntityLivingBase)entitylivingbase);
+          if (entitylivingbase != this && entitylivingbase.isEntityAlive() && canEntityBeSeen(entitylivingbase) && entitylivingbase.getOwnerId() == getOwnerId() && entitylivingbase.getFakeHealth() > 0.0F) {
+            setAttackTarget(entitylivingbase);
             break;
           } 
           list.remove(entitylivingbase);
@@ -513,12 +512,12 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
       } 
       if (!this.world.isRemote) {
         if (isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && this.isOffensive && !isChild() && !false)
-          if (getDistanceSq((Entity)getAttackTarget()) < (this.reachWidth * this.reachWidth + ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width) * ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width)) + 9.0D && (this.ticksExisted + getEntityId()) % 10 == 0)
-            attackEntityAsMob((Entity)getAttackTarget());  
+          if (getDistanceSq(getAttackTarget()) < (this.reachWidth * this.reachWidth + ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width) * ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width)) + 9.0D && (this.ticksExisted + getEntityId()) % 10 == 0)
+            attackEntityAsMob(getAttackTarget());
         if (isEntityAlive()) {
-          ChunkLoadingEvent.updateLoaded((Entity)this);
+          ChunkLoadingEvent.updateLoaded(this);
         } else {
-          ChunkLoadingEvent.stopLoading((Entity)this);
+          ChunkLoadingEvent.stopLoading(this);
         } 
       } 
     } 
@@ -633,7 +632,7 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
       } 
     } else {
       if (getAttackTarget() != null && getJukeboxToDanceTo() == null && this.phaseManager.getCurrentPhase() != PhaseList.LANDING_APPROACH && this.phaseManager.getCurrentPhase() != PhaseList.LANDING) {
-        faceEntity((Entity)getAttackTarget(), 10.0F, 90.0F);
+        faceEntity(getAttackTarget(), 10.0F, 90.0F);
         if (this.sitting)
           this.renderYawOffset = this.rotationYaw = this.rotationYawHead + 180.0F; 
       } else {
@@ -762,16 +761,16 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
         } 
       } 
       if (!this.world.isRemote) {
-        collideWithEntities(this.dragonPartHead, this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartHead.getEntityBoundingBox().grow(1.0D)));
-        collideWithEntities(this.dragonPartNeck, this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartNeck.getEntityBoundingBox().grow(1.0D)));
-        collideWithEntities(this.dragonPartBody, this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartBody.getEntityBoundingBox().grow(1.0D)));
-        flingEntities(this.dragonPartWing1, this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartWing1.getEntityBoundingBox().grow(4.0D).offset(0.0D, -2.0D, 0.0D)));
-        flingEntities(this.dragonPartWing2, this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartWing2.getEntityBoundingBox().grow(4.0D).offset(0.0D, -2.0D, 0.0D)));
-        collideWithEntities(this.dragonPartTail1, this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartTail1.getEntityBoundingBox().grow(1.0D)));
-        collideWithEntities(this.dragonPartTail2, this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartTail2.getEntityBoundingBox().grow(1.0D)));
-        collideWithEntities(this.dragonPartTail3, this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartTail3.getEntityBoundingBox().grow(1.0D)));
-        attackEntitiesInList(this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartHead.getEntityBoundingBox().grow(3.0D)));
-        attackEntitiesInList(this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, this.dragonPartNeck.getEntityBoundingBox().grow(2.0D)));
+        collideWithEntities(this.dragonPartHead, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartHead.getEntityBoundingBox().grow(1.0D)));
+        collideWithEntities(this.dragonPartNeck, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartNeck.getEntityBoundingBox().grow(1.0D)));
+        collideWithEntities(this.dragonPartBody, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartBody.getEntityBoundingBox().grow(1.0D)));
+        flingEntities(this.dragonPartWing1, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartWing1.getEntityBoundingBox().grow(4.0D).offset(0.0D, -2.0D, 0.0D)));
+        flingEntities(this.dragonPartWing2, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartWing2.getEntityBoundingBox().grow(4.0D).offset(0.0D, -2.0D, 0.0D)));
+        collideWithEntities(this.dragonPartTail1, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartTail1.getEntityBoundingBox().grow(1.0D)));
+        collideWithEntities(this.dragonPartTail2, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartTail2.getEntityBoundingBox().grow(1.0D)));
+        collideWithEntities(this.dragonPartTail3, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartTail3.getEntityBoundingBox().grow(1.0D)));
+        attackEntitiesInList(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartHead.getEntityBoundingBox().grow(3.0D)));
+        attackEntitiesInList(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartNeck.getEntityBoundingBox().grow(2.0D)));
       } 
       destroyBlocksInAABB(this.dragonPartHead.getEntityBoundingBox());
       destroyBlocksInAABB(this.dragonPartNeck.getEntityBoundingBox());
@@ -805,11 +804,11 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
         switch (this.rand.nextInt(2)) {
           case 0:
             getPhaseManager().setPhase(PhaseList.CHARGING_PLAYER);
-            ((PhaseRamAttack)getPhaseManager().getPhase(PhaseList.CHARGING_PLAYER)).setTarget(new Vec3d((getAttackTarget()).posX, (getAttackTarget()).posY, (getAttackTarget()).posZ));
+            getPhaseManager().getPhase(PhaseList.CHARGING_PLAYER).setTarget(new Vec3d((getAttackTarget()).posX, (getAttackTarget()).posY, (getAttackTarget()).posZ));
             break;
           case 1:
             getPhaseManager().setPhase(PhaseList.STRAFE_PLAYER);
-            ((PhaseFireballAndStrafe)getPhaseManager().getPhase(PhaseList.STRAFE_PLAYER)).setTarget(getAttackTarget());
+            getPhaseManager().getPhase(PhaseList.STRAFE_PLAYER).setTarget(getAttackTarget());
             break;
         }  
       if (isHero() && getSpecialAttackTimer() > 1995) {
@@ -824,12 +823,12 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
                         double d9 = entity.posX - d6;
                         double d10 = entity.posY + (entity.height / 2.0F) - d7 + (this.height / 2.0F);
                         double d11 = entity.posZ - d8;
-                        this.world.playEvent((EntityPlayer) null, 1016, new BlockPos((Entity) this), 0);
-                        EntityDragonFireballOther entitydragonfireball = new EntityDragonFireballOther(this.world, (EntityLivingBase) this, d9, d10, d11);
+                        this.world.playEvent(null, 1016, new BlockPos(this), 0);
+                        EntityDragonFireballOther entitydragonfireball = new EntityDragonFireballOther(this.world, this, d9, d10, d11);
                         entitydragonfireball.posX = d6;
                         entitydragonfireball.posY = d7;
                         entitydragonfireball.posZ = d8;
-                        this.world.spawnEntity((Entity) entitydragonfireball);
+                        this.world.spawnEntity(entitydragonfireball);
                     }
             }
       } 
@@ -875,53 +874,53 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
         getPhaseManager().setPhase(PhaseList.LANDING_APPROACH); 
       if (!getPhaseManager().getCurrentPhase().getIsStationary() && !isWild() && (getOwner().getHealth() <= 6.0F || (!getOwner().getHeldItemMainhand().isEmpty() && getOwner().getHeldItemMainhand().getItem() == Items.GLASS_BOTTLE)) && getRNG().nextInt(20) == 0) {
         getPhaseManager().setPhase(PhaseList.STRAFE_PLAYER);
-        ((PhaseFireballAndStrafe)getPhaseManager().getPhase(PhaseList.STRAFE_PLAYER)).setTarget(getOwner());
+        getPhaseManager().getPhase(PhaseList.STRAFE_PLAYER).setTarget(getOwner());
       } 
-      if (!isWild() && getDistanceSq((Entity)getOwner()) >= 48400.0D)
+      if (!isWild() && getDistanceSq(getOwner()) >= 48400.0D)
         setLocationAndAngles((getOwner()).posX, (getOwner()).posY, (getOwner()).posZ, this.rotationYaw, this.rotationPitch); 
-      if (!this.world.isRemote && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen((Entity)this) && this.rand.nextInt(120) == 0) {
+      if (!this.world.isRemote && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && this.rand.nextInt(120) == 0) {
         double d1 = this.dragonPartHead.posX;
         double d2 = this.dragonPartHead.posY + 0.25D;
         double d3 = this.dragonPartHead.posZ;
         if (getPolymorphTime() > 0 && this.rand.nextBoolean()) {
           for (int k = 0; k < (isHero() ? 36 : 18); k++) {
-            EntityMagicMissile entitymagicmissiles = new EntityMagicMissile(this.world, (Entity)getAttackTarget(), (EntityLivingBase)this, d1, d2, d3);
+            EntityMagicMissile entitymagicmissiles = new EntityMagicMissile(this.world, getAttackTarget(), this, d1, d2, d3);
             Random random = new Random();
             entitymagicmissiles.motionX += random.nextDouble() * 2.0D - 1.0D + this.motionX;
             entitymagicmissiles.motionY += random.nextDouble() * 2.0D + this.motionY;
             entitymagicmissiles.motionZ += random.nextDouble() * 2.0D - 1.0D + this.motionZ;
-            this.world.spawnEntity((Entity)entitymagicmissiles);
+            this.world.spawnEntity(entitymagicmissiles);
           } 
         } else {
-          fireLightning((Entity)getAttackTarget(), d1, d2, d3);
+          fireLightning(getAttackTarget(), d1, d2, d3);
         } 
       } 
-      if (!this.world.isRemote && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen((Entity)this) && this.rand.nextInt(120) == 0) {
+      if (!this.world.isRemote && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && this.rand.nextInt(120) == 0) {
         double d6 = this.dragonPartHead.posX;
         double d7 = this.dragonPartHead.posY + 0.5D;
         double d8 = this.dragonPartHead.posZ;
         double d9 = (getAttackTarget()).posX - d6;
         double d10 = (getAttackTarget()).posY + 1.0D - d7;
         double d11 = (getAttackTarget()).posZ - d8;
-        this.world.playEvent((EntityPlayer)null, 1016, new BlockPos((Entity)this), 0);
+        this.world.playEvent(null, 1016, new BlockPos(this), 0);
         if (getPolymorphTime() > 0 && this.rand.nextBoolean()) {
-          EntityInvisibleFangsProjectile entitydragonfireball = new EntityInvisibleFangsProjectile(this.world, (EntityLivingBase)this, d6, d7, d8);
+          EntityInvisibleFangsProjectile entitydragonfireball = new EntityInvisibleFangsProjectile(this.world, this, d6, d7, d8);
           entitydragonfireball.posX = d6;
           entitydragonfireball.posY = d7;
           entitydragonfireball.posZ = d8;
-          this.world.spawnEntity((Entity)entitydragonfireball);
+          this.world.spawnEntity(entitydragonfireball);
         } else {
-          EntityDragonFireballOther entitydragonfireball = new EntityDragonFireballOther(this.world, (EntityLivingBase)this, d9, d10, d11);
+          EntityDragonFireballOther entitydragonfireball = new EntityDragonFireballOther(this.world, this, d9, d10, d11);
           entitydragonfireball.posX = d6;
           entitydragonfireball.posY = d7;
           entitydragonfireball.posZ = d8;
-          this.world.spawnEntity((Entity)entitydragonfireball);
+          this.world.spawnEntity(entitydragonfireball);
         } 
       } 
       if (this.rand.nextInt(2) == 0 && !isWild() && getOwner().getRevengeTarget() != null)
         setAttackTarget(getOwner().getRevengeTarget()); 
       if (getAttackTarget() != null && (!getAttackTarget().isEntityAlive() || !this.isOffensive || false))
-        setAttackTarget((EntityLivingBase)null); 
+        setAttackTarget(null);
       updateDragonEnderCrystal();
       float f12 = 0.2F / (MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ) * 10.0F + 1.0F);
       f12 *= (float)Math.pow(2.0D, this.motionY);
@@ -971,7 +970,7 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
               entity.addVelocity(d2 / d4 * 4.0D, 0.75D, d3 / d4 * 4.0D);
               this.slowed = true;
               if (entity instanceof EntityLivingBase) {
-                  ((EntityLivingBase) entity).renderYawOffset = ((EntityLivingBase) entity).rotationYaw = ((EntityLivingBase) entity).rotationYawHead = (float) MathHelper.atan2(entity.motionZ, entity.motionX) * 57.295776F - 90.0F;
+                  ((EntityLivingBase) entity).renderYawOffset = entity.rotationYaw = ((EntityLivingBase) entity).rotationYawHead = (float) MathHelper.atan2(entity.motionZ, entity.motionX) * 57.295776F - 90.0F;
                   ((EntityLivingBase) entity).setRevengeTarget(null);
                   if (entity instanceof EntityLiving)
                       ((EntityLiving) entity).setAttackTarget(null);
@@ -990,7 +989,7 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
               double d4 = d2 * d2 + d3 * d3;
               entity.addVelocity(d2 / d4 * 32.0D, 1.5D, d3 / d4 * 32.0D);
               if (entity instanceof EntityLivingBase) {
-                  ((EntityLivingBase) entity).renderYawOffset = ((EntityLivingBase) entity).rotationYaw = ((EntityLivingBase) entity).rotationYawHead = (float) MathHelper.atan2(entity.motionZ, entity.motionX) * 57.295776F - 90.0F;
+                  ((EntityLivingBase) entity).renderYawOffset = entity.rotationYaw = ((EntityLivingBase) entity).rotationYawHead = (float) MathHelper.atan2(entity.motionZ, entity.motionX) * 57.295776F - 90.0F;
                   ((EntityLivingBase) entity).setRevengeTarget(null);
                   if (entity instanceof EntityLiving)
                       ((EntityLiving) entity).setAttackTarget(null);
@@ -1005,7 +1004,7 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
           if (isEntityAlive() && entity.ticksExisted + entity.getEntityId() % 10 == 0 && !this.world.isRemote && entity instanceof EntityLivingBase && !false) {
               attackEntityAsMob(entity);
               if (entity instanceof EntityLivingBase) {
-                  ((EntityLivingBase) entity).renderYawOffset = ((EntityLivingBase) entity).rotationYaw = ((EntityLivingBase) entity).rotationYawHead = (float) MathHelper.atan2(entity.motionZ, entity.motionX) * 57.295776F - 90.0F;
+                  ((EntityLivingBase) entity).renderYawOffset = entity.rotationYaw = ((EntityLivingBase) entity).rotationYawHead = (float) MathHelper.atan2(entity.motionZ, entity.motionX) * 57.295776F - 90.0F;
                   ((EntityLivingBase) entity).setRevengeTarget(null);
                   if (entity instanceof EntityLiving)
                       ((EntityLiving) entity).setAttackTarget(null);
@@ -1034,8 +1033,8 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
           BlockPos blockpos = new BlockPos(k1, l1, i2);
           IBlockState iblockstate = this.world.getBlockState(blockpos);
           Block block = iblockstate.getBlock();
-          if (EngenderConfig.mobs.grief && isEntityAlive() && !block.isAir(iblockstate, (IBlockAccess)this.world, blockpos))
-            if (block.canEntityDestroy(iblockstate, (IBlockAccess)this.world, blockpos, (Entity)this))
+          if (EngenderConfig.mobs.grief && isEntityAlive() && !block.isAir(iblockstate, this.world, blockpos))
+            if (block.canEntityDestroy(iblockstate, this.world, blockpos, this))
               if (block != Blocks.END_PORTAL && block != Blocks.DRAGON_EGG && block != Blocks.BEDROCK && block != Blocks.END_STONE && block != Blocks.OBSIDIAN && block != Blocks.COMMAND_BLOCK && block != Blocks.REPEATING_COMMAND_BLOCK && block != Blocks.CHAIN_COMMAND_BLOCK && block != Blocks.IRON_BARS && block != Blocks.END_GATEWAY) {
                 if (!this.world.isRemote)
                   flag1 = (this.world.setBlockToAir(blockpos) || flag1); 
@@ -1078,11 +1077,11 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
           switch (this.rand.nextInt(2)) {
             case 0:
               getPhaseManager().setPhase(PhaseList.CHARGING_PLAYER);
-              ((PhaseRamAttack)getPhaseManager().getPhase(PhaseList.CHARGING_PLAYER)).setTarget(new Vec3d(((EntityLivingBase)source.getTrueSource()).posX, ((EntityLivingBase)source.getTrueSource()).posY, ((EntityLivingBase)source.getTrueSource()).posZ));
+              getPhaseManager().getPhase(PhaseList.CHARGING_PLAYER).setTarget(new Vec3d(source.getTrueSource().posX, ((EntityLivingBase)source.getTrueSource()).posY, ((EntityLivingBase)source.getTrueSource()).posZ));
               break;
             case 1:
               getPhaseManager().setPhase(PhaseList.STRAFE_PLAYER);
-              ((PhaseFireballAndStrafe)getPhaseManager().getPhase(PhaseList.STRAFE_PLAYER)).setTarget((EntityLivingBase)source.getTrueSource());
+              getPhaseManager().getPhase(PhaseList.STRAFE_PLAYER).setTarget((EntityLivingBase)source.getTrueSource());
               break;
           }  
       } 
@@ -1094,26 +1093,26 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
         setAttackTarget((EntityLivingBase)source.getTrueSource());
         if (this.rand.nextInt(2) == 0) {
           getPhaseManager().setPhase(PhaseList.CHARGING_PLAYER);
-          ((PhaseRamAttack)getPhaseManager().getPhase(PhaseList.CHARGING_PLAYER)).setTarget(new Vec3d((source.getTrueSource()).posX, (source.getTrueSource()).posY, (source.getTrueSource()).posZ));
+          getPhaseManager().getPhase(PhaseList.CHARGING_PLAYER).setTarget(new Vec3d((source.getTrueSource()).posX, (source.getTrueSource()).posY, (source.getTrueSource()).posZ));
         } 
       }  
     return true;
   }
   
   public boolean attackEntityFrom(DamageSource source, float amount) {
-    return attackEntityFromPart((MultiPartEntityPart)this.dragonPartBody, source, amount);
+    return attackEntityFromPart(this.dragonPartBody, source, amount);
   }
   
   protected void onDeathUpdate() {
     List<EntityLivingBase> list = Lists.newArrayList();
-    List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, (new AxisAlignedBB(getPosition())).grow(256.0D));
+    List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, (new AxisAlignedBB(getPosition())).grow(256.0D));
     for (Entity entity : entities) {
       if (entity instanceof EntityEnderCrystal) {
         entity.attackEntityFrom(DamageSource.GENERIC, 1.0F);
         setHealth(50.0F);
         this.dead = false;
         getPhaseManager().setPhase(PhaseList.HOLDING_PATTERN);
-        this.world.setEntityState((Entity)this, (byte)35);
+        this.world.setEntityState(this, (byte)35);
         playSound(SoundEvents.ITEM_TOTEM_USE, 10.0F, 1.0F);
         this.deathTicks = 0;
         break;
@@ -1131,7 +1130,7 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
         while (i > 0) {
           int j = EntityXPOrb.getXPSplit(i);
           i -= j;
-          this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY + 8.0D, this.posZ, j));
+          this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + 8.0D, this.posZ, j));
         } 
       } 
       if (this.deathTicks == 1) {
@@ -1139,13 +1138,13 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
           Entity var8 = EntityList.createEntityByIDFromName(new ResourceLocation("draconicevolution:dragonheartitem"), this.world);
           this.world.spawnEntity(var8);
         } 
-        this.world.playBroadcastSound(1028, new BlockPos((Entity)this), 0);
+        this.world.playBroadcastSound(1028, new BlockPos(this), 0);
         if (getOwner() != null) {
           for (EntityPlayer entityplayer : this.world.playerEntities) {
             this.world.playSound(null, entityplayer.getPosition(), SoundEvents.ENTITY_ENDERDRAGON_DEATH, getSoundCategory(), getSoundVolume(), 1.0F);
-            entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
+            entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
           } 
-          ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("Your " + getName() + " has fallen in battle.", new Object[0]));
+          getOwner().sendMessage(new TextComponentTranslation("Your " + getName() + " has fallen in battle.", new Object[0]));
         } 
       } 
     } 
@@ -1171,7 +1170,7 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
       while (i > 0) {
         int j = EntityXPOrb.getXPSplit(i);
         i -= j;
-        this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY + 8.0D, this.posZ, j));
+        this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + 8.0D, this.posZ, j));
       } 
       this.world.setBlockState(new BlockPos(this.posX, this.posY + 4.0D, this.posZ), Blocks.DRAGON_EGG.getDefaultState(), 3);
       entityDropItem(new ItemStack(Items.SKULL, 1, 5), 4.0F);
@@ -1184,7 +1183,7 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
     while (p_184668_1_ > 0) {
       int i = EntityXPOrb.getXPSplit(p_184668_1_);
       p_184668_1_ -= i;
-      this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, i));
+      this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, i));
     } 
   }
   
@@ -1352,11 +1351,11 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
   protected void despawnEntity() {}
   
   public Entity[] getParts() {
-    return (Entity[])this.dragonPartArray;
+    return this.dragonPartArray;
   }
   
   public boolean canBeCollidedWith() {
-    return (this.world.getClosestPlayerToEntity((Entity)this, this.width) != null && isEntityAlive());
+    return (this.world.getClosestPlayerToEntity(this, this.width) != null && isEntityAlive());
   }
   
   public World getWorld() {
@@ -1385,7 +1384,7 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
   public float getHeadPartYOffset(int p_184667_1_, double[] p_184667_2_, double[] p_184667_3_) {
     BlockPos blockpos = this.world.getTopSolidOrLiquidBlock(WorldGenEndPodium.END_PODIUM_LOCATION);
     if (getOwner() != null)
-      blockpos = new BlockPos((Entity)getOwner()); 
+      blockpos = new BlockPos(getOwner());
     float f = Math.max(MathHelper.sqrt(getDistanceSqToCenter(blockpos)) / 4.0F, 1.0F);
     return p_184667_1_ / f;
   }
@@ -1407,7 +1406,7 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
     } else {
       BlockPos blockpos = this.world.getTopSolidOrLiquidBlock(WorldGenEndPodium.END_PODIUM_LOCATION);
       if (getOwner() != null)
-        blockpos = new BlockPos((Entity)getOwner()); 
+        blockpos = new BlockPos(getOwner());
       float f = Math.max(MathHelper.sqrt(getDistanceSqToCenter(blockpos)) / 4.0F, 1.0F);
       float f1 = 6.0F / f;
       float f2 = this.rotationPitch;
@@ -1431,7 +1430,7 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
   
   public void notifyDataManagerChange(DataParameter<?> key) {
     if (PHASE.equals(key) && this.world.isRemote)
-      this.phaseManager.setPhase(PhaseList.getById((Integer) getDataManager().get(PHASE)));
+      this.phaseManager.setPhase(PhaseList.getById(getDataManager().get(PHASE)));
     super.notifyDataManagerChange(key);
   }
   

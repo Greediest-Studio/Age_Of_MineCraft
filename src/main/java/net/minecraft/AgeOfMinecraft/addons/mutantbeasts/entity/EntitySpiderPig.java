@@ -72,10 +72,10 @@ public class EntitySpiderPig extends EntityTameBase implements IJumpingMount {
   public EntitySpiderPig(World worldIn) {
     super(worldIn);
     setSize(1.4F, 0.9F);
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.1D, 64.0F, 12.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.1D, true));
-    this.tasks.addTask(6, (EntityAIBase)new EntityAIWanderAvoidWater((EntityCreature)this, 1.0D));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.1D, 64.0F, 12.0F));
+    this.tasks.addTask(3, new EntityAIFriendlyAttackMelee(this, 1.1D, true));
+    this.tasks.addTask(6, new EntityAIWanderAvoidWater(this, 1.0D));
+    this.tasks.addTask(7, new EntityAILookIdle(this));
   }
   
   protected void applyEntityAttributes() {
@@ -111,7 +111,7 @@ public class EntitySpiderPig extends EntityTameBase implements IJumpingMount {
   }
   
   public boolean isBesideClimbableBlock() {
-    return (Boolean) this.dataManager.get(CLIMBING);
+    return this.dataManager.get(CLIMBING);
   }
   
   private void setBesideClimbableBlock(boolean climbing) {
@@ -127,7 +127,7 @@ public class EntitySpiderPig extends EntityTameBase implements IJumpingMount {
   }
   
   protected PathNavigate createNavigator(World worldIn) {
-    return (PathNavigate)new PathNavigateClimber((EntityLiving)this, worldIn);
+    return new PathNavigateClimber(this, worldIn);
   }
   
   public boolean isPotionApplicable(PotionEffect potioneffectIn) {
@@ -138,7 +138,7 @@ public class EntitySpiderPig extends EntityTameBase implements IJumpingMount {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return super.interact(player, hand);
@@ -202,9 +202,9 @@ public class EntitySpiderPig extends EntityTameBase implements IJumpingMount {
   
   private void updateChargeState() {
     if (this.chargingTick > 0)
-      for (EntityLivingBase entityLivingBase : this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox(), EntitySelectors.notRiding((Entity)this))) {
+      for (EntityLivingBase entityLivingBase : this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox(), EntitySelectors.notRiding(this))) {
         if (entityLivingBase != this && entityLivingBase != getOwner())
-          attackEntityAsMob((Entity)entityLivingBase); 
+          attackEntityAsMob(entityLivingBase);
       }  
     this.chargingTick = Math.max(0, this.chargingTick - 1);
   }
@@ -215,8 +215,8 @@ public class EntitySpiderPig extends EntityTameBase implements IJumpingMount {
     float damage = (float)getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
     if (entityIn.world.getBlockState(entityIn.getPosition()).getMaterial() == Material.WEB && !spiderType)
       damage += 4.0F; 
-    boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this), damage);
-    if ((!isBeingRidden() || flag) && this.rand.nextInt(2) == 0 && ForgeEventFactory.getMobGriefingEvent(this.world, (Entity)this)) {
+    boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
+    if ((!isBeingRidden() || flag) && this.rand.nextInt(2) == 0 && ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
       double dx = entityIn.posX - entityIn.prevPosX;
       double dz = entityIn.posZ - entityIn.prevPosZ;
       BlockPos pos = new BlockPos((int)(entityIn.posX + dx * 0.5D), MathHelper.floor((getEntityBoundingBox()).minY), (int)(entityIn.posZ + dz * 0.5D));
@@ -305,7 +305,7 @@ public class EntitySpiderPig extends EntityTameBase implements IJumpingMount {
       isPigOrSpider(entityLivingIn)) {
       EntitySpiderPig spiderPigEntity = new EntitySpiderPig(this.world);
       entityLivingIn.setDead();
-      this.world.spawnEntity((Entity)spiderPigEntity);
+      this.world.spawnEntity(spiderPigEntity);
     } 
     super.onKillEntity(entityLivingIn);
   }
@@ -327,9 +327,9 @@ public class EntitySpiderPig extends EntityTameBase implements IJumpingMount {
       for (WebPos coord : this.webList) {
         NBTTagCompound compound1 = NBTUtil.createPosTag(coord);
         compound1.setInteger("TimeLeft", coord.timeLeft);
-        nbtTagList.appendTag((NBTBase)compound1);
+        nbtTagList.appendTag(compound1);
       } 
-      compound.setTag("Webs", (NBTBase)nbtTagList);
+      compound.setTag("Webs", nbtTagList);
     } 
   }
   
@@ -370,7 +370,7 @@ public class EntitySpiderPig extends EntityTameBase implements IJumpingMount {
   class LeapAttackGoal extends EntityAIBase {
     public boolean shouldExecute() {
       EntityLivingBase target = EntitySpiderPig.this.getAttackTarget();
-      return (target != null && EntitySpiderPig.this.leapCooldown <= 0 && (EntitySpiderPig.this.onGround || EntitySpiderPig.this.isInWater()) && ((EntitySpiderPig.this.getDistanceSq((Entity)target) < 64.0D && EntitySpiderPig.this.rand.nextInt(8) == 0) || EntitySpiderPig.this.getDistanceSq((Entity)target) < 6.25D));
+      return (target != null && EntitySpiderPig.this.leapCooldown <= 0 && (EntitySpiderPig.this.onGround || EntitySpiderPig.this.isInWater()) && ((EntitySpiderPig.this.getDistanceSq(target) < 64.0D && EntitySpiderPig.this.rand.nextInt(8) == 0) || EntitySpiderPig.this.getDistanceSq(target) < 6.25D));
     }
     
     public void startExecuting() {
@@ -404,7 +404,7 @@ public class EntitySpiderPig extends EntityTameBase implements IJumpingMount {
     private int timeLeft;
     
     public WebPos(BlockPos pos, int timeLeft) {
-      super((Vec3i)pos);
+      super(pos);
       this.timeLeft = timeLeft;
     }
   }

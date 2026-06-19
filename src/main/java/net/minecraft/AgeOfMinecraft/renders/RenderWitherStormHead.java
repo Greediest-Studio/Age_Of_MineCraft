@@ -16,7 +16,7 @@ public class RenderWitherStormHead extends RenderLiving<EntityWitherStormHead> {
   private static final ResourceLocation witherStormTextures = new ResourceLocation("ageofminecraft", "textures/entities/wither_storm_head.png");
   
   public RenderWitherStormHead(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)new ModelWitherStormHead(), 4.0F);
+    super(renderManagerIn, new ModelWitherStormHead(), 4.0F);
     addLayer(new LayerWitherStormTractorBeam(this));
   }
   

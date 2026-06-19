@@ -33,7 +33,7 @@ public class LayerSlimeGel implements LayerRenderer<EntityLivingBase> {
   
   private final RenderSlime slimeRenderer;
   
-  private ModelBase slimeModel = EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)new ModelCMMSlime(0.25F) : (ModelBase)new ModelSlime(0);
+  private ModelBase slimeModel = EngenderConfig.mobs.useMobTalkerModels ? new ModelCMMSlime(0.25F) : new ModelSlime(0);
   
   public LayerSlimeGel(RenderSlime p_i46111_1_) {
     this.slimeRenderer = p_i46111_1_;
@@ -41,14 +41,14 @@ public class LayerSlimeGel implements LayerRenderer<EntityLivingBase> {
   
   public void doRenderLayer(EntitySlime p_177159_1_, float p_177159_2_, float p_177159_3_, float p_177159_4_, float p_177159_5_, float p_177159_6_, float p_177159_7_, float p_177159_8_) {
     if (!p_177159_1_.isInvisible()) {
-      this.slimeModel = EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)new ModelCMMSlime(0.25F) : (ModelBase)new ModelSlime(0);
+      this.slimeModel = EngenderConfig.mobs.useMobTalkerModels ? new ModelCMMSlime(0.25F) : new ModelSlime(0);
       GlStateManager.color(1.0F, 1.0F, 1.0F, 0.75F);
       GlStateManager.enableNormalize();
       GlStateManager.enableBlend();
       GlStateManager.blendFunc(770, 771);
       this.slimeRenderer.bindTexture(EngenderConfig.mobs.useMobTalkerModels ? ((p_177159_1_.getSlimeSize() <= 1) ? (p_177159_1_.isAntiMob() ? anticmmSlimeTinyTextures : cmmSlimeTinyTextures) : ((p_177159_1_.getSlimeSize() == 2 || p_177159_1_.getSlimeSize() == 3) ? (p_177159_1_.isAntiMob() ? anticmmSlimeSmallTextures : cmmSlimeSmallTextures) : (p_177159_1_.isAntiMob() ? anticmmSlimeLargeTextures : cmmSlimeLargeTextures))) : (p_177159_1_.isAntiMob() ? antislimeTextures : slimeTextures));
       this.slimeModel.setModelAttributes(this.slimeRenderer.getMainModel());
-      this.slimeModel.render((Entity)p_177159_1_, p_177159_2_, p_177159_3_, p_177159_5_, p_177159_6_, p_177159_7_, p_177159_8_);
+      this.slimeModel.render(p_177159_1_, p_177159_2_, p_177159_3_, p_177159_5_, p_177159_6_, p_177159_7_, p_177159_8_);
       GlStateManager.disableBlend();
       GlStateManager.disableNormalize();
     } 

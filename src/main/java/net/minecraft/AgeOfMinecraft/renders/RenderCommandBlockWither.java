@@ -33,12 +33,12 @@ public class RenderCommandBlockWither extends RenderLiving<EntityCommandBlockWit
   private static final ResourceLocation witherStormTextures = new ResourceLocation("ageofminecraft", "textures/entities/command_block_wither_cycloptic.png");
   
   public RenderCommandBlockWither(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)new ModelCommandBlockWither(), 1.0F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 0.5F));
+    super(renderManagerIn, new ModelCommandBlockWither(), 1.0F);
+    addLayer(new LayerArrowCustomSized(this, 0.5F));
     addLayer(new LayerWitherBody(this));
     addLayer(new LayerWitherTractorBeam(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
-    addLayer(new LayerCommandBlock((RenderLivingBase<?>)this));
+    addLayer(new LayerMobCape(this));
+    addLayer(new LayerCommandBlock(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityCommandBlockWither entity) {
@@ -122,7 +122,7 @@ public class RenderCommandBlockWither extends RenderLiving<EntityCommandBlockWit
         GlStateManager.rotate(-43.0F, 0.0F, 0.0F, 1.0F);
         GlStateManager.scale(1.4F, 1.4F, 1.4F);
         GlStateManager.translate(0.09F, -0.32F, -0.23F);
-        Minecraft.getMinecraft().getItemRenderer().renderItemSide((EntityLivingBase)p_188358_1_, p_188358_2_, p_188358_3_, false);
+        Minecraft.getMinecraft().getItemRenderer().renderItemSide(p_188358_1_, p_188358_2_, p_188358_3_, false);
         GlStateManager.popMatrix();
       } 
     }

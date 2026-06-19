@@ -21,11 +21,11 @@ public class RenderGhasther extends RenderLiving<EntityGhasther> {
   private static ModelGhasther regularmodel = new ModelGhasther();
   
   public RenderGhasther(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)regularmodel, 6.0F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 0.1F));
+    super(renderManagerIn, regularmodel, 6.0F);
+    addLayer(new LayerArrowCustomSized(this, 0.1F));
     addLayer(new LayerCustomHeadEngender(regularmodel.body, regularmodel.body));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    
+    addLayer(new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityGhasther entity) {

@@ -35,12 +35,12 @@ public class RenderGiant extends RenderLiving<EntityGiant> {
   
   public RenderGiant(RenderManager renderManagerIn) {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 3.0F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 0.1675F));
-    addLayer((LayerRenderer)new LayerHeldItem((RenderLivingBase)this));
+    addLayer(new LayerArrowCustomSized(this, 0.1675F));
+    addLayer((LayerRenderer)new LayerHeldItem(this));
     addLayer(new LayerCustomHeadEngender(regularmodel.bipedHead, cmmmodel.Head));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
-    addLayer((LayerRenderer)new LayerBipedArmor((RenderLivingBase)this) {
+    
+    addLayer(new LayerMobCape(this));
+    addLayer((LayerRenderer)new LayerBipedArmor(this) {
           protected void initArmor() {
             this.modelLeggings = EngenderConfig.mobs.useMobTalkerModels ? new ModelCMMGiant(0.5F, true) : new ModelGiant(0.5F, true);
             this.modelArmor = EngenderConfig.mobs.useMobTalkerModels ? new ModelCMMGiant(1.0F, true) : new ModelGiant(1.0F, true);
@@ -89,7 +89,7 @@ public class RenderGiant extends RenderLiving<EntityGiant> {
   }
   
   protected void preRenderCallback(EntityGiant entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel;
+    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
     GlStateManager.scale(6.0F, 6.0F, 6.0F);
     if (EngenderConfig.mobs.useMobTalkerModels) {
       if (entitylivingbaseIn.isSitResting())

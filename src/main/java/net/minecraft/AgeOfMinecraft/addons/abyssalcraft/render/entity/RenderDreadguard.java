@@ -2,12 +2,10 @@ package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDreadguard;
 import net.minecraft.AgeOfMinecraft.models.ModelZombie;
-import net.minecraft.AgeOfMinecraft.renders.LayerLearningBook;
 import net.minecraft.AgeOfMinecraft.renders.LayerMobCape;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderBiped;
-import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
@@ -24,16 +22,15 @@ public class RenderDreadguard extends RenderBiped<EntityDreadguard> {
   private static final ResourceLocation texture = new ResourceLocation("abyssalcraft:textures/model/elite/dread_guard.png");
   
   public RenderDreadguard(RenderManager manager) {
-    super(manager, (ModelBiped)new ModelZombie(), 0.75F);
-    LayerBipedArmor layerbipedarmor = new LayerBipedArmor((RenderLivingBase)this) {
+    super(manager, new ModelZombie(), 0.75F);
+    LayerBipedArmor layerbipedarmor = new LayerBipedArmor(this) {
         protected void initArmor() {
           this.modelLeggings = new ModelZombie(0.5F, true);
           this.modelArmor = new ModelZombie(1.0F, true);
         }
       };
     addLayer((LayerRenderer)layerbipedarmor);
-    addLayer((LayerRenderer)new LayerLearningBook((RenderLiving)this));
-    addLayer((LayerRenderer)new LayerMobCape((RenderLivingBase)this));
+    addLayer((LayerRenderer)new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityDreadguard par1Entitydreadguard) {

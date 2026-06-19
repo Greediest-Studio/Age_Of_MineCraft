@@ -37,7 +37,7 @@ public class EntityBlackHole extends Entity {
   public EntityBlackHole(World worldIn, EntityTameBase entity) {
     this(worldIn);
     this.shootingEntity = entity;
-    copyLocationAndAnglesFrom((Entity)entity);
+    copyLocationAndAnglesFrom(entity);
   }
   
   protected boolean canTriggerWalking() {
@@ -92,14 +92,14 @@ public class EntityBlackHole extends Entity {
           if (entity.getDistanceSq(this) <= 64.0D && this.shootingEntity != null && entity instanceof EntityLivingBase && !false) {
             entity.attackEntityFrom(DamageSource.OUT_OF_WORLD, (entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStorm || entity instanceof net.minecraft.AgeOfMinecraft.addons.draconicevolution.EntityChaosGuardian) ? 20.0F : 4.0F);
             if (EngenderConfig.general.useMessage && entity instanceof EntityLivingBase && !entity.isEntityAlive() && !this.shootingEntity.isWild())
-              this.shootingEntity.getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + " touched a Black Hole's event horizon thanks to " + this.shootingEntity.getName() + " (" + this.shootingEntity.getOwner().getName() + ")", new Object[0])); 
+              this.shootingEntity.getOwner().sendMessage(new TextComponentTranslation(entity.getName() + " touched a Black Hole's event horizon thanks to " + this.shootingEntity.getName() + " (" + this.shootingEntity.getOwner().getName() + ")", new Object[0]));
           } 
           if (entity.getDistanceSq(this) <= 16.0D && this.shootingEntity != null && entity instanceof EntityLivingBase && !false) {
             if (entity instanceof EntityLivingBase)
               ((EntityLivingBase)entity).setHealth((entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStorm) ? (((EntityLivingBase)entity).getHealth() - 100.0F) : (((EntityLivingBase)entity).getHealth() - 10.0F)); 
             entity.attackEntityFrom(DamageSource.CRAMMING.setDamageAllowedInCreativeMode().setDamageBypassesArmor().setDamageIsAbsolute(), (entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStorm || entity instanceof net.minecraft.AgeOfMinecraft.addons.draconicevolution.EntityChaosGuardian) ? 500.0F : 50.0F);
             if (EngenderConfig.general.useMessage && entity instanceof EntityLivingBase && !entity.isEntityAlive() && !this.shootingEntity.isWild())
-              this.shootingEntity.getOwner().sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + " was sucked into a Black Hole thanks to " + this.shootingEntity.getName() + " (" + this.shootingEntity.getOwner().getName() + ")", new Object[0])); 
+              this.shootingEntity.getOwner().sendMessage(new TextComponentTranslation(entity.getName() + " was sucked into a Black Hole thanks to " + this.shootingEntity.getName() + " (" + this.shootingEntity.getOwner().getName() + ")", new Object[0]));
             if (!entity.isEntityAlive() && entity.isNonBoss() && !(entity instanceof EntityTameBase)) {
               if (entity instanceof EntityLiving)
                 ((EntityLiving)entity).spawnExplosionParticle(); 
@@ -134,11 +134,11 @@ public class EntityBlackHole extends Entity {
           BlockPos pos = new BlockPos(j2, k, l);
           IBlockState state = this.world.getBlockState(pos);
           Block block = state.getBlock();
-          if (!isRiding() && !block.isAir(state, (IBlockAccess)this.world, pos) && this.rand.nextInt(10) == 0 && !this.world.isRemote && this.world.isAreaLoaded(getPosition().add(-32, -32, -32), getPosition().add(32, 32, 32)) && block.getBlockHardness(state, this.world, new BlockPos(j2, k, l)) != -1.0F)
+          if (!isRiding() && !block.isAir(state, this.world, pos) && this.rand.nextInt(10) == 0 && !this.world.isRemote && this.world.isAreaLoaded(getPosition().add(-32, -32, -32), getPosition().add(32, 32, 32)) && block.getBlockHardness(state, this.world, new BlockPos(j2, k, l)) != -1.0F)
             if (block.getMaterial(state).isLiquid()) {
               this.world.setBlockToAir(new BlockPos(j2, k, l));
             } else {
-              this.world.spawnEntity((Entity)new EntityFallingBlock(this.world, j2, k + 0.5D, l, block.getDefaultState()));
+              this.world.spawnEntity(new EntityFallingBlock(this.world, j2, k + 0.5D, l, block.getDefaultState()));
             }  
         } 
       } 

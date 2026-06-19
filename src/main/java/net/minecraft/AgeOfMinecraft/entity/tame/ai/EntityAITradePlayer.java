@@ -23,7 +23,7 @@ public class EntityAITradePlayer extends EntityAIBase {
     if (this.villager.velocityChanged)
       return false; 
     EntityPlayer entityplayer = this.villager.getCustomer();
-    return (entityplayer == null) ? false : ((this.villager.getDistanceSq((Entity)entityplayer) > 16.0D) ? false : (entityplayer.openContainer instanceof net.minecraft.inventory.Container));
+    return (entityplayer == null) ? false : ((this.villager.getDistanceSq(entityplayer) > 16.0D) ? false : (entityplayer.openContainer instanceof net.minecraft.inventory.Container));
   }
   
   public void startExecuting() {
@@ -31,6 +31,6 @@ public class EntityAITradePlayer extends EntityAIBase {
   }
   
   public void resetTask() {
-    this.villager.setCustomer((EntityPlayer)null);
+    this.villager.setCustomer(null);
   }
 }

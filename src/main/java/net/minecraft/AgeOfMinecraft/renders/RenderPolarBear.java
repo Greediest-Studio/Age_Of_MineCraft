@@ -20,10 +20,10 @@ public class RenderPolarBear extends RenderLiving<EntityPolarBear> {
   private static final ResourceLocation antiPOLAR_BEAR_TEXTURE = new ResourceLocation("ageofminecraft", "textures/entities/anti/polarbear.png");
   
   public RenderPolarBear(RenderManager p_i47132_1_) {
-    super(p_i47132_1_, (ModelBase)new ModelPolarBear(), 1.0F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 0.8F));
+    super(p_i47132_1_, new ModelPolarBear(), 1.0F);
+    addLayer(new LayerArrowCustomSized(this, 0.8F));
     addLayer(new LayerCustomHeadEngender(((ModelPolarBear)this.mainModel).head, ((ModelPolarBear)this.mainModel).head));
-    addLayer(new LayerLearningBook(this));
+    
   }
   
   protected ResourceLocation getEntityTexture(EntityPolarBear entity) {

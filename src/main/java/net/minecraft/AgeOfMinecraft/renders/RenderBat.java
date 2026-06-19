@@ -23,9 +23,9 @@ public class RenderBat extends RenderLiving<EntityBat> {
   private static ModelBlaze disguisemodel = new ModelBlaze();
   
   public RenderBat(RenderManager renderManagerIn) {
-    super(renderManagerIn, (ModelBase)new ModelBat(), 0.25F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
-    addLayer(new LayerLearningBook(this));
+    super(renderManagerIn, new ModelBat(), 0.25F);
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
+    
   }
   
   protected ResourceLocation getEntityTexture(EntityBat entity) {
@@ -33,7 +33,7 @@ public class RenderBat extends RenderLiving<EntityBat> {
   }
   
   protected void preRenderCallback(EntityBat entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = (entitylivingbaseIn.getIllusionFormTime() > 0) ? (ModelBase)disguisemodel : (ModelBase)regularmodel;
+    this.mainModel = (entitylivingbaseIn.getIllusionFormTime() > 0) ? disguisemodel : regularmodel;
     if (entitylivingbaseIn.getIllusionFormTime() <= 0)
       GlStateManager.scale(0.35F, 0.35F, 0.35F); 
     float fit = entitylivingbaseIn.getFittness();

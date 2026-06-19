@@ -45,7 +45,7 @@ public class PhaseTakeoff extends PhaseBaseFriendly {
     j -= 12;
     j &= 0x7;
     j += 12;
-    this.currentPath = this.dragon.findPath(i, j, (PathPoint)null);
+    this.currentPath = this.dragon.findPath(i, j, null);
     if (this.currentPath != null) {
       this.currentPath.incrementPathIndex();
       navigateToNextPathNode();

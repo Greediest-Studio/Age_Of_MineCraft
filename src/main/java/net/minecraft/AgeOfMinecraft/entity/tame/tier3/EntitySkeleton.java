@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier3;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.Calendar;
 import java.util.List;
@@ -87,13 +86,13 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
   public EntitySkeleton(World worldIn) {
     super(worldIn);
     this.isOffensive = true;
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIOpenDoor((EntityLiving)this, true));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIRestrictSun((EntityCreature)this));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFleeSun((EntityCreature)this, 1.0D));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.2D, 32.0F, 6.0F));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 1.0D, 80));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(0, new EntityAIOpenDoor(this, true));
+    this.tasks.addTask(2, new EntityAIRestrictSun(this));
+    this.tasks.addTask(2, new EntityAIFleeSun(this, 1.0D));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.2D, 32.0F, 6.0F));
+    this.tasks.addTask(5, new EntityAIWander(this, 1.0D, 80));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
     if (getSkeletonType() == 1) {
       setSize(0.6F, 2.39F);
     } else {
@@ -186,8 +185,8 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
     if (!this.world.isRemote)
       for (int i = 0; i < 1 + this.rand.nextInt(2); i++) {
         EntitySkeleton baby = new EntitySkeleton(this.world);
-        baby.copyLocationAndAnglesFrom((Entity)this);
-        baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), (IEntityLivingData)null);
+        baby.copyLocationAndAnglesFrom(this);
+        baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
         baby.setGrowingAge(-48000);
         baby.setChild(true);
         baby.setIsAntiMob(isAntiMob());
@@ -203,13 +202,13 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
         if (isMarried())
           for (int e = 0; e < 10 + this.rand.nextInt(10); e++)
             baby.levelUp();  
-        this.world.spawnEntity((Entity)baby);
+        this.world.spawnEntity(baby);
       }  
   }
   
   public EntityTameBase getMutant() {
     if (Loader.isModLoaded("mutantbeasts"))
-      return (EntityTameBase)new EntityMutantSkeleton(this.world); 
+      return new EntityMutantSkeleton(this.world);
     return null;
   }
   
@@ -289,13 +288,13 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
       if (getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) != null && getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() instanceof net.minecraft.item.ItemBow) {
         swingArm(EnumHand.OFF_HAND);
         playSound(SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, getSoundVolume(), 1.0F);
-        knockBack((Entity)this, 0.5F, MathHelper.sin(this.rotationYawHead * 0.017453292F), -MathHelper.cos(this.rotationYawHead * 0.017453292F));
-        ((EntityLivingBase)p_70652_1_).knockBack((Entity)this, 1.0F, MathHelper.sin(this.rotationYawHead * 0.017453292F), -MathHelper.cos(this.rotationYawHead * 0.017453292F));
+        knockBack(this, 0.5F, MathHelper.sin(this.rotationYawHead * 0.017453292F), -MathHelper.cos(this.rotationYawHead * 0.017453292F));
+        ((EntityLivingBase)p_70652_1_).knockBack(this, 1.0F, MathHelper.sin(this.rotationYawHead * 0.017453292F), -MathHelper.cos(this.rotationYawHead * 0.017453292F));
       } 
       if (getItemStackFromSlot(EntityEquipmentSlot.OFFHAND) != null && getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() == Items.SHIELD) {
         playSound(SoundEvents.ITEM_SHIELD_BLOCK, getSoundVolume(), 1.0F);
-        knockBack((Entity)this, 0.5F, -MathHelper.sin(this.rotationYawHead * 0.017453292F), MathHelper.cos(this.rotationYawHead * 0.017453292F));
-        ((EntityLivingBase)p_70652_1_).knockBack((Entity)this, 1.0F, MathHelper.sin(this.rotationYawHead * 0.017453292F), -MathHelper.cos(this.rotationYawHead * 0.017453292F));
+        knockBack(this, 0.5F, -MathHelper.sin(this.rotationYawHead * 0.017453292F), MathHelper.cos(this.rotationYawHead * 0.017453292F));
+        ((EntityLivingBase)p_70652_1_).knockBack(this, 1.0F, MathHelper.sin(this.rotationYawHead * 0.017453292F), -MathHelper.cos(this.rotationYawHead * 0.017453292F));
       } 
       if (getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) != null && (getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() == Items.FLINT_AND_STEEL || getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() == Items.FIRE_CHARGE))
         p_70652_1_.setFire(12); 
@@ -317,18 +316,18 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
       setSpecialAttackTimer(500);
       playSound(ESound.skeletonSpecial, 10.0F, 1.0F);
     } else {
-      getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this), (float)getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 5.0F);
+      getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float)getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 5.0F);
       setSpecialAttackTimer(500);
     } 
   }
   
   public void onLivingUpdate() {
-    ItemStack hats = (this.helmetCount > 0) ? new ItemStack((Item)Items.LEATHER_HELMET, this.helmetCount) : ItemStack.EMPTY;
+    ItemStack hats = (this.helmetCount > 0) ? new ItemStack(Items.LEATHER_HELMET, this.helmetCount) : ItemStack.EMPTY;
     this.basicInventory.setInventorySlotContents(7, hats);
     if (isRiding() && getRidingEntity() instanceof EntitySkeletonHorse)
       getPassengers().clear(); 
     if (getOwner() != null)
-      if (getDistanceSq((Entity)getOwner()) >= 2304.0D && isElytraFlying()) {
+      if (getDistanceSq(getOwner()) >= 2304.0D && isElytraFlying()) {
         double d01 = (getOwner()).posX - this.posX;
         double d11 = (getOwner()).posY - this.posY;
         double d21 = (getOwner()).posZ - this.posZ;
@@ -336,7 +335,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
         this.motionX = d01 / f2 * 0.5D * 0.5D + this.motionX * 0.5D;
         this.motionY = d11 / f2 * 0.5D * 0.5D + this.motionZ * 0.5D;
         this.motionZ = d21 / f2 * 0.5D * 0.5D + this.motionZ * 0.5D;
-        faceEntity((Entity)getOwner(), 180.0F, 180.0F);
+        faceEntity(getOwner(), 180.0F, 180.0F);
       }  
     if (this.world.canSeeSky(getPosition()) && ((getAttackTarget() != null && this.onGround) || (!isWild() && (getOwner()).posY > this.posY && getOwner().isElytraFlying())) && getItemStackFromSlot(EntityEquipmentSlot.CHEST) != null && getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() == Items.ELYTRA) {
       this.motionY = 1.0D;
@@ -350,20 +349,20 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
       this.renderYawOffset = this.rotationYaw = -((float)MathHelper.atan2(this.motionX, this.motionZ)) * 57.295776F; 
     ItemStack item = getHeldItem(EnumHand.MAIN_HAND);
     ItemStack secitem = getHeldItem(EnumHand.OFF_HAND);
-    if (!item.isEmpty() && !secitem.isEmpty() && item.getItem() instanceof net.minecraft.item.ItemBow && !(secitem.getItem() instanceof net.minecraft.item.ItemBow) && secitem.getItem() != Items.TIPPED_ARROW && getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) <= 128.0D && (getAttackTarget()).posY <= this.posY + 3.0D) {
+    if (!item.isEmpty() && !secitem.isEmpty() && item.getItem() instanceof net.minecraft.item.ItemBow && !(secitem.getItem() instanceof net.minecraft.item.ItemBow) && secitem.getItem() != Items.TIPPED_ARROW && getAttackTarget() != null && getDistanceSq(getAttackTarget()) <= 128.0D && (getAttackTarget()).posY <= this.posY + 3.0D) {
       setItemStackToSlot(EntityEquipmentSlot.MAINHAND, secitem);
       setItemStackToSlot(EntityEquipmentSlot.OFFHAND, item);
     } 
-    if (!item.isEmpty() && !secitem.isEmpty() && secitem.getItem() instanceof net.minecraft.item.ItemBow && !(item.getItem() instanceof net.minecraft.item.ItemBow) && item.getItem() != Items.TIPPED_ARROW && getAttackTarget() != null && (getDistanceSq((Entity)getAttackTarget()) > 128.0D || (getAttackTarget()).posY > this.posY + 3.0D)) {
+    if (!item.isEmpty() && !secitem.isEmpty() && secitem.getItem() instanceof net.minecraft.item.ItemBow && !(item.getItem() instanceof net.minecraft.item.ItemBow) && item.getItem() != Items.TIPPED_ARROW && getAttackTarget() != null && (getDistanceSq(getAttackTarget()) > 128.0D || (getAttackTarget()).posY > this.posY + 3.0D)) {
       setItemStackToSlot(EntityEquipmentSlot.MAINHAND, secitem);
       setItemStackToSlot(EntityEquipmentSlot.OFFHAND, item);
     } 
     if (!item.isEmpty() && item.getItem() instanceof net.minecraft.item.ItemBow) {
-      if (getAttackTarget() != null && getAttackTarget().isEntityAlive() && getDistanceSq((Entity)getAttackTarget()) < 512.0D && getSpecialAttackTimer() <= 0 && isHero())
+      if (getAttackTarget() != null && getAttackTarget().isEntityAlive() && getDistanceSq(getAttackTarget()) < 512.0D && getSpecialAttackTimer() <= 0 && isHero())
         performSpecialAttack(); 
       if (getAttackTarget() != null && isHero() && getSpecialAttackTimer() < 490 && getSpecialAttackTimer() > 470)
         attackEntityWithRangedAttack(getAttackTarget(), 2.0F); 
-    } else if (getAttackTarget() != null && getAttackTarget().isEntityAlive() && getDistanceSq((Entity)getAttackTarget()) < 32.0D && getSpecialAttackTimer() <= 0 && isHero()) {
+    } else if (getAttackTarget() != null && getAttackTarget().isEntityAlive() && getDistanceSq(getAttackTarget()) < 32.0D && getSpecialAttackTimer() <= 0 && isHero()) {
       performSpecialAttack();
     } 
     if (getRidingEntity() != null && getRidingEntity() instanceof EntitySkeletonHorse) {
@@ -389,7 +388,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
       if (!this.world.isRemote)
         for (int i = 0; i < this.helmetCount; i++) {
           playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
-          dropItem((Item)Items.LEATHER_HELMET, 1);
+          dropItem(Items.LEATHER_HELMET, 1);
           this.helmetCount--;
         }   
     ItemStack head = getItemStackFromSlot(EntityEquipmentSlot.HEAD);
@@ -419,7 +418,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
             swingArm(EnumHand.MAIN_HAND);
             swingArm(EnumHand.OFF_HAND);
             this.helmetCount--;
-            setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack((Item)Items.LEATHER_HELMET));
+            setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
             playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
           } else {
             setFire(8);
@@ -453,7 +452,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
     super.onDeath(cause);
     if (!this.world.isRemote && getLimitedLife() <= 0)
       for (int i = 0; i < this.helmetCount; i++) {
-        dropItem((Item)Items.LEATHER_HELMET, 1);
+        dropItem(Items.LEATHER_HELMET, 1);
         this.helmetCount--;
       }  
     if (cause.getTrueSource() instanceof EntityCreeper && ((EntityCreeper)cause.getTrueSource()).getPowered())
@@ -507,7 +506,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
         } 
       } 
     } else {
-      setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack((Item)Items.BOW));
+      setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
       if (this.rand.nextFloat() < ((this.world.getDifficulty() == EnumDifficulty.HARD) ? 0.05F : 0.01F)) {
         int i = this.rand.nextInt(3);
         ItemStack stack = new ItemStack(Items.TIPPED_ARROW);
@@ -527,7 +526,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
   @Nullable
   public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
     livingdata = super.onInitialSpawn(difficulty, livingdata);
-    Biome biome = this.world.getBiome(new BlockPos((Entity)this));
+    Biome biome = this.world.getBiome(new BlockPos(this));
     if (this.world.provider instanceof net.minecraft.world.WorldProviderHell && this.rand.nextInt(5) != 0) {
       setSkeletonType(1);
     } else if (biome instanceof net.minecraft.world.biome.BiomeSnow && this.rand.nextInt(5) != 0) {
@@ -547,14 +546,14 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
   
   public void setCombatTask() {
     if (this.world != null && !this.world.isRemote) {
-      this.tasks.removeTask((EntityAIBase)this.aiAttackOnCollide);
-      this.tasks.removeTask((EntityAIBase)this.aiRangedAttack);
-      this.tasks.removeTask((EntityAIBase)this.aiArrowAttack);
+      this.tasks.removeTask(this.aiAttackOnCollide);
+      this.tasks.removeTask(this.aiRangedAttack);
+      this.tasks.removeTask(this.aiArrowAttack);
       ItemStack itemstack = getHeldItemMainhand();
       if ((itemstack != null && itemstack.getItem() instanceof net.minecraft.item.ItemBow) || itemstack.getItem() == Items.SNOWBALL || itemstack.getItem() == Items.FIRE_CHARGE || itemstack.getItem() == Items.EGG) {
         this.tasks.addTask(4, (itemstack.getItem() instanceof net.minecraft.item.ItemBow && getIntelligence() >= 10.0F) ? (EntityAIBase)this.aiArrowAttack : (EntityAIBase)this.aiRangedAttack);
       } else {
-        this.tasks.addTask(4, (EntityAIBase)this.aiAttackOnCollide);
+        this.tasks.addTask(4, this.aiAttackOnCollide);
       } 
     } 
   }
@@ -570,13 +569,13 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
         double d2 = target.posX - this.posX + f * 0.35D + vec3.x;
         double d3 = target.posY + target.getEyeHeight() - 0.1D - this.posY + getEyeHeight() - 0.10000000149011612D + vec3.y;
         double d4 = target.posZ - this.posZ + f1 * 0.35D + vec3.z;
-        EntityPEGunPellet entitywitherskull = new EntityPEGunPellet(this.world, (EntityLivingBase)this, d2, d3, d4);
+        EntityPEGunPellet entitywitherskull = new EntityPEGunPellet(this.world, this, d2, d3, d4);
         entitywitherskull.posX = this.posX + f * 0.35D + vec3.x;
         entitywitherskull.posY = this.posY + getEyeHeight() - 0.10000000149011612D + vec3.y;
         entitywitherskull.posZ = this.posZ + f1 * 0.35D + vec3.z;
         entitywitherskull.damage = ((ItemPEGun)getHeldItemMainhand().getItem()).getProjectileDamage(getHeldItemMainhand());
         if (!this.world.isRemote)
-          this.world.spawnEntity((Entity)entitywitherskull); 
+          this.world.spawnEntity(entitywitherskull);
         playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 0.5F, 0.5F + getRNG().nextFloat() * 0.25F);
         playSound(ESound.pegunfire, 0.5F, 0.6F + getRNG().nextFloat() * 0.2F + entitywitherskull.damage / 100.0F);
       } else {
@@ -585,7 +584,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
         setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
       } 
     } else if (getHeldItemMainhand().getItem() == Items.SNOWBALL) {
-      EntitySnowballHarmful entitysnowball = new EntitySnowballHarmful(this.world, (EntityLivingBase)this);
+      EntitySnowballHarmful entitysnowball = new EntitySnowballHarmful(this.world, this);
       double d0 = target.posY + target.getEyeHeight() - 1.15D;
       double d1 = target.posX - this.posX;
       double d2 = d0 - entitysnowball.posY;
@@ -593,11 +592,11 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
       float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
       entitysnowball.shoot(d1, d2 + f, d3, 1.6F, 26.0F - getDexterity() / 4.0F);
       playSound(SoundEvents.ENTITY_SNOWMAN_SHOOT, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
-      this.world.spawnEntity((Entity)entitysnowball);
+      this.world.spawnEntity(entitysnowball);
       swingArm(EnumHand.MAIN_HAND);
       entitysnowball.damage = (target instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityBlaze || target instanceof net.minecraft.entity.monster.EntityBlaze) ? 3.0F : ((this.rand.nextInt(3) == 0 || !(target instanceof EntityTameBase)) ? 1.0F : 0.0F);
     } else if (getHeldItemMainhand().getItem() == Items.EGG) {
-      EntityEgg entitysnowball = new EntityEgg(this.world, (EntityLivingBase)this);
+      EntityEgg entitysnowball = new EntityEgg(this.world, this);
       double d0 = target.posY + target.getEyeHeight() - 1.15D;
       double d1 = target.posX - this.posX;
       double d2 = d0 - entitysnowball.posY;
@@ -605,7 +604,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
       float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
       entitysnowball.shoot(d1, d2 + f, d3, 1.6F, 26.0F - getDexterity() / 4.0F);
       playSound(SoundEvents.ENTITY_SNOWMAN_SHOOT, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
-      this.world.spawnEntity((Entity)entitysnowball);
+      this.world.spawnEntity(entitysnowball);
       swingArm(EnumHand.MAIN_HAND);
     } else if (getHeldItemMainhand().getItem() == Items.FIRE_CHARGE) {
       double d1 = isChild() ? 0.25D : 0.5D;
@@ -613,24 +612,24 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
       double d2 = target.posX - this.posX + vec3.x * d1;
       double d3 = target.posY + ((target.height > 8.0F) ? 7.0D : (target.height * 0.5D)) - this.posY + 1.0D;
       double d4 = target.posZ - this.posZ + vec3.z * d1;
-      EntitySmallFireballOther entitylargefireball = new EntitySmallFireballOther(this.world, (EntityLivingBase)this, d2, d3, d4);
+      EntitySmallFireballOther entitylargefireball = new EntitySmallFireballOther(this.world, this, d2, d3, d4);
       entitylargefireball.posX = this.posX + vec3.x * d1;
       entitylargefireball.posY = this.posY + 1.0D;
       entitylargefireball.posZ = this.posZ + vec3.z * d1;
       float dm = (float)getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
       entitylargefireball.damage = dm;
       playSound(SoundEvents.ENTITY_GHAST_SHOOT, 1.0F, 1.5F);
-      this.world.spawnEntity((Entity)entitylargefireball);
+      this.world.spawnEntity(entitylargefireball);
       swingArm(EnumHand.MAIN_HAND);
     } else {
-      EntityTippedArrowOther entityarrow = new EntityTippedArrowOther(this.world, (EntityLivingBase)this);
+      EntityTippedArrowOther entityarrow = new EntityTippedArrowOther(this.world, this);
       double d0 = target.posX - this.posX;
       double d1 = target.posY + target.getEyeHeight() - this.posY + getEyeHeight() - 0.10000000149011612D;
       double d2 = target.posZ - this.posZ;
       double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
-      entityarrow.shoot(d0, d1 + d3 * getDistance((Entity)target) * 0.013D, d2, 1.4F, isHero() ? 1.0F : 9.0F);
-      int i = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, (EntityLivingBase)this);
-      int j = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.PUNCH, (EntityLivingBase)this);
+      entityarrow.shoot(d0, d1 + d3 * getDistance(target) * 0.013D, d2, 1.4F, isHero() ? 1.0F : 9.0F);
+      int i = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, this);
+      int j = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.PUNCH, this);
       if (getRidingEntity() != null) {
         entityarrow.setDamage((p_82196_2_ * 3.0F) + this.rand.nextGaussian() * 0.25D + 0.5D);
       } else {
@@ -652,12 +651,12 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
         entityarrow.setKnockbackStrength(j); 
       if (getSkeletonType() == 2)
         entityarrow.addEffect(new PotionEffect(MobEffects.SLOWNESS, 600)); 
-      if (EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FLAME, (EntityLivingBase)this) > 0 || getSkeletonType() == 1)
+      if (EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FLAME, this) > 0 || getSkeletonType() == 1)
         entityarrow.setFire(100); 
       if (getHeldItemOffhand() != null && getHeldItemOffhand().getItem() == Items.TIPPED_ARROW)
         entityarrow.setPotionEffect(getHeldItemOffhand()); 
       playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
-      this.world.spawnEntity((Entity)entityarrow);
+      this.world.spawnEntity(entityarrow);
     } 
   }
   
@@ -666,7 +665,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
   }
   
   public int getSkeletonType() {
-    return (Integer) this.dataManager.get(SKELETON_VARIANT);
+    return this.dataManager.get(SKELETON_VARIANT);
   }
   
   public void setSkeletonType(int p_82201_1_) {
@@ -723,7 +722,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
                   entity.setHorseTamed(true);
                   entity.setRearing(true);
                   entity.ticksExisted = 0;
-                  startRiding((Entity) entity);
+                  startRiding(entity);
                   playSound(SoundEvents.ENTITY_HORSE_ARMOR, 1.0F, 1.0F);
                   break;
               }

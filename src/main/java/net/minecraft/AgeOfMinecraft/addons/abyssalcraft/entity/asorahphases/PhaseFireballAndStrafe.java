@@ -44,8 +44,8 @@ public class PhaseFireballAndStrafe extends PhaseBaseFriendly {
       if (d12 < 100.0D || d12 > 22500.0D)
         findNewTarget(); 
       double d13 = 64.0D;
-      if (this.attackTarget.getDistanceSq((Entity)this.dragon) < d13 * d13) {
-        if (this.dragon.canEntityBeSeen((Entity)this.attackTarget)) {
+      if (this.attackTarget.getDistanceSq(this.dragon) < d13 * d13) {
+        if (this.dragon.canEntityBeSeen(this.attackTarget)) {
           this.fireballCharge++;
           Vec3d vec3d1 = (new Vec3d(this.attackTarget.posX - this.dragon.posX, 0.0D, this.attackTarget.posZ - this.dragon.posZ)).normalize();
           Vec3d vec3d = (new Vec3d(MathHelper.sin(this.dragon.rotationYaw * 0.017453292F), 0.0D, -MathHelper.cos(this.dragon.rotationYaw * 0.017453292F))).normalize();
@@ -61,12 +61,12 @@ public class PhaseFireballAndStrafe extends PhaseBaseFriendly {
             double d9 = this.attackTarget.posX - d6;
             double d10 = this.attackTarget.posY + 1.0D - d7;
             double d11 = this.attackTarget.posZ - d8;
-            this.dragon.world.playEvent((EntityPlayer)null, 1016, new BlockPos((Entity)this.dragon), 0);
-            EntityCoraliumChargeOther entitydragonfireball = new EntityCoraliumChargeOther(this.dragon.world, (EntityLivingBase)this.dragon, d9, d10, d11);
+            this.dragon.world.playEvent(null, 1016, new BlockPos(this.dragon), 0);
+            EntityCoraliumChargeOther entitydragonfireball = new EntityCoraliumChargeOther(this.dragon.world, this.dragon, d9, d10, d11);
             entitydragonfireball.posX = d6;
             entitydragonfireball.posY = d7;
             entitydragonfireball.posZ = d8;
-            this.dragon.world.spawnEntity((Entity)entitydragonfireball);
+            this.dragon.world.spawnEntity(entitydragonfireball);
             this.fireballCharge = 0;
             if (this.currentPath != null)
               while (!this.currentPath.isFinished())

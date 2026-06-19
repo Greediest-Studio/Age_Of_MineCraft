@@ -26,8 +26,8 @@ public class RenderMutantCreeper extends RenderLiving<EntityMutantCreeper> {
   private static final ResourceLocation Anti_LIGHTNING_TEXTURE = new ResourceLocation("ageofminecraft", "textures/entities/anti/creeper_armor.png");
   
   public RenderMutantCreeper(RenderManager rendermanagerIn) {
-    super(rendermanagerIn, (ModelBase)new ModelMutantCreeper(), 1.5F);
-    addLayer(new LayerCreeperCharge(this, (ModelBase)new ModelMutantCreeper(2.0F)));
+    super(rendermanagerIn, new ModelMutantCreeper(), 1.5F);
+    addLayer(new LayerCreeperCharge(this, new ModelMutantCreeper(2.0F)));
   }
   
   protected void preRenderCallback(EntityMutantCreeper entitylivingbaseIn, float partialTickTime) {
@@ -100,7 +100,7 @@ public class RenderMutantCreeper extends RenderLiving<EntityMutantCreeper> {
         GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
         this.model.setModelAttributes(this.renderer.getMainModel());
         (Minecraft.getMinecraft()).entityRenderer.setupFogColor(true);
-        this.model.render((Entity)entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+        this.model.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
         (Minecraft.getMinecraft()).entityRenderer.setupFogColor(false);
         GlStateManager.matrixMode(5890);
         GlStateManager.loadIdentity();

@@ -17,9 +17,7 @@ public class ChunkLoadingEvent implements ForgeChunkManager.LoadingCallback {
   public static Map<Entity, ForgeChunkManager.Ticket> ticketList = new HashMap<>();
   
   public static Map<Entity, ArrayList<ChunkPos>> chunkList = new HashMap<>();
-  
-  public static boolean hasReportedIssue = false;
-  
+
   public static void init() {
     instance = new ChunkLoadingEvent();
     MinecraftForge.EVENT_BUS.register(instance);

@@ -31,7 +31,7 @@ public class RenderMutantZombie extends RenderLiving<EntityMutantZombie> {
   private static final ResourceLocation AntiMutantAbyssalZombie = new ResourceLocation("ageofminecraft", "textures/entities/mutant/anti/anti_mutant_abyssal_zombie.png");
   
   public RenderMutantZombie(RenderManager manager) {
-    super(manager, (ModelBase)new ModelMutantZombie(), 1.0F);
+    super(manager, new ModelMutantZombie(), 1.0F);
   }
   
   protected void renderModel(EntityMutantZombie living, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {

@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier3;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -138,14 +137,14 @@ public class EntityVex extends EntityTameBase implements Light, Flying, Elementa
   
   protected void initEntityAI() {
     super.initEntityAI();
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
     this.tasks.addTask(4, new AIChargeAttack());
     this.tasks.addTask(8, new AIMoveRandom());
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.0D, 24.0F, 6.0F));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
-    this.targetTasks.addTask(0, (EntityAIBase)new EntityAIFriendlyHurtByTarget((EntityCreature)this, true, new Class[0]));
-    this.targetTasks.addTask(1, (EntityAIBase)new EntityAILeaderHurtByTarget(this));
-    this.targetTasks.addTask(2, (EntityAIBase)new EntityAILeaderHurtTarget(this));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.0D, 24.0F, 6.0F));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
+    this.targetTasks.addTask(0, new EntityAIFriendlyHurtByTarget(this, true, new Class[0]));
+    this.targetTasks.addTask(1, new EntityAILeaderHurtByTarget(this));
+    this.targetTasks.addTask(2, new EntityAILeaderHurtTarget(this));
   }
   
   protected void applyEntityAttributes() {
@@ -185,7 +184,7 @@ public class EntityVex extends EntityTameBase implements Light, Flying, Elementa
   }
   
   private boolean getVexFlag(int p_190656_1_) {
-    int i = (Byte) this.dataManager.get(VEX_FLAGS);
+    int i = this.dataManager.get(VEX_FLAGS);
     return ((i & p_190656_1_) != 0);
   }
   
@@ -251,7 +250,7 @@ public class EntityVex extends EntityTameBase implements Light, Flying, Elementa
     }
     
     public boolean shouldExecute() {
-      return (EntityVex.this.getAttackTarget() != null && EntityVex.this.getSpecialAttackTimer() > 600) ? true : ((EntityVex.this.getAttackTarget() != null && !EntityVex.this.getMoveHelper().isUpdating() && EntityVex.this.rand.nextInt(7) == 0) ? ((EntityVex.this.getDistanceSq((Entity)EntityVex.this.getAttackTarget()) > 4.0D)) : false);
+      return (EntityVex.this.getAttackTarget() != null && EntityVex.this.getSpecialAttackTimer() > 600) ? true : ((EntityVex.this.getAttackTarget() != null && !EntityVex.this.getMoveHelper().isUpdating() && EntityVex.this.rand.nextInt(7) == 0) ? ((EntityVex.this.getDistanceSq(EntityVex.this.getAttackTarget()) > 4.0D)) : false);
     }
     
     public boolean shouldContinueExecuting() {
@@ -277,10 +276,10 @@ public class EntityVex extends EntityTameBase implements Light, Flying, Elementa
     public void updateTask() {
       EntityLivingBase entitylivingbase = EntityVex.this.getAttackTarget();
       if (entitylivingbase != null && entitylivingbase.isEntityAlive())
-        if (EntityVex.this.getDistanceSq((Entity)entitylivingbase) <= (EntityVex.this.width * EntityVex.this.width + entitylivingbase.width * entitylivingbase.width) + 9.0D) {
-          EntityVex.this.attackEntityAsMob((Entity)entitylivingbase);
+        if (EntityVex.this.getDistanceSq(entitylivingbase) <= (EntityVex.this.width * EntityVex.this.width + entitylivingbase.width * entitylivingbase.width) + 9.0D) {
+          EntityVex.this.attackEntityAsMob(entitylivingbase);
         } else {
-          double d0 = EntityVex.this.getDistanceSq((Entity)entitylivingbase);
+          double d0 = EntityVex.this.getDistanceSq(entitylivingbase);
           if (d0 < 9.0D) {
             Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
             EntityVex.this.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
@@ -291,7 +290,7 @@ public class EntityVex extends EntityTameBase implements Light, Flying, Elementa
   
   class AIMoveControl extends EntityMoveHelper {
     public AIMoveControl(EntityVex vex) {
-      super((EntityLiving)vex);
+      super(vex);
     }
     
     public void setMoveTo(double x, double y, double z, double speedIn) {
@@ -322,7 +321,7 @@ public class EntityVex extends EntityTameBase implements Light, Flying, Elementa
             double d5 = (EntityVex.this.getAttackTarget()).posZ - EntityVex.this.posZ;
             EntityVex.this.rotationYaw = -((float)MathHelper.atan2(d4, d5)) * 57.295776F;
             EntityVex.this.renderYawOffset = EntityVex.this.rotationYaw;
-            EntityVex.this.faceEntity((Entity)EntityVex.this.getAttackTarget(), 10.0F, 40.0F);
+            EntityVex.this.faceEntity(EntityVex.this.getAttackTarget(), 10.0F, 40.0F);
           } 
         } 
       } 
@@ -345,7 +344,7 @@ public class EntityVex extends EntityTameBase implements Light, Flying, Elementa
     public void updateTask() {
       BlockPos blockpos = EntityVex.this.getBoundOrigin();
       if (blockpos == null)
-        blockpos = new BlockPos((Entity)EntityVex.this); 
+        blockpos = new BlockPos(EntityVex.this);
       for (int i = 0; i < 3; i++) {
         BlockPos blockpos1 = blockpos.add(EntityVex.this.rand.nextInt(15) - 7, EntityVex.this.rand.nextInt(11) - 5, EntityVex.this.rand.nextInt(15) - 7);
         if (EntityVex.this.world.isAirBlock(blockpos1)) {

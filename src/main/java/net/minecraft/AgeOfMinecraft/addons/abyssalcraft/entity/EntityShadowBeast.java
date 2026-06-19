@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.shinoow.abyssalcraft.api.item.ACItems;
 import com.shinoow.abyssalcraft.lib.ACConfig;
@@ -58,14 +57,14 @@ public class EntityShadowBeast extends EntityTameBase implements Armored, Undead
   public EntityShadowBeast(World par1World) {
     super(par1World);
     setSize(0.8F, 2.9F);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.2D, 48.0F, 12.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.2D, true));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIMoveTowardsRestriction((EntityCreature)this, 1.0D));
-    this.tasks.addTask(4, (EntityAIBase)new EntityAIWander((EntityCreature)this, 1.0D));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIFleeSun((EntityCreature)this, 1.0D));
-    this.tasks.addTask(6, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
-    this.tasks.addTask(6, (EntityAIBase)new EntityAIWatchClosest((EntityLiving)this, EntityPlayer.class, 8.0F));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.2D, 48.0F, 12.0F));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.2D, true));
+    this.tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 1.0D));
+    this.tasks.addTask(4, new EntityAIWander(this, 1.0D));
+    this.tasks.addTask(5, new EntityAIFleeSun(this, 1.0D));
+    this.tasks.addTask(6, new EntityAILookIdle(this));
+    this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
     this.isOffensive = true;
     this.isImmuneToFire = true;
   }
@@ -143,7 +142,7 @@ public class EntityShadowBeast extends EntityTameBase implements Armored, Undead
       ((EntityLivingBase)par1Entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 60));
     } 
     if (ACConfig.hardcoreMode && par1Entity instanceof EntityPlayer)
-      par1Entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
+      par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor().setDamageIsAbsolute(), 3.0F * (float)(Math.max(ACConfig.damageAmpl, 1.0D)));
     return flag;
   }
   
@@ -174,12 +173,12 @@ public class EntityShadowBeast extends EntityTameBase implements Armored, Undead
   public void onLivingUpdate() {
     for (int i = 0; i < 2 && ACConfig.particleEntity && this.world.provider.getDimension() != ACLib.dark_realm_id; i++)
       this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) <= 64.0D && this.shadowFlameShootTimer <= (isHero() ? -100 : -300))
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) <= 64.0D && this.shadowFlameShootTimer <= (isHero() ? -100 : -300))
       this.shadowFlameShootTimer = 100; 
     if (this.shadowFlameShootTimer > 0) {
       this.motionX *= 0.05D;
       this.motionZ *= 0.05D;
-      this.world.setEntityState((Entity)this, (byte)23);
+      this.world.setEntityState(this, (byte)23);
       if (this.ticksExisted % 5 == 0)
         this.world.playSound(null, new BlockPos(this.posX + 0.5D, this.posY + getEyeHeight(), this.posZ + 0.5D), SoundEvents.ENTITY_GHAST_SHOOT, getSoundCategory(), 0.5F + getRNG().nextFloat(), getRNG().nextFloat() * 0.7F + 0.3F); 
       Entity target = getHeadLookTarget();
@@ -188,11 +187,11 @@ public class EntityShadowBeast extends EntityTameBase implements Armored, Undead
         if (list != null && !list.isEmpty())
             for (EntityLivingBase entity : list) {
                 if (entity != null && !false && this.rand.nextInt(3) == 0)
-                    if (entity.attackEntityFrom((new DamageSource("shadow")).setDamageBypassesArmor().setDamageIsAbsolute().setMagicDamage(), (float) (15.0D - getDistance((Entity) entity)))) {
+                    if (entity.attackEntityFrom((new DamageSource("shadow")).setDamageBypassesArmor().setDamageIsAbsolute().setMagicDamage(), (float) (15.0D - getDistance(entity)))) {
                         entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 100));
                         entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 1));
                     } else {
-                        attackEntityAsMob((Entity) entity);
+                        attackEntityAsMob(entity);
                         entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 100));
                         entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 1));
                     }
@@ -239,7 +238,7 @@ public class EntityShadowBeast extends EntityTameBase implements Armored, Undead
     double rz = (hitpos == null) ? range : Math.min(range, Math.abs(this.posZ - hitpos.getZ()));
     Vec3d destVec = srcVec.add(lookVec.x * range, lookVec.y * range, lookVec.z * range);
     float var9 = 4.0F;
-    List<Entity> possibleList = this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, getEntityBoundingBox().offset(lookVec.x * rx, lookVec.y * ry, lookVec.z * rz).grow(var9, var9, var9));
+    List<Entity> possibleList = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().offset(lookVec.x * rx, lookVec.y * ry, lookVec.z * rz).grow(var9, var9, var9));
     double hitDist = 0.0D;
     for (Entity possibleEntity : possibleList) {
       if (possibleEntity != this && possibleEntity instanceof EntityLivingBase && !false) {
@@ -286,7 +285,7 @@ public class EntityShadowBeast extends EntityTameBase implements Armored, Undead
         this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, px + getRNG().nextDouble() - 0.5D, py + getRNG().nextDouble() - 0.5D, pz + getRNG().nextDouble() - 0.5D, dx, dy, dz);
       } 
     } else {
-      this.world.setEntityState((Entity)this, (byte)23);
+      this.world.setEntityState(this, (byte)23);
     } 
   }
   
@@ -305,7 +304,7 @@ public class EntityShadowBeast extends EntityTameBase implements Armored, Undead
       if (hasOwner(player)) {
         player.swingArm(EnumHand.MAIN_HAND);
         if (getRidingEntity() == null) {
-          startRiding((Entity)player, true);
+          startRiding(player, true);
         } else {
           dismountRidingEntity();
         } 
@@ -314,7 +313,7 @@ public class EntityShadowBeast extends EntityTameBase implements Armored, Undead
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;

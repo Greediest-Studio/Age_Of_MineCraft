@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier4;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.shinoow.abyssalcraft.api.AbyssalCraftAPI;
 import com.shinoow.abyssalcraft.api.entity.EntityUtil;
@@ -73,12 +72,12 @@ public class EntityWitch extends EntityTameBase implements IRangedAttackMob, Lig
     super(worldIn);
     setSize(0.5F, 1.95F);
     this.isOffensive = true;
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(0, (EntityAIBase)new EntityAIOpenDoor((EntityLiving)this, true));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFollowLeader(this, 1.2D, 32.0F, 8.0F));
-    this.tasks.addTask(3, (EntityAIBase)new EntityAIAttackRangedAlly(this, 1.0D, 40, 10.0F));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 1.0D, 80));
-    this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(0, new EntityAIOpenDoor(this, true));
+    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.2D, 32.0F, 8.0F));
+    this.tasks.addTask(3, new EntityAIAttackRangedAlly(this, 1.0D, 40, 10.0F));
+    this.tasks.addTask(5, new EntityAIWander(this, 1.0D, 80));
+    this.tasks.addTask(8, new EntityAILookIdle(this));
     this.experienceValue = 10;
   }
   
@@ -127,12 +126,12 @@ public class EntityWitch extends EntityTameBase implements IRangedAttackMob, Lig
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return I18n.translateToLocal("entity." + str + ".cmm.name");
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name");
@@ -143,7 +142,7 @@ public class EntityWitch extends EntityTameBase implements IRangedAttackMob, Lig
     if (!this.world.isRemote)
       for (int i = 0; i < 1 + this.rand.nextInt(2); i++) {
         EntityWitch baby = new EntityWitch(this.world);
-        baby.copyLocationAndAnglesFrom((Entity)this);
+        baby.copyLocationAndAnglesFrom(this);
         baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
         baby.setGrowingAge(-32000);
         baby.setChild(true);
@@ -153,7 +152,7 @@ public class EntityWitch extends EntityTameBase implements IRangedAttackMob, Lig
         if (isMarried())
           for (int e = 0; e < 10 + this.rand.nextInt(10); e++)
             baby.levelUp();  
-        this.world.spawnEntity((Entity)baby);
+        this.world.spawnEntity(baby);
       }  
   }
   
@@ -166,7 +165,7 @@ public class EntityWitch extends EntityTameBase implements IRangedAttackMob, Lig
   }
   
   public boolean isDrinkingPotion() {
-    return (Boolean) getDataManager().get(IS_AGGRESSIVE);
+    return getDataManager().get(IS_AGGRESSIVE);
   }
   
   protected void applyEntityAttributes() {
@@ -187,20 +186,20 @@ public class EntityWitch extends EntityTameBase implements IRangedAttackMob, Lig
           for (EntityLiving entity : list) {
               if (entity != null && entity.isNonBoss() && !(entity instanceof EntityTameBase) && !false) {
                   EntityPig entityzombie = new EntityPig(this.world);
-                  entityzombie.copyLocationAndAnglesFrom((Entity) entity);
-                  this.world.removeEntity((Entity) entity);
-                  entityzombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity) entityzombie)), null);
+                  entityzombie.copyLocationAndAnglesFrom(entity);
+                  this.world.removeEntity(entity);
+                  entityzombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityzombie)), null);
                   entityzombie.spawnExplosionParticle();
                   if (!this.world.isRemote)
-                      this.world.spawnEntity((Entity) entityzombie);
+                      this.world.spawnEntity(entityzombie);
               }
           }
     } 
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 256.0D && getSpecialAttackTimer() <= 0 && isHero())
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) < 256.0D && getSpecialAttackTimer() <= 0 && isHero())
       performSpecialAttack(); 
     if (!this.world.isRemote) {
       if (this.witchAttackTimer <= 28 && this.witchAttackTimer > 0 && this.ticksExisted % 4 == 0 && isEntityAlive())
-        this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_DRINK, getSoundCategory(), getSoundVolume(), getSoundPitch() - 0.2F); 
+        this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_DRINK, getSoundCategory(), getSoundVolume(), getSoundPitch() - 0.2F);
       if (isDrinkingPotion() && getHealth() > 0.0F && this.ticksExisted > 20) {
         if (this.witchAttackTimer-- <= 0) {
           this.renderYawOffset = this.rotationYaw = this.rotationYawHead;
@@ -208,7 +207,7 @@ public class EntityWitch extends EntityTameBase implements IRangedAttackMob, Lig
           ItemStack itemstack = getHeldItemMainhand();
           setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
           if (itemstack.getItem() == Items.POTIONITEM) {
-            this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_PLAYER_BURP, getSoundCategory(), getSoundVolume(), getSoundPitch());
+            this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_PLAYER_BURP, getSoundCategory(), getSoundVolume(), getSoundPitch());
             List<PotionEffect> list = PotionUtils.getEffectsFromStack(itemstack);
             if (list != null)
               for (PotionEffect potioneffect : list)
@@ -236,21 +235,21 @@ public class EntityWitch extends EntityTameBase implements IRangedAttackMob, Lig
           potiontype = PotionTypes.STRONG_HEALING;
         } 
         if (potiontype != null && getHealth() > 0.0F && this.ticksExisted > 20 && !isChild()) {
-          setItemStackToSlot(EntityEquipmentSlot.MAINHAND, PotionUtils.addPotionToItemStack(new ItemStack((Item)Items.POTIONITEM), potiontype));
+          setItemStackToSlot(EntityEquipmentSlot.MAINHAND, PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), potiontype));
           this.witchAttackTimer = getHeldItemMainhand().getMaxItemUseDuration();
           setAggressive(true);
-          this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_WITCH_DRINK, getSoundCategory(), getSoundVolume(), getSoundPitch());
+          this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_WITCH_DRINK, getSoundCategory(), getSoundVolume(), getSoundPitch());
           IAttributeInstance iattributeinstance = getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
           iattributeinstance.removeModifier(MODIFIER);
           iattributeinstance.applyModifier(MODIFIER);
         } 
       } 
-      if (!this.world.isRemote && !isChild() && getOwner() != null && this.world.getClosestPlayerToEntity((Entity)this, 16.0D) != null && this.world.getClosestPlayerToEntity((Entity)this, 16.0D) == getOwner() && getDistance((Entity)getOwner()) < 16.0D && canEntityBeSeen((Entity)getOwner()) && this.rand.nextInt(200) == 0) {
+      if (!this.world.isRemote && !isChild() && getOwner() != null && this.world.getClosestPlayerToEntity(this, 16.0D) != null && this.world.getClosestPlayerToEntity(this, 16.0D) == getOwner() && getDistance(getOwner()) < 16.0D && canEntityBeSeen(getOwner()) && this.rand.nextInt(200) == 0) {
         attackEntityWithRangedAttack(getOwner(), 0.0F);
-        getLookHelper().setLookPositionWithEntity((Entity)getOwner(), 180.0F, 30.0F);
+        getLookHelper().setLookPositionWithEntity(getOwner(), 180.0F, 30.0F);
       } 
       if (this.rand.nextFloat() < 0.01F)
-        this.world.setEntityState((Entity)this, (byte)15); 
+        this.world.setEntityState(this, (byte)15);
     } 
     super.onLivingUpdate();
   }
@@ -285,7 +284,7 @@ public class EntityWitch extends EntityTameBase implements IRangedAttackMob, Lig
   
   public void attackEntityWithRangedAttack(EntityLivingBase target, float p_82196_2_) {
     for (int i = 0; i < (isHero() ? 3 : 1); i++) {
-      if (!isDrinkingPotion() && canEntityBeSeen((Entity)target)) {
+      if (!isDrinkingPotion() && canEntityBeSeen(target)) {
         double d0 = target.posY;
         double d1 = target.posX + target.motionX - this.posX;
         double d2 = d0 - this.posY;
@@ -335,13 +334,13 @@ public class EntityWitch extends EntityTameBase implements IRangedAttackMob, Lig
         } else if (target.isNonBoss() && Loader.isModLoaded("abyssalcraft") && target.isPotionApplicable(new PotionEffect(AbyssalCraftAPI.antimatter_potion)) && !EntityUtil.isEntityAnti(target) && isAntiMob() && !target.isPotionActive(AbyssalCraftAPI.antimatter_potion) && !false) {
           potiontype = MiscHandler.antiMatter_long;
         } 
-        EntityPotionOther entitypotion = new EntityPotionOther(this.world, (EntityLivingBase)this, PotionUtils.addPotionToItemStack((getIntelligence() > 40.0F) ? new ItemStack((Item)Items.LINGERING_POTION) : new ItemStack((Item)Items.SPLASH_POTION), potiontype));
+        EntityPotionOther entitypotion = new EntityPotionOther(this.world, this, PotionUtils.addPotionToItemStack((getIntelligence() > 40.0F) ? new ItemStack(Items.LINGERING_POTION) : new ItemStack(Items.SPLASH_POTION), potiontype));
         entitypotion.rotationPitch -= -20.0F;
-        entitypotion.shoot(d1, d2, d3, 1.0F * getDistance((Entity)target) / getDistance((Entity)target), 9.0F);
+        entitypotion.shoot(d1, d2, d3, 1.0F * getDistance(target) / getDistance(target), 9.0F);
         playLivingSound();
         swingArm(EnumHand.MAIN_HAND);
-        this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_WITCH_THROW, getSoundCategory(), 1.0F, 0.8F + this.rand.nextFloat() * 0.4F);
-        this.world.spawnEntity((Entity)entitypotion);
+        this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_WITCH_THROW, getSoundCategory(), 1.0F, 0.8F + this.rand.nextFloat() * 0.4F);
+        this.world.spawnEntity(entitypotion);
       } 
     } 
   }

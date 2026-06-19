@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier5;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import java.util.Random;
@@ -76,10 +75,10 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
     this.isOffensive = true;
     this.moveHelper = new GhastMoveHelper(this);
     this.tasks.addTask(0, new AIFireballAttack(this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.0D, EngenderConfig.mobs.useMobTalkerModels ? 64.0F : 100.0F, EngenderConfig.mobs.useMobTalkerModels ? 9.0F : 16.0F));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.0D, EngenderConfig.mobs.useMobTalkerModels ? 64.0F : 100.0F, EngenderConfig.mobs.useMobTalkerModels ? 9.0F : 16.0F));
     this.tasks.addTask(2, new AIRandomFly(this));
     this.tasks.addTask(3, new AILookAround());
-    this.tasks.addTask(4, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(4, new EntityAILookIdle(this));
   }
   
   public String getDescName() {
@@ -133,7 +132,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
   
   @SideOnly(Side.CLIENT)
   public boolean isAttacking() {
-    return (Boolean) this.dataManager.get(ATTACKING);
+    return this.dataManager.get(ATTACKING);
   }
   
   public EnumTier getTier() {
@@ -149,7 +148,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
   }
   
   public void performSpecialAttack() {
-    playSound(getHurtSound((DamageSource)null), getSoundVolume(), getSoundPitch());
+    playSound(getHurtSound(null), getSoundVolume(), getSoundPitch());
     setSpecialAttackTimer(1200);
   }
   
@@ -168,35 +167,35 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
     if (!this.world.isRemote)
       if (!this.world.isRemote) {
         if (isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && this.isOffensive && !isChild() && !false)
-          if (getDistanceSq((Entity)getAttackTarget()) < (this.reachWidth * this.reachWidth + ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width) * ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width)) + 9.0D && (this.ticksExisted + getEntityId()) % 10 == 0)
-            attackEntityAsMob((Entity)getAttackTarget());  
+          if (getDistanceSq(getAttackTarget()) < (this.reachWidth * this.reachWidth + ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width) * ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width)) + 9.0D && (this.ticksExisted + getEntityId()) % 10 == 0)
+            attackEntityAsMob(getAttackTarget());
         if (isEntityAlive()) {
-          ChunkLoadingEvent.updateLoaded((Entity)this);
+          ChunkLoadingEvent.updateLoaded(this);
         } else {
-          ChunkLoadingEvent.stopLoading((Entity)this);
+          ChunkLoadingEvent.stopLoading(this);
         } 
       }  
     this.onGround = false;
     this.isAirBorne = true;
     if (isHero() && getSpecialAttackTimer() > 1100) {
-      playSound(getHurtSound((DamageSource)null), getSoundVolume(), getSoundPitch());
+      playSound(getHurtSound(null), getSoundVolume(), getSoundPitch());
       List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(64.0D, 64.0D, 64.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty())
           for (EntityLivingBase entity : list) {
               if (entity != null)
                   if (!false) {
                       if (getSpecialAttackTimer() > 1190 && entity instanceof EntityCreature && !(entity instanceof EntityTameBase))
-                          ((EntityCreature) entity).tasks.addTask(0, (EntityAIBase) new EntityAIAvoidEntitySPC((EntityCreature) entity, EntityGhasther.class, 128.0F, 1.5D, 1.5D));
+                          ((EntityCreature) entity).tasks.addTask(0, new EntityAIAvoidEntitySPC((EntityCreature) entity, EntityGhasther.class, 128.0F, 1.5D, 1.5D));
                       entity.hurtResistantTime = 0;
                       inflictEngenderMobDamage(entity, "'s ears exploded thanks to ", DamageSource.WITHER, 0.25F);
                       entity.addVelocity(this.rand.nextGaussian() * 0.05D, this.rand.nextGaussian() * 0.05D, this.rand.nextGaussian() * 0.05D);
                   }
           }
     } 
-    if (getAttackTarget() != null && getDistanceSq((Entity)getAttackTarget()) < 2048.0D && getSpecialAttackTimer() <= 0 && isHero())
+    if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) < 2048.0D && getSpecialAttackTimer() <= 0 && isHero())
       performSpecialAttack(); 
-    if (getAttackTarget() != null && getOwner() != null && !canEntityBeSeen((Entity)getAttackTarget()) && this.rand.nextInt(80) == 0)
-      playSound(getHurtSound((DamageSource)null), getSoundVolume(), getSoundPitch() + 0.25F); 
+    if (getAttackTarget() != null && getOwner() != null && !canEntityBeSeen(getAttackTarget()) && this.rand.nextInt(80) == 0)
+      playSound(getHurtSound(null), getSoundVolume(), getSoundPitch() + 0.25F);
     if (getControllingPassenger() != null && getControllingPassenger() instanceof EntityPlayer) {
       EntityPlayer passenger = (EntityPlayer)getControllingPassenger();
       this.renderYawOffset = this.rotationYaw = this.rotationYawHead = passenger.rotationYaw;
@@ -217,7 +216,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
         if (list != null && !list.isEmpty())
           for (int i1 = 0; i1 < list.size(); i1++) {
             Entity entity = list.get(i1);
-            if (entity != null && entity.isEntityAlive() && canEntityBeSeen(entity) && !false && entity.getDistanceSq((Entity)getOwner()) <= 256.0D) {
+            if (entity != null && entity.isEntityAlive() && canEntityBeSeen(entity) && !false && entity.getDistanceSq(getOwner()) <= 256.0D) {
               setAttackTarget((EntityLivingBase)entity);
             } else {
               list.remove(entity);
@@ -364,7 +363,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
@@ -375,7 +374,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
   }
   
   public void launchFireball(EntityGhasther ghast, double d2, double d3, double d4, double d5, double d6, double d7) {
-    EntityLargeFireballOther entitylargefireball = new EntityLargeFireballOther(this.world, (EntityLivingBase)ghast, d2, d3, d4);
+    EntityLargeFireballOther entitylargefireball = new EntityLargeFireballOther(this.world, ghast, d2, d3, d4);
     entitylargefireball.explosionPower = ghast.getFireballStrength();
     entitylargefireball.posX = d5;
     entitylargefireball.posY = d6;
@@ -383,7 +382,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
     float dm = (float)ghast.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
     entitylargefireball.damage = dm;
     ghast.playSound(SoundEvents.ENTITY_GHAST_SHOOT, 10.0F, 0.875F);
-    this.world.spawnEntity((Entity)entitylargefireball);
+    this.world.spawnEntity(entitylargefireball);
   }
   
   public void chooseNewAttack() {
@@ -432,15 +431,15 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
       if (this.deathTicks == 340) {
         if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot")) {
           int i = getExperiencePoints(this.attackingPlayer);
-          i = ForgeEventFactory.getExperienceDrop((EntityLivingBase)this, this.attackingPlayer, i);
+          i = ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
           while (i > 0) {
             int j = EntityXPOrb.getXPSplit(i);
             i -= j;
-            this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
-            this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
-            this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
-            this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
-            this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
           } 
         } 
         setDead();
@@ -455,9 +454,9 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
         if (getOwner() != null) {
           for (EntityPlayer entityplayer : this.world.playerEntities) {
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
-            entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
+            entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
           } 
-          ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("Your Ghasther has been destroyed!", new Object[0]));
+          getOwner().sendMessage(new TextComponentTranslation("Your Ghasther has been destroyed!", new Object[0]));
         } 
       } 
       if (this.deathTicks > 80)
@@ -498,7 +497,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
       double mark3 = this.ghast.posZ + vec3.z * d1;
       EntityLivingBase entitylivingbase = this.ghast.getAttackTarget();
       double d0 = 100.0D;
-      if (entitylivingbase != null && entitylivingbase.getDistanceSq((Entity)this.ghast) < d0 * d0) {
+      if (entitylivingbase != null && entitylivingbase.getDistanceSq(this.ghast) < d0 * d0) {
         World world = this.ghast.world;
         this.attackTimer++;
         if (this.ghast.moralRaisedTimer > 200)
@@ -613,12 +612,12 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
                   int i1 = i + MathHelper.getInt(this.ghast.rand, 16, 64) * MathHelper.getInt(this.ghast.rand, -1, 1);
                   int k1 = k + MathHelper.getInt(this.ghast.rand, 16, 64) * MathHelper.getInt(this.ghast.rand, -1, 1);
                   int j1 = this.ghast.world.getTopSolidOrLiquidBlock(new BlockPos(i1, MathHelper.floor(this.ghast.posY), k1)).getY();
-                  if (this.ghast.world.getBlockState(new BlockPos(i1, j1 - 1, k1)).isSideSolid((IBlockAccess)this.ghast.world, new BlockPos(i1, j1 - 1, k1), EnumFacing.UP)) {
+                  if (this.ghast.world.getBlockState(new BlockPos(i1, j1 - 1, k1)).isSideSolid(this.ghast.world, new BlockPos(i1, j1 - 1, k1), EnumFacing.UP)) {
                     EntityGhast entityzombie = new EntityGhast(this.ghast.world);
                     entityzombie.setPosition(i1, j1, k1);
-                    if (this.ghast.rand.nextInt(100) == 0 && !this.ghast.world.isAnyPlayerWithinRangeAt(i1, j1, k1, 7.0D) && this.ghast.world.checkNoEntityCollision(entityzombie.getEntityBoundingBox(), (Entity)entityzombie) && this.ghast.world.getCollisionBoxes((Entity)entityzombie, entityzombie.getEntityBoundingBox()).isEmpty() && !this.ghast.world.containsAnyLiquid(entityzombie.getEntityBoundingBox())) {
-                      this.ghast.world.spawnEntity((Entity)entityzombie);
-                      entityzombie.onInitialSpawn(this.ghast.world.getDifficultyForLocation(new BlockPos((Entity)entityzombie)), (IEntityLivingData)null);
+                    if (this.ghast.rand.nextInt(100) == 0 && !this.ghast.world.isAnyPlayerWithinRangeAt(i1, j1, k1, 7.0D) && this.ghast.world.checkNoEntityCollision(entityzombie.getEntityBoundingBox(), entityzombie) && this.ghast.world.getCollisionBoxes(entityzombie, entityzombie.getEntityBoundingBox()).isEmpty() && !this.ghast.world.containsAnyLiquid(entityzombie.getEntityBoundingBox())) {
+                      this.ghast.world.spawnEntity(entityzombie);
+                      entityzombie.onInitialSpawn(this.ghast.world.getDifficultyForLocation(new BlockPos(entityzombie)), null);
                       entityzombie.setOwnerId(this.ghast.getOwnerId());
                       entityzombie.setIsAntiMob(this.ghast.isAntiMob());
                       entityzombie.setGrowingAge(this.ghast.getGrowingAge());
@@ -659,8 +658,8 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
               this.ghast.launchFireball(this.ghast, d2, d3, d4, mark1, mark2, mark3);
               this.attackTimer = -40;
               this.ghast.chooseNewAttack();
-              if (this.ghast.getDistance((Entity)entitylivingbase) <= 10.0D)
-                this.ghast.attackEntityAsMob((Entity)entitylivingbase); 
+              if (this.ghast.getDistance(entitylivingbase) <= 10.0D)
+                this.ghast.attackEntityAsMob(entitylivingbase);
             } 
             break;
         } 
@@ -693,7 +692,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
       } else {
         EntityLivingBase entitylivingbase = this.parentEntity.getAttackTarget();
         this.parentEntity.renderYawOffset = this.parentEntity.rotationYaw = this.parentEntity.rotationYawHead;
-        this.parentEntity.getLookHelper().setLookPositionWithEntity((Entity)entitylivingbase, 180.0F, EngenderConfig.mobs.useMobTalkerModels ? 40.0F : 180.0F);
+        this.parentEntity.getLookHelper().setLookPositionWithEntity(entitylivingbase, 180.0F, EngenderConfig.mobs.useMobTalkerModels ? 40.0F : 180.0F);
       } 
     }
   }
@@ -755,7 +754,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
     private int courseChangeCooldown;
     
     public GhastMoveHelper(EntityGhasther ghast) {
-      super((EntityLiving)ghast);
+      super(ghast);
       this.parentEntity = ghast;
     }
     
@@ -790,7 +789,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
       AxisAlignedBB axisalignedbb = this.parentEntity.getEntityBoundingBox();
       for (int i = 1; i < p_179926_7_; i++) {
         axisalignedbb = axisalignedbb.offset(d0, d1, d2);
-        if (!this.parentEntity.world.getCollisionBoxes((Entity)this.parentEntity, axisalignedbb).isEmpty())
+        if (!this.parentEntity.world.getCollisionBoxes(this.parentEntity, axisalignedbb).isEmpty())
           return false; 
       } 
       return true;

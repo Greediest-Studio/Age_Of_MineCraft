@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.items;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -105,15 +104,15 @@ public class ItemDragonsHorn extends ItemBEItem {
                 ((EntityChaosGuardian) entity).playLivingSound();
             }
             if (entity instanceof EntityDragonMinion && entity != null && entity.isEntityAlive() && ((EntityDragonMinion) entity).getOwnerId() == playerIn.getUniqueID()) {
-                ((EntityDragonMinion) entity).target = (Entity) playerIn;
+                ((EntityDragonMinion) entity).target = playerIn;
                 ((EntityDragonMinion) entity).playLivingSound();
             }
             if (entity instanceof EntityMob) {
-                ((EntityMob) entity).setAttackTarget((EntityLivingBase) playerIn);
-                ((EntityMob) entity).setRevengeTarget((EntityLivingBase) playerIn);
+                ((EntityMob) entity).setAttackTarget(playerIn);
+                entity.setRevengeTarget(playerIn);
                 ((EntityMob) entity).getMoveHelper().setMoveTo(playerIn.posX, playerIn.posY, playerIn.posY, 1.2D);
-                if (playerIn.getDistanceSq((Entity) entity) <= 64.0D)
-                    ((EntityMob) entity).attackEntityFrom(DamageSource.GENERIC, 50.0F);
+                if (playerIn.getDistanceSq(entity) <= 64.0D)
+                    entity.attackEntityFrom(DamageSource.GENERIC, 50.0F);
             }
         }
     List<EntityLivingBase> list1 = playerIn.world.getEntitiesWithinAABB(EntityLivingBase.class, playerIn.getEntityBoundingBox().grow(256.0D, 256.0D, 256.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));

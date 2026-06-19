@@ -33,9 +33,9 @@ public class RenderRabbit extends RenderLiving<EntityRabbit> {
   private static final ResourceLocation CAERBANNOG = new ResourceLocation("textures/entity/rabbit/caerbannog.png");
   
   public RenderRabbit(RenderManager p_i46146_1_) {
-    super(p_i46146_1_, (ModelBase)new ModelRabbit(), 0.3F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 0.6F));
-    addLayer(new LayerLearningBook(this));
+    super(p_i46146_1_, new ModelRabbit(), 0.3F);
+    addLayer(new LayerArrowCustomSized(this, 0.6F));
+    
   }
   
   protected ResourceLocation getEntityTexture(EntityRabbit entity) {

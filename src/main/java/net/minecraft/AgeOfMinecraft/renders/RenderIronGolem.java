@@ -36,10 +36,10 @@ public class RenderIronGolem extends RenderLiving<EntityIronGolem> {
   public RenderIronGolem(RenderManager p_i46133_1_) {
     super(p_i46133_1_, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.75F);
     addLayer(new LayerIronGolemFlower(this));
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
     addLayer(new LayerCustomHeadEngender(regularmodel.ironGolemHead, cmmmodel.Head));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    
+    addLayer(new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityIronGolem entity) {
@@ -47,7 +47,7 @@ public class RenderIronGolem extends RenderLiving<EntityIronGolem> {
   }
   
   protected void preRenderCallback(EntityIronGolem entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = (entitylivingbaseIn.getIllusionFormTime() > 0) ? (ModelBase)disguisemodel : (EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel);
+    this.mainModel = (entitylivingbaseIn.getIllusionFormTime() > 0) ? disguisemodel : (EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel);
     if (EngenderConfig.mobs.useMobTalkerModels) {
       GlStateManager.scale(1.25F, 1.25F, 1.25F);
       if (entitylivingbaseIn.isSitResting())

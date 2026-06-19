@@ -36,7 +36,7 @@ public class EntityItemCarrier extends EntityItem {
           } else {
             entityliving.setLocationAndAngles(this.posX, this.posY, this.posZ, entityliving.rotationYaw, entityliving.rotationPitch);
           } 
-          entity.copyLocationAndAnglesFrom((Entity)this);
+          entity.copyLocationAndAnglesFrom(this);
           entity.world.setEntityState(entity, (byte)20);
           entity.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0F, 2.0F);
           entity.playSound(SoundEvents.BLOCK_GLASS_BREAK, 1.0F, 2.0F);

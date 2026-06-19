@@ -4,7 +4,6 @@ import com.shinoow.abyssalcraft.api.item.ACItems;
 import com.shinoow.abyssalcraft.lib.ACLib;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntitySacthoth;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.model.ModelSacthoth;
-import net.minecraft.AgeOfMinecraft.renders.LayerLearningBook;
 import net.minecraft.AgeOfMinecraft.renders.LayerMobCape;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -27,10 +26,10 @@ public class RenderSacthoth extends RenderLiving<EntitySacthoth> {
   private static final ResourceLocation mobTexture = new ResourceLocation("abyssalcraft:textures/model/boss/sacthoth.png");
   
   public RenderSacthoth(RenderManager manager) {
-    super(manager, (ModelBase)new ModelSacthoth(), 0.0F);
-    addLayer(new LayerHeldItemSacthoth((RenderLivingBase<?>)this));
-    addLayer((LayerRenderer)new LayerLearningBook(this));
-    addLayer((LayerRenderer)new LayerMobCape((RenderLivingBase)this));
+    super(manager, new ModelSacthoth(), 0.0F);
+    addLayer(new LayerHeldItemSacthoth(this));
+    
+    addLayer((LayerRenderer)new LayerMobCape(this));
   }
   
   protected void renderModel(EntitySacthoth entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {

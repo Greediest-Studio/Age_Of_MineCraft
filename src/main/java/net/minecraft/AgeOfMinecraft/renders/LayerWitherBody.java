@@ -16,9 +16,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class LayerWitherBody implements LayerRenderer<EntityLivingBase> {
   private static final ResourceLocation witherTextures = new ResourceLocation("ageofminecraft", "textures/entities/wither_storm_hue_small.png");
   
-  private final ModelBase modelmatter = (ModelBase)new ModelCommandBlockWitherBody();
+  private final ModelBase modelmatter = new ModelCommandBlockWitherBody();
   
-  private final ModelBase modelsmalltentacle = (ModelBase)new ModelWitherStormTentecle();
+  private final ModelBase modelsmalltentacle = new ModelWitherStormTentecle();
   
   private final RenderCommandBlockWither witherRenderer;
   
@@ -30,7 +30,7 @@ public class LayerWitherBody implements LayerRenderer<EntityLivingBase> {
     if (p_177214_1_.getSize() >= 1000) {
       GlStateManager.pushMatrix();
       this.witherRenderer.bindTexture(witherTextures);
-      this.modelmatter.render((Entity)p_177214_1_, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+      this.modelmatter.render(p_177214_1_, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
       GlStateManager.popMatrix();
     } 
     if (p_177214_1_.getSize() >= 5000) {
@@ -38,7 +38,7 @@ public class LayerWitherBody implements LayerRenderer<EntityLivingBase> {
       GlStateManager.scale(1.51F, 1.51F, 1.51F);
       GlStateManager.translate(0.0F, 0.0F, 0.45F);
       this.witherRenderer.bindTexture(witherTextures);
-      this.modelmatter.render((Entity)p_177214_1_, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+      this.modelmatter.render(p_177214_1_, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
       GlStateManager.popMatrix();
     } 
     if (p_177214_1_.getSize() >= 8000) {
@@ -48,9 +48,9 @@ public class LayerWitherBody implements LayerRenderer<EntityLivingBase> {
       GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
       GlStateManager.rotate(-30.0F, 1.0F, 0.0F, 0.0F);
       this.witherRenderer.bindTexture(new ResourceLocation("ageofminecraft", "textures/entities/wither_storm_hue.png"));
-      this.modelsmalltentacle.render((Entity)p_177214_1_, p_177214_2_, p_177214_3_, p_177214_5_, p_177214_6_, p_177214_7_, p_177214_8_);
-      this.modelsmalltentacle.setRotationAngles(p_177214_2_, p_177214_3_, p_177214_5_, p_177214_6_, p_177214_7_, p_177214_8_, (Entity)p_177214_1_);
-      this.modelsmalltentacle.setLivingAnimations((EntityLivingBase)p_177214_1_, p_177214_2_, p_177214_3_, p_177214_4_);
+      this.modelsmalltentacle.render(p_177214_1_, p_177214_2_, p_177214_3_, p_177214_5_, p_177214_6_, p_177214_7_, p_177214_8_);
+      this.modelsmalltentacle.setRotationAngles(p_177214_2_, p_177214_3_, p_177214_5_, p_177214_6_, p_177214_7_, p_177214_8_, p_177214_1_);
+      this.modelsmalltentacle.setLivingAnimations(p_177214_1_, p_177214_2_, p_177214_3_, p_177214_4_);
       GlStateManager.popMatrix();
     } 
     if (p_177214_1_.getSize() >= 12250) {
@@ -59,7 +59,7 @@ public class LayerWitherBody implements LayerRenderer<EntityLivingBase> {
       GlStateManager.scale(4.0F, 4.0F, 4.0F);
       GlStateManager.translate(0.0F, -0.5F, -0.5F);
       this.witherRenderer.bindTexture(witherTextures);
-      this.modelmatter.render((Entity)p_177214_1_, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+      this.modelmatter.render(p_177214_1_, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
       GlStateManager.popMatrix();
     } 
     if (p_177214_1_.getSize() >= 5250) {
@@ -67,7 +67,7 @@ public class LayerWitherBody implements LayerRenderer<EntityLivingBase> {
       GlStateManager.translate(0.0F, 1.3F, -0.5F);
       GlStateManager.rotate(30.0F, 1.0F, 0.0F, 0.0F);
       this.witherRenderer.bindTexture(witherTextures);
-      this.modelmatter.render((Entity)p_177214_1_, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+      this.modelmatter.render(p_177214_1_, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
       GlStateManager.popMatrix();
     } 
   }

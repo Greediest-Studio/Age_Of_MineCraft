@@ -70,13 +70,13 @@ public class PhaseBreathing extends PhaseBaseFriendly {
       double d1 = this.dragon.dragonPartHead.posZ + vec3d.z * f / 2.0D;
       double d2 = this.dragon.dragonPartHead.posY + (this.dragon.dragonPartHead.height / 2.0F);
       BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(MathHelper.floor(d0), MathHelper.floor(d2), MathHelper.floor(d1));
-      while (this.dragon.world.isAirBlock((BlockPos)blockpos$mutableblockpos)) {
+      while (this.dragon.world.isAirBlock(blockpos$mutableblockpos)) {
         d2--;
         blockpos$mutableblockpos.setPos(MathHelper.floor(d0), MathHelper.floor(d2), MathHelper.floor(d1));
       } 
       d2 = (MathHelper.floor(d2) + 1);
       this.areaEffectCloud = new EntityAreaEffectCloudOther(this.dragon.world, d0, d2, d1);
-      this.areaEffectCloud.setOwner((EntityTameBase)this.dragon);
+      this.areaEffectCloud.setOwner(this.dragon);
       this.areaEffectCloud.setRadius(1.0F);
       this.areaEffectCloud.setDuration(80);
       this.areaEffectCloud.setRadiusPerTick(f / this.areaEffectCloud.getDuration());

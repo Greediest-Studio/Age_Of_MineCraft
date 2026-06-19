@@ -52,10 +52,10 @@ public class RenderVillager extends RenderLiving<EntityVillager> {
   
   public RenderVillager(RenderManager renderManagerIn) {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.5F);
-    addLayer(new LayerArrowCustomSized((RenderLivingBase<?>)this, 1.0F));
+    addLayer(new LayerArrowCustomSized(this, 1.0F));
     addLayer(new LayerCustomHeadEngender(regularmodel.villagerHead, cmmmodel.Head));
-    addLayer(new LayerLearningBook(this));
-    addLayer(new LayerMobCape((RenderLivingBase<?>)this));
+    
+    addLayer(new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityVillager entity) {
@@ -117,7 +117,7 @@ public class RenderVillager extends RenderLiving<EntityVillager> {
   }
   
   protected void preRenderCallback(EntityVillager entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = (entitylivingbaseIn.getIllusionFormTime() <= 0 && EngenderConfig.mobs.useMobTalkerModels) ? (ModelBase)cmmmodel : (ModelBase)regularmodel;
+    this.mainModel = (entitylivingbaseIn.getIllusionFormTime() <= 0 && EngenderConfig.mobs.useMobTalkerModels) ? cmmmodel : regularmodel;
     float f = 0.9375F;
     if (!EngenderConfig.mobs.useMobTalkerModels) {
       GlStateManager.scale(f, f, f);

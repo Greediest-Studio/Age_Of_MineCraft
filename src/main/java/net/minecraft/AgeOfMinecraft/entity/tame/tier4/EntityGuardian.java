@@ -83,12 +83,12 @@ public class EntityGuardian extends EntityTameBase implements Armored {
     } else {
       setSize(1.0F, 1.0F);
     } 
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.1D, 48.0F, 8.0F));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.1D, 48.0F, 8.0F));
     this.tasks.addTask(4, new AIGuardianAttack());
     EntityAIMoveTowardsRestriction entityaimovetowardsrestriction;
-    this.tasks.addTask(5, (EntityAIBase)(entityaimovetowardsrestriction = new EntityAIMoveTowardsRestriction((EntityCreature)this, 1.0D)));
-    this.tasks.addTask(7, (EntityAIBase)(this.wander = new EntityAIWander((EntityCreature)this, 1.0D, 80)));
-    this.tasks.addTask(9, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(5, entityaimovetowardsrestriction = new EntityAIMoveTowardsRestriction(this, 1.0D));
+    this.tasks.addTask(7, this.wander = new EntityAIWander(this, 1.0D, 80));
+    this.tasks.addTask(9, new EntityAILookIdle(this));
     this.wander.setMutexBits(3);
     entityaimovetowardsrestriction.setMutexBits(3);
     this.moveHelper = new GuardianMoveHelper(this);
@@ -127,12 +127,12 @@ public class EntityGuardian extends EntityTameBase implements Armored {
     if (hasCustomName())
       return getCustomNameTag(); 
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      String str = EntityList.getEntityString((Entity)this);
+      String str = EntityList.getEntityString(this);
       if (str == null)
         str = "generic"; 
       return I18n.translateToLocal("entity." + str + ".cmm.name");
     } 
-    String s = EntityList.getEntityString((Entity)this);
+    String s = EntityList.getEntityString(this);
     if (s == null)
       s = "generic"; 
     return I18n.translateToLocal("entity." + s + ".name");
@@ -144,7 +144,7 @@ public class EntityGuardian extends EntityTameBase implements Armored {
       for (int i = 0; i < 1 + this.rand.nextInt(2); i++) {
         EntityGuardian baby = new EntityGuardian(this.world);
         EntityGuardian entityElderGuardian = baby;
-        baby.copyLocationAndAnglesFrom((Entity)this);
+        baby.copyLocationAndAnglesFrom(this);
         baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
         if (this.rand.nextFloat() < 0.01F) {
           entityElderGuardian = new EntityElderGuardian(this.world);
@@ -160,7 +160,7 @@ public class EntityGuardian extends EntityTameBase implements Armored {
         if (isMarried())
           for (int e = 0; e < 10 + this.rand.nextInt(10); e++)
             entityElderGuardian.levelUp();  
-        this.world.spawnEntity((Entity)entityElderGuardian);
+        this.world.spawnEntity(entityElderGuardian);
       }  
   }
   
@@ -189,7 +189,7 @@ public class EntityGuardian extends EntityTameBase implements Armored {
   }
   
   protected PathNavigate getNewNavigator(World worldIn) {
-    return (PathNavigate)new PathNavigateSwimmer((EntityLiving)this, worldIn);
+    return new PathNavigateSwimmer(this, worldIn);
   }
   
   public float getBlockPathWeight(BlockPos pos) {
@@ -246,7 +246,7 @@ public class EntityGuardian extends EntityTameBase implements Armored {
   }
   
   public boolean hasTargetedEntity() {
-    return ((Integer) this.dataManager.get(TARGET_ENTITY) != 0 && isEntityAlive());
+    return (this.dataManager.get(TARGET_ENTITY) != 0 && isEntityAlive());
   }
   
   public EntityLivingBase getTargetedEntity() {
@@ -255,7 +255,7 @@ public class EntityGuardian extends EntityTameBase implements Armored {
     if (this.world.isRemote) {
       if (this.targetedEntity != null)
         return this.targetedEntity; 
-      Entity entity = this.world.getEntityByID((Integer) this.dataManager.get(TARGET_ENTITY));
+      Entity entity = this.world.getEntityByID(this.dataManager.get(TARGET_ENTITY));
       if (entity instanceof EntityLivingBase) {
         this.targetedEntity = (EntityLivingBase)entity;
         return this.targetedEntity;
@@ -284,7 +284,7 @@ public class EntityGuardian extends EntityTameBase implements Armored {
   }
   
   protected SoundEvent getDeathSound() {
-    setAttackTarget((EntityLivingBase)null);
+    setAttackTarget(null);
     if (EngenderConfig.mobs.useMobTalkerModels)
       playSound(ESound.girlDeath, getSoundVolume(), getSoundPitch() + 0.1F); 
     if (!isInWater())
@@ -308,27 +308,27 @@ public class EntityGuardian extends EntityTameBase implements Armored {
     ItemStack stack = player.getHeldItem(hand);
     if (!stack.isEmpty() && stack.getItem() == Items.TOTEM_OF_UNDYING && !(this instanceof EntityElderGuardian)) {
       EntityElderGuardian baby = new EntityElderGuardian(this.world);
-      baby.copyLocationAndAnglesFrom((Entity)this);
+      baby.copyLocationAndAnglesFrom(this);
       baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
       baby.setOwnerId(getOwnerId());
-      this.world.spawnEntity((Entity)baby);
-      this.world.removeEntity((Entity)this);
+      this.world.spawnEntity(baby);
+      this.world.removeEntity(this);
       stack.shrink(1);
-      (Minecraft.getMinecraft()).effectRenderer.emitParticleAtEntity((Entity)this, EnumParticleTypes.TOTEM, 30);
+      (Minecraft.getMinecraft()).effectRenderer.emitParticleAtEntity(this, EnumParticleTypes.TOTEM, 30);
       playSound(SoundEvents.ITEM_TOTEM_USE, 1.0F, 1.0F);
       this.ticksExisted = 0;
       return true;
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (!isWild() && false && !isChild() && !this.world.isRemote)
-        player.startRiding((Entity)this); 
+        player.startRiding(this);
       return true;
     } 
     return false;
   }
   
   public void onLivingUpdate() {
-    this.moveHelper = (!isInWater() && EngenderConfig.mobs.useMobTalkerModels) ? new EntityMoveHelper((EntityLiving)this) : new GuardianMoveHelper(this);
+    this.moveHelper = (!isInWater() && EngenderConfig.mobs.useMobTalkerModels) ? new EntityMoveHelper(this) : new GuardianMoveHelper(this);
     if (!EngenderConfig.mobs.useMobTalkerModels)
       this.renderYawOffset = this.rotationYaw = this.rotationYawHead; 
     if (this.deathTime > 0)
@@ -338,7 +338,7 @@ public class EntityGuardian extends EntityTameBase implements Armored {
       this.clientSideTailAnimationO = this.clientSideTailAnimation;
       if (!isInWater() && !isElder() && !isPotionActive(MobEffects.LEVITATION)) {
         this.tailSwiping = 1.0F;
-        this.clientSideTouchedGround = (this.motionY < 0.0D && this.world.isBlockNormalCube((new BlockPos((Entity)this)).down(), false));
+        this.clientSideTouchedGround = (this.motionY < 0.0D && this.world.isBlockNormalCube((new BlockPos(this)).down(), false));
       } else if (isMoving()) {
         if (this.tailSwiping < 0.5F) {
           this.tailSwiping = 4.0F;
@@ -381,7 +381,7 @@ public class EntityGuardian extends EntityTameBase implements Armored {
           this.clientSideAttackTime++; 
         EntityLivingBase entitylivingbase = getTargetedEntity();
         if (entitylivingbase != null) {
-          getLookHelper().setLookPositionWithEntity((Entity)entitylivingbase, 180.0F, getVerticalFaceSpeed());
+          getLookHelper().setLookPositionWithEntity(entitylivingbase, 180.0F, getVerticalFaceSpeed());
           getLookHelper().onUpdateLook();
           double d5 = getAttackAnimationScale(0.0F);
           double d0 = entitylivingbase.posX - this.posX;
@@ -445,7 +445,7 @@ public class EntityGuardian extends EntityTameBase implements Armored {
   }
   
   public boolean isNotColliding() {
-    return (this.world.checkNoEntityCollision(getEntityBoundingBox(), (Entity)this) && this.world.getCollisionBoxes((Entity)this, getEntityBoundingBox()).isEmpty());
+    return (this.world.checkNoEntityCollision(getEntityBoundingBox(), this) && this.world.getCollisionBoxes(this, getEntityBoundingBox()).isEmpty());
   }
   
   public boolean attackEntityFrom(DamageSource source, float amount) {
@@ -453,7 +453,7 @@ public class EntityGuardian extends EntityTameBase implements Armored {
       if (!isMoving() && !source.isMagicDamage() && source.getTrueSource() instanceof EntityLivingBase) {
         EntityLivingBase entitylivingbase = (EntityLivingBase)source.getTrueSource();
         if (!source.isExplosion() && (!false || (getOwner() != null && entitylivingbase == getOwner()))) {
-          inflictEngenderMobDamage(entitylivingbase, " died trying to attack ", DamageSource.causeThornsDamage((Entity)this), 2.0F);
+          inflictEngenderMobDamage(entitylivingbase, " died trying to attack ", DamageSource.causeThornsDamage(this), 2.0F);
           playSound(SoundEvents.ENCHANT_THORNS_HIT, getSoundVolume(), getSoundPitch());
         } 
       } 
@@ -570,14 +570,14 @@ public class EntityGuardian extends EntityTameBase implements Armored {
     public void startExecuting() {
       this.tickCounter = -10;
       this.guardian.getNavigator().clearPath();
-      this.guardian.getLookHelper().setLookPositionWithEntity((Entity)this.guardian.getAttackTarget(), 180.0F, this.guardian.getVerticalFaceSpeed());
+      this.guardian.getLookHelper().setLookPositionWithEntity(this.guardian.getAttackTarget(), 180.0F, this.guardian.getVerticalFaceSpeed());
       this.guardian.isAirBorne = true;
       this.guardian.setSitResting(false);
     }
     
     public void resetTask() {
       this.guardian.setTargetedEntity(0);
-      this.guardian.setAttackTarget((EntityLivingBase)null);
+      this.guardian.setAttackTarget(null);
       this.guardian.wander.makeUpdate();
     }
     
@@ -585,9 +585,9 @@ public class EntityGuardian extends EntityTameBase implements Armored {
       this.guardian.setSitResting(false);
       EntityLivingBase entitylivingbase = this.guardian.getAttackTarget();
       this.guardian.getNavigator().clearPath();
-      this.guardian.getLookHelper().setLookPositionWithEntity((Entity)entitylivingbase, 180.0F, this.guardian.getVerticalFaceSpeed());
-      if (!this.guardian.canEntityBeSeen((Entity)entitylivingbase)) {
-        this.guardian.setAttackTarget((EntityLivingBase)null);
+      this.guardian.getLookHelper().setLookPositionWithEntity(entitylivingbase, 180.0F, this.guardian.getVerticalFaceSpeed());
+      if (!this.guardian.canEntityBeSeen(entitylivingbase)) {
+        this.guardian.setAttackTarget(null);
       } else {
         this.tickCounter++;
         if (this.guardian.moralRaisedTimer > 200)
@@ -608,18 +608,18 @@ public class EntityGuardian extends EntityTameBase implements Armored {
             float xRatio = MathHelper.sin(entitylivingbase.rotationYawHead * 0.017453292F);
             float zRatio = -MathHelper.cos(entitylivingbase.rotationYawHead * 0.017453292F);
             float f1 = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
-            entitylivingbase.motionX -= xRatio / f1 / this.guardian.getDistance((Entity)entitylivingbase) * 4.0D;
-            entitylivingbase.motionZ -= zRatio / f1 / this.guardian.getDistance((Entity)entitylivingbase) * 4.0D;
+            entitylivingbase.motionX -= xRatio / f1 / this.guardian.getDistance(entitylivingbase) * 4.0D;
+            entitylivingbase.motionZ -= zRatio / f1 / this.guardian.getDistance(entitylivingbase) * 4.0D;
             entitylivingbase.motionY++;
             if (entitylivingbase instanceof EntityPlayerMP)
-              ((EntityPlayerMP)entitylivingbase).connection.sendPacket((Packet)new SPacketEntityVelocity((Entity)entitylivingbase)); 
+              ((EntityPlayerMP)entitylivingbase).connection.sendPacket(new SPacketEntityVelocity(entitylivingbase));
           } 
-          this.guardian.inflictEngenderMobDamage(entitylivingbase, " was laser beamed by ", DamageSource.causeMobDamage((EntityLivingBase)this.guardian).setMagicDamage(), (float)this.guardian.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue() + f);
+          this.guardian.inflictEngenderMobDamage(entitylivingbase, " was laser beamed by ", DamageSource.causeMobDamage(this.guardian).setMagicDamage(), (float)this.guardian.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue() + f);
           if (this.guardian.isHero() && this.guardian.getSpecialAttackTimer() <= 0) {
             this.guardian.playSound(SoundEvents.ENTITY_WITHER_SPAWN, 10.0F, 1.25F);
             entitylivingbase.hurtResistantTime = 0;
-            EntityTameBase.createEngenderModExplosion((Entity)this.guardian, entitylivingbase.posX, entitylivingbase.posY + (entitylivingbase.height / 2.0F), entitylivingbase.posZ, 7.0F, true, false);
-            entitylivingbase.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this.guardian), (float)this.guardian.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 3.0F);
+            EntityTameBase.createEngenderModExplosion(this.guardian, entitylivingbase.posX, entitylivingbase.posY + (entitylivingbase.height / 2.0F), entitylivingbase.posZ, 7.0F, true, false);
+            entitylivingbase.attackEntityFrom(DamageSource.causeMobDamage(this.guardian), (float)this.guardian.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 3.0F);
             this.guardian.setSpecialAttackTimer(600);
           } 
         } 
@@ -632,7 +632,7 @@ public class EntityGuardian extends EntityTameBase implements Armored {
     private EntityGuardian entityGuardian;
     
     public GuardianMoveHelper(EntityGuardian guardian) {
-      super((EntityLiving)guardian);
+      super(guardian);
       this.entityGuardian = guardian;
     }
     
