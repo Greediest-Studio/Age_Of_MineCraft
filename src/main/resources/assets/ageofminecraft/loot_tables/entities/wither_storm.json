@@ -1,1 +1,15 @@
-{}
+{
+  "pools": [
+    {
+      "name": "withered_nether_star",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "ageofminecraft:withered_nether_star",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

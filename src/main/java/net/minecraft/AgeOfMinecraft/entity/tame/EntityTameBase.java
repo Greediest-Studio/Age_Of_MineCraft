@@ -1057,23 +1057,8 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public void incrementConversion(EntityPlayer player) {
-    if (isWild())
-      if (this.convertionInt >= timesToConvert()) {
-        setAttackTarget((EntityLivingBase)null);
-        this.world.playEvent((EntityPlayer)null, 3000, new BlockPos(this.posX, this.posY, this.posZ), 0);
-        setOwnerId(player.getUniqueID());
-        this.ticksExisted = 0;
-        playSound(ESound.converted, 3.0F, 1.0F);
-        if (player instanceof EntityPlayerMP)
-          ESetup.CONVERT_MOB.trigger((EntityPlayerMP)player, this); 
-        if (player != null && !isWild() && !this.world.isRemote)
-          player.sendMessage((ITextComponent)new TextComponentTranslation(getName() + " has been converted by " + player.getName() + " (" + (int)this.posX + ", " + (int)this.posY + ", " + (int)this.posZ + ", )", new Object[0])); 
-      } else {
-        this.convertionInt++;
-        playSound(ESound.converting, 3.0F, 1.0F);
-        setAttackTarget((EntityLivingBase)null);
-        this.convertionDelay = 200;
-      }  
+    this.convertionInt = 0;
+    this.convertionDelay = 0;
   }
   
   public EnumTier getTier() {
@@ -1247,16 +1232,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       setFittness(tagCompund.getFloat("FIT")); 
     setMarried(tagCompund.getBoolean("IsMarried"));
     setChild(tagCompund.getBoolean("IsBaby"));
-    if (tagCompund.hasKey("OwnerUUID", 8)) {
-      s = tagCompund.getString("OwnerUUID");
-    } else {
-      String s1 = tagCompund.getString("Owner");
-      s = PreYggdrasilConverter.convertMobOwnerIfNeeded(getServer(), s1);
-    } 
-    if (!s.isEmpty())
-      try {
-        setOwnerId(UUID.fromString(s));
-      } catch (Throwable throwable) {} 
+    setOwnerId(null);
     this.dataManager.set(REBIRTH, Boolean.valueOf(tagCompund.getBoolean("LastChance")));
     this.dataManager.set(HERO, Boolean.valueOf(tagCompund.getBoolean("Hero")));
     this.dataManager.set(ANTIMOB, Boolean.valueOf(tagCompund.getBoolean("Anti")));
@@ -1308,11 +1284,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     tagCompound.setFloat("DEX", getDexterity());
     tagCompound.setFloat("AGI", getAgility());
     tagCompound.setFloat("FIT", getFittness());
-    if (getOwnerId() == null) {
-      tagCompound.setString("OwnerUUID", "");
-    } else {
-      tagCompound.setString("OwnerUUID", getOwnerId().toString());
-    } 
+    tagCompound.setString("OwnerUUID", "");
     tagCompound.setBoolean("IsMarried", isMarried());
     tagCompound.setBoolean("IsBaby", isChild());
     tagCompound.setBoolean("Hero", isHero());
@@ -1416,33 +1388,28 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   
   @Nullable
   public UUID getOwnerId() {
-    return (UUID)((Optional)this.dataManager.get(OWNER_UNIQUE_ID)).orNull();
+    return null;
   }
   
   public void setOwnerId(@Nullable UUID p_184754_1_) {
-    this.dataManager.set(OWNER_UNIQUE_ID, Optional.fromNullable(p_184754_1_));
+    this.dataManager.set(OWNER_UNIQUE_ID, Optional.absent());
   }
   
   @Nullable
   public EntityLivingBase getOwner() {
-    try {
-      UUID uuid = getOwnerId();
-      return (uuid == null) ? null : (EntityLivingBase)this.world.getPlayerEntityByUUID(uuid);
-    } catch (IllegalArgumentException var2) {
-      return null;
-    } 
+    return null;
   }
   
   public boolean isOwner(EntityLivingBase entityIn) {
-    return (entityIn == getOwner());
+    return false;
   }
   
   public boolean isWild() {
-    return (getOwner() == null);
+    return true;
   }
   
   public boolean hasOwner(EntityPlayer player) {
-    return (!isWild() && getOwner() == player);
+    return false;
   }
   
   protected void dropEquipmentUndamaged() {
@@ -1482,49 +1449,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public boolean isAThreatToOwner(EntityLivingBase otherEntity) {
-    if (otherEntity == this || !otherEntity.attackable())
-      return false; 
-    if (Loader.isModLoaded("twilightforest"))
-      if (otherEntity instanceof EntityTFLich && ((EntityTFLich)otherEntity).isShadowClone())
-        return false;  
-    if (Loader.isModLoaded("mutantbeasts") && otherEntity instanceof chumbanotz.mutantbeasts.entity.mutant.MutantSnowGolemEntity)
-      return false; 
-    if (Loader.isModLoaded("iceandfire") && otherEntity instanceof com.github.alexthe666.iceandfire.entity.EntityDragonEgg)
-      return false; 
-    if (Loader.isModLoaded("abyssalcraft") && otherEntity instanceof EntityRemnant && (EntityRemnant)otherEntity != getOwner().getLastAttackedEntity() && !((EntityRemnant)otherEntity).isAngry())
-      return false; 
-    if (Loader.isModLoaded("abyssalcraft") && otherEntity instanceof EntityAbygolem && ((EntityAbygolem)otherEntity).getAttackTarget() == null && (EntityAbygolem)otherEntity != getOwner().getLastAttackedEntity())
-      return false; 
-    if (Loader.isModLoaded("mutantbeasts") && otherEntity instanceof MutantEndermanEntity && ((MutantEndermanEntity)otherEntity).getAttackTarget() == null)
-      return false; 
-    if (Loader.isModLoaded("draconicevolution") && otherEntity instanceof EntityGuardianCrystal && ((EntityGuardianCrystal)otherEntity).health <= 0.0F)
-      return false; 
-    EntityLivingBase entitylivingbase = getOwner();
-    if (otherEntity instanceof EntityPlayer) {
-      if (otherEntity == entitylivingbase)
-        return false; 
-      if (((EntityPlayer)otherEntity).capabilities.disableDamage)
-        return false; 
-    } 
-    if (otherEntity instanceof EntityCreature && (((EntityCreature)otherEntity).getAttackTarget() == getOwner() || ((EntityCreature)otherEntity).getAttackTarget() == this))
-      return false; 
-    if (otherEntity instanceof EntityPigZombie && !((EntityPigZombie)otherEntity).isAngry())
-      return false; 
-    if (otherEntity instanceof EntityTameBase) {
-      if (((EntityTameBase)otherEntity).isAIDisabled())
-        return false; 
-      if (((EntityTameBase)otherEntity).isWild() && (((EntityTameBase)otherEntity).convertionInt <= 0 || (((EntityTameBase)otherEntity).convertionInt > 0 && this instanceof EntityEvoker)))
-        return false; 
-      if (!((EntityTameBase)otherEntity).isWild() && ((EntityTameBase)otherEntity).getOwner() == entitylivingbase && ((EntityTameBase)otherEntity).getFakeHealth() <= 0.0F)
-        return false; 
-      if (((EntityTameBase)otherEntity).getFakeHealth() > 0.0F)
-        return true; 
-    } 
-    if (otherEntity instanceof EntityDragon && ((EntityDragon)otherEntity).getPhaseManager().getCurrentPhase() instanceof net.minecraft.entity.boss.dragon.phase.PhaseDying)
-      return false; 
-    if ((otherEntity instanceof EntityZombieVillager && ((EntityZombieVillager)otherEntity).isConverting()) || (otherEntity instanceof net.minecraft.entity.INpc && !(otherEntity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier2.EntityVillager)) || otherEntity instanceof net.minecraft.entity.monster.EntitySnowman || otherEntity instanceof net.minecraft.entity.passive.EntityAmbientCreature || otherEntity instanceof net.minecraft.entity.passive.EntityWaterMob || otherEntity instanceof net.minecraft.entity.passive.EntityAnimal)
-      return false; 
-    return true;
+    return false;
   }
   
   protected void despawnEntity() {
@@ -1683,57 +1608,6 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public boolean attackEntityFrom(DamageSource source, float amount) {
-    Entity entity = source.getTrueSource();
-    if (this == entity)
-      return false; 
-    if (!ForgeHooks.onLivingAttack((EntityLivingBase)this, source, amount))
-      return false; 
-    if (getOwner() != null && entity == getOwner()) {
-      if (this instanceof EntityChicken)
-        ((EntityChicken)this).timeUntilNextEgg -= 40; 
-      this.moralRaisedTimer += 40;
-      this.prevChasingPosX = this.chasingPosX = this.posX + MathHelper.sin(this.renderYawOffset * 0.017453292F) * 6.0D;
-      this.prevChasingPosY = this.chasingPosY = this.posY + getEyeHeight();
-      this.prevChasingPosZ = this.chasingPosZ = this.posX - MathHelper.cos(this.renderYawOffset * 0.017453292F) * 6.0D;
-      this.distanceWalkedModified = 0.0F;
-      setAttackTarget((EntityLivingBase)null);
-      setRevengeTarget(null);
-      getNavigator().clearPath();
-      getNavigator().tryMoveToEntityLiving((Entity)this, 0.0D);
-      if (!this.world.isRemote && getArrowCountInEntity() > 0) {
-        setArrowCountInEntity(getArrowCountInEntity() - 1);
-        attackEntityFrom(DamageSource.CACTUS, 1.0F);
-        playSound(SoundEvents.ENCHANT_THORNS_HIT, getSoundVolume(), getSoundPitch());
-        EntityTippedArrow entityTippedArrow = new EntityTippedArrow(this.world, (EntityLivingBase)this);
-        entityTippedArrow.copyLocationAndAnglesFrom((Entity)this);
-        ((EntityArrow)entityTippedArrow).posY = this.posY + getEyeHeight();
-        entityTippedArrow.shoot((Entity)this, -30.0F, this.rand.nextFloat() * 360.0F, 0.0F, 0.35F, 1.0F);
-        ((EntityArrow)entityTippedArrow).pickupStatus = EntityArrow.PickupStatus.ALLOWED;
-        this.world.spawnEntity((Entity)entityTippedArrow);
-      } 
-    } 
-    if (isEntityInvulnerable(source) || amount == 0.0F || (
-      
-      !takesFallDamage() && source.getDamageType() == "fall") || (
-      isImmuneToExplosions() && source.isExplosion()) || (isHero() && (source.getDamageType() == "sulphuric_acid" || source.getDamageType() == "thermal" || source.getDamageType() == "oxygen_suffocation" || source.getDamageType() == "wither" || source.getDamageType() == "inFire" || source.getDamageType() == "onFire" || source.getDamageType() == "lava" || source.getDamageType() == "hotFloor" || source.getDamageType() == "magic" || source.getDamageType() == "indirectMagic")) || (source
-      .isFireDamage() && (isPotionActive(MobEffects.FIRE_RESISTANCE) || isImmuneToFire())) || (
-      isEntityImmuneToCoralium() && source.getDamageType() == "coralium") || (
-      isEntityImmuneToDread() && source.getDamageType() == "dread") || (
-      isEntityImmuneToAntiMatter() && source.getDamageType() == "antimatter") || (
-      isEntityImmuneToDarkness() && source.getDamageType() == "shadow") || (
-      getTier() == EnumTier.TIER6 && (source.getDamageType() == "sulphuric_acid" || source.getDamageType() == "thermal" || source.getDamageType() == "oxygen_suffocation" || source.getDamageType() == "wither" || source.getDamageType() == "inFire" || source.getDamageType() == "onFire" || source.getDamageType() == "lava" || source.getDamageType() == "hotFloor" || source.getDamageType() == "chaosImplosion")) || source == DamageSource.CRAMMING)
-      return false; 
-    setSitResting(false);
-    if (!this.world.isRemote && entity != null && (getAttackTarget() == null || (getAttackTarget() != null && getDistance(entity) < getDistance((Entity)getAttackTarget()))) && entity instanceof EntityLivingBase && !source.isExplosion())
-      setAttackTarget((EntityLivingBase)entity); 
-    if (this.hurtResistantTime <= 1)
-      if (source.isProjectile()) {
-        playSound(getPierceHurtSound(), 3.0F, 1.0F);
-      } else if (amount >= 7.0F || source.isExplosion() || source.isDamageAbsolute() || source.isUnblockable() || source == DamageSource.ANVIL || source.canHarmInCreative() || source.isMagicDamage() || source == DamageSource.LAVA) {
-        playSound(getCrushHurtSound(), 3.0F, 1.0F);
-      } else {
-        playSound(getRegularHurtSound(), 3.0F, 1.0F);
-      }  
     return super.attackEntityFrom(source, amount);
   }
   
@@ -1949,7 +1823,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         if (aentity != null)
           for (Entity parts : aentity) {
             if (parts instanceof MultiPartEntityPart)
-              flag = ((IEntityMultiPart)entity).attackEntityFromPart((MultiPartEntityPart)parts, (entity instanceof EntityTameBase) ? DamageSource.causeMobDamage((EntityLivingBase)this) : DamageSource.causePlayerDamage(isWild() ? this.world.getClosestPlayerToEntity((Entity)this, -1.0D) : (EntityPlayer)getOwner()), f); 
+              flag = ((IEntityMultiPart)entity).attackEntityFromPart((MultiPartEntityPart)parts, DamageSource.causeMobDamage((EntityLivingBase)this), f); 
           }  
       } 
     } 
@@ -2188,7 +2062,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
           if (aentity != null) {
             Entity mob = aentity[this.rand.nextInt((entity.getParts()).length)];
             if (mob instanceof MultiPartEntityPart)
-              if (!((IEntityMultiPart)entity).attackEntityFromPart((MultiPartEntityPart)mob, (entity instanceof EntityTameBase) ? DamageSource.causeMobDamage((EntityLivingBase)this) : DamageSource.causePlayerDamage(isWild() ? this.world.getClosestPlayerToEntity((Entity)this, -1.0D) : (EntityPlayer)getOwner()), damage) && attacktype.getDamageType() == "sans")
+              if (!((IEntityMultiPart)entity).attackEntityFromPart((MultiPartEntityPart)mob, DamageSource.causeMobDamage((EntityLivingBase)this), damage) && attacktype.getDamageType() == "sans")
                 entity.setHealth(entity.getHealth() - 1.0F);  
           } 
         } 
@@ -3911,7 +3785,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         debugPathFinding();
         if (!noPath()) {
           Vec3d vec3d1 = this.currentPath.getPosition((Entity)this.entity);
-          this.entity.getMoveHelper().setMoveTo(vec3d1.x, vec3d1.y, vec3d1.z, this.speed);
+          this.entity.getMoveHelper().setMoveTo(vec3d1.x, Flying.clampFlightY(vec3d1.y), vec3d1.z, this.speed);
         } 
       } 
     }

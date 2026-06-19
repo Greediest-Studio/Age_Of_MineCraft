@@ -1,6 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.asorahphases;
 
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDragonBoss;
+import net.minecraft.AgeOfMinecraft.entity.tame.Flying;
 import net.minecraft.util.math.Vec3d;
 
 public class PhaseIdleHover extends PhaseBaseFriendly {
@@ -11,7 +12,7 @@ public class PhaseIdleHover extends PhaseBaseFriendly {
   }
   
   public void doLocalUpdate() {
-    this.targetLocation = new Vec3d(this.dragon.posX, this.dragon.posY, this.dragon.posZ);
+    this.targetLocation = new Vec3d(this.dragon.posX, Flying.clampFlightY(this.dragon.posY), this.dragon.posZ);
   }
   
   public boolean getIsStationary() {

@@ -1,6 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.asorahphases;
 
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDragonBoss;
+import net.minecraft.AgeOfMinecraft.entity.tame.Flying;
 import net.minecraft.util.math.Vec3d;
 
 public class PhaseRamAttack extends PhaseBaseFriendly {
@@ -30,7 +31,7 @@ public class PhaseRamAttack extends PhaseBaseFriendly {
   }
   
   public void setTarget(Vec3d p_188668_1_) {
-    this.targetLocation = p_188668_1_;
+    this.targetLocation = new Vec3d(p_188668_1_.x, Flying.clampFlightY(p_188668_1_.y), p_188668_1_.z);
   }
   
   public float getMaxRiseOrFall() {

@@ -25,7 +25,7 @@ public class LayerWitherStormTractorBeam implements LayerRenderer<EntityLivingBa
   }
   
   public void func_177214_a(EntityWitherStormHead p_177214_1_, float p_177214_2_, float p_177214_3_, float p_177214_4_, float p_177214_5_, float p_177214_6_, float p_177214_7_, float p_177214_8_) {
-    if (p_177214_1_ != null && !p_177214_1_.isInvisible()) {
+    if (p_177214_1_ != null && !p_177214_1_.isInvisible() && (p_177214_1_.openMouthCounter > 0 || p_177214_1_.getAttackTarget() != null)) {
       GlStateManager.pushMatrix();
       boolean flag = p_177214_1_.isInvisible();
       GlStateManager.depthMask(!flag);

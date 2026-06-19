@@ -320,6 +320,20 @@ entity.WitherStormBossTentacleHelpful.name=Wither Storm Tentacle
 entity.WitherStormBossHeadHelpful.name=Wither Storm Head
 entity.WitherStormBossTentacleDevourerHelpful.name=Wither Storm Tentacle
 entity.Portal.name=Portal
+entity.untame_darkness.name=Darkness
+entity.sans.name=Sans
+entity.MagicMissile.name=Magic Missile
+entity.WitherStormSkull.name=Wither Storm Skull
+entity.PortalLightning.name=Portal Lightning
+entity.DisintigrationRay.name=Disintegration Ray
+entity.FrostRay.name=Frost Ray
+entity.SnowballHarmful.name=Snowball
+entity.AreaEffectCloudOther.name=Area Effect Cloud
+entity.TippedArrowOther.name=Tipped Arrow
+entity.InvisibleFangsProjectile.name=Invisible Fangs
+entity.ManaOrb.name=Mana Orb
+entity.BoneAttack.name=Bone Attack
+entity.GasterBlaster.name=Gaster Blaster
 
 entity.VillagerHelpful.cmm.name=Villager Woman
 entity.SnowmanHelpful.cmm.name=Snow Golem Girl
@@ -695,6 +709,16 @@ entity.ChagarothHelpful.name=Cha'garoth, The Dreadbeast
 entity.SacthothHelpful.name=Sacthoth, Harbinger of Doom
 entity.JzaharHelpful.name=J'zahar, Gatekeeper of The Abyss
 entity.AbyssalPortal.name=Abyssal Portal
+entity.Squads.name=Squads
+entity.Slugs.name=Dread Slug
+entity.Inks.name=Ink Projectile
+entity.PEBolt.name=Powerstone Bolt
+entity.CoraliumCharge.name=Coralium Charge
+entity.DreadedCharge.name=Dreaded Charge
+entity.OmotholCharge.name=Omothol Charge
+entity.MiniBlackHole.name=Mini Black Hole
+entity.BlackHole.name=Black Hole
+entity.Implosion.name=Implosion
 
 #Advancements
 #Creative Tabs
@@ -840,6 +864,9 @@ entity.MutantSkeletonHelpful.name=Mutant Skeleton
 entity.MutantEndermanHelpful.name=Mutant Enderman
 entity.MutantSnowGolemHelpful.name=Mutant Snow Golem
 entity.SpiderPigHelpful.name=Spider Pig
+entity.MutantSkeletonArrowOther.name=Mutant Skeleton Arrow
+entity.ThrowingBlockOther.name=Throwing Block
+entity.EndersoulFragmentOther.name=Endersoul Fragment
 #Advancements
 #Creative Tabs
 itemGroup.ageofmutants=Mutant Beasts Addon

@@ -1,6 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.asorahphases;
 
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDragonBoss;
+import net.minecraft.AgeOfMinecraft.entity.tame.Flying;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -35,7 +36,7 @@ public class PhaseLightningAndStrafe extends PhaseBaseFriendly {
         double d3 = d1 - this.dragon.posZ;
         double d4 = MathHelper.sqrt(d2 * d2 + d3 * d3);
         double d5 = Math.min(0.4000000059604645D + d4 / 80.0D - 1.0D, 10.0D);
-        this.targetLocation = new Vec3d(d0, this.attackTarget.posY + d5, d1);
+        this.targetLocation = new Vec3d(d0, Flying.clampFlightY(this.attackTarget.posY + d5), d1);
       } 
       double d12 = (this.targetLocation == null) ? 0.0D : this.targetLocation.squareDistanceTo(this.dragon.posX, this.dragon.posY, this.dragon.posZ);
       if (d12 < 100.0D || d12 > 22500.0D)
@@ -103,7 +104,7 @@ public class PhaseLightningAndStrafe extends PhaseBaseFriendly {
       do {
         d1 = vec3d.y + 30.0D + (this.dragon.getRNG().nextFloat() * 20.0F);
       } while (d1 < vec3d.y);
-      this.targetLocation = new Vec3d(d0, d1, d2);
+      this.targetLocation = new Vec3d(d0, Flying.clampFlightY(d1), d2);
     } 
   }
   
@@ -124,7 +125,7 @@ public class PhaseLightningAndStrafe extends PhaseBaseFriendly {
     double d1 = l - this.dragon.posZ;
     double d2 = MathHelper.sqrt(d0 * d0 + d1 * d1);
     double d3 = Math.min(0.4000000059604645D + d2 / 80.0D - 1.0D, 10.0D);
-    int i1 = MathHelper.floor(this.attackTarget.posY + d3);
+    int i1 = MathHelper.floor(Flying.clampFlightY(this.attackTarget.posY + d3));
     PathPoint pathpoint = new PathPoint(k, i1, l);
     this.currentPath = this.dragon.findPath(i, j, pathpoint);
     if (this.currentPath != null) {

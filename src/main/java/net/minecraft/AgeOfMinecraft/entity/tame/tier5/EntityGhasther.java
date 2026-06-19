@@ -760,6 +760,10 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
       this.parentEntity = ghast;
     }
     
+    public void setMoveTo(double x, double y, double z, double speedIn) {
+      super.setMoveTo(x, Flying.clampFlightY(y), z, speedIn);
+    }
+    
     public void onUpdateMoveHelper() {
       if (this.action == EntityMoveHelper.Action.MOVE_TO && this.parentEntity.getJukeboxToDanceTo() == null) {
         double d0 = this.posX - this.parentEntity.posX;

@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
 import net.minecraft.AgeOfMinecraft.entity.tame.EnumTier;
 import net.minecraft.AgeOfMinecraft.entity.tame.ExtendMultiPartEntityPart;
+import net.minecraft.AgeOfMinecraft.entity.tame.Flying;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEnderDragon;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.dragonphases.EntityDragonFireballOther;
 import net.minecraft.AgeOfMinecraft.events.ChunkLoadingEvent;
@@ -365,7 +366,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
           double d8 = 0.4000000059604645D + d7 / 80.0D - 1.0D;
           if (d8 > 10.0D)
             d8 = 10.0D; 
-          this.targetY = (getAttackTarget().getEntityBoundingBox()).minY + d8 + ((this.behaviour == EnumBehaviour.CIRCLE_PLAYER) ? 50 : 10);
+          this.targetY = Flying.clampFlightY((getAttackTarget().getEntityBoundingBox()).minY + d8 + ((this.behaviour == EnumBehaviour.CIRCLE_PLAYER) ? 50 : 10));
         } else if (this.behaviour != EnumBehaviour.FIREBOMB) {
           this.targetX += this.rand.nextGaussian() * 2.0D;
           this.targetZ += this.rand.nextGaussian() * 2.0D;
@@ -578,7 +579,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
     if (!this.world.isRemote && getAttackTarget() != null && getAttackTarget().isEntityAlive() && this.rand.nextInt(200) == 0 && getDistance((Entity)getAttackTarget()) >= 100.0D) {
       this.behaviour = EnumBehaviour.CHARGING;
       this.targetX = (getAttackTarget()).posX;
-      this.targetY = (getAttackTarget()).posY;
+      this.targetY = Flying.clampFlightY((getAttackTarget()).posY);
       this.targetZ = (getAttackTarget()).posZ;
     } 
     if (this.attackInProgress != -1 && this.nextAttackTimer <= 0)
@@ -613,7 +614,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
           int escape = 0;
           while (escape < 50) {
             this.targetX = this.homeX + (this.rand.nextDouble() - 0.5D) * 220.0D;
-            this.targetY = (this.homeY + 30) + this.rand.nextDouble() * 20.0D;
+            this.targetY = Flying.clampFlightY((this.homeY + 30) + this.rand.nextDouble() * 20.0D);
             this.targetZ = this.homeZ + (this.rand.nextDouble() - 0.5D) * 220.0D;
             escape++;
           } 
@@ -867,7 +868,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
       case FIREBOMB:
         if (Utils.getDistanceAtoB(this.posX, this.posY, this.posZ, this.homeX, (this.homeY + 30), this.homeZ) > 3.0D) {
           this.targetX = this.homeX;
-          this.targetY = (this.homeY + 30);
+          this.targetY = Flying.clampFlightY(this.homeY + 30);
           this.targetZ = this.homeZ;
         } 
         break;
@@ -887,41 +888,41 @@ public class EntityChaosGuardian extends EntityEnderDragon {
     switch (this.behaviour) {
       case ROAMING:
         this.targetX = (this.homeX + this.rand.nextFloat() * 120.0F - 60.0F);
-        this.targetY = (this.homeY + 60) + this.rand.nextDouble() * 40.0D;
+        this.targetY = Flying.clampFlightY((this.homeY + 60) + this.rand.nextDouble() * 40.0D);
         this.targetZ = (this.homeZ + this.rand.nextFloat() * 120.0F - 60.0F);
         break;
       case GO_HOME:
         this.targetX = this.homeX;
-        this.targetY = (this.homeY + 30) + this.rand.nextDouble() * 30.0D;
+        this.targetY = Flying.clampFlightY((this.homeY + 30) + this.rand.nextDouble() * 30.0D);
         this.targetZ = this.homeZ;
       case GUARDING:
         this.targetX = this.homeX;
-        this.targetY = (this.homeY + 5) + this.rand.nextDouble() * 5.0D;
+        this.targetY = Flying.clampFlightY((this.homeY + 5) + this.rand.nextDouble() * 5.0D);
         this.targetZ = this.homeZ;
         setAttackTarget(null);
         break;
       case CHARGING:
         if (getAttackTarget() != null) {
           this.targetX = (getAttackTarget()).posX + (this.rand.nextFloat() * 60.0F) - 30.0D;
-          this.targetY = (getAttackTarget()).posY + 10.0D + this.rand.nextDouble() * 10.0D;
+          this.targetY = Flying.clampFlightY((getAttackTarget()).posY + 10.0D + this.rand.nextDouble() * 10.0D);
           this.targetZ = (getAttackTarget()).posZ + (this.rand.nextFloat() * 60.0F) - 30.0D;
         } 
       case CIRCLE_PLAYER:
         if (getAttackTarget() != null) {
           this.targetX = (getAttackTarget()).posX + (this.rand.nextFloat() * 120.0F) - 60.0D;
-          this.targetY = (getAttackTarget()).posY + 30.0D + this.rand.nextDouble() * 30.0D;
+          this.targetY = Flying.clampFlightY((getAttackTarget()).posY + 30.0D + this.rand.nextDouble() * 30.0D);
           this.targetZ = (getAttackTarget()).posZ + (this.rand.nextFloat() * 120.0F) - 60.0D;
         } 
         break;
       case LOW_HEALTH_STRATEGY:
         this.targetX = (this.homeX + this.rand.nextFloat() * 60.0F - 30.0F);
-        this.targetY = (this.homeY + 30) + this.rand.nextDouble() * 20.0D;
+        this.targetY = Flying.clampFlightY((this.homeY + 30) + this.rand.nextDouble() * 20.0D);
         this.targetZ = (this.homeZ + this.rand.nextFloat() * 60.0F - 30.0F);
         break;
       case FIREBOMB:
         if (getAttackTarget() != null) {
           this.targetX = (getAttackTarget()).posX + (this.rand.nextFloat() * 120.0F) - 60.0D;
-          this.targetY = (getAttackTarget()).posY + 20.0D + this.rand.nextDouble() * 20.0D;
+          this.targetY = Flying.clampFlightY((getAttackTarget()).posY + 20.0D + this.rand.nextDouble() * 20.0D);
           this.targetZ = (getAttackTarget()).posZ + (this.rand.nextFloat() * 120.0F) - 60.0D;
         } 
         break;
@@ -962,7 +963,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
           int escape = 0;
           while (escape < 50) {
             this.targetX = this.homeX + (this.rand.nextDouble() - 0.5D) * 260.0D;
-            this.targetY = (this.homeY + 20) + (this.rand.nextDouble() - 0.5D) * 50.0D;
+            this.targetY = Flying.clampFlightY((this.homeY + 20) + (this.rand.nextDouble() - 0.5D) * 50.0D);
             this.targetZ = this.homeZ + (this.rand.nextDouble() - 0.5D) * 260.0D;
             escape++;
           } 

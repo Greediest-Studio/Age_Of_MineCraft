@@ -1,6 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.asorahphases;
 
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDragonBoss;
+import net.minecraft.AgeOfMinecraft.entity.tame.Flying;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.Path;
@@ -72,7 +73,7 @@ public class PhaseApproachOwner extends PhaseBaseFriendly {
       do {
         d2 = vec3d.y + (this.dragon.getRNG().nextFloat() * 20.0F);
       } while (d2 < vec3d.y);
-      this.targetLocation = new Vec3d(d0, d2, d1);
+      this.targetLocation = new Vec3d(d0, Flying.clampFlightY(d2), d1);
     } 
   }
 }

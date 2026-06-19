@@ -31,48 +31,10 @@ public class ItemTrainingStick extends ItemBEItem {
   }
   
   public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {
-    List<EntityTameBase> list = worldIn.getEntitiesWithinAABB(EntityTameBase.class, player.getEntityBoundingBox().grow(32.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
-    if (!list.isEmpty()) {
-      player.swingArm(hand);
-      for (EntityTameBase mob : list) {
-        if (!player.world.isRemote && mob != null && mob.isEntityAlive()) {
-          if (player.isSneaking()) {
-            mob.setFakeHealth(0.0F);
-          } else {
-            mob.setFakeHealth(mob.getMaxHealth() * 2.0F);
-            mob.setAttackTarget(null);
-            mob.getNavigator().clearPath();
-          } 
-          mob.incrementConversion(player);
-        } 
-      } 
-      if (!player.world.isRemote)
-        if (player.isSneaking()) {
-          player.sendMessage((ITextComponent)new TextComponentTranslation("Your mobs have stopped training.", new Object[0]));
-        } else {
-          player.sendMessage((ITextComponent)new TextComponentTranslation("Your mobs are ready to train!", new Object[0]));
-        }  
-      return new ActionResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
-    } 
-    return new ActionResult(EnumActionResult.FAIL, player.getHeldItem(hand));
+    return new ActionResult(EnumActionResult.PASS, player.getHeldItem(hand));
   }
   
   public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
-    if (target instanceof EntityTameBase) {
-      EntityTameBase mob = (EntityTameBase)target;
-      player.swingArm(hand);
-      if (!player.world.isRemote && mob != null && mob.isEntityAlive()) {
-        mob.setFakeHealth(mob.getMaxHealth() * 2.0F);
-        mob.setAttackTarget(null);
-        mob.getNavigator().clearPath();
-        mob.incrementConversion(player);
-        if (stack.hasDisplayName())
-          mob.fakeTeam = getItemStackDisplayName(stack); 
-      } 
-      if (!player.world.isRemote)
-        player.sendMessage((ITextComponent)new TextComponentTranslation(target.getName() + " is ready to train!", new Object[0])); 
-      return true;
-    } 
     return false;
   }
   

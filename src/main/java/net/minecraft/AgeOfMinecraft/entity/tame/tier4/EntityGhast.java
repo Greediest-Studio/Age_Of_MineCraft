@@ -552,6 +552,10 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
       this.parentEntity = ghast;
     }
     
+    public void setMoveTo(double x, double y, double z, double speedIn) {
+      super.setMoveTo(x, Flying.clampFlightY(y), z, speedIn);
+    }
+    
     public void onUpdateMoveHelper() {
       if (this.parentEntity.getControllingPassenger() != null && this.parentEntity.getControllingPassenger() instanceof EntityPlayer && this.parentEntity.isBeingRidden()) {
         EntityPlayer passenger = (EntityPlayer)this.parentEntity.getControllingPassenger();

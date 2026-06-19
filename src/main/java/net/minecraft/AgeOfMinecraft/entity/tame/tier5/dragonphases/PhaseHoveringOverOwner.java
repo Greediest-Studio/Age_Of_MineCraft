@@ -1,6 +1,7 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier5.dragonphases;
 
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEnderDragon;
+import net.minecraft.AgeOfMinecraft.entity.tame.Flying;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -47,7 +48,7 @@ public class PhaseHoveringOverOwner extends PhaseBaseFriendly {
   public void doLocalUpdate() {
     if (this.targetLocation == null)
       if (this.dragon.getOwner() != null) {
-        this.targetLocation = new Vec3d((Vec3i)new BlockPos((this.dragon.getOwner()).posX, (this.dragon.getOwner()).posY + 4.0D, (this.dragon.getOwner()).posZ));
+        this.targetLocation = new Vec3d((this.dragon.getOwner()).posX, Flying.clampFlightY((this.dragon.getOwner()).posY + 4.0D), (this.dragon.getOwner()).posZ);
       } else {
         this.targetLocation = new Vec3d((Vec3i)this.dragon.world.getTopSolidOrLiquidBlock(WorldGenEndPodium.END_PODIUM_LOCATION));
       }  

@@ -78,15 +78,7 @@ public class ItemCommandingStaff extends ItemBEItem {
   
   public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
     ItemStack itemStackIn = playerIn.getHeldItem(hand);
-    boolean flag = (findAmmo(playerIn) != null);
-    ActionResult<ItemStack> ret = ForgeEventFactory.onArrowNock(itemStackIn, worldIn, playerIn, hand, flag);
-    if (ret != null)
-      return ret; 
-    if (!playerIn.capabilities.isCreativeMode && !flag)
-      return !flag ? new ActionResult(EnumActionResult.FAIL, itemStackIn) : new ActionResult(EnumActionResult.PASS, itemStackIn); 
-    playerIn.setActiveHand(hand);
-    playerIn.world.playSound(playerIn, new BlockPos((Entity)playerIn), SoundEvents.ENTITY_WITHER_AMBIENT, SoundCategory.PLAYERS, 100.0F, 0.5F);
-    return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
+    return new ActionResult(EnumActionResult.PASS, itemStackIn);
   }
   
   private ItemStack findAmmo(EntityPlayer player) {
@@ -98,34 +90,6 @@ public class ItemCommandingStaff extends ItemBEItem {
   }
   
   public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityPlayer playerIn) {
-    List<EntityTameBase> list = playerIn.world.getEntitiesWithinAABB(EntityTameBase.class, playerIn.getEntityBoundingBox().grow(32.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
-    if (!playerIn.world.isRemote && list != null)
-      if (!list.isEmpty()) {
-        playerIn.world.playSound(null, new BlockPos((Entity)playerIn), ESound.chaos, SoundCategory.PLAYERS, 100.0F, 1.0F);
-        if (!playerIn.world.isRemote)
-          playerIn.sendMessage((ITextComponent)new TextComponentTranslation("Nearby mobs are deserting their original alliances!", new Object[0])); 
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityTameBase entity = list.get(i1);
-          if (entity != null && entity.getOwnerId() != playerIn.getUniqueID() && entity.affectedByCommandingStaff() && entity.getTier() != EnumTier.TIER6 && entity.isEntityAlive() && (entity.getTier() != EnumTier.TIER5 || stack.getMetadata() > 3) && (entity.getTier() != EnumTier.TIER4 || stack.getMetadata() > 2) && (entity.getTier() != EnumTier.TIER3 || stack.getMetadata() > 1) && (entity.getTier() != EnumTier.TIER2 || stack.getMetadata() > 0) && i1 < stack.getMetadata() * entity.getRNG().nextInt(4 * stack.getMetadata())) {
-            if (entity.getOwnerId() == null && stack.getMetadata() > 3) {
-              playerIn.getCooldownTracker().setCooldown(this, 20);
-              entity.ticksExisted = 0;
-              entity.setOwnerId(playerIn.getUniqueID());
-              entity.setAttackTarget(null);
-              entity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 40, 0));
-              entity.getOwner().sendMessage((ITextComponent)new TextComponentTranslation("A " + entity.getName() + " has joined your side!", new Object[0]));
-            } 
-            if (!entity.isWild() && entity.getOwnerId() != playerIn.getUniqueID()) {
-              playerIn.getCooldownTracker().setCooldown(this, 10);
-              entity.ticksExisted = 0;
-              entity.getOwner().sendMessage((ITextComponent)new TextComponentTranslation("Your " + entity.getName() + " has deserted you!", new Object[0]));
-              entity.setAttackTarget(null);
-              entity.setOwnerId(null);
-              entity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 40, 0));
-            } 
-          } 
-        } 
-      }  
     return stack;
   }
   

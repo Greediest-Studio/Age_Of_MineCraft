@@ -2,6 +2,7 @@ package net.minecraft.AgeOfMinecraft.entity.tame.tier5.dragonphases;
 
 import javax.annotation.Nullable;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEnderDragon;
+import net.minecraft.AgeOfMinecraft.entity.tame.Flying;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
@@ -58,7 +59,7 @@ public class PhaseTakeoff extends PhaseBaseFriendly {
     do {
       d0 = vec3d.y + (this.dragon.getRNG().nextFloat() * 20.0F);
     } while (d0 < vec3d.y);
-    this.targetLocation = new Vec3d(vec3d.x, d0, vec3d.z);
+    this.targetLocation = new Vec3d(vec3d.x, Flying.clampFlightY(d0), vec3d.z);
   }
   
   @Nullable

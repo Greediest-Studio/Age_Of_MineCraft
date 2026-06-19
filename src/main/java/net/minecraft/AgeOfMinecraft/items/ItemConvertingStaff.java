@@ -71,14 +71,7 @@ public class ItemConvertingStaff extends ItemBEItem {
   
   public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
     ItemStack itemStackIn = playerIn.getHeldItem(hand);
-    boolean flag = (findAmmo(playerIn) != null);
-    ActionResult<ItemStack> ret = ForgeEventFactory.onArrowNock(itemStackIn, worldIn, playerIn, hand, flag);
-    if (ret != null)
-      return ret; 
-    if (!playerIn.capabilities.isCreativeMode && !flag)
-      return !flag ? new ActionResult(EnumActionResult.FAIL, itemStackIn) : new ActionResult(EnumActionResult.PASS, itemStackIn); 
-    playerIn.setActiveHand(hand);
-    return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
+    return new ActionResult(EnumActionResult.PASS, itemStackIn);
   }
   
   private ItemStack findAmmo(EntityPlayer player) {
@@ -90,23 +83,6 @@ public class ItemConvertingStaff extends ItemBEItem {
   }
   
   public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityPlayer playerIn) {
-    List<EntityTameBase> list = playerIn.world.getEntitiesWithinAABB(EntityTameBase.class, playerIn.getEntityBoundingBox().grow(10.0D * (getDamage(stack) + 1)), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
-    if (list != null)
-      if (!list.isEmpty()) {
-        for (int i1 = 0; i1 < list.size(); i1++) {
-          EntityTameBase entity = list.get(i1);
-          if (entity != null && entity.isEntityAlive() && entity.isWild() && entity.getOwnerId() == null && !entity.isABoss() && entity.getTier() != EnumTier.TIER6) {
-            if (entity.convertionInt <= 0)
-              if (!playerIn.world.isRemote)
-                playerIn.sendMessage((ITextComponent)new TextComponentTranslation(entity.getName() + " is wild. Starting conversion...", new Object[0]));  
-            playerIn.getCooldownTracker().setCooldown(this, 10);
-            for (int times = 0; times <= stack.getMetadata(); times++)
-              entity.incrementConversion(playerIn); 
-          } 
-        } 
-      } else if (!playerIn.world.isRemote) {
-        playerIn.sendMessage((ITextComponent)new TextComponentTranslation("No engender mobs are in your vicinity.", new Object[0]));
-      }  
     return stack;
   }
   

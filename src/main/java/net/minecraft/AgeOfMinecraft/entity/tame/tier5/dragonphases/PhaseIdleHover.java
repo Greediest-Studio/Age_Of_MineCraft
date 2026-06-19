@@ -1,6 +1,7 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier5.dragonphases;
 
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEnderDragon;
+import net.minecraft.AgeOfMinecraft.entity.tame.Flying;
 import net.minecraft.util.math.Vec3d;
 
 public class PhaseIdleHover extends PhaseBaseFriendly {
@@ -12,7 +13,7 @@ public class PhaseIdleHover extends PhaseBaseFriendly {
   
   public void doLocalUpdate() {
     if (this.targetLocation == null)
-      this.targetLocation = new Vec3d(this.dragon.posX, this.dragon.posY, this.dragon.posZ); 
+      this.targetLocation = new Vec3d(this.dragon.posX, Flying.clampFlightY(this.dragon.posY), this.dragon.posZ); 
     if (!this.dragon.sitting)
       this.dragon.getPhaseManager().setPhase(PhaseList.HOLDING_PATTERN); 
   }

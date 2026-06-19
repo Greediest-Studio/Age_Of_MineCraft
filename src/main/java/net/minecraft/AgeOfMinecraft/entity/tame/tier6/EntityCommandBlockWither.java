@@ -419,7 +419,7 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
       this.motionY *= 0.6D; 
     if (!this.world.isRemote && getAttackTarget() != null)
       if (entity != null) {
-        if (this.posY < entity.posY || (!isArmored() && this.posY < entity.posY + 4.0D + entity.getEyeHeight())) {
+        if (this.posY < Flying.MAX_FLIGHT_TARGET_Y && (this.posY < Flying.clampFlightY(entity.posY) || (!isArmored() && this.posY < Flying.clampFlightY(entity.posY + 4.0D + entity.getEyeHeight())))) {
           if (this.motionY < 0.0D)
             this.motionY = 0.0D; 
           this.motionY += (0.35D - this.motionY) * 0.6D;

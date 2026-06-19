@@ -1,6 +1,7 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier5.dragonphases;
 
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEnderDragon;
+import net.minecraft.AgeOfMinecraft.entity.tame.Flying;
 import net.minecraft.util.math.Vec3d;
 
 public class PhaseRamAttack extends PhaseBaseFriendly {
@@ -28,13 +29,13 @@ public class PhaseRamAttack extends PhaseBaseFriendly {
     if (this.dragon.getAttackTarget() == null) {
       this.targetLocation = null;
     } else {
-      this.targetLocation = new Vec3d((this.dragon.getAttackTarget()).posX, (this.dragon.getAttackTarget()).posY + this.dragon.getRNG().nextDouble() * 2.0D - 1.0D, (this.dragon.getAttackTarget()).posZ);
+      this.targetLocation = new Vec3d((this.dragon.getAttackTarget()).posX, Flying.clampFlightY((this.dragon.getAttackTarget()).posY + this.dragon.getRNG().nextDouble() * 2.0D - 1.0D), (this.dragon.getAttackTarget()).posZ);
     } 
     this.timeSinceCharge = 0;
   }
   
   public void setTarget(Vec3d p_188668_1_) {
-    this.targetLocation = p_188668_1_;
+    this.targetLocation = new Vec3d(p_188668_1_.x, Flying.clampFlightY(p_188668_1_.y), p_188668_1_.z);
   }
   
   public float getMaxRiseOrFall() {

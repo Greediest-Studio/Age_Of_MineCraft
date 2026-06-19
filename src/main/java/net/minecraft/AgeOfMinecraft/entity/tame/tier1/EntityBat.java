@@ -194,13 +194,13 @@ public class EntityBat extends EntityTameBase implements EntityFlying, Light, Fl
       if (this.spawnPosition != null && (!this.world.isAirBlock(this.spawnPosition) || this.spawnPosition.getY() < 1))
         this.spawnPosition = null; 
       if (this.spawnPosition == null || this.rand.nextInt(30) == 0 || this.spawnPosition.distanceSq((int)this.posX, (int)this.posY, (int)this.posZ) < 4.0D)
-        this.spawnPosition = new BlockPos((int)this.posX + this.rand.nextInt(7) - this.rand.nextInt(7), (int)this.posY + this.rand.nextInt(6) - 2, (int)this.posZ + this.rand.nextInt(7) - this.rand.nextInt(7)); 
+        this.spawnPosition = new BlockPos((int)this.posX + this.rand.nextInt(7) - this.rand.nextInt(7), (int)Flying.clampFlightY(this.posY + this.rand.nextInt(6) - 2), (int)this.posZ + this.rand.nextInt(7) - this.rand.nextInt(7)); 
       if (this.rand.nextInt(100) == 0 && this.world.getBlockState(blockpos1).isNormalCube())
         setIsBatHanging(true); 
       if (getActivePotionEffect(MobEffects.LUCK) == null)
         if (this.world.getClosestPlayerToEntity((Entity)this, 200.0D) != null && getAttackTarget() == null && this.world.getClosestPlayerToEntity((Entity)this, 200.0D) == getOwner() && getDistanceSq((Entity)getOwner()) > 200.0D) {
           double d01 = (getOwner()).posX - this.posX;
-          double d11 = (getOwner()).posY - this.posY;
+          double d11 = Flying.clampFlightY((getOwner()).posY) - this.posY;
           double d21 = (getOwner()).posZ - this.posZ;
           float f2 = MathHelper.sqrt(d01 * d01 + d11 * d11 + d21 * d21);
           this.motionX = d01 / f2 * 0.5D * 0.5D + this.motionX * 0.5D;
@@ -214,11 +214,11 @@ public class EntityBat extends EntityTameBase implements EntityFlying, Light, Fl
           this.motionX = d01 / f2 * 0.5D * 0.5D + this.motionX;
           this.motionZ = d11 / f2 * 0.5D * 0.5D + this.motionZ;
           faceEntity((Entity)getAttackTarget(), 180.0F, 30.0F);
-          if (this.posY < (getAttackTarget()).posY)
+          if (this.posY < Flying.MAX_FLIGHT_TARGET_Y && this.posY < Flying.clampFlightY((getAttackTarget()).posY))
             this.motionY += 0.25D - this.motionY; 
         } else {
           double d0 = this.spawnPosition.getX() + 0.5D - this.posX;
-          double d1 = this.spawnPosition.getY() + 0.1D - this.posY;
+          double d1 = Flying.clampFlightY(this.spawnPosition.getY() + 0.1D) - this.posY;
           double d2 = this.spawnPosition.getZ() + 0.5D - this.posZ;
           this.motionX += (Math.signum(d0) * 0.5D - this.motionX) * 0.10000000149011612D;
           this.motionY += (Math.signum(d1) * 0.699999988079071D - this.motionY) * 0.10000000149011612D;

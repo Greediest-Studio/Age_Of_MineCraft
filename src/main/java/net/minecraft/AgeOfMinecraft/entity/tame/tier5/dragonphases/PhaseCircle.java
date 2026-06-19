@@ -1,6 +1,7 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier5.dragonphases;
 
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEnderDragon;
+import net.minecraft.AgeOfMinecraft.entity.tame.Flying;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.pathfinding.Path;
@@ -105,9 +106,9 @@ public class PhaseCircle extends PhaseBaseFriendly {
         } 
       } while (d2 < vec3d.y);
       if (this.dragon.getOwner() != null) {
-        this.targetLocation = new Vec3d((this.dragon.getOwner()).posX + d0, (this.dragon.getOwner()).posY + d2, (this.dragon.getOwner()).posZ + d1);
+        this.targetLocation = new Vec3d((this.dragon.getOwner()).posX + d0, Flying.clampFlightY((this.dragon.getOwner()).posY + d2), (this.dragon.getOwner()).posZ + d1);
       } else {
-        this.targetLocation = new Vec3d(d0, d2, d1);
+        this.targetLocation = new Vec3d(d0, Flying.clampFlightY(d2), d1);
       } 
     } 
   }

@@ -295,6 +295,10 @@ public class EntityVex extends EntityTameBase implements Light, Flying, Elementa
       super((EntityLiving)vex);
     }
     
+    public void setMoveTo(double x, double y, double z, double speedIn) {
+      super.setMoveTo(x, Flying.clampFlightY(y), z, speedIn);
+    }
+    
     public void onUpdateMoveHelper() {
       if (this.action == EntityMoveHelper.Action.MOVE_TO) {
         double d0 = this.posX - EntityVex.this.posX;

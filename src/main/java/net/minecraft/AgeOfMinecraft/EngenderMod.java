@@ -62,8 +62,8 @@ public class EngenderMod {
     logger.info("Loading The Engender Mod...");
     logger.debug("Pre-Initialization started");
     NetworkRegistry.INSTANCE.registerGuiHandler(instance, new CommonProxy());
-    PrivateHelper.set(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.MAX_HEALTH, Double.valueOf(2147483647.0D), "maximumValue", "maximumValue");
-    PrivateHelper.set(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.ATTACK_DAMAGE, Double.valueOf(2147483647.0D), "maximumValue", "maximumValue");
+    PrivateHelper.set(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.MAX_HEALTH, Double.valueOf(2147483647.0D), "maximumValue", "field_111118_b", "b");
+    PrivateHelper.set(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.ATTACK_DAMAGE, Double.valueOf(2147483647.0D), "maximumValue", "field_111118_b", "b");
     proxy.preInit(e);
     logger.debug("Pre-Initialization finished");
   }

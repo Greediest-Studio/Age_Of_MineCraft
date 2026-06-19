@@ -58,7 +58,10 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -86,6 +89,8 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
   public EntityWitherStormTentacleDevourer tentacledevourer1 = new EntityWitherStormTentacleDevourer(this.world);
   
   public EntityWitherStormTentacleDevourer tentacledevourer2 = new EntityWitherStormTentacleDevourer(this.world);
+  
+  private boolean witherStormDeathFinished;
   
   public EntityWitherStorm(World worldIn) {
     super(worldIn);
@@ -636,6 +641,10 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     if (this.motionY > 1.0D)
       this.motionY = 0.0D; 
     this.renderYawOffset = this.rotationYaw = this.rotationYawHead;
+    if (!this.world.isRemote && !doesntContainACommandBlock() && getHealth() <= 0.0F) {
+      finishWitherStormDeath();
+      return;
+    } 
     if (this.deathTicks <= 0) {
       if (this.recentlyHit <= 50 && getHealth() <= 0.0F) {
         setHealth(1.0F);
@@ -953,8 +962,75 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     return doesntContainACommandBlock() ? ELoot.ENTITIES_WITHER_STORM_MULAGEN : ELoot.ENTITIES_WITHER_STORM;
   }
   
+  private void dropWitherStormLootTable() {
+    ResourceLocation resourcelocation = getLootTable();
+    if (resourcelocation == null)
+      return; 
+    LootTable loottable = this.world.getLootTableManager().getLootTableFromLocation(resourcelocation);
+    LootContext lootcontext = (new LootContext.Builder((WorldServer)this.world)).withLootedEntity((Entity)this).withDamageSource(DamageSource.GENERIC).build();
+    boolean droppedAny = false;
+    for (ItemStack itemstack : loottable.generateLootForPools(this.rand, lootcontext)) {
+      EntityItem entityitem = entityDropItem(itemstack, 0.0F);
+      if (entityitem != null) {
+        droppedAny = true;
+        entityitem.setNoDespawn(); 
+      } 
+    } 
+    if (!droppedAny && !doesntContainACommandBlock()) {
+      EntityItem entityitem = entityDropItem(new ItemStack(EItem.witheredNetherStar), 0.0F);
+      if (entityitem != null)
+        entityitem.setNoDespawn(); 
+    } 
+  }
+  
   protected SoundEvent getCrushHurtSound() {
     return ESound.fleshHitCrushHeavy;
+  }
+  
+  private void finishWitherStormDeath() {
+    if (this.world.isRemote || this.witherStormDeathFinished)
+      return; 
+    this.witherStormDeathFinished = true;
+    if (this.centerHead != null && this.centerHead.residentWitherStorm != null) {
+      playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
+      playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
+      playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
+      playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
+      createEngenderModExplosionFireless((Entity)this, this.centerHead.posX, this.centerHead.posY, this.centerHead.posZ, 9.0F, EngenderConfig.mobs.grief);
+      double d01 = this.centerHead.posX - this.posX;
+      double d21 = this.centerHead.posZ - this.posZ;
+      float f2 = MathHelper.sqrt(d01 * d01 + d21 * d21);
+      if (f2 > 0.0F) {
+        this.centerHead.motionX = d01 / f2 * 0.6D * 0.6D + this.centerHead.motionX;
+        this.centerHead.motionZ = d21 / f2 * 0.6D * 0.6D + this.centerHead.motionZ;
+      } 
+    } 
+    List<EntityFallingBlock> list = this.world.getEntitiesWithinAABB(EntityFallingBlock.class, getEntityBoundingBox().grow(128.0D, 128.0D, 128.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
+    if (list != null && !list.isEmpty() && this.world.isRemote)
+      for (int j = 0; j < list.size(); j++) {
+        EntityFallingBlock entity = list.get(j);
+        if (entity != null) {
+          createEngenderModExplosionFireless((Entity)this, entity.posX, entity.posY, entity.posZ, 2.0F, false);
+          entity.setDead();
+        } 
+      }  
+    for (EntityPlayer entityplayer : this.world.playerEntities)
+      this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F); 
+    int i = getSize();
+    while (i > 0) {
+      int j = EntityXPOrb.getXPSplit(i);
+      i -= j;
+      this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY + 8.0D, this.posZ, j));
+    } 
+    dropWitherStormLootTable();
+    if (!this.world.isRemote)
+      for (EntityWitherStorm allmulegans : this.world.getEntitiesWithinAABB(EntityWitherStorm.class, getEntityBoundingBox().grow(256.0D))) {
+        if (allmulegans.doesntContainACommandBlock())
+          allmulegans.setHealth(0.0F); 
+      }  
+    for (int i1 = 0; i1 < getSize() / 10000; i1++)
+      entityDropItem(new ItemStack(Blocks.OBSIDIAN, 64), 0.0F); 
+    setDead();
   }
   
   protected void onDeathUpdate() {
@@ -970,6 +1046,10 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       super.onDeathUpdate();
     } else {
       this.deathTicks++;
+      if (!this.world.isRemote) {
+        finishWitherStormDeath();
+        return;
+      } 
       if (getSize() > 12500 && !this.world.isRemote && this.world.isAreaLoaded(blockpos, blockpos))
         for (int j = 0; j < ((getSize() > 50000) ? 20 : 10); j++) {
           this.world.setBlockState(getPosition().up(j), Blocks.OBSIDIAN.getDefaultState());
@@ -999,6 +1079,8 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
             } 
             ((EntityPlayerMP)getOwner()).sendMessage((ITextComponent)new TextComponentTranslation("Your Wither Storm has been destroyed!", new Object[0]));
           }   
+      if (this.deathTicks == 1 && !this.world.isRemote)
+        return; 
       if (this.deathTicks == 80)
         if (this.tentacle1 != null && this.tentacle1.residentWitherStorm != null) {
           playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
@@ -1086,48 +1168,8 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
           this.rightHead.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.rightHead.motionZ = ((this.rand.nextFloat() - 0.5F) * 3.0F);
         }  
-      if (this.deathTicks >= 300 && !this.world.isRemote) {
-        if (this.centerHead != null && this.centerHead.residentWitherStorm != null) {
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
-          playSound(getHurtSound((DamageSource)null), getSoundVolume(), 2.0F);
-          createEngenderModExplosionFireless((Entity)this, this.centerHead.posX, this.centerHead.posY, this.centerHead.posZ, 9.0F, EngenderConfig.mobs.grief);
-          double d01 = this.centerHead.posX - this.posX;
-          double d21 = this.centerHead.posZ - this.posZ;
-          float f2 = MathHelper.sqrt(d01 * d01 + d21 * d21);
-          this.centerHead.motionX = d01 / f2 * 0.6D * 0.6D + this.centerHead.motionX;
-          this.centerHead.motionZ = d21 / f2 * 0.6D * 0.6D + this.centerHead.motionZ;
-        } 
-        List<EntityFallingBlock> list = this.world.getEntitiesWithinAABB(EntityFallingBlock.class, getEntityBoundingBox().grow(128.0D, 128.0D, 128.0D), Predicates.and(new Predicate[] { EntitySelectors.NOT_SPECTATING }));
-        if (list != null && !list.isEmpty() && this.world.isRemote)
-          for (int j = 0; j < list.size(); j++) {
-            EntityFallingBlock entity = list.get(j);
-            if (entity != null) {
-              createEngenderModExplosionFireless((Entity)this, entity.posX, entity.posY, entity.posZ, 2.0F, false);
-              entity.setDead();
-            } 
-          }  
-        for (EntityPlayer entityplayer : this.world.playerEntities)
-          this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F); 
-        int i = getSize();
-        while (i > 0) {
-          int j = EntityXPOrb.getXPSplit(i);
-          i -= j;
-          this.world.spawnEntity((Entity)new EntityXPOrb(this.world, this.posX, this.posY + 8.0D, this.posZ, j));
-        } 
-        EntityItem entityitem = entityDropItem(new ItemStack(EItem.witheredNetherStar), 0.0F);
-        if (entityitem != null)
-          entityitem.setNoDespawn(); 
-        if (!this.world.isRemote)
-          for (EntityWitherStorm allmulegans : this.world.getEntitiesWithinAABB(EntityWitherStorm.class, getEntityBoundingBox().grow(256.0D))) {
-            if (allmulegans.doesntContainACommandBlock())
-              allmulegans.setHealth(0.0F); 
-          }  
-        for (int i1 = 0; i1 < getSize() / 10000; i1++)
-          entityDropItem(new ItemStack(Blocks.OBSIDIAN, 64), 0.0F); 
-        setDead();
-      } 
+      if (this.deathTicks >= 300 && !this.world.isRemote)
+        finishWitherStormDeath(); 
     } 
   }
   

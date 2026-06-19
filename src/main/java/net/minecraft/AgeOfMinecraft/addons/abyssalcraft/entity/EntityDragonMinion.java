@@ -312,7 +312,7 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
         double d7 = 0.4000000059604645D + d6 / 80.0D - 1.0D;
         if (d7 > 10.0D)
           d7 = 10.0D; 
-        this.targetY = (this.target.getEntityBoundingBox()).minY + d7;
+        this.targetY = Flying.clampFlightY((this.target.getEntityBoundingBox()).minY + d7);
       } else {
         this.targetX += this.rand.nextGaussian() * 2.0D;
         this.targetZ += this.rand.nextGaussian() * 2.0D;
@@ -496,7 +496,7 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
       do {
         if (getAttackTarget() != null) {
           this.targetX = (getAttackTarget()).posX;
-          this.targetY = (getAttackTarget()).posY + 20.0D + (this.rand.nextFloat() * 20.0F);
+          this.targetY = Flying.clampFlightY((getAttackTarget()).posY + 20.0D + (this.rand.nextFloat() * 20.0F));
           this.targetZ = (getAttackTarget()).posZ;
           this.targetX += (this.rand.nextFloat() * 40.0F - 20.0F);
           this.targetZ += (this.rand.nextFloat() * 40.0F - 20.0F);
@@ -506,7 +506,7 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
           flag = (d0 * d0 + d1 * d1 + d2 * d2 > 100.0D);
         } else if (!isWild()) {
           this.targetX = (getOwner()).posX;
-          this.targetY = (getOwner()).posY + 20.0D + (this.rand.nextFloat() * 20.0F);
+          this.targetY = Flying.clampFlightY((getOwner()).posY + 20.0D + (this.rand.nextFloat() * 20.0F));
           this.targetZ = (getOwner()).posZ;
           this.targetX += (this.rand.nextFloat() * 60.0F - 30.0F);
           this.targetZ += (this.rand.nextFloat() * 60.0F - 30.0F);
@@ -516,7 +516,7 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
           flag = (d0 * d0 + d1 * d1 + d2 * d2 > 100.0D);
         } else {
           this.targetX = 0.0D;
-          this.targetY = (70.0F + this.rand.nextFloat() * 50.0F);
+          this.targetY = Flying.clampFlightY(70.0F + this.rand.nextFloat() * 50.0F);
           this.targetZ = 0.0D;
           this.targetX += (this.rand.nextFloat() * 120.0F - 60.0F);
           this.targetZ += (this.rand.nextFloat() * 120.0F - 60.0F);

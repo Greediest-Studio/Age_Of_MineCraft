@@ -563,7 +563,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
             if (getDistance(entity) > 4.0D && getRamTime() <= 0) {
               this.hoverX = entity.posX;
               this.hoverZ = entity.posZ;
-              if (!(entity instanceof EntityWither) && !(entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityCommandBlockWither) && this.posY < entity.posY) {
+              if (!(entity instanceof EntityWither) && !(entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityCommandBlockWither) && this.posY < Flying.MAX_FLIGHT_TARGET_Y && this.posY < Flying.clampFlightY(entity.posY)) {
                 this.onGround = false;
                 this.isAirBorne = true;
                 this.motionY += 0.5D - this.motionY;
@@ -576,7 +576,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
             } 
           } 
           if ((entity instanceof EntityWither || entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityCommandBlockWither) && ((EntityLiving)entity).getAttackTarget() != this) {
-            if (this.posY < entity.posY - 1.0D) {
+            if (this.posY < Flying.MAX_FLIGHT_TARGET_Y && this.posY < Flying.clampFlightY(entity.posY - 1.0D)) {
               this.onGround = false;
               this.isAirBorne = true;
               this.motionY += 0.5D - this.motionY;
@@ -587,7 +587,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
               this.motionY -= 0.5D + this.motionY;
             } 
           } else {
-            if (this.posY < (isArmored() ? (entity.posY - ((hasSpawnedSkeletons() && getFakeHealth() <= 0.0F) ? 8.0D : 1.0D)) : (entity.posY + 4.0D + entity.getEyeHeight()))) {
+            if (this.posY < Flying.MAX_FLIGHT_TARGET_Y && this.posY < Flying.clampFlightY(isArmored() ? (entity.posY - ((hasSpawnedSkeletons() && getFakeHealth() <= 0.0F) ? 8.0D : 1.0D)) : (entity.posY + 4.0D + entity.getEyeHeight()))) {
               this.onGround = false;
               this.isAirBorne = true;
               this.motionY += 0.5D - this.motionY;

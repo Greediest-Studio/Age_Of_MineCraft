@@ -2,6 +2,7 @@ package net.minecraft.AgeOfMinecraft.entity.tame.ai;
 
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
+import net.minecraft.AgeOfMinecraft.entity.tame.Flying;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntitySlime;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityGuardian;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityWither;
@@ -98,7 +99,7 @@ public class EntityAIFollowLeader extends EntityAIBase {
     Vec3d vec3 = this.theOwner.getLook(1.0F);
     if (this.theCreature instanceof EntityWither) {
       ((EntityWither)this.theCreature).updateWatchedTargetId(0, this.theOwner.getEntityId());
-      if (this.theCreature.posY < this.theOwner.posY || (!((EntityWither)this.theCreature).isArmored() && this.theCreature.posY < this.theOwner.posY + 5.0D + this.theOwner.getEyeHeight()))
+      if (this.theCreature.posY < Flying.MAX_FLIGHT_TARGET_Y && (this.theCreature.posY < Flying.clampFlightY(this.theOwner.posY) || (!((EntityWither)this.theCreature).isArmored() && this.theCreature.posY < Flying.clampFlightY(this.theOwner.posY + 5.0D + this.theOwner.getEyeHeight()))))
         this.theCreature.motionY += 0.5D - this.theCreature.motionY; 
       this.theCreature.faceEntity((Entity)this.theOwner, 180.0F, 40.0F);
       double d0 = this.theOwner.posX - this.theCreature.posX;
@@ -116,7 +117,7 @@ public class EntityAIFollowLeader extends EntityAIBase {
       } 
     } 
     if (this.theCreature instanceof EntityCommandBlockWither) {
-      if (this.theCreature.posY < this.theOwner.posY || (!((EntityCommandBlockWither)this.theCreature).isArmored() && this.theCreature.posY < this.theOwner.posY + 5.0D + this.theOwner.getEyeHeight()))
+      if (this.theCreature.posY < Flying.MAX_FLIGHT_TARGET_Y && (this.theCreature.posY < Flying.clampFlightY(this.theOwner.posY) || (!((EntityCommandBlockWither)this.theCreature).isArmored() && this.theCreature.posY < Flying.clampFlightY(this.theOwner.posY + 5.0D + this.theOwner.getEyeHeight()))))
         this.theCreature.motionY += 0.5D - this.theCreature.motionY; 
       this.theCreature.faceEntity((Entity)this.theOwner, 180.0F, 40.0F);
       double d0 = this.theOwner.posX - this.theCreature.posX;

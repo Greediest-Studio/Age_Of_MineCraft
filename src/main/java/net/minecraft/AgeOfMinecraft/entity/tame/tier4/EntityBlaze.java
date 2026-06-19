@@ -204,7 +204,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
     if (isWet()) {
       playSound(SoundEvents.ENTITY_GENERIC_BURN, 1.0F, 1.0F);
       attackEntityFrom((new DamageSource("cooler")).setDamageBypassesArmor().setDamageIsAbsolute().setDifficultyScaled(), 4.0F);
-      getMoveHelper().setMoveTo(this.posX, this.posY + 3.0D, this.posZ, 1.0D);
+      getMoveHelper().setMoveTo(this.posX, Flying.clampFlightY(this.posY + 3.0D), this.posZ, 1.0D);
     } 
     if (isHero() && getSpecialAttackTimer() > 790) {
       this.motionX = 0.0D;
@@ -515,7 +515,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
           this.attackTime = 20;
           this.blaze.attackEntityAsMob((Entity)entitylivingbase);
         } 
-        this.blaze.getMoveHelper().setMoveTo(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ, 1.0D);
+        this.blaze.getMoveHelper().setMoveTo(entitylivingbase.posX, Flying.clampFlightY(entitylivingbase.posY), entitylivingbase.posZ, 1.0D);
       } else if (d0 < getFollowDistance()) {
         double d1 = entitylivingbase.posX - this.blaze.posX;
         double d2 = (entitylivingbase.getEntityBoundingBox()).minY + (entitylivingbase.height / 2.0F) - this.blaze.posY + (this.blaze.height / 2.0F);
@@ -544,7 +544,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
         } 
       } else {
         this.blaze.getNavigator().clearPath();
-        this.blaze.getMoveHelper().setMoveTo(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ, 1.0D);
+        this.blaze.getMoveHelper().setMoveTo(entitylivingbase.posX, Flying.clampFlightY(entitylivingbase.posY), entitylivingbase.posZ, 1.0D);
       } 
       super.updateTask();
     }
