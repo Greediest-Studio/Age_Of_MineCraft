@@ -122,7 +122,6 @@ import net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStormHead;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStormSkull;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStormTentacle;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStormTentacleDevourer;
-import net.minecraft.AgeOfMinecraft.entity.untame.tier5.EntityDarkness;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
@@ -130,7 +129,6 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
@@ -198,7 +196,6 @@ public class EEntity {
     createEntityWithEgg((Class)EntityPortal.class, "Portal", 5723991, 4602464, 2048);
     createEntityWithEgg((Class)EntityCommandBlockWither.class, "WitherBossCommandBlockHelpful", 1710618, 5526612, 2048);
     createEntityWithEgg((Class)EntityWitherStorm.class, "WitherStormBossHelpful", 986135, 1838892, 2048);
-    createEntityWithEgg((Class)EntityDarkness.class, "untame_darkness", 1052688, 4198416, 2048);
     createEntityWithEgg((Class)EntitySans.class, "sans", 16382457, 1052688, 2048);
     createEntity((Class)EntityWitherStormHead.class, "WitherStormBossHeadHelpful", 2048);
     createEntity((Class)EntityWitherStormTentacle.class, "WitherStormBossTentacleHelpful", 2048);

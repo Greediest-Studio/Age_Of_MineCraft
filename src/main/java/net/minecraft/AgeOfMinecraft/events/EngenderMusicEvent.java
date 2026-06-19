@@ -102,12 +102,6 @@ public class EngenderMusicEvent extends MusicTicker {
         case 14:
           music = MusicTypeExtra.BONETOUSLE;
           break;
-        case 15:
-          music = MusicTypeExtra.DARKNESS;
-          break;
-        case 16:
-          music = MusicTypeExtra.DARKNESS_MAX;
-          break;
         case 17:
           music = MusicTypeExtra.BTERTD;
           break;
@@ -240,10 +234,8 @@ public class EngenderMusicEvent extends MusicTicker {
     DUNKS_AND_JUDGEMENT(ESound.dunksandjudgement),
     THE_TWINS(ESound.terrariathetwins),
     SOVNGARDE(ESound.sovngarde),
-    ALDUIN(ESound.alduintheme),
-    DARKNESS(ESound.darkness),
-    DARKNESS_MAX(ESound.darknessMax);
-    
+    ALDUIN(ESound.alduintheme);
+
     private final SoundEvent musicLocation;
     
     MusicTypeExtra(SoundEvent musicLocationIn) {

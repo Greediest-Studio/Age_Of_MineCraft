@@ -168,11 +168,7 @@ public class ESound {
   public static SoundEvent sovngarde;
   
   public static SoundEvent alduintheme;
-  
-  public static SoundEvent darkness;
-  
-  public static SoundEvent darknessMax;
-  
+
   public static SoundEvent unowenwasher;
   
   public static SoundEvent septetteforthedeadprincess;
@@ -244,8 +240,6 @@ public class ESound {
     chaosguardiantheme = registerSound("chaosguardiantheme");
     giantmagmagolemtheme = registerSound("giantmagmagolemtheme");
     ghasthertheme = registerSound("ghasthertheme");
-    darkness = registerSound("darkness");
-    darknessMax = registerSound("darkness_max");
     commandBlockWitherSpawn = registerSound("commandBlockWitherSpawn");
     commandBlockWitherIdle = registerSound("commandBlockWitherIdle");
     commandBlockWitherGrow = registerSound("commandBlockWitherGrow");

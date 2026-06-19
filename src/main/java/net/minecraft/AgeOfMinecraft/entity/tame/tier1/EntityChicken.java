@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier1;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import javax.annotation.Nullable;

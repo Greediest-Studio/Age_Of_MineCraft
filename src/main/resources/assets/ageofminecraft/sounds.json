@@ -328,18 +328,6 @@
     ]
   },
   
-  "darkness": {
-    "sounds": [
-      { "name": "ageofminecraft:darknesstheme", "stream": true }
-    ]
-  },
-  
-  "darkness_max": {
-    "sounds": [
-      { "name": "ageofminecraft:darknessmaxtheme", "stream": true }
-    ]
-  },
-  
   "jzahartheme": {
     "sounds": [
       { "name": "ageofminecraft:jzahartheme", "stream": true }
