@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityRemnant;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.model.ModelRemnant;
 import net.minecraft.AgeOfMinecraft.renders.LayerMobCape;
@@ -39,9 +41,9 @@ public class RenderRemnant extends RenderLiving<EntityRemnant> {
   
   public RenderRemnant(RenderManager manager, ModelRemnant model) {
     super(manager, model, 0.5F);
-    addLayer((LayerRenderer)new LayerCustomHead(model.head));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerCustomHead(model.head));
     
-    addLayer((LayerRenderer)new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityRemnant entity) {

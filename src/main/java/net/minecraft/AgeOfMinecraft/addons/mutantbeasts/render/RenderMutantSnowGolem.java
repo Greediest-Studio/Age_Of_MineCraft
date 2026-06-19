@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.mutantbeasts.render;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import chumbanotz.mutantbeasts.MutantBeasts;
 import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.entity.EntityMutantSnowGolem;
 import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.model.ModelMutantSnowGolem;
@@ -31,8 +33,8 @@ public class RenderMutantSnowGolem extends RenderLiving<EntityMutantSnowGolem> {
   
   public RenderMutantSnowGolem(RenderManager manager) {
     super(manager, new ModelMutantSnowGolem(), 0.7F);
-    addLayer(new GlowLayer());
-    addLayer(new ThrownBlockLayer());
+    RenderLayerCompat.addLayer(this, new GlowLayer());
+    RenderLayerCompat.addLayer(this, new ThrownBlockLayer());
   }
   
   protected void preRenderCallback(EntityMutantSnowGolem entitylivingbaseIn, float partialTickTime) {
@@ -54,15 +56,15 @@ public class RenderMutantSnowGolem extends RenderLiving<EntityMutantSnowGolem> {
     } 
   }
   
-  public ModelMutantSnowGolem getMainModel() {
-    return (ModelMutantSnowGolem)super.getMainModel();
+  public ModelMutantSnowGolem getMutantSnowGolemModel() {
+    return (ModelMutantSnowGolem)RenderLayerCompat.getMainModel(this);
   }
   
   protected void renderModel(EntityMutantSnowGolem entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
     super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
     if (!entitylivingbaseIn.isInvisible() && entitylivingbaseIn.isPumpkinEquipped()) {
       bindTexture(PUMPKIN_TEXTURE);
-      this.mainModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+      RenderLayerCompat.getMainModel(this).render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
     } 
   }
   
@@ -82,7 +84,7 @@ public class RenderMutantSnowGolem extends RenderLiving<EntityMutantSnowGolem> {
         float f2 = MathHelper.cos(f * 0.15F);
         GlStateManager.color(1.0F, 0.8F + 0.05F * f2, 0.15F + 0.2F * f1, 1.0F);
         (Minecraft.getMinecraft()).entityRenderer.setupFogColor(true);
-        RenderMutantSnowGolem.this.mainModel.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+        RenderLayerCompat.getMainModel(RenderMutantSnowGolem.this).render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
         (Minecraft.getMinecraft()).entityRenderer.setupFogColor(false);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         RenderMutantSnowGolem.this.setLightmap(entityIn);
@@ -102,7 +104,7 @@ public class RenderMutantSnowGolem extends RenderLiving<EntityMutantSnowGolem> {
         GlStateManager.enableRescaleNormal();
         GlStateManager.pushMatrix();
         GlStateManager.translate(0.4F, 0.0F, 0.0F);
-        RenderMutantSnowGolem.this.getMainModel().postRenderArm(0.0625F);
+        RenderMutantSnowGolem.this.getMutantSnowGolemModel().postRenderArm(0.0625F);
         GlStateManager.translate(0.0F, 0.9F, 0.0F);
         GlStateManager.scale(-0.8F, -0.8F, 0.8F);
         int i = entityIn.getBrightnessForRender();

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import net.minecraft.AgeOfMinecraft.EngenderMod;
+import net.minecraft.AgeOfMinecraft.util.EntityCompat;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -26,8 +27,10 @@ public class ChunkLoadingEvent implements ForgeChunkManager.LoadingCallback {
   
   public static void updateLoaded(Entity mob) {
     ArrayList<ChunkPos> dragonChunks = new ArrayList<>();
-    for (int xx = (int)mob.posX / 16 - 2; xx <= (int)mob.posX / 16 + 2; xx++) {
-      for (int zz = (int)mob.posZ / 16 - 2; zz <= (int)mob.posZ / 16 + 2; zz++)
+    int chunkX = (int)EntityCompat.posX(mob) / 16;
+    int chunkZ = (int)EntityCompat.posZ(mob) / 16;
+    for (int xx = chunkX - 2; xx <= chunkX + 2; xx++) {
+      for (int zz = chunkZ - 2; zz <= chunkZ + 2; zz++)
         dragonChunks.add(new ChunkPos(xx, zz)); 
     } 
     if (chunkList.containsKey(mob) && dragonChunks.hashCode() == chunkList.get(mob).hashCode())
@@ -36,7 +39,7 @@ public class ChunkLoadingEvent implements ForgeChunkManager.LoadingCallback {
       ForgeChunkManager.Ticket ticket1 = ticketList.get(mob);
       ForgeChunkManager.releaseTicket(ticket1);
     } 
-    ForgeChunkManager.Ticket ticket = ForgeChunkManager.requestTicket(EngenderMod.instance, mob.world, ForgeChunkManager.Type.ENTITY);
+    ForgeChunkManager.Ticket ticket = ForgeChunkManager.requestTicket(EngenderMod.instance, EntityCompat.world(mob), ForgeChunkManager.Type.ENTITY);
     if (ticket != null) {
       ticket.bindEntity(mob);
       ticket.setChunkListDepth(25);

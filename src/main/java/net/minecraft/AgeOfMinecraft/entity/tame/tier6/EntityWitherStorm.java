@@ -104,6 +104,8 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     this.experienceValue = 50000;
     setLevel(300);
     this.ignoreFrustumCheck = true;
+    Grow(12500);
+    setHealth(getMaxHealth());
     for (EntityPlayer entityplayer : worldIn.playerEntities)
       worldIn.playSound(null, entityplayer.getPosition(), ESound.witherStormFinish, getSoundCategory(), Float.MAX_VALUE, 1.0F); 
     if (!worldIn.isRemote) {
@@ -333,6 +335,27 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
   public boolean canBePushed() {
     return false;
   }
+
+  private void clampStormMotion() {
+    if (this.motionX > 1.0D)
+      this.motionX = 1.0D;
+    if (this.motionX < -1.0D)
+      this.motionX = -1.0D;
+    if (this.motionY > 1.0D)
+      this.motionY = 1.0D;
+    if (this.motionY < -1.0D)
+      this.motionY = -1.0D;
+    if (this.motionZ > 1.0D)
+      this.motionZ = 1.0D;
+    if (this.motionZ < -1.0D)
+      this.motionZ = -1.0D;
+  }
+
+  private void syncHealthAfterFormChange() {
+    float maxHealth = getMaxHealth();
+    if (getHealth() <= 20.0F || getHealth() > maxHealth)
+      setHealth(maxHealth);
+  }
   
   public EnumWitherStormPhase getPhase() {
     return (getSize() <= 250000 && getSize() > 50000) ? EnumWitherStormPhase.Devourer : ((getSize() > 250000) ? EnumWitherStormPhase.ThunderStorm : EnumWitherStormPhase.Destroyer);
@@ -342,8 +365,15 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     float rot = this.rotationYawHead * 0.017453292F;
     float oned = MathHelper.sin(rot);
     float twod = MathHelper.cos(rot);
-    if (!isWild() && getDistanceSq(getOwner()) >= 48400.0D)
-      setLocationAndAngles((getOwner()).posX, (getOwner()).posY, (getOwner()).posZ, this.rotationYaw, this.rotationPitch); 
+    EntityLivingBase owner = getOwner();
+    if (owner != null && getDistanceSq(owner) >= 48400.0D) {
+      setPositionAndUpdate(owner.posX, owner.posY + 40.0D, owner.posZ);
+      this.motionX = 0.0D;
+      this.motionY = 0.0D;
+      this.motionZ = 0.0D;
+      this.fallDistance = 0.0F;
+      getNavigator().clearPath();
+    }
     if (!doesntContainACommandBlock() && !this.world.isRemote)
       if (isEntityAlive()) {
         ChunkLoadingEvent.updateLoaded(this);
@@ -359,27 +389,17 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       EntityWitherStorm entityzombie = new EntityWitherStorm(this.world);
       entityzombie.copyLocationAndAnglesFrom(this);
       entityzombie.setNoAI(isAIDisabled());
-      this.world.spawnEntity(entityzombie);
       entityzombie.setOwnerId(getOwnerId());
       entityzombie.setNotContainingCommandBlock(true);
+      entityzombie.setHealth(entityzombie.getMaxHealth());
       entityzombie.motionX = this.rand.nextDouble() - 0.5D;
       entityzombie.motionZ = this.rand.nextDouble() - 0.5D;
+      this.world.spawnEntity(entityzombie);
       Grow(getSize() - 12500);
     } 
-    if (this.motionX > 1.0D)
-      this.motionX = 1.0D; 
-    if (this.motionZ < -1.0D)
-      this.motionZ = -1.0D; 
-    if (this.motionY > 1.0D)
-      this.motionY = 1.0D; 
-    if (this.motionY < -1.0D)
-      this.motionY = -1.0D; 
-    if (this.motionX > 1.0D)
-      this.motionX = 1.0D; 
-    if (this.motionZ < -1.0D)
-      this.motionZ = -1.0D; 
-    if (!isWild())
-      getOwner().removeActivePotionEffect(MobEffects.WITHER); 
+    clampStormMotion();
+    if (owner != null)
+      owner.removeActivePotionEffect(MobEffects.WITHER);
     if (this.deathTicks <= 0)
       if (!this.world.isRemote) {
         if (this.centerHead != null) {
@@ -844,11 +864,12 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       EntityWitherStorm entityzombie = new EntityWitherStorm(this.world);
       entityzombie.copyLocationAndAnglesFrom(this);
       entityzombie.setNoAI(isAIDisabled());
-      this.world.spawnEntity(entityzombie);
       entityzombie.setOwnerId(getOwnerId());
       entityzombie.setNotContainingCommandBlock(true);
+      entityzombie.setHealth(entityzombie.getMaxHealth());
       entityzombie.motionX = this.rand.nextDouble() - 0.5D;
       entityzombie.motionZ = this.rand.nextDouble() - 0.5D;
+      this.world.spawnEntity(entityzombie);
       Grow(getSize() - 12500);
     } 
     if (isEntityInvulnerable(source))
@@ -932,6 +953,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     if (!this.world.isRemote) {
       this.dataManager.set(SIZE, doesntContainACommandBlock() ? 12500 : p_82215_1_);
       getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(doesntContainACommandBlock() ? 1000.0D : p_82215_1_);
+      syncHealthAfterFormChange();
       if (p_82215_1_ == 12500 && !isWild())
         for (EntityPlayer entityplayer : this.world.playerEntities)
           entityplayer.sendStatusMessage(new TextComponentTranslation(doesntContainACommandBlock() ? "§5 A Wither Storm has fissioned!" : ("§5" + getOwner().getName() + "'s Wither Storm has grown to Destroyer form!!"), new Object[0]), true);
@@ -946,6 +968,10 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     if (p_82215_1_)
       this.lastDamage = Float.MAX_VALUE; 
     this.dataManager.set(DOESNT_HAVE_COMMAND_BLOCK, p_82215_1_);
+    if (!this.world.isRemote) {
+      getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(p_82215_1_ ? 1000.0D : getSize());
+      syncHealthAfterFormChange();
+    }
   }
   
   @Nullable
@@ -1220,7 +1246,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
           d1 = (this.witherStorm.getOwner()).posY - 60.0D - ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
           d2 = (this.witherStorm.getOwner()).posZ + ((random.nextFloat() * 2.0F - 1.0F) * 2.0F);
         } 
-        if (this.witherStorm.centerHead.isBeingRidden()) {
+        if (this.witherStorm.centerHead != null && this.witherStorm.centerHead.isBeingRidden()) {
           Vec3d vec3 = this.witherStorm.getOwner().getLook(1.0F);
           d0 = this.witherStorm.posX + vec3.x * 8.0D;
           d1 = this.witherStorm.posY + vec3.y * 8.0D;
@@ -1267,9 +1293,17 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         double d1 = this.posY - this.witherStorm.posY;
         double d2 = this.posZ - this.witherStorm.posZ;
         double d3 = d0 * d0 + d1 * d1 + d2 * d2;
+        if (d3 < 1.0E-7D) {
+          this.action = EntityMoveHelper.Action.WAIT;
+          return;
+        }
         if (this.courseChangeCooldown-- <= 0) {
           this.courseChangeCooldown += this.witherStorm.getRNG().nextInt(5) + 2;
           d3 = MathHelper.sqrt(d3);
+          if (d3 < 1.0E-4D) {
+            this.action = EntityMoveHelper.Action.WAIT;
+            return;
+          }
           if (this.witherStorm.getOwner() != null && this.witherStorm.getDistanceSq(this.witherStorm.getOwner()) > 5184.0D && this.witherStorm.getGuardBlock() == null) {
             this.witherStorm.motionX += d0 / d3 * 0.2D;
             this.witherStorm.motionY += d1 / d3 * 0.2D;

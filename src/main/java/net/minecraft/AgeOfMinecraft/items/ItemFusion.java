@@ -22,25 +22,25 @@ public class ItemFusion extends ItemBEItem {
     this.entropyCost = entropy;
     switch (this.itemToFuse.itemTier) {
       case 5:
-        setMaxStackSize(1);
+        ItemCompat.setMaxStackSize(this, 1);
         break;
       case 4:
-        setMaxStackSize(8);
+        ItemCompat.setMaxStackSize(this, 8);
         break;
       case 3:
-        setMaxStackSize(16);
+        ItemCompat.setMaxStackSize(this, 16);
         break;
       case 2:
-        setMaxStackSize(24);
+        ItemCompat.setMaxStackSize(this, 24);
         break;
       case 1:
-        setMaxStackSize(32);
+        ItemCompat.setMaxStackSize(this, 32);
         break;
       default:
-        setMaxStackSize(64);
+        ItemCompat.setMaxStackSize(this, 64);
         break;
     } 
-    setCreativeTab(tab);
+    ItemCompat.setCreativeTab(this, tab);
   }
   
   public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {

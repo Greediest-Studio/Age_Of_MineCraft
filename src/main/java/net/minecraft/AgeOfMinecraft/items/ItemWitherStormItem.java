@@ -30,6 +30,7 @@ public class ItemWitherStormItem extends ItemMCSMTier {
     entityliving.rotationYawHead = entityliving.rotationYaw;
     entityliving.renderYawOffset = entityliving.rotationYaw;
     entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), null);
+    entityliving.setOwnerId(playerIn.getUniqueID());
     entityliving.setInvulTime(1);
     if (!worldIn.isRemote) {
       worldIn.spawnEntity(entityliving);
@@ -42,7 +43,6 @@ public class ItemWitherStormItem extends ItemMCSMTier {
       } 
     } 
     if (entityliving != null) {
-      entityliving.setOwnerId(playerIn.getUniqueID());
       triggerAction(playerIn, stack);
       entityliving.playLivingSound();
       entityliving.playSound(ESound.createMob, 10.0F, 0.5F);

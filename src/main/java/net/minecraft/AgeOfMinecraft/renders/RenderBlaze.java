@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import com.mojang.authlib.GameProfile;
 import java.util.UUID;
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
@@ -58,19 +60,19 @@ public class RenderBlaze extends RenderLiving<EntityBlaze> {
   
   public RenderBlaze(RenderManager renderManagerIn) {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.5F);
-    addLayer(new LayerArrowCustomSized(this, 1.0F));
-    addLayer(new LayerCustomHeadEngender(regularmodel.blazeHead, cmmmodel.Head));
-    addLayer(this.helditems);
+    RenderLayerCompat.addLayer(this, new LayerArrowCustomSized(this, 1.0F));
+    RenderLayerCompat.addLayer(this, new LayerCustomHeadEngender(regularmodel.blazeHead, cmmmodel.Head));
+    RenderLayerCompat.addLayer(this, this.helditems);
     
-    addLayer(new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, new LayerMobCape(this));
   }
   
   protected void preRenderCallback(EntityBlaze entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = (entitylivingbaseIn.getIllusionFormTime() > 0) ? disguisemodel : (EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel);
-    this.layerRenderers.remove(this.helditems);
+    RenderLayerCompat.setMainModel(this, (entitylivingbaseIn.getIllusionFormTime() > 0) ? disguisemodel : (EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel));
+    RenderLayerCompat.removeLayer(this, this.helditems);
     this.helditems.modelRenderer1 = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel.RArm : regularmodel.blazeSticks[0];
     this.helditems.modelRenderer2 = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel.LArm : regularmodel.blazeSticks[3];
-    addLayer(this.helditems);
+    RenderLayerCompat.addLayer(this, this.helditems);
     if (entitylivingbaseIn.getIllusionFormTime() > 0)
       GlStateManager.scale(0.4F, 0.4F, 0.4F); 
     if (EngenderConfig.mobs.useMobTalkerModels)
@@ -126,15 +128,15 @@ public class RenderBlaze extends RenderLiving<EntityBlaze> {
   }
   
   private ModelRenderer getHead() {
-    return EngenderConfig.mobs.useMobTalkerModels ? ((ModelCMMBlaze)getMainModel()).Head : ((ModelBlaze)getMainModel()).blazeHead;
+    return EngenderConfig.mobs.useMobTalkerModels ? ((ModelCMMBlaze)RenderLayerCompat.getMainModel(this)).Head : ((ModelBlaze)RenderLayerCompat.getMainModel(this)).blazeHead;
   }
   
   private ModelRenderer getRightArm() {
-    return EngenderConfig.mobs.useMobTalkerModels ? ((ModelCMMBlaze)getMainModel()).RArm : ((ModelBlaze)getMainModel()).blazeSticks[0];
+    return EngenderConfig.mobs.useMobTalkerModels ? ((ModelCMMBlaze)RenderLayerCompat.getMainModel(this)).RArm : ((ModelBlaze)RenderLayerCompat.getMainModel(this)).blazeSticks[0];
   }
   
   private ModelRenderer getLeftArm() {
-    return EngenderConfig.mobs.useMobTalkerModels ? ((ModelCMMBlaze)getMainModel()).LArm : ((ModelBlaze)getMainModel()).blazeSticks[3];
+    return EngenderConfig.mobs.useMobTalkerModels ? ((ModelCMMBlaze)RenderLayerCompat.getMainModel(this)).LArm : ((ModelBlaze)RenderLayerCompat.getMainModel(this)).blazeSticks[3];
   }
   
   public void doRender(EntityBlaze entity, double x, double y, double z, float entityYaw, float partialTicks) {
@@ -143,15 +145,15 @@ public class RenderBlaze extends RenderLiving<EntityBlaze> {
       float f = handleRotationFloat(entity, partialTicks);
       for (int i = 0; i < avec3d.length; i++)
         super.doRender(entity, x + (avec3d[i]).x + MathHelper.cos(i + f * 0.5F) * 0.025D, y + (avec3d[i]).y + MathHelper.cos(i + f * 0.75F) * 0.0125D, z + (avec3d[i]).z + MathHelper.cos(i + f * 0.7F) * 0.025D, entityYaw, partialTicks); 
-      this.shadowOpaque = 0.0F;
+      RenderLayerCompat.setShadowOpaque(this, 0.0F);
     } else {
-      this.shadowOpaque = 1.0F;
+      RenderLayerCompat.setShadowOpaque(this, 1.0F);
       super.doRender(entity, x, y, z, entityYaw, partialTicks);
     } 
   }
   
   protected boolean isVisible(EntityTameBase entity) {
-    return (!entity.isInvisible() || this.renderOutlines || entity.getGhostTime() > 0);
+    return (!entity.isInvisible() || RenderLayerCompat.isRenderOutlines(this) || entity.getGhostTime() > 0);
   }
   
   @SideOnly(Side.CLIENT)

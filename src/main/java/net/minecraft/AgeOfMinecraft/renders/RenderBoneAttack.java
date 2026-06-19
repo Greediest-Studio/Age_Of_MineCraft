@@ -51,7 +51,7 @@ public class RenderBoneAttack<T extends Entity> extends Render<T> {
         GlStateManager.translate(8.0F, 0.0F, 0.0F);
         break;
     } 
-    if (this.renderOutlines) {
+    if (RenderLayerCompat.isRenderOutlines(this)) {
       GlStateManager.enableColorMaterial();
       GlStateManager.enableOutlineMode(getTeamColor(entity));
     } 
@@ -71,7 +71,7 @@ public class RenderBoneAttack<T extends Entity> extends Render<T> {
       bufferbuilder.pos(-8.0D, 2.0D, 0.0D).tex(0.0D, v2).endVertex();
       tessellator.draw();
     } 
-    if (this.renderOutlines) {
+    if (RenderLayerCompat.isRenderOutlines(this)) {
       GlStateManager.disableOutlineMode();
       GlStateManager.disableColorMaterial();
     } 

@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityAbyssalPortal;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -53,7 +55,7 @@ public class LayerAbyssalPortalGlow implements LayerRenderer<EntityLivingBase> {
     int j = c0 / 65536;
     OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, i / 1.0F, j / 1.0F);
     GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-    this.spiderRenderer.getMainModel().render(p_177148_1_, p_177148_2_, p_177148_3_, p_177148_5_, p_177148_6_, p_177148_7_, p_177148_8_);
+    RenderLayerCompat.getMainModel(this.spiderRenderer).render(p_177148_1_, p_177148_2_, p_177148_3_, p_177148_5_, p_177148_6_, p_177148_7_, p_177148_8_);
     this.spiderRenderer.setLightmap(p_177148_1_);
     GlStateManager.disableBlend();
     GlStateManager.enableAlpha();

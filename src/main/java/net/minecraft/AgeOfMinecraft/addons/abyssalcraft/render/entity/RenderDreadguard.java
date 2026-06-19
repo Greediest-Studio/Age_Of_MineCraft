@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDreadguard;
 import net.minecraft.AgeOfMinecraft.models.ModelZombie;
 import net.minecraft.AgeOfMinecraft.renders.LayerMobCape;
@@ -25,12 +27,12 @@ public class RenderDreadguard extends RenderBiped<EntityDreadguard> {
     super(manager, new ModelZombie(), 0.75F);
     LayerBipedArmor layerbipedarmor = new LayerBipedArmor(this) {
         protected void initArmor() {
-          this.modelLeggings = new ModelZombie(0.5F, true);
-          this.modelArmor = new ModelZombie(1.0F, true);
+          RenderLayerCompat.setArmorLeggings(this, new ModelZombie(0.5F, true));
+          RenderLayerCompat.setArmorBody(this, new ModelZombie(1.0F, true));
         }
       };
-    addLayer((LayerRenderer)layerbipedarmor);
-    addLayer((LayerRenderer)new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)layerbipedarmor);
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityDreadguard par1Entitydreadguard) {

@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import com.shinoow.abyssalcraft.client.model.entity.ModelChagarothSpawn;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityChagarothSpawn;
 import net.minecraft.AgeOfMinecraft.renders.LayerArrowCustomSized;
@@ -20,7 +22,7 @@ public class RenderChagarothSpawn extends RenderLiving<EntityChagarothSpawn> {
   
   public RenderChagarothSpawn(RenderManager manager) {
     super(manager, new ModelChagarothSpawn(), 0.5F);
-    addLayer((LayerRenderer)new LayerArrowCustomSized(this, 1.0F));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerArrowCustomSized(this, 1.0F));
     
   }
   

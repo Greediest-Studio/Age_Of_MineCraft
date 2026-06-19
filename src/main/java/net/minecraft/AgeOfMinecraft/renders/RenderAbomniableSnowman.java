@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityAbomniableSnowman;
 import net.minecraft.AgeOfMinecraft.models.ModelIceGolem;
 import net.minecraft.client.Minecraft;
@@ -28,10 +30,10 @@ public class RenderAbomniableSnowman extends RenderLiving<EntityAbomniableSnowma
   
   public RenderAbomniableSnowman(RenderManager p_i46133_1_) {
     super(p_i46133_1_, regularmodel, 1.75F);
-    addLayer(new LayerArrowCustomSized(this, 1.0F));
-    addLayer(new LayerSnowmanHead(regularmodel.ironGolemHead));
+    RenderLayerCompat.addLayer(this, new LayerArrowCustomSized(this, 1.0F));
+    RenderLayerCompat.addLayer(this, new LayerSnowmanHead(regularmodel.ironGolemHead));
     
-    addLayer(new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityAbomniableSnowman entity) {

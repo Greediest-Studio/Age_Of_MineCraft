@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntityVex;
 import net.minecraft.AgeOfMinecraft.models.ModelVex;
 import net.minecraft.client.model.ModelBiped;
@@ -25,8 +27,8 @@ public class RenderVex extends RenderBiped<EntityVex> {
   
   public RenderVex(RenderManager p_i47190_1_) {
     super(p_i47190_1_, new ModelVex(), 0.3F);
-    addLayer(new LayerCustomHeadEngender(((ModelVex)this.mainModel).bipedHead, ((ModelVex)this.mainModel).bipedHead));
-    addLayer(new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, new LayerCustomHeadEngender(((ModelVex)RenderLayerCompat.getMainModel(this)).bipedHead, ((ModelVex)RenderLayerCompat.getMainModel(this)).bipedHead));
+    RenderLayerCompat.addLayer(this, new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityVex entity) {
@@ -55,14 +57,14 @@ public class RenderVex extends RenderBiped<EntityVex> {
       float f = handleRotationFloat(entity, partialTicks);
       for (int i = 0; i < avec3d.length; i++)
         super.doRender(entity, x + (avec3d[i]).x + MathHelper.cos(i + f * 0.5F) * 0.025D, y + (avec3d[i]).y + MathHelper.cos(i + f * 0.75F) * 0.0125D, z + (avec3d[i]).z + MathHelper.cos(i + f * 0.7F) * 0.025D, entityYaw, partialTicks); 
-      this.shadowOpaque = 0.0F;
+      RenderLayerCompat.setShadowOpaque(this, 0.0F);
     } else if (!entity.isInvisible()) {
-      this.shadowOpaque = 1.0F;
+      RenderLayerCompat.setShadowOpaque(this, 1.0F);
       super.doRender(entity, x, y, z, entityYaw, partialTicks);
     } 
   }
   
   protected boolean isVisible(EntityVex entity) {
-    return (!entity.isInvisible() || this.renderOutlines || entity.getGhostTime() > 0);
+    return (!entity.isInvisible() || RenderLayerCompat.isRenderOutlines(this) || entity.getGhostTime() > 0);
   }
 }

@@ -33,7 +33,7 @@ public class LayerEnderDragonEyes implements LayerRenderer<EntityLivingBase> {
     OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, i / 1.0F, j / 1.0F);
     GlStateManager.enableLighting();
     GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-    this.dragonRenderer.getMainModel().render(p_177210_1_, p_177210_2_, p_177210_3_, p_177210_5_, p_177210_6_, p_177210_7_, p_177210_8_);
+    RenderLayerCompat.getMainModel(this.dragonRenderer).render(p_177210_1_, p_177210_2_, p_177210_3_, p_177210_5_, p_177210_6_, p_177210_7_, p_177210_8_);
     this.dragonRenderer.setLightmap(p_177210_1_);
     GlStateManager.disableBlend();
     GlStateManager.enableAlpha();

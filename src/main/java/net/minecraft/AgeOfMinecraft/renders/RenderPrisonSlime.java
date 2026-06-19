@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntityPrisonSlime;
 import net.minecraft.AgeOfMinecraft.models.ModelSlime;
 import net.minecraft.client.model.ModelBase;
@@ -24,13 +26,13 @@ public class RenderPrisonSlime extends RenderLiving<EntityPrisonSlime> {
   
   public RenderPrisonSlime(RenderManager renderManagerIn) {
     super(renderManagerIn, regularmodel, 0.25F);
-    addLayer(new LayerSlimeGel(this));
-    addLayer(new LayerCustomHeadEngender(regularmodel.slimeBodies, regularmodel.slimeBodies));
+    RenderLayerCompat.addLayer(this, new LayerSlimeGel(this));
+    RenderLayerCompat.addLayer(this, new LayerCustomHeadEngender(regularmodel.slimeBodies, regularmodel.slimeBodies));
     
   }
   
   protected void preRenderCallback(EntityPrisonSlime entitylivingbaseIn, float partialTickTime) {
-    this.shadowSize = 0.25F * entitylivingbaseIn.getSlimeSize();
+    RenderLayerCompat.setShadowSize(this, 0.25F * entitylivingbaseIn.getSlimeSize());
     float f1 = entitylivingbaseIn.getSlimeSize();
     float f2 = (entitylivingbaseIn.prevSquishFactor + (entitylivingbaseIn.squishFactor - entitylivingbaseIn.prevSquishFactor) * partialTickTime) / (f1 * 0.5F + 1.0F);
     float f3 = 1.0F / (f2 + 1.0F);
@@ -82,15 +84,15 @@ public class RenderPrisonSlime extends RenderLiving<EntityPrisonSlime> {
       float f = handleRotationFloat(entity, partialTicks);
       for (int i = 0; i < avec3d.length; i++)
         super.doRender(entity, x + (avec3d[i]).x + MathHelper.cos(i + f * 0.5F) * 0.025D, y + (avec3d[i]).y + MathHelper.cos(i + f * 0.75F) * 0.0125D, z + (avec3d[i]).z + MathHelper.cos(i + f * 0.7F) * 0.025D, entityYaw, partialTicks); 
-      this.shadowOpaque = 0.0F;
+      RenderLayerCompat.setShadowOpaque(this, 0.0F);
     } else {
-      this.shadowOpaque = 1.0F;
+      RenderLayerCompat.setShadowOpaque(this, 1.0F);
       super.doRender(entity, x, y, z, entityYaw, partialTicks);
     } 
   }
   
   protected boolean isVisible(EntityPrisonSlime entity) {
-    return (!entity.isInvisible() || this.renderOutlines || entity.getGhostTime() > 0);
+    return (!entity.isInvisible() || RenderLayerCompat.isRenderOutlines(this) || entity.getGhostTime() > 0);
   }
   
   @SideOnly(Side.CLIENT)
@@ -112,7 +114,7 @@ public class RenderPrisonSlime extends RenderLiving<EntityPrisonSlime> {
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(770, 771);
         this.slimeRenderer.bindTexture(this.slimeTextures);
-        this.slimeModel.setModelAttributes(this.slimeRenderer.getMainModel());
+        this.slimeModel.setModelAttributes(RenderLayerCompat.getMainModel(this.slimeRenderer));
         this.slimeModel.render(p_177159_1_, p_177159_2_, p_177159_3_, p_177159_5_, p_177159_6_, p_177159_7_, p_177159_8_);
         GlStateManager.disableBlend();
         GlStateManager.disableNormalize();

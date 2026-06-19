@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityPEGunPellet;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -23,7 +25,7 @@ public class RenderPEGunPellet extends Render<EntityPEGunPellet> {
   }
   
   public void doRender(EntityPEGunPellet entity, double x, double y, double z, float entityYaw, float partialTicks) {
-    if (!this.renderOutlines) {
+    if (!RenderLayerCompat.isRenderOutlines(this)) {
       GlStateManager.pushMatrix();
       GlStateManager.translate((float)x, (float)y, (float)z);
       bindEntityTexture(entity);
@@ -42,8 +44,8 @@ public class RenderPEGunPellet extends Render<EntityPEGunPellet> {
       l = (int)((MathHelper.sin(f9 + 0.0F) + 1.0F) * 0.5F * 255.0F);
       int j1 = (int)((MathHelper.sin(f9 + 4.1887903F) + 1.0F) * 0.1F * 255.0F);
       GlStateManager.translate(0.0F, 0.1F, 0.0F);
-      GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-      GlStateManager.rotate(((this.renderManager.options.thirdPersonView == 2) ? -1.0F : 1.0F) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+      GlStateManager.rotate(180.0F - RenderLayerCompat.getRenderManager(this).playerViewY, 0.0F, 1.0F, 0.0F);
+      GlStateManager.rotate(((RenderLayerCompat.getRenderManager(this).options.thirdPersonView == 2) ? -1.0F : 1.0F) * -RenderLayerCompat.getRenderManager(this).playerViewX, 1.0F, 0.0F, 0.0F);
       GlStateManager.scale(0.3F, 0.3F, 0.3F);
       Tessellator tessellator = Tessellator.getInstance();
       BufferBuilder vertexbuffer = tessellator.getBuffer();

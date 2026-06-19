@@ -32,7 +32,7 @@ public class LayerSpiderEyes<T extends EntitySpider> implements LayerRenderer<T>
   
   public void doRenderLayer(T p_177148_1_, float p_177148_2_, float p_177148_3_, float p_177148_4_, float p_177148_5_, float p_177148_6_, float p_177148_7_, float p_177148_8_) {
     if (!p_177148_1_.isSurvivalTestSkin() && p_177148_1_.isEntityAlive()) {
-      this.spiderRenderer.bindTexture(EngenderConfig.mobs.useMobTalkerModels ? ((this.spiderRenderer.getMainModel() instanceof net.minecraft.AgeOfMinecraft.models.ModelCMMCaveSpider) ? (p_177148_1_.isAntiMob() ? antiCMM_CAVE_SPIDER_EYES : CMM_CAVE_SPIDER_EYES) : (p_177148_1_.isAntiMob() ? antiCMM_SPIDER_EYES : CMM_SPIDER_EYES)) : (p_177148_1_.isAntiMob() ? antiSPIDER_EYES : SPIDER_EYES));
+      this.spiderRenderer.bindTexture(EngenderConfig.mobs.useMobTalkerModels ? ((RenderLayerCompat.getMainModel(this.spiderRenderer) instanceof net.minecraft.AgeOfMinecraft.models.ModelCMMCaveSpider) ? (p_177148_1_.isAntiMob() ? antiCMM_CAVE_SPIDER_EYES : CMM_CAVE_SPIDER_EYES) : (p_177148_1_.isAntiMob() ? antiCMM_SPIDER_EYES : CMM_SPIDER_EYES)) : (p_177148_1_.isAntiMob() ? antiSPIDER_EYES : SPIDER_EYES));
       GlStateManager.enableBlend();
       GlStateManager.disableAlpha();
       GlStateManager.blendFunc(1, 1);
@@ -46,7 +46,7 @@ public class LayerSpiderEyes<T extends EntitySpider> implements LayerRenderer<T>
       int j = c0 / 65536;
       OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, i / 1.0F, j / 1.0F);
       GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-      this.spiderRenderer.getMainModel().render(p_177148_1_, p_177148_2_, p_177148_3_, p_177148_5_, p_177148_6_, p_177148_7_, p_177148_8_);
+      RenderLayerCompat.getMainModel(this.spiderRenderer).render(p_177148_1_, p_177148_2_, p_177148_3_, p_177148_5_, p_177148_6_, p_177148_7_, p_177148_8_);
       int k = 15728880;
       i = k % 65536;
       j = k / 65536;

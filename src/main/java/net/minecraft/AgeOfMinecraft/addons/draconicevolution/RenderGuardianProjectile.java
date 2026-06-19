@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.draconicevolution;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import com.brandon3055.draconicevolution.helpers.ResourceHelperDE;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -44,8 +46,8 @@ public class RenderGuardianProjectile extends Render<EntityGuardianProjectile> {
     float f7 = 1.0F;
     float f8 = 0.5F;
     float f9 = 0.25F;
-    GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-    GlStateManager.rotate(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+    GlStateManager.rotate(180.0F - RenderLayerCompat.getRenderManager(this).playerViewY, 0.0F, 1.0F, 0.0F);
+    GlStateManager.rotate(-RenderLayerCompat.getRenderManager(this).playerViewX, 1.0F, 0.0F, 0.0F);
     if (projectile.type == 1 || projectile.type == 3) {
       GlStateManager.translate(0.0D, 0.25D, 0.0D);
       GlStateManager.rotate((projectile.ticksExisted * 40) + partialTicks * 40.0F, 0.0F, 0.0F, 1.0F);

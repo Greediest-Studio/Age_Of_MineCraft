@@ -47,7 +47,7 @@ public class LayerSlimeGel implements LayerRenderer<EntityLivingBase> {
       GlStateManager.enableBlend();
       GlStateManager.blendFunc(770, 771);
       this.slimeRenderer.bindTexture(EngenderConfig.mobs.useMobTalkerModels ? ((p_177159_1_.getSlimeSize() <= 1) ? (p_177159_1_.isAntiMob() ? anticmmSlimeTinyTextures : cmmSlimeTinyTextures) : ((p_177159_1_.getSlimeSize() == 2 || p_177159_1_.getSlimeSize() == 3) ? (p_177159_1_.isAntiMob() ? anticmmSlimeSmallTextures : cmmSlimeSmallTextures) : (p_177159_1_.isAntiMob() ? anticmmSlimeLargeTextures : cmmSlimeLargeTextures))) : (p_177159_1_.isAntiMob() ? antislimeTextures : slimeTextures));
-      this.slimeModel.setModelAttributes(this.slimeRenderer.getMainModel());
+      this.slimeModel.setModelAttributes(RenderLayerCompat.getMainModel(this.slimeRenderer));
       this.slimeModel.render(p_177159_1_, p_177159_2_, p_177159_3_, p_177159_5_, p_177159_6_, p_177159_7_, p_177159_8_);
       GlStateManager.disableBlend();
       GlStateManager.disableNormalize();

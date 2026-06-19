@@ -1,5 +1,4 @@
 package net.minecraft.AgeOfMinecraft.registry;
-
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.items.ItemAbygolemItem;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.items.ItemAbyssalPortalStaff;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.items.ItemAbyssalZombieItem;
@@ -41,7 +40,6 @@ import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.items.ItemSpiderPigItem;
 import net.minecraft.AgeOfMinecraft.items.ItemAbomniableSnowmanItem;
 import net.minecraft.AgeOfMinecraft.items.ItemBatItem;
 import net.minecraft.AgeOfMinecraft.items.ItemBlazeItem;
-import net.minecraft.AgeOfMinecraft.items.ItemCarrier;
 import net.minecraft.AgeOfMinecraft.items.ItemCaveSpiderItem;
 import net.minecraft.AgeOfMinecraft.items.ItemChickenItem;
 import net.minecraft.AgeOfMinecraft.items.ItemChickenJockeyItem;
@@ -64,6 +62,7 @@ import net.minecraft.AgeOfMinecraft.items.ItemFusionVanilla;
 import net.minecraft.AgeOfMinecraft.items.ItemGhastItem;
 import net.minecraft.AgeOfMinecraft.items.ItemGhastherItem;
 import net.minecraft.AgeOfMinecraft.items.ItemGiantItem;
+import net.minecraft.AgeOfMinecraft.items.ItemGlowing;
 import net.minecraft.AgeOfMinecraft.items.ItemGuardianItem;
 import net.minecraft.AgeOfMinecraft.items.ItemHeroMaker;
 import net.minecraft.AgeOfMinecraft.items.ItemHuskItem;
@@ -114,18 +113,11 @@ import net.minecraft.AgeOfMinecraft.items.ItemWitherSkeletonItem;
 import net.minecraft.AgeOfMinecraft.items.ItemWitherStormItem;
 import net.minecraft.AgeOfMinecraft.items.ItemWolfItem;
 import net.minecraft.AgeOfMinecraft.items.ItemZombieItem;
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
-import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSimpleFoiled;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.registries.GameData;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -546,17 +538,6 @@ public class EItem {
   public static void ENMO() {
     init();
     register();
-    BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(carrier, new BehaviorDefaultDispenseItem() {
-          public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
-            EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue((IProperty)BlockDispenser.FACING);
-            double d0 = source.getX() + enumfacing.getXOffset();
-            double d1 = ((source.getBlockPos().getY() + enumfacing.getYOffset()) + 0.2F);
-            double d2 = source.getZ() + enumfacing.getZOffset();
-            Entity entity = ItemCarrier.spawnMob(source.getWorld(), stack, d0, d1, d2);
-            super.dispenseStack(source, stack);
-            return stack;
-          }
-        });
   }
   
   public static void ENMOA() {
@@ -578,9 +559,8 @@ public class EItem {
     manaContainer = new ItemManaCollector("mana_collector", 0);
     entropyContainer = new ItemManaCollector("entropy_collector", 1);
     artifact1 = new ItemManaCollector("infinite_well_spring", 2);
-    witheredNetherStar = (new ItemSimpleFoiled()).setCreativeTab(ETab.engender).setTranslationKey("withered_nether_star").setRegistryName("withered_nether_star");
+    witheredNetherStar = new ItemGlowing("withered_nether_star");
     statChecker = new ItemEngenderStatChecker();
-    carrier = new ItemCarrier();
     heromaker = new ItemHeroMaker();
     lastchance = new ItemLastChance();
     trainingstick = new ItemTrainingStick();
@@ -804,7 +784,6 @@ public class EItem {
     GameData.register_impl((IForgeRegistryEntry)artifact1);
     GameData.register_impl((IForgeRegistryEntry)witheredNetherStar);
     GameData.register_impl((IForgeRegistryEntry)statChecker);
-    GameData.register_impl((IForgeRegistryEntry)carrier);
     GameData.register_impl((IForgeRegistryEntry)heromaker);
     GameData.register_impl((IForgeRegistryEntry)lastchance);
     GameData.register_impl((IForgeRegistryEntry)trainingstick);
@@ -1032,7 +1011,6 @@ public class EItem {
     registerItem(renderItem, artifact1);
     registerItem(renderItem, witheredNetherStar);
     registerItem(renderItem, statChecker);
-    registerItem(renderItem, carrier);
     registerItem(renderItem, heromaker);
     registerItem(renderItem, lastchance);
     registerItem(renderItem, trainingstick);

@@ -25,7 +25,7 @@ public class LayerEversource implements LayerRenderer<EntityEversource> {
   }
   
   public void doRenderLayer(EntityEversource entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-    this.layerModel.setModelAttributes(this.renderer.getMainModel());
+    this.layerModel.setModelAttributes(RenderLayerCompat.getMainModel(this.renderer));
     this.layerModel.setLivingAnimations(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks);
     GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     GlStateManager.translate(0.0F, -0.06F, 0.0F);

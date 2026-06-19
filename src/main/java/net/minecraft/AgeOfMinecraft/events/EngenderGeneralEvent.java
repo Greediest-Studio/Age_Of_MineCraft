@@ -5,6 +5,9 @@ import net.minecraft.AgeOfMinecraft.EngenderConfig;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityCreeder;
 import net.minecraft.AgeOfMinecraft.registry.EItem;
+import net.minecraft.AgeOfMinecraft.util.ClientCompat;
+import net.minecraft.AgeOfMinecraft.util.EntityAICompat;
+import net.minecraft.AgeOfMinecraft.util.EntityCompat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -28,6 +31,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.World;
 import net.minecraft.world.end.DragonFightManager;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootEntryItem;
@@ -53,7 +57,7 @@ public class EngenderGeneralEvent {
   @SubscribeEvent
   public void onClientTick(TickEvent.ClientTickEvent event) {
     Minecraft mc = Minecraft.getMinecraft();
-    if (musicTicker != null && mc.world != null)
+    if (musicTicker != null && ClientCompat.world(mc) != null)
       if (EngenderConfig.general.useMusic) {
         musicTicker.update();
       } else {
@@ -150,23 +154,25 @@ public class EngenderGeneralEvent {
   public void onLivingEvent(LivingEvent.LivingUpdateEvent event) {
     if (event.getEntity() instanceof EntityDragon) {
       EntityDragon mob = (EntityDragon)event.getEntity();
-      if (!mob.world.isRemote && mob.getFightManager() != null && mob.getFightManager().hasPreviouslyKilledDragon() && EngenderConfig.general.dragonEgg) {
+      World world = EntityCompat.world(mob);
+      if (!EntityCompat.isRemote(world) && mob.getFightManager() != null && mob.getFightManager().hasPreviouslyKilledDragon() && EngenderConfig.general.dragonEgg) {
         ReflectionHelper.setPrivateValue(DragonFightManager.class, mob.getFightManager(), Boolean.FALSE, new String[] { "previouslyKilled", "previouslyKilled" });
-        for (EntityPlayer entityplayer : mob.world.playerEntities) {
+        for (EntityPlayer entityplayer : EntityCompat.playerEntities(world)) {
           if (EngenderConfig.general.useMessage)
             entityplayer.sendStatusMessage(new TextComponentTranslation(TextFormatting.BOLD + "The respawned dragon will drop another egg now."), true);
         } 
       } 
     } 
     if (event.getEntity() instanceof EntityPlayer)
-      ((EntityPlayer)event.getEntity()).xpCooldown = 0; 
+      EntityCompat.setXpCooldown((EntityPlayer)event.getEntity(), 0); 
     if (event.getEntity() instanceof EntityLivingBase) {
       EntityLivingBase mob = (EntityLivingBase)event.getEntity();
-      if (mob.attackable() && mob.ticksExisted > 0) {
+      int ticksExisted = EntityCompat.ticksExisted(mob);
+      if (mob.attackable() && ticksExisted > 0) {
         NBTTagCompound karma = mob.getEntityData();
-        if (!karma.hasKey("KR", 99) || mob.isDead)
+        if (!karma.hasKey("KR", 99) || EntityCompat.isDead(mob))
           karma.setInteger("KR", 0); 
-        if (karma.getInteger("KR") > 0 && mob.getHealth() > 1.0F && mob.ticksExisted % 5 - ((karma.getInteger("KR") >= 40) ? 4 : (karma.getInteger("KR") / 10)) == 0) {
+        if (karma.getInteger("KR") > 0 && mob.getHealth() > 1.0F && ticksExisted % 5 - ((karma.getInteger("KR") >= 40) ? 4 : (karma.getInteger("KR") / 10)) == 0) {
           mob.setHealth(mob.getHealth() - 1.0F);
           karma.setInteger("KR", karma.getInteger("KR") - 1);
         } 
@@ -206,10 +212,11 @@ public class EngenderGeneralEvent {
   public void onMobSpawnEvent(EntityJoinWorldEvent event) {
     if (event.getEntity() instanceof EntityPlayer)
       musicTicker = new EngenderMusicEvent(Minecraft.getMinecraft());
-    if (!(event.getEntity()).world.isRemote && !(event.getEntity()).world.getGameRules().hasRule("disableExpItemDrops"))
-      (event.getEntity()).world.getGameRules().addGameRule("disableExpItemDrops", "false", GameRules.ValueType.BOOLEAN_VALUE); 
-    if (!(event.getEntity()).world.isRemote && !(event.getEntity()).world.getGameRules().hasRule("disableCorpses"))
-      (event.getEntity()).world.getGameRules().addGameRule("disableCorpses", "false", GameRules.ValueType.BOOLEAN_VALUE); 
+    World world = EntityCompat.world(event.getEntity());
+    if (!EntityCompat.isRemote(world) && !world.getGameRules().hasRule("disableExpItemDrops"))
+      world.getGameRules().addGameRule("disableExpItemDrops", "false", GameRules.ValueType.BOOLEAN_VALUE); 
+    if (!EntityCompat.isRemote(world) && !world.getGameRules().hasRule("disableCorpses"))
+      world.getGameRules().addGameRule("disableCorpses", "false", GameRules.ValueType.BOOLEAN_VALUE); 
     if (event.getEntity() instanceof EntityLiving) {
       final EntityLiving mob = (EntityLiving)event.getEntity();
       if (mob instanceof EntityCreature) {
@@ -220,23 +227,23 @@ public class EngenderGeneralEvent {
       final EntityLiving mob = (EntityLiving)event.getEntity();
       if (mob instanceof EntityCreature) {
         final EntityCreature cri = (EntityCreature)event.getEntity();
-        cri.targetTasks.addTask(3, new EntityAINearestAttackableTarget(cri, net.minecraft.entity.passive.EntityVillager.class, false));
+        EntityAICompat.addTargetTask(cri, 3, new EntityAINearestAttackableTarget(cri, net.minecraft.entity.passive.EntityVillager.class, false));
       } else {
-        mob.targetTasks.addTask(3, new EntityAIFindEntityNearest(mob, net.minecraft.entity.passive.EntityVillager.class));
+        EntityAICompat.addTargetTask(mob, 3, new EntityAIFindEntityNearest(mob, net.minecraft.entity.passive.EntityVillager.class));
       } 
     } 
     if (event.getEntity() instanceof EntityMob) {
       final EntityMob mob = (EntityMob)event.getEntity();
-      mob.targetTasks.addTask(3, new EntityAINearestAttackableTarget(mob, EntityTameBase.class, 0, false, false, (Predicate<EntityTameBase>) engendermob -> (engendermob != null && engendermob.isEntityAlive() && !false)));
-      mob.targetTasks.addTask(3, new EntityAINearestAttackableTarget(mob, net.minecraft.entity.passive.EntityVillager.class, true));
+      EntityAICompat.addTargetTask(mob, 3, new EntityAINearestAttackableTarget(mob, EntityTameBase.class, 0, false, false, (Predicate<EntityTameBase>) engendermob -> (engendermob != null && engendermob.isEntityAlive() && !false)));
+      EntityAICompat.addTargetTask(mob, 3, new EntityAINearestAttackableTarget(mob, net.minecraft.entity.passive.EntityVillager.class, true));
     } 
     if (event.getEntity() instanceof net.minecraft.entity.monster.EntityIronGolem) {
       net.minecraft.entity.monster.EntityIronGolem golems = (net.minecraft.entity.monster.EntityIronGolem)event.getEntity();
-      golems.targetTasks.addTask(3, new EntityAINearestAttackableTarget(golems, EntityLivingBase.class, 0, false, false, (Predicate<EntityLivingBase>) p_apply_1_ -> (p_apply_1_ != null && IMob.MOB_SELECTOR.apply(p_apply_1_))));
+      EntityAICompat.addTargetTask(golems, 3, new EntityAINearestAttackableTarget(golems, EntityLivingBase.class, 0, false, false, (Predicate<EntityLivingBase>) p_apply_1_ -> (p_apply_1_ != null && IMob.MOB_SELECTOR.apply(p_apply_1_))));
     } 
     if (event.getEntity() instanceof net.minecraft.entity.passive.EntityVillager) {
       net.minecraft.entity.passive.EntityVillager testificate = (net.minecraft.entity.passive.EntityVillager)event.getEntity();
-      testificate.tasks.addTask(1, new EntityAIAvoidEntity(testificate, EntityLivingBase.class, (Predicate<EntityLivingBase>) mob -> (mob.isEntityAlive() && mob instanceof IMob),  8.0F, 0.6D, 0.6D));
+      EntityAICompat.addTask(testificate, 1, new EntityAIAvoidEntity(testificate, EntityLivingBase.class, (Predicate<EntityLivingBase>) mob -> (mob.isEntityAlive() && mob instanceof IMob),  8.0F, 0.6D, 0.6D));
     } 
     if (event.getEntity() instanceof EntityItem) {
       EntityItem item = (EntityItem)event.getEntity();

@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.mutantbeasts.render;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import chumbanotz.mutantbeasts.MutantBeasts;
 import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.entity.EntityMutantCreeper;
 import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.model.ModelMutantCreeper;
@@ -27,7 +29,7 @@ public class RenderMutantCreeper extends RenderLiving<EntityMutantCreeper> {
   
   public RenderMutantCreeper(RenderManager rendermanagerIn) {
     super(rendermanagerIn, new ModelMutantCreeper(), 1.5F);
-    addLayer(new LayerCreeperCharge(this, new ModelMutantCreeper(2.0F)));
+    RenderLayerCompat.addLayer(this, new LayerCreeperCharge(this, new ModelMutantCreeper(2.0F)));
   }
   
   protected void preRenderCallback(EntityMutantCreeper entitylivingbaseIn, float partialTickTime) {
@@ -98,7 +100,7 @@ public class RenderMutantCreeper extends RenderLiving<EntityMutantCreeper> {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.disableLighting();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-        this.model.setModelAttributes(this.renderer.getMainModel());
+        this.model.setModelAttributes(RenderLayerCompat.getMainModel(this.renderer));
         (Minecraft.getMinecraft()).entityRenderer.setupFogColor(true);
         this.model.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
         (Minecraft.getMinecraft()).entityRenderer.setupFogColor(false);

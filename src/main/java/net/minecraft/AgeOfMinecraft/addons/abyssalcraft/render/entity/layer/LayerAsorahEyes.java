@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity.layer;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDragonBoss;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity.RenderDragonBoss;
 import net.minecraft.client.renderer.GlStateManager;
@@ -33,7 +35,7 @@ public class LayerAsorahEyes implements LayerRenderer<EntityDragonBoss> {
     OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j / 1.0F, k / 1.0F);
     GlStateManager.enableLighting();
     GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-    this.dragonRenderer.getMainModel().render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+    RenderLayerCompat.getMainModel(this.dragonRenderer).render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
     this.dragonRenderer.setLightmap(entitylivingbaseIn);
     GlStateManager.disableBlend();
     GlStateManager.enableAlpha();

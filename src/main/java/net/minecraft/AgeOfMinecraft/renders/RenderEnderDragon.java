@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import java.util.Random;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEnderDragon;
 import net.minecraft.AgeOfMinecraft.models.ModelEnderDragon;
@@ -37,10 +39,10 @@ public class RenderEnderDragon extends RenderLiving<EntityEnderDragon> {
   
   public RenderEnderDragon(RenderManager renderManagerIn) {
     super(renderManagerIn, new ModelEnderDragon(0.0F), 8.0F);
-    this.modelDragon = (ModelEnderDragon)this.mainModel;
-    addLayer(new LayerEnderDragonEyes(this));
-    addLayer(new LayerEnderDragonDeath());
-    addLayer(new LayerArrowCustomSized(this, 1.0F));
+    this.modelDragon = (ModelEnderDragon)RenderLayerCompat.getMainModel(this);
+    RenderLayerCompat.addLayer(this, new LayerEnderDragonEyes(this));
+    RenderLayerCompat.addLayer(this, new LayerEnderDragonDeath());
+    RenderLayerCompat.addLayer(this, new LayerArrowCustomSized(this, 1.0F));
     
   }
   
@@ -64,19 +66,19 @@ public class RenderEnderDragon extends RenderLiving<EntityEnderDragon> {
         GlStateManager.enableAlpha();
         GlStateManager.alphaFunc(516, f);
         bindTexture(DRAGON_EXPLODING_TEXTURES);
-        this.mainModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+        RenderLayerCompat.getMainModel(this).render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
         GlStateManager.alphaFunc(516, 0.1F);
         GlStateManager.depthFunc(514);
       } 
       bindEntityTexture(entitylivingbaseIn);
-      this.mainModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+      RenderLayerCompat.getMainModel(this).render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
       if (entitylivingbaseIn.hurtTime > 0) {
         GlStateManager.depthFunc(514);
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.color(1.0F, 0.0F, 0.0F, 0.5F);
-        this.mainModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+        RenderLayerCompat.getMainModel(this).render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
         GlStateManager.depthFunc(515);
@@ -107,12 +109,12 @@ public class RenderEnderDragon extends RenderLiving<EntityEnderDragon> {
       bindTexture(ENDER_CRYSTAL_TEXTURES);
       float f1 = MathHelper.sin(f * 0.2F) / 2.0F + 0.5F;
       f1 = f1 * f1 + f1;
-      if (this.renderOutlines) {
+      if (RenderLayerCompat.isRenderOutlines(this)) {
         GlStateManager.enableColorMaterial();
         GlStateManager.enableOutlineMode(getTeamColor(entity));
       } 
       this.modelEnderCrystalNoBase.render(entity, 0.0F, f * 3.0F, f1 * 0.2F, 0.0F, 0.0F, 0.0625F);
-      if (this.renderOutlines) {
+      if (RenderLayerCompat.isRenderOutlines(this)) {
         GlStateManager.disableOutlineMode();
         GlStateManager.disableColorMaterial();
       } 

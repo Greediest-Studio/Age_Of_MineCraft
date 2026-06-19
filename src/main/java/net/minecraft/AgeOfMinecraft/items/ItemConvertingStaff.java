@@ -23,8 +23,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemConvertingStaff extends ItemBEItem {
   public ItemConvertingStaff() {
     super("convertingstaff");
-    setMaxStackSize(1);
-    setHasSubtypes(true);
+    ItemCompat.setMaxStackSize(this, 1);
+    ItemCompat.setHasSubtypes(this, true);
   }
   
   public EnumAction getItemUseAction(ItemStack stack) {

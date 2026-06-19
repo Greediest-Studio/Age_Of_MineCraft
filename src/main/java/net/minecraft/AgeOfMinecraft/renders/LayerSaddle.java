@@ -24,7 +24,7 @@ public class LayerSaddle implements LayerRenderer<EntityLivingBase> {
   public void doRenderLayer(EntityPig p_177155_1_, float p_177155_2_, float p_177155_3_, float p_177155_4_, float p_177155_5_, float p_177155_6_, float p_177155_7_, float p_177155_8_) {
     if (p_177155_1_.getSaddled()) {
       this.pigRenderer.bindTexture(TEXTURE);
-      this.pigModel.setModelAttributes(this.pigRenderer.getMainModel());
+      this.pigModel.setModelAttributes(RenderLayerCompat.getMainModel(this.pigRenderer));
       this.pigModel.render(p_177155_1_, p_177155_2_, p_177155_3_, p_177155_5_, p_177155_6_, p_177155_7_, p_177155_8_);
     } 
   }

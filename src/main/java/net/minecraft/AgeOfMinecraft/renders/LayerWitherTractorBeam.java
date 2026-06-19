@@ -28,7 +28,7 @@ public class LayerWitherTractorBeam implements LayerRenderer<EntityLivingBase> {
     if (p_177214_1_.getSize() >= 6000) {
       boolean flag = p_177214_1_.isInvisible();
       GlStateManager.depthMask(!flag);
-      ((ModelCommandBlockWither)this.witherRenderer.getMainModel()).MainHead.postRender(0.0625F);
+      ((ModelCommandBlockWither)RenderLayerCompat.getMainModel(this.witherRenderer)).MainHead.postRender(0.0625F);
       GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
       GlStateManager.scale(0.5F, 4.0F, 0.5F);
       GlStateManager.translate(0.0F, 0.0F, 0.5F);

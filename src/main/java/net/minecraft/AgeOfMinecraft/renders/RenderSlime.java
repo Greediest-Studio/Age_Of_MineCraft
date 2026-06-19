@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntitySlime;
 import net.minecraft.AgeOfMinecraft.models.ModelCMMSlime;
@@ -38,22 +40,22 @@ public class RenderSlime extends RenderLiving<EntitySlime> {
   
   public RenderSlime(RenderManager renderManagerIn) {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.25F);
-    addLayer(new LayerSlimeGel(this));
-    addLayer(new LayerCustomHeadEngender(regularmodel.slimeBodies, cmmmodel.Head));
+    RenderLayerCompat.addLayer(this, new LayerSlimeGel(this));
+    RenderLayerCompat.addLayer(this, new LayerCustomHeadEngender(regularmodel.slimeBodies, cmmmodel.Head));
     
   }
   
   public void doRender(EntitySlime entity, double x, double y, double z, float entityYaw, float partialTicks) {
     if (EngenderConfig.mobs.useMobTalkerModels) {
-      this.shadowSize = entity.getSlimeSize() * 0.125F;
+      RenderLayerCompat.setShadowSize(this, entity.getSlimeSize() * 0.125F);
     } else {
-      this.shadowSize = 0.25F * entity.getSlimeSize();
+      RenderLayerCompat.setShadowSize(this, 0.25F * entity.getSlimeSize());
     } 
     super.doRender(entity, x, y, z, entityYaw, partialTicks);
   }
   
   protected void preRenderCallback(EntitySlime entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
+    RenderLayerCompat.setMainModel(this, EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel);
     float f1 = entitylivingbaseIn.getSlimeSize();
     float f2 = (entitylivingbaseIn.prevSquishFactor + (entitylivingbaseIn.squishFactor - entitylivingbaseIn.prevSquishFactor) * partialTickTime) / (f1 * 0.5F + 1.0F);
     float f3 = 1.0F / (f2 + 1.0F);

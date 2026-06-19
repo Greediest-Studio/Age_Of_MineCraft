@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import com.shinoow.abyssalcraft.api.item.ACItems;
 import com.shinoow.abyssalcraft.lib.ACLib;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntitySacthoth;
@@ -27,9 +29,9 @@ public class RenderSacthoth extends RenderLiving<EntitySacthoth> {
   
   public RenderSacthoth(RenderManager manager) {
     super(manager, new ModelSacthoth(), 0.0F);
-    addLayer(new LayerHeldItemSacthoth(this));
+    RenderLayerCompat.addLayer(this, new LayerHeldItemSacthoth(this));
     
-    addLayer((LayerRenderer)new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerMobCape(this));
   }
   
   protected void renderModel(EntitySacthoth entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
@@ -72,7 +74,7 @@ public class RenderSacthoth extends RenderLiving<EntitySacthoth> {
     private void renderHeldItem(EntityLivingBase p_188358_1_, ItemStack p_188358_2_, ItemCameraTransforms.TransformType p_188358_3_, EnumHandSide handSide) {
       if (!p_188358_2_.isEmpty()) {
         GlStateManager.pushMatrix();
-        ((ModelSacthoth)this.livingEntityRenderer.getMainModel()).leftarm1.postRender(0.0625F);
+        ((ModelSacthoth)RenderLayerCompat.getMainModel(this.livingEntityRenderer)).leftarm1.postRender(0.0625F);
         GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
         GlStateManager.scale(1.2F, 1.2F, 1.2F);
         GlStateManager.translate(-0.125F, 0.325F, 0.825F);
@@ -82,7 +84,7 @@ public class RenderSacthoth extends RenderLiving<EntitySacthoth> {
     }
     
     protected void translateToHand(EnumHandSide p_191361_1_) {
-      ((ModelBiped)this.livingEntityRenderer.getMainModel()).postRenderArm(0.0625F, p_191361_1_);
+      ((ModelBiped)RenderLayerCompat.getMainModel(this.livingEntityRenderer)).postRenderArm(0.0625F, p_191361_1_);
     }
     
     public boolean shouldCombineTextures() {

@@ -30,8 +30,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemPortalStaff extends ItemBEItem {
   public ItemPortalStaff() {
     super("portalstaff");
-    setMaxStackSize(1);
-    setHasSubtypes(true);
+    ItemCompat.setMaxStackSize(this, 1);
+    ItemCompat.setHasSubtypes(this, true);
   }
   
   public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {

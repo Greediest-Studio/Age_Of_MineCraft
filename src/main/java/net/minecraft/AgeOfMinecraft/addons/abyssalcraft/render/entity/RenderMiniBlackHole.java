@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityMiniBlackHole;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -27,9 +29,9 @@ public class RenderMiniBlackHole extends Render<EntityMiniBlackHole> {
     GlStateManager.scale(0.5F, 0.5F, 0.5F);
     Tessellator tessellator = Tessellator.getInstance();
     BufferBuilder vertexbuffer = tessellator.getBuffer();
-    GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-    GlStateManager.rotate(((this.renderManager.options.thirdPersonView == 2) ? -1.0F : 1.0F) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-    if (this.renderOutlines) {
+    GlStateManager.rotate(180.0F - RenderLayerCompat.getRenderManager(this).playerViewY, 0.0F, 1.0F, 0.0F);
+    GlStateManager.rotate(((RenderLayerCompat.getRenderManager(this).options.thirdPersonView == 2) ? -1.0F : 1.0F) * -RenderLayerCompat.getRenderManager(this).playerViewX, 1.0F, 0.0F, 0.0F);
+    if (RenderLayerCompat.isRenderOutlines(this)) {
       GlStateManager.enableColorMaterial();
       GlStateManager.enableOutlineMode(getTeamColor(entity));
     } 
@@ -39,7 +41,7 @@ public class RenderMiniBlackHole extends Render<EntityMiniBlackHole> {
     vertexbuffer.pos(0.5D, 0.75D, 0.0D).tex(1.0D, 0.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
     vertexbuffer.pos(-0.5D, 0.75D, 0.0D).tex(0.0D, 0.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
     tessellator.draw();
-    if (this.renderOutlines) {
+    if (RenderLayerCompat.isRenderOutlines(this)) {
       GlStateManager.disableOutlineMode();
       GlStateManager.disableColorMaterial();
     } 

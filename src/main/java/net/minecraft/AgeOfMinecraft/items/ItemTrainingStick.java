@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 public class ItemTrainingStick extends ItemBEItem {
   public ItemTrainingStick() {
     super("trainingstick");
-    setMaxStackSize(1);
+    ItemCompat.setMaxStackSize(this, 1);
   }
   
   public EnumRarity getRarity(ItemStack stack) {

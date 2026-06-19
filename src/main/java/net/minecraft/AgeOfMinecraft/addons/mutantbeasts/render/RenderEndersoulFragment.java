@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.mutantbeasts.render;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import chumbanotz.mutantbeasts.MutantBeasts;
 import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.entity.EntityEndersoulFragment;
 import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.model.ModelEndersoulFragment;
@@ -19,8 +21,8 @@ public class RenderEndersoulFragment extends Render<EntityEndersoulFragment> {
   
   public RenderEndersoulFragment(RenderManager renderManager) {
     super(renderManager);
-    this.shadowSize = 0.3F;
-    this.shadowOpaque = 0.5F;
+    RenderLayerCompat.setShadowSize(this, 0.3F);
+    RenderLayerCompat.setShadowOpaque(this, 0.5F);
   }
   
   public void doRender(EntityEndersoulFragment entity, double x, double y, double z, float entityYaw, float partialTicks) {
@@ -29,7 +31,7 @@ public class RenderEndersoulFragment extends Render<EntityEndersoulFragment> {
     GlStateManager.translate((float)x, (float)y - 1.9F, (float)z);
     GlStateManager.scale(1.6F, 1.6F, 1.6F);
     bindEntityTexture(entity);
-    if (this.renderOutlines) {
+    if (RenderLayerCompat.isRenderOutlines(this)) {
       GlStateManager.enableColorMaterial();
       GlStateManager.enableOutlineMode(getTeamColor(entity));
     } 
@@ -49,7 +51,7 @@ public class RenderEndersoulFragment extends Render<EntityEndersoulFragment> {
     GlStateManager.color(0.9F, 0.3F, 1.0F, 1.0F);
     GlStateManager.enableLighting();
     this.modelRod.render(entity);
-    if (this.renderOutlines) {
+    if (RenderLayerCompat.isRenderOutlines(this)) {
       GlStateManager.disableOutlineMode();
       GlStateManager.disableColorMaterial();
     } 

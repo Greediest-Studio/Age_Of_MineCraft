@@ -54,7 +54,7 @@ public class RenderGasterBlaster extends RenderLivingBase<EntityGasterBlaster> {
   }
   
   public void doRender(EntityGasterBlaster entity, double x, double y, double z, float entityYaw, float partialTicks) {
-    this.shadowOpaque = 1.0F;
+    RenderLayerCompat.setShadowOpaque(this, 1.0F);
     if (entity.fireLength > 10) {
       Tessellator tessellator = Tessellator.getInstance();
       BufferBuilder vertexbuffer = tessellator.getBuffer();

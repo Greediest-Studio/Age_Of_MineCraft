@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import com.shinoow.abyssalcraft.client.model.entity.ModelDreadSpawn;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityGreaterDreadSpawn;
 import net.minecraft.AgeOfMinecraft.renders.LayerArrowCustomSized;
@@ -22,7 +24,7 @@ public class RenderGreaterDreadSpawn extends RenderLiving<EntityGreaterDreadSpaw
   
   public RenderGreaterDreadSpawn(RenderManager manager) {
     super(manager, new ModelDreadSpawn(), 1.0F);
-    addLayer((LayerRenderer)new LayerArrowCustomSized(this, 0.5F));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerArrowCustomSized(this, 0.5F));
     
   }
   

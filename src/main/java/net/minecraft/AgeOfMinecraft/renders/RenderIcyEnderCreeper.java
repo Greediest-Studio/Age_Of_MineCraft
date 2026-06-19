@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import java.util.Random;
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityIcyEnderCreeper;
@@ -35,13 +37,13 @@ public class RenderIcyEnderCreeper extends RenderLiving<EntityIcyEnderCreeper> {
   
   public RenderIcyEnderCreeper(RenderManager renderManagerIn) {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.5F);
-    addLayer(new LayerCustomHeadEngender(regularmodel.bipedHead, cmmmodel.Head));
+    RenderLayerCompat.addLayer(this, new LayerCustomHeadEngender(regularmodel.bipedHead, cmmmodel.Head));
     
-    addLayer(new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, new LayerMobCape(this));
   }
   
   protected void preRenderCallback(EntityIcyEnderCreeper entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
+    RenderLayerCompat.setMainModel(this, EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel);
     if (entitylivingbaseIn.isSneaking() && !EngenderConfig.mobs.useMobTalkerModels) {
       GlStateManager.translate(0.0F, -0.2F, -0.75F);
       if (entitylivingbaseIn.isChild())
@@ -113,14 +115,14 @@ public class RenderIcyEnderCreeper extends RenderLiving<EntityIcyEnderCreeper> {
       float f = handleRotationFloat(entity, partialTicks);
       for (int i = 0; i < avec3d.length; i++)
         super.doRender(entity, x + (avec3d[i]).x + MathHelper.cos(i + f * 0.5F) * 0.025D, y + (avec3d[i]).y + MathHelper.cos(i + f * 0.75F) * 0.0125D, z + (avec3d[i]).z + MathHelper.cos(i + f * 0.7F) * 0.025D, entityYaw, partialTicks); 
-      this.shadowOpaque = 0.0F;
+      RenderLayerCompat.setShadowOpaque(this, 0.0F);
     } else {
-      this.shadowOpaque = 1.0F;
+      RenderLayerCompat.setShadowOpaque(this, 1.0F);
       super.doRender(entity, x, y, z, entityYaw, partialTicks);
     } 
   }
   
   protected boolean isVisible(EntityIcyEnderCreeper entity) {
-    return (!entity.isInvisible() || this.renderOutlines || entity.getGhostTime() > 0);
+    return (!entity.isInvisible() || RenderLayerCompat.isRenderOutlines(this) || entity.getGhostTime() > 0);
   }
 }

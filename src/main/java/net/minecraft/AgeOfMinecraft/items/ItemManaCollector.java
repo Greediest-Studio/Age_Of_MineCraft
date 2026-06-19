@@ -31,8 +31,8 @@ public class ItemManaCollector extends ItemBEItem implements IBauble {
   public ItemManaCollector(String name, int data) {
     super(name);
     this.type = data;
-    setMaxStackSize(1);
-    setHasSubtypes(true);
+    ItemCompat.setMaxStackSize(this, 1);
+    ItemCompat.setHasSubtypes(this, true);
     if (data != 2)
       addPropertyOverride(new ResourceLocation("percent"), new IItemPropertyGetter() {
             @SideOnly(Side.CLIENT)

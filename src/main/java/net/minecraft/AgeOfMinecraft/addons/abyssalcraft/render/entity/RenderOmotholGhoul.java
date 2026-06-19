@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import com.shinoow.abyssalcraft.api.AbyssalCraftAPI;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityOmotholGhoul;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.model.ModelDG;
@@ -38,16 +40,16 @@ public class RenderOmotholGhoul extends RenderLiving<EntityOmotholGhoul> {
   
   public RenderOmotholGhoul(RenderManager manager, ModelDG model) {
     super(manager, model, 0.8F);
-    addLayer(new LayerGhoulHeldItem(this));
-    addLayer((LayerRenderer)new LayerGhoulArmor(this));
-    addLayer((LayerRenderer)new LayerCustomHead(model.Head));
-    addLayer((LayerRenderer)new LayerArrowCustomSized(this, 0.8F));
+    RenderLayerCompat.addLayer(this, new LayerGhoulHeldItem(this));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerGhoulArmor(this));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerCustomHead(model.Head));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerArrowCustomSized(this, 0.8F));
     
-    addLayer((LayerRenderer)new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerMobCape(this));
   }
   
   protected void preRenderCallback(EntityOmotholGhoul entitylivingbaseIn, float partialTickTime) {
-    ((ModelDG)getMainModel()).isSneak = entitylivingbaseIn.isSneaking();
+    ((ModelDG)RenderLayerCompat.getMainModel(this)).isSneak = entitylivingbaseIn.isSneaking();
     if (entitylivingbaseIn.isSneaking()) {
       GlStateManager.rotate(30.0F, 1.0F, 0.0F, 0.0F);
       GlStateManager.translate(0.0F, 0.25F, 0.5F);
@@ -87,7 +89,7 @@ public class RenderOmotholGhoul extends RenderLiving<EntityOmotholGhoul> {
       ItemStack itemstack1 = flag ? entitylivingbaseIn.getHeldItemMainhand() : entitylivingbaseIn.getHeldItemOffhand();
       if (itemstack != null || itemstack1 != null) {
         GlStateManager.pushMatrix();
-        if ((this.livingEntityRenderer.getMainModel()).isChild) {
+        if ((RenderLayerCompat.getMainModel(this.livingEntityRenderer)).isChild) {
           float f = 0.5F;
           GlStateManager.translate(0.0F, 0.625F, 0.0F);
           GlStateManager.rotate(-20.0F, -1.0F, 0.0F, 0.0F);
@@ -102,8 +104,8 @@ public class RenderOmotholGhoul extends RenderLiving<EntityOmotholGhoul> {
     private void renderHeldItem(EntityLivingBase p_188358_1_, ItemStack p_188358_2_, ItemCameraTransforms.TransformType p_188358_3_, EnumHandSide handSide) {
       if (p_188358_2_ != null) {
         GlStateManager.pushMatrix();
-        ((ModelDG)this.livingEntityRenderer.getMainModel()).postRenderArm(0.0625F, handSide);
-        if (!(this.livingEntityRenderer.getMainModel()).isChild) {
+        ((ModelDG)RenderLayerCompat.getMainModel(this.livingEntityRenderer)).postRenderArm(0.0625F, handSide);
+        if (!(RenderLayerCompat.getMainModel(this.livingEntityRenderer)).isChild) {
           GlStateManager.translate(-0.08F, 0.55F, -0.16F);
           GlStateManager.rotate(-45.0F, 1.0F, 0.0F, 0.0F);
         } else {
@@ -135,8 +137,8 @@ public class RenderOmotholGhoul extends RenderLiving<EntityOmotholGhoul> {
     }
     
     protected void initArmor() {
-      this.modelLeggings = new ModelDGArmor(0.5F);
-      this.modelArmor = new ModelDGArmor(1.0F);
+      RenderLayerCompat.setArmorLeggings(this, new ModelDGArmor(0.5F));
+      RenderLayerCompat.setArmorBody(this, new ModelDGArmor(1.0F));
     }
     
     protected void setModelSlotVisible(ModelDGArmor model, EntityEquipmentSlot slot) {

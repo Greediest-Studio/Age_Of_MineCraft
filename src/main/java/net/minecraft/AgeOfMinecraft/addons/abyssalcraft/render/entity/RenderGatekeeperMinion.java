@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityGatekeeperMinion;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.model.ModelGatekeeperMinion;
 import net.minecraft.AgeOfMinecraft.renders.LayerMobCape;
@@ -22,12 +24,12 @@ public class RenderGatekeeperMinion extends RenderLiving<EntityGatekeeperMinion>
   public RenderGatekeeperMinion(RenderManager manager) {
     this(manager, new ModelGatekeeperMinion());
     
-    addLayer((LayerRenderer)new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerMobCape(this));
   }
   
   public RenderGatekeeperMinion(RenderManager manager, ModelGatekeeperMinion model) {
     super(manager, model, 0.75F);
-    addLayer((LayerRenderer)new LayerCustomHead(model.head));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerCustomHead(model.head));
   }
   
   protected ResourceLocation getEntityTexture(EntityGatekeeperMinion entity) {

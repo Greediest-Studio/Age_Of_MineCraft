@@ -29,7 +29,7 @@ public class LayerHeldItemWitch implements LayerRenderer<EntityLivingBase> {
     if (!itemstack.isEmpty() && !EngenderConfig.mobs.useMobTalkerModels) {
       GlStateManager.color(1.0F, 1.0F, 1.0F);
       GlStateManager.pushMatrix();
-      ((ModelWitch)this.witchRenderer.getMainModel()).villagerArms.postRender(0.0625F);
+      ((ModelWitch)RenderLayerCompat.getMainModel(this.witchRenderer)).villagerArms.postRender(0.0625F);
       GlStateManager.translate(-0.25F, 0.25F, -0.125F);
       GlStateManager.rotate(-150.0F, 1.0F, 0.0F, 0.0F);
       GlStateManager.rotate(-15.0F, 0.0F, 1.0F, 0.0F);

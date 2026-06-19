@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityGuardian;
 import net.minecraft.AgeOfMinecraft.models.ModelCMMGuardian;
@@ -51,10 +53,10 @@ public class RenderGuardian extends RenderLiving<EntityGuardian> {
   
   public RenderGuardian(RenderManager renderManagerIn) {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.5F);
-    addLayer(new LayerArrowCustomSized(this, 0.5F));
-    addLayer(new LayerCustomHeadEngender(regularmodel.guardianBody, cmmmodel.Head));
+    RenderLayerCompat.addLayer(this, new LayerArrowCustomSized(this, 0.5F));
+    RenderLayerCompat.addLayer(this, new LayerCustomHeadEngender(regularmodel.guardianBody, cmmmodel.Head));
     
-    addLayer(new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, new LayerMobCape(this));
   }
   
   public boolean shouldRender(EntityGuardian livingEntity, ICamera camera, double camX, double camY, double camZ) {
@@ -182,7 +184,7 @@ public class RenderGuardian extends RenderLiving<EntityGuardian> {
   }
   
   protected void preRenderCallback(EntityGuardian entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
+    RenderLayerCompat.setMainModel(this, EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel);
     if (EngenderConfig.mobs.useMobTalkerModels) {
       GlStateManager.scale(0.85F, 0.85F, 0.85F);
       if (entitylivingbaseIn.isElder()) {
@@ -236,15 +238,15 @@ public class RenderGuardian extends RenderLiving<EntityGuardian> {
         doRenderGuardian(entity, x + (avec3d[i]).x + MathHelper.cos(i + f * 0.5F) * 0.025D, y + (avec3d[i]).y + MathHelper.cos(i + f * 0.75F) * 0.0125D, z + (avec3d[i]).z + MathHelper.cos(i + f * 0.7F) * 0.025D, entityYaw, partialTicks);
         super.doRender(entity, x + (avec3d[i]).x + MathHelper.cos(i + f * 0.5F) * 0.025D, y + (avec3d[i]).y + MathHelper.cos(i + f * 0.75F) * 0.0125D, z + (avec3d[i]).z + MathHelper.cos(i + f * 0.7F) * 0.025D, entityYaw, partialTicks);
       } 
-      this.shadowOpaque = 0.0F;
+      RenderLayerCompat.setShadowOpaque(this, 0.0F);
     } else {
-      this.shadowOpaque = 1.0F;
+      RenderLayerCompat.setShadowOpaque(this, 1.0F);
       doRenderGuardian(entity, x, y, z, entityYaw, partialTicks);
       super.doRender(entity, x, y, z, entityYaw, partialTicks);
     } 
   }
   
   protected boolean isVisible(EntityGuardian entity) {
-    return (!entity.isInvisible() || this.renderOutlines || entity.getGhostTime() > 0);
+    return (!entity.isInvisible() || RenderLayerCompat.isRenderOutlines(this) || entity.getGhostTime() > 0);
   }
 }

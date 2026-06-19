@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.mutantbeasts.render;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import chumbanotz.mutantbeasts.MutantBeasts;
 import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.entity.EntityMutantEnderman;
 import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.model.ModelMutantEnderman;
@@ -38,8 +40,8 @@ public class RenderMutantEnderman extends RenderLiving<EntityMutantEnderman> {
   
   public RenderMutantEnderman(RenderManager manager) {
     super(manager, new ModelMutantEnderman(), 0.8F);
-    addLayer(new EyesLayer());
-    addLayer(new GlowLayer());
+    RenderLayerCompat.addLayer(this, new EyesLayer());
+    RenderLayerCompat.addLayer(this, new GlowLayer());
   }
   
   protected void renderModel(EntityMutantEnderman entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
@@ -49,7 +51,7 @@ public class RenderMutantEnderman extends RenderLiving<EntityMutantEnderman> {
       GlStateManager.enableAlpha();
       GlStateManager.alphaFunc(516, blendFactor);
       bindTexture(DEATH_TEXTURE);
-      this.mainModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+      RenderLayerCompat.getMainModel(this).render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
       GlStateManager.alphaFunc(516, 0.1F);
       GlStateManager.depthFunc(514);
     } 
@@ -69,12 +71,12 @@ public class RenderMutantEnderman extends RenderLiving<EntityMutantEnderman> {
   }
   
   public void doRender(EntityMutantEnderman entity, double x, double y, double z, float entityYaw, float partialTicks) {
-    this.shadowSize = entity.isClone() ? 0.5F : 0.8F;
-    this.shadowOpaque = entity.isClone() ? 0.5F : 1.0F;
+    RenderLayerCompat.setShadowSize(this, entity.isClone() ? 0.5F : 0.8F);
+    RenderLayerCompat.setShadowOpaque(this, entity.isClone() ? 0.5F : 1.0F);
     this.teleportAttack = false;
     double addX = 0.0D;
     double addZ = 0.0D;
-    this.mainModel = entity.isClone() ? cloneModel : endermanModel;
+    RenderLayerCompat.setMainModel(this, entity.isClone() ? cloneModel : endermanModel);
     cloneModel.isAttacking = entity.isAggressive();
     cloneModel.isCarrying = (entity.heldBlock[1] != 0);
     boolean forcedLook = (entity.getAttackID() == 6);
@@ -112,7 +114,7 @@ public class RenderMutantEnderman extends RenderLiving<EntityMutantEnderman> {
         RenderMutantEnderman.this.bindTexture(entityIn.isAntiMob() ? RenderMutantEnderman.Anti_EYES_TEXTURE : RenderMutantEnderman.EYES_TEXTURE);
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 61680.0F, 0.0F);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderMutantEnderman.this.mainModel.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+        RenderLayerCompat.getMainModel(RenderMutantEnderman.this).render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
         RenderMutantEnderman.this.setLightmap(entityIn);
         GlStateManager.enableLighting();
       } 
@@ -159,7 +161,7 @@ public class RenderMutantEnderman extends RenderLiving<EntityMutantEnderman> {
         GlStateManager.color(0.9F, 0.3F, 1.0F, getAlpha(entityIn, partialTicks));
         GlStateManager.enableLighting();
         (Minecraft.getMinecraft()).entityRenderer.setupFogColor(true);
-        RenderMutantEnderman.this.getMainModel().render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+        RenderLayerCompat.getMainModel(RenderMutantEnderman.this).render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
         (Minecraft.getMinecraft()).entityRenderer.setupFogColor(false);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.matrixMode(5890);

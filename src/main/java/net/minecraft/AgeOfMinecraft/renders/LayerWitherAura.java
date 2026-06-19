@@ -40,7 +40,7 @@ public class LayerWitherAura implements LayerRenderer<EntityLivingBase> {
       GlStateManager.disableLighting();
       GlStateManager.blendFunc(1, 1);
       this.witherModel.setLivingAnimations(p_177214_1_, p_177214_2_, p_177214_3_, p_177214_4_);
-      this.witherModel.setModelAttributes(this.witherRenderer.getMainModel());
+      this.witherModel.setModelAttributes(RenderLayerCompat.getMainModel(this.witherRenderer));
       this.witherModel.render(p_177214_1_, p_177214_2_, p_177214_3_, p_177214_5_, p_177214_6_, p_177214_7_, p_177214_8_);
       GlStateManager.matrixMode(5890);
       GlStateManager.loadIdentity();

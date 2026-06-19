@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityPigZombie;
 import net.minecraft.AgeOfMinecraft.models.ModelCMMPigZombie;
@@ -46,19 +48,19 @@ public class RenderPigZombie extends RenderLiving<EntityPigZombie> {
   
   public RenderPigZombie(RenderManager renderManagerIn) {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.5F);
-    addLayer(new LayerArrowCustomSized(this, 1.0F));
+    RenderLayerCompat.addLayer(this, new LayerArrowCustomSized(this, 1.0F));
     this.armor = new LayerBipedArmor(this) {
         protected void initArmor() {
-          this.modelLeggings = EngenderConfig.mobs.useMobTalkerModels ? RenderPigZombie.cmmleggings : RenderPigZombie.regularleggings;
-          this.modelArmor = EngenderConfig.mobs.useMobTalkerModels ? RenderPigZombie.cmmarmor : RenderPigZombie.regulararmor;
+          RenderLayerCompat.setArmorLeggings(this, EngenderConfig.mobs.useMobTalkerModels ? RenderPigZombie.cmmleggings : RenderPigZombie.regularleggings);
+          RenderLayerCompat.setArmorBody(this, EngenderConfig.mobs.useMobTalkerModels ? RenderPigZombie.cmmarmor : RenderPigZombie.regulararmor);
         }
       };
-    addLayer((LayerRenderer)this.armor);
-    addLayer((LayerRenderer)new LayerElytra(this));
-    addLayer((LayerRenderer)new LayerHeldItem(this));
-    addLayer(new LayerCustomHeadEngender(regularmodel.bipedHead, cmmmodel.Head));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)this.armor);
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerElytra(this));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerHeldItem(this));
+    RenderLayerCompat.addLayer(this, new LayerCustomHeadEngender(regularmodel.bipedHead, cmmmodel.Head));
     
-    addLayer(new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, new LayerMobCape(this));
   }
   
   protected void applyRotations(EntityPigZombie entityLiving, float p_77043_2_, float p_77043_3_, float partialTicks) {
@@ -93,15 +95,15 @@ public class RenderPigZombie extends RenderLiving<EntityPigZombie> {
   }
   
   private void changeModel() {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
-    this.layerRenderers.remove(this.armor);
+    RenderLayerCompat.setMainModel(this, EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel);
+    RenderLayerCompat.removeLayer(this, this.armor);
     this.armor = new LayerBipedArmor(this) {
         protected void initArmor() {
-          this.modelLeggings = EngenderConfig.mobs.useMobTalkerModels ? RenderPigZombie.cmmleggings : RenderPigZombie.regularleggings;
-          this.modelArmor = EngenderConfig.mobs.useMobTalkerModels ? RenderPigZombie.cmmarmor : RenderPigZombie.regulararmor;
+          RenderLayerCompat.setArmorLeggings(this, EngenderConfig.mobs.useMobTalkerModels ? RenderPigZombie.cmmleggings : RenderPigZombie.regularleggings);
+          RenderLayerCompat.setArmorBody(this, EngenderConfig.mobs.useMobTalkerModels ? RenderPigZombie.cmmarmor : RenderPigZombie.regulararmor);
         }
       };
-    addLayer((LayerRenderer)this.armor);
+    RenderLayerCompat.addLayer(this, (LayerRenderer)this.armor);
   }
   
   protected void preRenderCallback(EntityPigZombie entitylivingbaseIn, float partialTickTime) {
@@ -138,14 +140,14 @@ public class RenderPigZombie extends RenderLiving<EntityPigZombie> {
       float f = handleRotationFloat(entity, partialTicks);
       for (int i = 0; i < avec3d.length; i++)
         super.doRender(entity, x + (avec3d[i]).x + MathHelper.cos(i + f * 0.5F) * 0.025D, y + (avec3d[i]).y + MathHelper.cos(i + f * 0.75F) * 0.0125D, z + (avec3d[i]).z + MathHelper.cos(i + f * 0.7F) * 0.025D, entityYaw, partialTicks); 
-      this.shadowOpaque = 0.0F;
+      RenderLayerCompat.setShadowOpaque(this, 0.0F);
     } else {
-      this.shadowOpaque = 1.0F;
+      RenderLayerCompat.setShadowOpaque(this, 1.0F);
       super.doRender(entity, x, y, z, entityYaw, partialTicks);
     } 
   }
   
   protected boolean isVisible(EntityPigZombie entity) {
-    return (!entity.isInvisible() || this.renderOutlines || entity.getGhostTime() > 0);
+    return (!entity.isInvisible() || RenderLayerCompat.isRenderOutlines(this) || entity.getGhostTime() > 0);
   }
 }

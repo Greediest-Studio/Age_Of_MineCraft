@@ -4,6 +4,7 @@ import com.shinoow.abyssalcraft.api.energy.IEnergyContainerItem;
 import java.util.List;
 import javax.annotation.Nullable;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityPEGunPellet;
+import net.minecraft.AgeOfMinecraft.items.ItemCompat;
 import net.minecraft.AgeOfMinecraft.registry.EItem;
 import net.minecraft.AgeOfMinecraft.registry.ESound;
 import net.minecraft.AgeOfMinecraft.registry.ETab;
@@ -32,11 +33,9 @@ import net.minecraftforge.fml.common.Optional.Interface;
 @Interface(iface = "com.shinoow.abyssalcraft.api.energy.IEnergyContainerItem", modid = "abyssalcraft")
 public class ItemPEGun extends ItemBow implements IEnergyContainerItem {
   public ItemPEGun(String string) {
-    setMaxDamage(0);
-    setTranslationKey(string);
-    setRegistryName(string);
-    setCreativeTab(ETab.abyssal);
-    setMaxStackSize(1);
+    ItemCompat.setMaxDamage(this, 0);
+    ItemCompat.setup(this, string, ETab.abyssal);
+    ItemCompat.setMaxStackSize(this, 1);
   }
   
   public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {

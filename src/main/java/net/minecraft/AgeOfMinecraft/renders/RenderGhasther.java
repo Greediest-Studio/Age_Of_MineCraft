@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityGhasther;
 import net.minecraft.AgeOfMinecraft.models.ModelGhasther;
 import net.minecraft.client.model.ModelBase;
@@ -22,10 +24,10 @@ public class RenderGhasther extends RenderLiving<EntityGhasther> {
   
   public RenderGhasther(RenderManager renderManagerIn) {
     super(renderManagerIn, regularmodel, 6.0F);
-    addLayer(new LayerArrowCustomSized(this, 0.1F));
-    addLayer(new LayerCustomHeadEngender(regularmodel.body, regularmodel.body));
+    RenderLayerCompat.addLayer(this, new LayerArrowCustomSized(this, 0.1F));
+    RenderLayerCompat.addLayer(this, new LayerCustomHeadEngender(regularmodel.body, regularmodel.body));
     
-    addLayer(new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityGhasther entity) {

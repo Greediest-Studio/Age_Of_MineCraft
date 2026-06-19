@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.mutantbeasts.render;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.entity.EntityThrowingBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -15,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class RenderThrowingBlock extends Render<EntityThrowingBlock> {
   public RenderThrowingBlock(RenderManager renderManager) {
     super(renderManager);
-    this.shadowSize = 0.6F;
+    RenderLayerCompat.setShadowSize(this, 0.6F);
   }
   
   public void doRender(EntityThrowingBlock entity, double x, double y, double z, float entityYaw, float partialTicks) {

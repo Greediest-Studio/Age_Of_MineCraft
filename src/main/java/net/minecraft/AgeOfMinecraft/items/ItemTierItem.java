@@ -18,11 +18,11 @@ public class ItemTierItem extends ItemBEItem {
   
   public ItemTierItem(int tier, int fusingTime, int stacking, CreativeTabs tab, String name) {
     super(name);
-    setCreativeTab(tab);
+    ItemCompat.setCreativeTab(this, tab);
     this.item = this;
     this.itemTier = tier;
     this.fuseTime = fusingTime;
-    setMaxStackSize(stacking);
+    ItemCompat.setMaxStackSize(this, stacking);
   }
   
   public int getTimeToSpawnMob() {

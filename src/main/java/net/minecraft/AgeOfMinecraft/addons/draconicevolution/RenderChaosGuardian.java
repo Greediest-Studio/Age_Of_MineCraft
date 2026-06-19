@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.draconicevolution;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import com.brandon3055.draconicevolution.client.model.ModelGuardianCrystal;
 import java.util.Random;
 
@@ -35,9 +37,9 @@ public class RenderChaosGuardian extends RenderLiving<EntityChaosGuardian> {
   
   public RenderChaosGuardian(RenderManager manager) {
     super(manager, new ModelChaosGuardian(0.0F), 8.0F);
-    this.modelDragon = (ModelChaosGuardian)this.mainModel;
-    addLayer(new LayerChaosGuardianEyes(this));
-    addLayer(new LayerChaosGuardianDeath());
+    this.modelDragon = (ModelChaosGuardian)RenderLayerCompat.getMainModel(this);
+    RenderLayerCompat.addLayer(this, new LayerChaosGuardianEyes(this));
+    RenderLayerCompat.addLayer(this, new LayerChaosGuardianDeath());
     
   }
   
@@ -63,19 +65,19 @@ public class RenderChaosGuardian extends RenderLiving<EntityChaosGuardian> {
       GL11.glEnable(3008);
       GL11.glAlphaFunc(516, f6);
       bindTexture(DRAGON_EXPLODING_TEXTURES);
-      this.mainModel.render(chaosGuardian, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+      RenderLayerCompat.getMainModel(this).render(chaosGuardian, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
       GL11.glAlphaFunc(516, 0.1F);
       GL11.glDepthFunc(514);
     } 
     bindEntityTexture(chaosGuardian);
-    this.mainModel.render(chaosGuardian, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+    RenderLayerCompat.getMainModel(this).render(chaosGuardian, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
     if (chaosGuardian.hurtTime > 0) {
       GL11.glDepthFunc(514);
       GL11.glDisable(3553);
       GL11.glEnable(3042);
       GL11.glBlendFunc(770, 771);
       GL11.glColor4f(1.0F, 0.0F, 0.0F, 0.5F);
-      this.mainModel.render(chaosGuardian, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+      RenderLayerCompat.getMainModel(this).render(chaosGuardian, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
       GL11.glEnable(3553);
       GL11.glDisable(3042);
       GL11.glDepthFunc(515);
@@ -94,13 +96,13 @@ public class RenderChaosGuardian extends RenderLiving<EntityChaosGuardian> {
       bindTexture(ENDER_CRYSTAL_TEXTURES);
       float f1 = MathHelper.sin(f * 0.2F) / 2.0F + 0.5F;
       f1 = f1 * f1 + f1;
-      if (this.renderOutlines) {
+      if (RenderLayerCompat.isRenderOutlines(this)) {
         GlStateManager.enableColorMaterial();
         GlStateManager.enableOutlineMode(getTeamColor(chaosGuardian));
       } 
       this.modelEnderCrystalNoBase.base.isHidden = true;
       this.modelEnderCrystalNoBase.render(chaosGuardian, 0.0F, f * 3.0F, f1 * 0.2F, 0.0F, 0.0F, 0.0625F);
-      if (this.renderOutlines) {
+      if (RenderLayerCompat.isRenderOutlines(this)) {
         GlStateManager.disableOutlineMode();
         GlStateManager.disableColorMaterial();
       } 
@@ -220,7 +222,7 @@ public class RenderChaosGuardian extends RenderLiving<EntityChaosGuardian> {
       OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j, k);
       GlStateManager.enableLighting();
       GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-      this.dragonRenderer.getMainModel().render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+      RenderLayerCompat.getMainModel(this.dragonRenderer).render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
       this.dragonRenderer.setLightmap(entitylivingbaseIn);
       GlStateManager.disableBlend();
       GlStateManager.enableAlpha();

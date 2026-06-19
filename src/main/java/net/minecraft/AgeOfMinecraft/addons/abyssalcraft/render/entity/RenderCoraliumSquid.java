@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityCoraliumSquid;
 import net.minecraft.AgeOfMinecraft.renders.LayerArrowCustomSized;
 import net.minecraft.client.model.ModelBase;
@@ -21,7 +23,7 @@ public class RenderCoraliumSquid extends RenderLiving<EntityCoraliumSquid> {
   
   public RenderCoraliumSquid(RenderManager renderManagerIn) {
     super(renderManagerIn, new ModelSquid(), 0.7F);
-    addLayer((LayerRenderer)new LayerArrowCustomSized(this, 1.0F));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerArrowCustomSized(this, 1.0F));
     
   }
   

@@ -28,7 +28,7 @@ public class LayerMobCape implements LayerRenderer<EntityTameBase> {
   }
   
   public void doRenderLayer(EntityTameBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-    if (!entitylivingbaseIn.isInvisible() && !entitylivingbaseIn.isChild() && this.playerRenderer.getMainModel() instanceof ICappedModel && !entitylivingbaseIn.isWild() && ((AbstractClientPlayer)entitylivingbaseIn.getOwner()).hasPlayerInfo() && ((AbstractClientPlayer)entitylivingbaseIn.getOwner()).isWearing(EnumPlayerModelParts.CAPE) && ((AbstractClientPlayer)entitylivingbaseIn.getOwner()).getLocationCape() != null) {
+    if (!entitylivingbaseIn.isInvisible() && !entitylivingbaseIn.isChild() && RenderLayerCompat.getMainModel(this.playerRenderer) instanceof ICappedModel && !entitylivingbaseIn.isWild() && ((AbstractClientPlayer)entitylivingbaseIn.getOwner()).hasPlayerInfo() && ((AbstractClientPlayer)entitylivingbaseIn.getOwner()).isWearing(EnumPlayerModelParts.CAPE) && ((AbstractClientPlayer)entitylivingbaseIn.getOwner()).getLocationCape() != null) {
       ItemStack itemstack = entitylivingbaseIn.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
       String cape = null;
       for (int i = 0; i <= NAMES.length; i++) {
@@ -60,7 +60,7 @@ public class LayerMobCape implements LayerRenderer<EntityTameBase> {
           f1 -= MathHelper.clamp((float)(entitylivingbaseIn.motionY * Math.PI * 45.0D), -75.0F, 3.0F); 
         if (entitylivingbaseIn.isInvisible())
           f1 = 0.0F; 
-        ((ICappedModel)this.playerRenderer.getMainModel()).renderCape(0.0625F, f1, f2, f3);
+        ((ICappedModel)RenderLayerCompat.getMainModel(this.playerRenderer)).renderCape(0.0625F, f1, f2, f3);
         GlStateManager.popMatrix();
       } 
     } 

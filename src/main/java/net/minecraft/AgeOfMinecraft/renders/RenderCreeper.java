@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntityCreeper;
@@ -40,16 +42,16 @@ public class RenderCreeper extends RenderLiving<EntityCreeper> {
   
   public RenderCreeper(RenderManager renderManagerIn) {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.5F);
-    addLayer(new LayerCreeperCharge(this));
-    addLayer(new LayerCreeperGlow(this));
-    addLayer(new LayerArrowCustomSized(this, 1.0F));
-    addLayer(new LayerCustomHeadEngender(regularmodel.head, cmmmodel.Head));
+    RenderLayerCompat.addLayer(this, new LayerCreeperCharge(this));
+    RenderLayerCompat.addLayer(this, new LayerCreeperGlow(this));
+    RenderLayerCompat.addLayer(this, new LayerArrowCustomSized(this, 1.0F));
+    RenderLayerCompat.addLayer(this, new LayerCustomHeadEngender(regularmodel.head, cmmmodel.Head));
     
-    addLayer(new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, new LayerMobCape(this));
   }
   
   protected void preRenderCallback(EntityCreeper entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = (entitylivingbaseIn.getIllusionFormTime() > 0) ? disguisemodel : (EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel);
+    RenderLayerCompat.setMainModel(this, (entitylivingbaseIn.getIllusionFormTime() > 0) ? disguisemodel : (EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel));
     float f = entitylivingbaseIn.getCreeperFlashIntensity(partialTickTime);
     float f1 = 1.0F + MathHelper.sin(f * 100.0F) * f * 0.01F;
     f = MathHelper.clamp(f, 0.0F, 1.0F);
@@ -131,9 +133,9 @@ public class RenderCreeper extends RenderLiving<EntityCreeper> {
       float f = handleRotationFloat(entity, partialTicks);
       for (int i = 0; i < avec3d.length; i++)
         super.doRender(entity, x + (avec3d[i]).x + MathHelper.cos(i + f * 0.5F) * 0.025D, y + (avec3d[i]).y + MathHelper.cos(i + f * 0.75F) * 0.0125D, z + (avec3d[i]).z + MathHelper.cos(i + f * 0.7F) * 0.025D, entityYaw, partialTicks); 
-      this.shadowOpaque = 0.0F;
+      RenderLayerCompat.setShadowOpaque(this, 0.0F);
     } else {
-      this.shadowOpaque = 1.0F;
+      RenderLayerCompat.setShadowOpaque(this, 1.0F);
       super.doRender(entity, x, y, z, entityYaw, partialTicks);
     } 
   }

@@ -3,6 +3,7 @@ package net.minecraft.AgeOfMinecraft.addons.draconicevolution;
 import java.util.List;
 import javax.annotation.Nullable;
 import net.minecraft.AgeOfMinecraft.items.ItemBEItem;
+import net.minecraft.AgeOfMinecraft.items.ItemCompat;
 import net.minecraft.AgeOfMinecraft.registry.ESetup;
 import net.minecraft.AgeOfMinecraft.registry.ETab;
 import net.minecraft.client.util.ITooltipFlag;
@@ -31,9 +32,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemDraconicPortalStaff extends ItemBEItem {
   public ItemDraconicPortalStaff() {
     super("draconicportalstaff");
-    setMaxStackSize(1);
-    setCreativeTab(ETab.draconic);
-    setHasSubtypes(true);
+    ItemCompat.setMaxStackSize(this, 1);
+    ItemCompat.setCreativeTab(this, ETab.draconic);
+    ItemCompat.setHasSubtypes(this, true);
   }
   
   public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {

@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityCommandBlockWither;
 import net.minecraft.AgeOfMinecraft.models.ModelCommandBlockWither;
 import net.minecraft.client.Minecraft;
@@ -34,11 +36,11 @@ public class RenderCommandBlockWither extends RenderLiving<EntityCommandBlockWit
   
   public RenderCommandBlockWither(RenderManager renderManagerIn) {
     super(renderManagerIn, new ModelCommandBlockWither(), 1.0F);
-    addLayer(new LayerArrowCustomSized(this, 0.5F));
-    addLayer(new LayerWitherBody(this));
-    addLayer(new LayerWitherTractorBeam(this));
-    addLayer(new LayerMobCape(this));
-    addLayer(new LayerCommandBlock(this));
+    RenderLayerCompat.addLayer(this, new LayerArrowCustomSized(this, 0.5F));
+    RenderLayerCompat.addLayer(this, new LayerWitherBody(this));
+    RenderLayerCompat.addLayer(this, new LayerWitherTractorBeam(this));
+    RenderLayerCompat.addLayer(this, new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, new LayerCommandBlock(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityCommandBlockWither entity) {
@@ -116,7 +118,7 @@ public class RenderCommandBlockWither extends RenderLiving<EntityCommandBlockWit
     private void renderHeldItem(EntityCommandBlockWither p_188358_1_, ItemStack p_188358_2_, ItemCameraTransforms.TransformType p_188358_3_, EnumHandSide handSide) {
       if (p_188358_1_.getSize() < 6000) {
         GlStateManager.pushMatrix();
-        ((ModelCommandBlockWither)this.livingEntityRenderer.getMainModel()).spine.postRender(0.0625F);
+        ((ModelCommandBlockWither)RenderLayerCompat.getMainModel(this.livingEntityRenderer)).spine.postRender(0.0625F);
         GlStateManager.rotate(100.0F, 1.0F, 0.0F, 0.0F);
         GlStateManager.rotate(-11.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(-43.0F, 0.0F, 0.0F, 1.0F);
@@ -128,7 +130,7 @@ public class RenderCommandBlockWither extends RenderLiving<EntityCommandBlockWit
     }
     
     protected void translateToHand(EnumHandSide p_191361_1_) {
-      ((ModelBiped)this.livingEntityRenderer.getMainModel()).postRenderArm(0.0625F, p_191361_1_);
+      ((ModelBiped)RenderLayerCompat.getMainModel(this.livingEntityRenderer)).postRenderArm(0.0625F, p_191361_1_);
     }
     
     public boolean shouldCombineTextures() {

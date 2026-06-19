@@ -17,8 +17,8 @@ public class LayerCustomArmor extends LayerArmorBase<ModelBiped> {
   }
   
   protected void initArmor() {
-    this.modelLeggings = new ModelBiped(0.5F);
-    this.modelArmor = new ModelBiped(1.0F);
+    RenderLayerCompat.setArmorLeggings(this, new ModelBiped(0.5F));
+    RenderLayerCompat.setArmorBody(this, new ModelBiped(1.0F));
   }
   
   protected void setModelSlotVisible(ModelBiped p_188359_1_, EntityEquipmentSlot slotIn) {

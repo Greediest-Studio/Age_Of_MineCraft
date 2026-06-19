@@ -35,7 +35,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 public class ItemDragonsHorn extends ItemBEItem {
   public ItemDragonsHorn() {
     super("enderdragonshorn");
-    setMaxStackSize(1);
+    ItemCompat.setMaxStackSize(this, 1);
   }
   
   public EnumAction getItemUseAction(ItemStack stack) {

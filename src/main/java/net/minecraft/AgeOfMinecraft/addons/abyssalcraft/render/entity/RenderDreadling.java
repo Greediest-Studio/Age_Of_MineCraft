@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import com.shinoow.abyssalcraft.client.model.entity.ModelDreadling;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDreadling;
 import net.minecraft.client.model.ModelBase;
@@ -23,7 +25,7 @@ public class RenderDreadling extends RenderLiving<EntityDreadling> {
   
   public RenderDreadling(RenderManager manager, ModelDreadling model) {
     super(manager, model, 0.5F);
-    addLayer((LayerRenderer)new LayerCustomHead(model.head));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerCustomHead(model.head));
     
   }
   

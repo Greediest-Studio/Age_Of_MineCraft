@@ -19,7 +19,7 @@ public class ItemEngenderStatChecker extends ItemBEItem {
   
   public ItemEngenderStatChecker() {
     super("statchecker");
-    setMaxStackSize(1);
+    ItemCompat.setMaxStackSize(this, 1);
   }
   
   public EnumRarity getRarity(ItemStack stack) {

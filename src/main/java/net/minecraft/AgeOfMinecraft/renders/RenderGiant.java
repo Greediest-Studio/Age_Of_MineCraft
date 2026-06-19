@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityGiant;
 import net.minecraft.AgeOfMinecraft.models.ModelCMMGiant;
@@ -35,15 +37,15 @@ public class RenderGiant extends RenderLiving<EntityGiant> {
   
   public RenderGiant(RenderManager renderManagerIn) {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 3.0F);
-    addLayer(new LayerArrowCustomSized(this, 0.1675F));
-    addLayer((LayerRenderer)new LayerHeldItem(this));
-    addLayer(new LayerCustomHeadEngender(regularmodel.bipedHead, cmmmodel.Head));
+    RenderLayerCompat.addLayer(this, new LayerArrowCustomSized(this, 0.1675F));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerHeldItem(this));
+    RenderLayerCompat.addLayer(this, new LayerCustomHeadEngender(regularmodel.bipedHead, cmmmodel.Head));
     
-    addLayer(new LayerMobCape(this));
-    addLayer((LayerRenderer)new LayerBipedArmor(this) {
+    RenderLayerCompat.addLayer(this, new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerBipedArmor(this) {
           protected void initArmor() {
-            this.modelLeggings = EngenderConfig.mobs.useMobTalkerModels ? new ModelCMMGiant(0.5F, true) : new ModelGiant(0.5F, true);
-            this.modelArmor = EngenderConfig.mobs.useMobTalkerModels ? new ModelCMMGiant(1.0F, true) : new ModelGiant(1.0F, true);
+            RenderLayerCompat.setArmorLeggings(this, EngenderConfig.mobs.useMobTalkerModels ? new ModelCMMGiant(0.5F, true) : new ModelGiant(0.5F, true));
+            RenderLayerCompat.setArmorBody(this, EngenderConfig.mobs.useMobTalkerModels ? new ModelCMMGiant(1.0F, true) : new ModelGiant(1.0F, true));
           }
         });
   }
@@ -89,7 +91,7 @@ public class RenderGiant extends RenderLiving<EntityGiant> {
   }
   
   protected void preRenderCallback(EntityGiant entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
+    RenderLayerCompat.setMainModel(this, EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel);
     GlStateManager.scale(6.0F, 6.0F, 6.0F);
     if (EngenderConfig.mobs.useMobTalkerModels) {
       if (entitylivingbaseIn.isSitResting())
@@ -125,14 +127,14 @@ public class RenderGiant extends RenderLiving<EntityGiant> {
       float f = handleRotationFloat(entity, partialTicks);
       for (int i = 0; i < avec3d.length; i++)
         super.doRender(entity, x + (avec3d[i]).x + MathHelper.cos(i + f * 0.5F) * 0.025D, y + (avec3d[i]).y + MathHelper.cos(i + f * 0.75F) * 0.0125D, z + (avec3d[i]).z + MathHelper.cos(i + f * 0.7F) * 0.025D, entityYaw, partialTicks); 
-      this.shadowOpaque = 0.0F;
+      RenderLayerCompat.setShadowOpaque(this, 0.0F);
     } else {
-      this.shadowOpaque = 1.0F;
+      RenderLayerCompat.setShadowOpaque(this, 1.0F);
       super.doRender(entity, x, y, z, entityYaw, partialTicks);
     } 
   }
   
   protected boolean isVisible(EntityGiant entity) {
-    return (!entity.isInvisible() || this.renderOutlines || entity.getGhostTime() > 0);
+    return (!entity.isInvisible() || RenderLayerCompat.isRenderOutlines(this) || entity.getGhostTime() > 0);
   }
 }

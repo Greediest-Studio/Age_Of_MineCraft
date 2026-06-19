@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import java.util.Random;
 import net.minecraft.AgeOfMinecraft.entity.tame.other.EntityPortal;
 import net.minecraft.AgeOfMinecraft.models.ModelPortal;
@@ -20,8 +22,8 @@ public class RenderPortal extends RenderLiving<EntityPortal> {
   
   public RenderPortal(RenderManager renderManagerIn) {
     super(renderManagerIn, new ModelPortal(), 4.0F);
-    addLayer(new LayerPortalGlow(this));
-    addLayer(new LayerPortalOverlay(this));
+    RenderLayerCompat.addLayer(this, new LayerPortalGlow(this));
+    RenderLayerCompat.addLayer(this, new LayerPortalOverlay(this));
   }
   
   protected void preRenderCallback(EntityPortal entitylivingbaseIn, float partialTickTime) {

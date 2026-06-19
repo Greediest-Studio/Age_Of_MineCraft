@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier1.EntityCow;
 import net.minecraft.client.model.ModelBase;
@@ -22,8 +24,8 @@ public class RenderCow extends RenderLiving<EntityCow> {
   
   public RenderCow(RenderManager renderManagerIn) {
     super(renderManagerIn, new ModelCow(), 0.7F);
-    addLayer(new LayerArrowCustomSized(this, 1.0F));
-    addLayer(new LayerCustomHeadEngender(((ModelCow)this.mainModel).head, ((ModelCow)this.mainModel).head));
+    RenderLayerCompat.addLayer(this, new LayerArrowCustomSized(this, 1.0F));
+    RenderLayerCompat.addLayer(this, new LayerCustomHeadEngender(((ModelCow)RenderLayerCompat.getMainModel(this)).head, ((ModelCow)RenderLayerCompat.getMainModel(this)).head));
     
   }
   
@@ -54,14 +56,14 @@ public class RenderCow extends RenderLiving<EntityCow> {
       float f = handleRotationFloat(entity, partialTicks);
       for (int i = 0; i < avec3d.length; i++)
         super.doRender(entity, x + (avec3d[i]).x + MathHelper.cos(i + f * 0.5F) * 0.025D, y + (avec3d[i]).y + MathHelper.cos(i + f * 0.75F) * 0.0125D, z + (avec3d[i]).z + MathHelper.cos(i + f * 0.7F) * 0.025D, entityYaw, partialTicks); 
-      this.shadowOpaque = 0.0F;
+      RenderLayerCompat.setShadowOpaque(this, 0.0F);
     } else {
-      this.shadowOpaque = 1.0F;
+      RenderLayerCompat.setShadowOpaque(this, 1.0F);
       super.doRender(entity, x, y, z, entityYaw, partialTicks);
     } 
   }
   
   protected boolean isVisible(EntityTameBase entity) {
-    return (!entity.isInvisible() || this.renderOutlines || entity.getGhostTime() > 0);
+    return (!entity.isInvisible() || RenderLayerCompat.isRenderOutlines(this) || entity.getGhostTime() > 0);
   }
 }

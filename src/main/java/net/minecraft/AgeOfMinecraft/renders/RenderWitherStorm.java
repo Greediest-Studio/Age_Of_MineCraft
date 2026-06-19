@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStorm;
 import net.minecraft.AgeOfMinecraft.models.ModelWitherStorm;
 import net.minecraft.client.model.ModelBase;
@@ -16,7 +18,7 @@ public class RenderWitherStorm extends RenderLiving<EntityWitherStorm> {
   
   public RenderWitherStorm(RenderManager renderManagerIn) {
     super(renderManagerIn, new ModelWitherStorm(), 16.0F);
-    addLayer(new LayerWitherStormBody(this));
+    RenderLayerCompat.addLayer(this, new LayerWitherStormBody(this));
   }
   
   protected void preRenderCallback(EntityWitherStorm entitylivingbaseIn, float partialTickTime) {

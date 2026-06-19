@@ -254,27 +254,28 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
       this.motionY += (0.5D - this.motionY) * 0.6000000238418579D; 
     if (this.motionX > 1.0D)
       this.motionX = 1.0D; 
+    if (this.motionX < -1.0D)
+      this.motionX = -1.0D;
+    if (this.motionZ > 1.0D)
+      this.motionZ = 1.0D;
     if (this.motionZ < -1.0D)
       this.motionZ = -1.0D; 
     if (this.motionY > 1.0D)
       this.motionY = 1.0D; 
     if (this.motionY < -1.0D)
       this.motionY = -1.0D; 
-    if (this.motionX > 1.0D)
-      this.motionX = 1.0D; 
-    if (this.motionZ < -1.0D)
-      this.motionZ = -1.0D; 
     if ((this.ticksExisted + getEntityId()) % 100 == 0)
       playSound(ESound.commandBlockWitherHum, (getSize() >= 5250) ? 0.25F : 5.0F, 1.0F); 
     if (getSize() >= 12500 && !this.world.isRemote) {
       EntityWitherStorm witherstorm = new EntityWitherStorm(this.world);
       witherstorm.copyLocationAndAnglesFrom(this);
       witherstorm.setNoAI(isAIDisabled());
-      this.world.spawnEntity(witherstorm);
       witherstorm.setOwnerId(getOwnerId());
       if (hasCustomName())
         witherstorm.setCustomNameTag(getCustomNameTag()); 
       witherstorm.Grow(12500);
+      witherstorm.setHealth(witherstorm.getMaxHealth());
+      this.world.spawnEntity(witherstorm);
       Grow(0);
       onKillCommand();
     } 

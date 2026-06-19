@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemLastChance extends ItemBEItem {
   public ItemLastChance() {
     super("last_chance");
-    setMaxStackSize(1);
+    ItemCompat.setMaxStackSize(this, 1);
   }
   
   @SideOnly(Side.CLIENT)

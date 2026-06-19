@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDragonMinion;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.model.ModelDragonMinion;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity.layer.LayerSpectralDragonEyes;
@@ -31,8 +33,8 @@ public class RenderDragonMinion extends RenderLiving<EntityDragonMinion> {
   
   public RenderDragonMinion(RenderManager manager) {
     super(manager, new ModelDragonMinion(0.0F), 0.0F);
-    this.modelDragon = (ModelDragonMinion)this.mainModel;
-    addLayer((LayerRenderer)new LayerSpectralDragonEyes(this));
+    this.modelDragon = (ModelDragonMinion)RenderLayerCompat.getMainModel(this);
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerSpectralDragonEyes(this));
     
   }
   
@@ -113,7 +115,7 @@ public class RenderDragonMinion extends RenderLiving<EntityDragonMinion> {
     GlStateManager.enableBlend();
     GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
     GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);
-    this.mainModel.render(par1EntityDragonMinion, par2, par3, par4, par5, par6, par7);
+    RenderLayerCompat.getMainModel(this).render(par1EntityDragonMinion, par2, par3, par4, par5, par6, par7);
     GlStateManager.disableBlend();
     if (par1EntityDragonMinion.hurtTime > 0) {
       GL11.glDepthFunc(514);
@@ -121,7 +123,7 @@ public class RenderDragonMinion extends RenderLiving<EntityDragonMinion> {
       GlStateManager.enableBlend();
       GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
       GlStateManager.color(1.0F, 0.0F, 0.0F, 0.5F);
-      this.mainModel.render(par1EntityDragonMinion, par2, par3, par4, par5, par6, par7);
+      RenderLayerCompat.getMainModel(this).render(par1EntityDragonMinion, par2, par3, par4, par5, par6, par7);
       GlStateManager.enableTexture2D();
       GlStateManager.disableBlend();
       GL11.glDepthFunc(515);

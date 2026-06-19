@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import java.util.Random;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityShulker;
 import net.minecraft.AgeOfMinecraft.models.ModelShulker;
@@ -29,9 +31,9 @@ public class RenderShulker extends RenderLiving<EntityShulker> {
   
   public RenderShulker(RenderManager p_i46550_1_) {
     super(p_i46550_1_, new ModelShulker(), 0.75F);
-    addLayer(new HeadLayer());
-    addLayer(new LayerArrowCustomSized(this, 1.0F));
-    addLayer(new LayerCustomHeadEngender(((ModelShulker)this.mainModel).head, ((ModelShulker)this.mainModel).head));
+    RenderLayerCompat.addLayer(this, new HeadLayer());
+    RenderLayerCompat.addLayer(this, new LayerArrowCustomSized(this, 1.0F));
+    RenderLayerCompat.addLayer(this, new LayerCustomHeadEngender(((ModelShulker)RenderLayerCompat.getMainModel(this)).head, ((ModelShulker)RenderLayerCompat.getMainModel(this)).head));
     
   }
   
@@ -128,7 +130,7 @@ public class RenderShulker extends RenderLiving<EntityShulker> {
       if (!entitylivingbaseIn.isInvisible())
         if (entitylivingbaseIn.isChild()) {
           GlStateManager.pushMatrix();
-          ModelRenderer modelrenderer = ((ModelShulker)RenderShulker.this.getMainModel()).head;
+          ModelRenderer modelrenderer = ((ModelShulker)RenderLayerCompat.getMainModel(RenderShulker.this)).head;
           modelrenderer.rotateAngleY = netHeadYaw * 0.017453292F;
           modelrenderer.rotateAngleX = headPitch * 0.017453292F;
           RenderShulker.this.bindTexture(entitylivingbaseIn.isAntiMob() ? RenderShulker.antiSHULKER_ENDERGOLEM_TEXTURE : RenderShulker.SHULKER_ENDERGOLEM_TEXTURE[entitylivingbaseIn.getColor().getMetadata()]);
@@ -197,7 +199,7 @@ public class RenderShulker extends RenderLiving<EntityShulker> {
               GlStateManager.translate(0.0F, -2.0F, 0.0F);
               break;
           } 
-          ModelRenderer modelrenderer = ((ModelShulker)RenderShulker.this.getMainModel()).head;
+          ModelRenderer modelrenderer = ((ModelShulker)RenderLayerCompat.getMainModel(RenderShulker.this)).head;
           modelrenderer.rotateAngleY = netHeadYaw * 0.017453292F;
           modelrenderer.rotateAngleX = headPitch * 0.017453292F;
           RenderShulker.this.bindTexture(entitylivingbaseIn.isAntiMob() ? RenderShulker.antiSHULKER_ENDERGOLEM_TEXTURE : RenderShulker.SHULKER_ENDERGOLEM_TEXTURE[entitylivingbaseIn.getColor().getMetadata()]);

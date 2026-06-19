@@ -28,7 +28,7 @@ public class LayerIronGolemFlower implements LayerRenderer<EntityLivingBase> {
       BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
       GlStateManager.enableRescaleNormal();
       GlStateManager.pushMatrix();
-      GlStateManager.rotate(5.0F + 180.0F * (EngenderConfig.mobs.useMobTalkerModels ? ((ModelCMMIronGolem)this.ironGolemRenderer.getMainModel()).RArm.rotateAngleX : ((ModelIronGolem)this.ironGolemRenderer.getMainModel()).ironGolemRightArm.rotateAngleX) / 3.1415927F, 1.0F, 0.0F, 0.0F);
+      GlStateManager.rotate(5.0F + 180.0F * (EngenderConfig.mobs.useMobTalkerModels ? ((ModelCMMIronGolem)RenderLayerCompat.getMainModel(this.ironGolemRenderer)).RArm.rotateAngleX : ((ModelIronGolem)RenderLayerCompat.getMainModel(this.ironGolemRenderer)).ironGolemRightArm.rotateAngleX) / 3.1415927F, 1.0F, 0.0F, 0.0F);
       GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
       if (p_177153_1_.isChild())
         if (EngenderConfig.mobs.useMobTalkerModels) {

@@ -23,16 +23,16 @@ public class RenderMagicMissile<T extends Entity> extends Render<T> {
     GlStateManager.pushMatrix();
     GlStateManager.translate((float)x, (float)y, (float)z);
     GlStateManager.enableRescaleNormal();
-    GlStateManager.rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-    GlStateManager.rotate(((this.renderManager.options.thirdPersonView == 2) ? -1.0F : 1.0F) * this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+    GlStateManager.rotate(-RenderLayerCompat.getRenderManager(this).playerViewY, 0.0F, 1.0F, 0.0F);
+    GlStateManager.rotate(((RenderLayerCompat.getRenderManager(this).options.thirdPersonView == 2) ? -1.0F : 1.0F) * RenderLayerCompat.getRenderManager(this).playerViewX, 1.0F, 0.0F, 0.0F);
     GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
     bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-    if (this.renderOutlines) {
+    if (RenderLayerCompat.isRenderOutlines(this)) {
       GlStateManager.enableColorMaterial();
       GlStateManager.enableOutlineMode(getTeamColor(entity));
     } 
     Minecraft.getMinecraft().getRenderItem().renderItem(getStackToRender(entity), ItemCameraTransforms.TransformType.GROUND);
-    if (this.renderOutlines) {
+    if (RenderLayerCompat.isRenderOutlines(this)) {
       GlStateManager.disableOutlineMode();
       GlStateManager.disableColorMaterial();
     } 

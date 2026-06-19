@@ -33,7 +33,7 @@ public class LayerArrowCustomSized implements LayerRenderer<EntityLivingBase> {
       RenderHelper.disableStandardItemLighting();
       for (int j = 0; j < i; j++) {
         GlStateManager.pushMatrix();
-        ModelRenderer modelrenderer = this.renderer.getMainModel().getRandomModelBox(random);
+        ModelRenderer modelrenderer = RenderLayerCompat.getMainModel(this.renderer).getRandomModelBox(random);
         ModelBox modelbox = modelrenderer.cubeList.get(random.nextInt(modelrenderer.cubeList.size()));
         modelrenderer.postRender(0.0625F);
         float f = random.nextFloat();

@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityMagmaGolem;
 import net.minecraft.AgeOfMinecraft.models.ModelIronGolem;
 import net.minecraft.client.model.ModelBase;
@@ -22,10 +24,10 @@ public class RenderMagmaGolem extends RenderLiving<EntityMagmaGolem> {
   
   public RenderMagmaGolem(RenderManager p_i46133_1_) {
     super(p_i46133_1_, regularmodel, 0.75F);
-    addLayer(new LayerArrowCustomSized(this, 1.0F));
-    addLayer(new LayerCustomHeadEngender(regularmodel.ironGolemHead, regularmodel.ironGolemHead));
+    RenderLayerCompat.addLayer(this, new LayerArrowCustomSized(this, 1.0F));
+    RenderLayerCompat.addLayer(this, new LayerCustomHeadEngender(regularmodel.ironGolemHead, regularmodel.ironGolemHead));
     
-    addLayer(new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityMagmaGolem entity) {
@@ -78,14 +80,14 @@ public class RenderMagmaGolem extends RenderLiving<EntityMagmaGolem> {
       float f = handleRotationFloat(entity, partialTicks);
       for (int i = 0; i < avec3d.length; i++)
         super.doRender(entity, x + (avec3d[i]).x + MathHelper.cos(i + f * 0.5F) * 0.025D, y + (avec3d[i]).y + MathHelper.cos(i + f * 0.75F) * 0.0125D, z + (avec3d[i]).z + MathHelper.cos(i + f * 0.7F) * 0.025D, entityYaw, partialTicks); 
-      this.shadowOpaque = 0.0F;
+      RenderLayerCompat.setShadowOpaque(this, 0.0F);
     } else {
-      this.shadowOpaque = 1.0F;
+      RenderLayerCompat.setShadowOpaque(this, 1.0F);
       super.doRender(entity, x, y, z, entityYaw, partialTicks);
     } 
   }
   
   protected boolean isVisible(EntityMagmaGolem entity) {
-    return (!entity.isInvisible() || this.renderOutlines || entity.getGhostTime() > 0);
+    return (!entity.isInvisible() || RenderLayerCompat.isRenderOutlines(this) || entity.getGhostTime() > 0);
   }
 }

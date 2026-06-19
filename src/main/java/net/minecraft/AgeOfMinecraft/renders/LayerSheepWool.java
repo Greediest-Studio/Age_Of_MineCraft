@@ -41,7 +41,7 @@ public class LayerSheepWool implements LayerRenderer<EntitySheep> {
         float[] afloat = EntitySheep.getDyeRgb(entitylivingbaseIn.getFleeceColor());
         GlStateManager.color(afloat[0], afloat[1], afloat[2]);
       } 
-      this.sheepModel.setModelAttributes(this.sheepRenderer.getMainModel());
+      this.sheepModel.setModelAttributes(RenderLayerCompat.getMainModel(this.sheepRenderer));
       this.sheepModel.setLivingAnimations(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks);
       this.sheepModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
     } 

@@ -21,12 +21,12 @@ public class RenderCaveSpider extends RenderSpider<EntityCaveSpider> {
   
   public RenderCaveSpider(RenderManager renderManagerIn) {
     super(renderManagerIn);
-    this.shadowSize *= 0.7F;
+    RenderLayerCompat.multiplyShadowSize(this, 0.7F);
   }
   
   protected void preRenderCallback(EntityCaveSpider entitylivingbaseIn, float partialTickTime) {
     super.preRenderCallback(entitylivingbaseIn, partialTickTime);
-    this.shadowSize *= 0.7F;
+    RenderLayerCompat.multiplyShadowSize(this, 0.7F);
     if (EngenderConfig.mobs.useMobTalkerModels) {
       if (entitylivingbaseIn.isSitResting())
         GlStateManager.translate(0.0F, -0.2F, 0.0F); 

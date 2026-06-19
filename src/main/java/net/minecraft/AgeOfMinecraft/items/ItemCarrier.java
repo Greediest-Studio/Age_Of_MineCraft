@@ -33,7 +33,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemCarrier extends ItemBEItem {
   public ItemCarrier() {
     super("carrier");
-    setMaxStackSize(1);
+    ItemCompat.setMaxStackSize(this, 1);
     addPropertyOverride(new ResourceLocation("carrying"), new IItemPropertyGetter() {
           @SideOnly(Side.CLIENT)
           public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {

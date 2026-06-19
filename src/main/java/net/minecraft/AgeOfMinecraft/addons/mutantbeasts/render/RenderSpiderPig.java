@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.mutantbeasts.render;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import chumbanotz.mutantbeasts.MutantBeasts;
 import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.entity.EntitySpiderPig;
 import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.model.ModelSpiderPig;
@@ -22,7 +24,7 @@ public class RenderSpiderPig extends RenderLiving<EntitySpiderPig> {
   
   public RenderSpiderPig(RenderManager manager) {
     super(manager, new ModelSpiderPig(0.0F), 0.8F);
-    addLayer(new SaddleLayer());
+    RenderLayerCompat.addLayer(this, new SaddleLayer());
   }
   
   protected float getDeathMaxRotation(EntitySpiderPig entityLivingBaseIn) {
@@ -60,7 +62,7 @@ public class RenderSpiderPig extends RenderLiving<EntitySpiderPig> {
     public void doRenderLayer(EntitySpiderPig entityIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
       if (!entityIn.isWild()) {
         RenderSpiderPig.this.bindTexture(RenderSpiderPig.SADDLE_TEXTURE);
-        RenderSpiderPig.this.mainModel.setModelAttributes(this.spiderPigModel);
+        RenderLayerCompat.getMainModel(RenderSpiderPig.this).setModelAttributes(this.spiderPigModel);
         this.spiderPigModel.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
       } 
     }

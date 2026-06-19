@@ -4,6 +4,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityAbyssalPortal;
 import net.minecraft.AgeOfMinecraft.items.ItemBEItem;
+import net.minecraft.AgeOfMinecraft.items.ItemCompat;
 import net.minecraft.AgeOfMinecraft.registry.ESetup;
 import net.minecraft.AgeOfMinecraft.registry.ESound;
 import net.minecraft.AgeOfMinecraft.registry.ETab;
@@ -33,9 +34,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemAbyssalPortalStaff extends ItemBEItem {
   public ItemAbyssalPortalStaff() {
     super("abyssalportalstaff");
-    setMaxStackSize(1);
-    setCreativeTab(ETab.abyssal);
-    setHasSubtypes(true);
+    ItemCompat.setMaxStackSize(this, 1);
+    ItemCompat.setCreativeTab(this, ETab.abyssal);
+    ItemCompat.setHasSubtypes(this, true);
   }
   
   public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {

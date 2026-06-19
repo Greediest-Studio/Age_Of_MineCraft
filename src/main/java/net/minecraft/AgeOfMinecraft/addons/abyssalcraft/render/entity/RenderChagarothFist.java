@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import com.shinoow.abyssalcraft.client.model.entity.ModelChagarothFist;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityChagarothFist;
 import net.minecraft.AgeOfMinecraft.renders.LayerArrowCustomSized;
@@ -20,7 +22,7 @@ public class RenderChagarothFist extends RenderLiving<EntityChagarothFist> {
   
   public RenderChagarothFist(RenderManager manager) {
     super(manager, new ModelChagarothFist(), 0.5F);
-    addLayer((LayerRenderer)new LayerArrowCustomSized(this, 1.0F));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerArrowCustomSized(this, 1.0F));
     
   }
   

@@ -29,7 +29,7 @@ public class LayerWitherStormTractorBeam implements LayerRenderer<EntityLivingBa
       GlStateManager.pushMatrix();
       boolean flag = p_177214_1_.isInvisible();
       GlStateManager.depthMask(!flag);
-      ((ModelWitherStormHead)this.witherRenderer.getMainModel()).BackMouth.postRender(0.0625F);
+      ((ModelWitherStormHead)RenderLayerCompat.getMainModel(this.witherRenderer)).BackMouth.postRender(0.0625F);
       GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
       GlStateManager.scale(1.5F, 18.0F, 1.5F);
       GlStateManager.translate(0.025F, -0.1F, 0.475F);

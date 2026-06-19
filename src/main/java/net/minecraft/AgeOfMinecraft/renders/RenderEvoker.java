@@ -7,7 +7,6 @@ import net.minecraft.AgeOfMinecraft.models.ModelIllager;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -32,9 +31,9 @@ public class RenderEvoker extends RenderLiving<EntityEvoker> {
   
   public RenderEvoker(RenderManager p_i47207_1_) {
     super(p_i47207_1_, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.5F);
-    addLayer(new LayerCustomHeadEngender(regularmodel.head, cmmmodel.Head));
+    RenderLayerCompat.addLayer(this, new LayerCustomHeadEngender(regularmodel.head, cmmmodel.Head));
     
-    addLayer(new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityEvoker entity) {
@@ -65,7 +64,7 @@ public class RenderEvoker extends RenderLiving<EntityEvoker> {
   }
   
   protected void preRenderCallback(EntityEvoker entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
+    RenderLayerCompat.setMainModel(this, EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel);
     float f = 0.9375F;
     if (!EngenderConfig.mobs.useMobTalkerModels) {
       GlStateManager.scale(f, f, f);
@@ -102,14 +101,14 @@ public class RenderEvoker extends RenderLiving<EntityEvoker> {
       float f = handleRotationFloat(entity, partialTicks);
       for (int i = 0; i < avec3d.length; i++)
         super.doRender(entity, x + (avec3d[i]).x + MathHelper.cos(i + f * 0.5F) * 0.025D, y + (avec3d[i]).y + MathHelper.cos(i + f * 0.75F) * 0.0125D, z + (avec3d[i]).z + MathHelper.cos(i + f * 0.7F) * 0.025D, entityYaw, partialTicks); 
-      this.shadowOpaque = 0.0F;
+      RenderLayerCompat.setShadowOpaque(this, 0.0F);
     } else {
-      this.shadowOpaque = 1.0F;
+      RenderLayerCompat.setShadowOpaque(this, 1.0F);
       super.doRender(entity, x, y, z, entityYaw, partialTicks);
     } 
   }
   
   protected boolean isVisible(EntityEvoker entity) {
-    return (!entity.isInvisible() || this.renderOutlines || entity.getGhostTime() > 0);
+    return (!entity.isInvisible() || RenderLayerCompat.isRenderOutlines(this) || entity.getGhostTime() > 0);
   }
 }

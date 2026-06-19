@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStormHead;
 import net.minecraft.AgeOfMinecraft.models.ModelWitherStormHead;
 import net.minecraft.client.model.ModelBase;
@@ -17,7 +19,7 @@ public class RenderWitherStormHead extends RenderLiving<EntityWitherStormHead> {
   
   public RenderWitherStormHead(RenderManager renderManagerIn) {
     super(renderManagerIn, new ModelWitherStormHead(), 4.0F);
-    addLayer(new LayerWitherStormTractorBeam(this));
+    RenderLayerCompat.addLayer(this, new LayerWitherStormTractorBeam(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityWitherStormHead entity) {

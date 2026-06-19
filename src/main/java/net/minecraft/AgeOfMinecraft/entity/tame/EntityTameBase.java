@@ -2987,7 +2987,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       extinguish(); 
     if (!isSitResting() || !isWild() || isHero() || !isNonBoss() || getTier() == EnumTier.TIER6 || this instanceof IEntityMultiPart)
       this.idleTime = 0; 
-    if (getHeldItemMainhand().getItem() == EItem.carrier || getHeldItemOffhand().getItem() == EItem.carrier)
+    if (EItem.carrier != null && (getHeldItemMainhand().getItem() == EItem.carrier || getHeldItemOffhand().getItem() == EItem.carrier))
       dropEquipmentUndamaged(); 
     if (this.ticksExisted > 20 && getRidingEntity() != null && getRidingEntity() instanceof EntityPlayer && !(this instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityChagaroth) && !(this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntitySlime) && !isChild())
       dismountRidingEntity(); 

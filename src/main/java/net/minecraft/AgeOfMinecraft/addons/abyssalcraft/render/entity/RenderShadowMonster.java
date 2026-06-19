@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import com.shinoow.abyssalcraft.client.model.entity.ModelShadowMonster;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityShadowMonster;
 import net.minecraft.AgeOfMinecraft.renders.LayerMobCape;
@@ -25,9 +27,9 @@ public class RenderShadowMonster extends RenderLiving<EntityShadowMonster> {
   
   public RenderShadowMonster(RenderManager manager, ModelShadowMonster model) {
     super(manager, model, 0.0F);
-    addLayer((LayerRenderer)new LayerCustomHead(model.Head));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerCustomHead(model.Head));
     
-    addLayer((LayerRenderer)new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerMobCape(this));
   }
   
   protected void renderModel(EntityShadowMonster entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {

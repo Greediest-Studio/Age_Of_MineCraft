@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntitySkeletonGoliath;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.model.ModelSkeletonGoliath;
 import net.minecraft.AgeOfMinecraft.renders.LayerMobCape;
@@ -27,9 +29,9 @@ public class RenderSkeletonGoliath extends RenderLiving<EntitySkeletonGoliath> {
   
   public RenderSkeletonGoliath(RenderManager manager, ModelSkeletonGoliath model) {
     super(manager, model, 0.75F);
-    addLayer((LayerRenderer)new LayerCustomHead(model.head));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerCustomHead(model.head));
     
-    addLayer((LayerRenderer)new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerMobCape(this));
   }
   
   protected void preRenderScale(EntitySkeletonGoliath entitylivingbaseIn, float partialTickTime) {

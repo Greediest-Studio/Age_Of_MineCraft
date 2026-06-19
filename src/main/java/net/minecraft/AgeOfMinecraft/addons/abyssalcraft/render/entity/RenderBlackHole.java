@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityBlackHole;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -34,8 +36,8 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
     float rot = (this.ticks * 2);
     double scale = 2.0D;
     GlStateManager.pushMatrix();
-    GlStateManager.rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-    GlStateManager.rotate(this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+    GlStateManager.rotate(-RenderLayerCompat.getRenderManager(this).playerViewY, 0.0F, 1.0F, 0.0F);
+    GlStateManager.rotate(RenderLayerCompat.getRenderManager(this).playerViewX, 1.0F, 0.0F, 0.0F);
     GlStateManager.pushMatrix();
     GlStateManager.rotate(rot, 0.0F, 0.0F, 1.0F);
     Tessellator tessellator = Tessellator.getInstance();

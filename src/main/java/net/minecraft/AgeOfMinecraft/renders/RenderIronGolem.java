@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityIronGolem;
 import net.minecraft.AgeOfMinecraft.models.ModelCMMIronGolem;
@@ -35,11 +37,11 @@ public class RenderIronGolem extends RenderLiving<EntityIronGolem> {
   
   public RenderIronGolem(RenderManager p_i46133_1_) {
     super(p_i46133_1_, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.75F);
-    addLayer(new LayerIronGolemFlower(this));
-    addLayer(new LayerArrowCustomSized(this, 1.0F));
-    addLayer(new LayerCustomHeadEngender(regularmodel.ironGolemHead, cmmmodel.Head));
+    RenderLayerCompat.addLayer(this, new LayerIronGolemFlower(this));
+    RenderLayerCompat.addLayer(this, new LayerArrowCustomSized(this, 1.0F));
+    RenderLayerCompat.addLayer(this, new LayerCustomHeadEngender(regularmodel.ironGolemHead, cmmmodel.Head));
     
-    addLayer(new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityIronGolem entity) {
@@ -47,7 +49,7 @@ public class RenderIronGolem extends RenderLiving<EntityIronGolem> {
   }
   
   protected void preRenderCallback(EntityIronGolem entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = (entitylivingbaseIn.getIllusionFormTime() > 0) ? disguisemodel : (EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel);
+    RenderLayerCompat.setMainModel(this, (entitylivingbaseIn.getIllusionFormTime() > 0) ? disguisemodel : (EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel));
     if (EngenderConfig.mobs.useMobTalkerModels) {
       GlStateManager.scale(1.25F, 1.25F, 1.25F);
       if (entitylivingbaseIn.isSitResting())
@@ -112,14 +114,14 @@ public class RenderIronGolem extends RenderLiving<EntityIronGolem> {
       float f = handleRotationFloat(entity, partialTicks);
       for (int i = 0; i < avec3d.length; i++)
         super.doRender(entity, x + (avec3d[i]).x + MathHelper.cos(i + f * 0.5F) * 0.025D, y + (avec3d[i]).y + MathHelper.cos(i + f * 0.75F) * 0.0125D, z + (avec3d[i]).z + MathHelper.cos(i + f * 0.7F) * 0.025D, entityYaw, partialTicks); 
-      this.shadowOpaque = 0.0F;
+      RenderLayerCompat.setShadowOpaque(this, 0.0F);
     } else {
-      this.shadowOpaque = 1.0F;
+      RenderLayerCompat.setShadowOpaque(this, 1.0F);
       super.doRender(entity, x, y, z, entityYaw, partialTicks);
     } 
   }
   
   protected boolean isVisible(EntityIronGolem entity) {
-    return (!entity.isInvisible() || this.renderOutlines || entity.getGhostTime() > 0);
+    return (!entity.isInvisible() || RenderLayerCompat.isRenderOutlines(this) || entity.getGhostTime() > 0);
   }
 }

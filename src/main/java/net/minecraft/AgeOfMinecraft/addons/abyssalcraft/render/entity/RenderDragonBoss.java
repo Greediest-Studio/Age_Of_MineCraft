@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityDragonBoss;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.model.ModelDragonBoss;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity.layer.LayerAsorahDeath;
@@ -30,9 +32,9 @@ public class RenderDragonBoss extends RenderLiving<EntityDragonBoss> {
   
   public RenderDragonBoss(RenderManager manager) {
     super(manager, new ModelDragonBoss(0.0F), 0.9F);
-    this.modelDragon = (ModelDragonBoss)this.mainModel;
-    addLayer((LayerRenderer)new LayerAsorahEyes(this));
-    addLayer((LayerRenderer)new LayerAsorahDeath());
+    this.modelDragon = (ModelDragonBoss)RenderLayerCompat.getMainModel(this);
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerAsorahEyes(this));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerAsorahDeath());
     
   }
   
@@ -58,19 +60,19 @@ public class RenderDragonBoss extends RenderLiving<EntityDragonBoss> {
       GlStateManager.enableAlpha();
       GL11.glAlphaFunc(516, f6);
       bindTexture(DRAGON_EXPLODING_TEXTURES);
-      this.mainModel.render(par1EntityDragonBoss, par2, par3, par4, par5, par6, par7);
+      RenderLayerCompat.getMainModel(this).render(par1EntityDragonBoss, par2, par3, par4, par5, par6, par7);
       GL11.glAlphaFunc(516, 0.1F);
       GL11.glDepthFunc(514);
     } 
     bindEntityTexture(par1EntityDragonBoss);
-    this.mainModel.render(par1EntityDragonBoss, par2, par3, par4, par5, par6, par7);
+    RenderLayerCompat.getMainModel(this).render(par1EntityDragonBoss, par2, par3, par4, par5, par6, par7);
     if (par1EntityDragonBoss.hurtTime > 0) {
       GL11.glDepthFunc(514);
       GlStateManager.disableTexture2D();
       GlStateManager.enableBlend();
       GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
       GlStateManager.color(1.0F, 0.0F, 0.0F, 0.5F);
-      this.mainModel.render(par1EntityDragonBoss, par2, par3, par4, par5, par6, par7);
+      RenderLayerCompat.getMainModel(this).render(par1EntityDragonBoss, par2, par3, par4, par5, par6, par7);
       GlStateManager.enableTexture2D();
       GlStateManager.disableBlend();
       GL11.glDepthFunc(515);

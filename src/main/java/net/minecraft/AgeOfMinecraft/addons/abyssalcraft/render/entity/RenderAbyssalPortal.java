@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import java.util.Random;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityAbyssalPortal;
 import net.minecraft.AgeOfMinecraft.models.ModelPortal;
@@ -20,8 +22,8 @@ public class RenderAbyssalPortal extends RenderLiving<EntityAbyssalPortal> {
   
   public RenderAbyssalPortal(RenderManager renderManagerIn) {
     super(renderManagerIn, new ModelPortal(), 4.0F);
-    addLayer(new LayerAbyssalPortalGlow(this));
-    addLayer(new LayerAbyssalPortalOverlay(this));
+    RenderLayerCompat.addLayer(this, new LayerAbyssalPortalGlow(this));
+    RenderLayerCompat.addLayer(this, new LayerAbyssalPortalOverlay(this));
   }
   
   protected void preRenderCallback(EntityAbyssalPortal entitylivingbaseIn, float partialTickTime) {

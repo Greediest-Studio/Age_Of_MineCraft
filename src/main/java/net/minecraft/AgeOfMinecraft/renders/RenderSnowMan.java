@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.EngenderConfig;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier2.EntitySnowman;
 import net.minecraft.AgeOfMinecraft.models.ModelCMMSnowGolem;
@@ -31,10 +33,10 @@ public class RenderSnowMan extends RenderLiving<EntitySnowman> {
   
   public RenderSnowMan(RenderManager renderManagerIn) {
     super(renderManagerIn, EngenderConfig.mobs.useMobTalkerModels ? (ModelBase)cmmmodel : (ModelBase)regularmodel, 0.5F);
-    addLayer(new LayerArrowCustomSized(this, 1.0F));
-    addLayer(new LayerSnowmanHead(regularmodel.head));
+    RenderLayerCompat.addLayer(this, new LayerArrowCustomSized(this, 1.0F));
+    RenderLayerCompat.addLayer(this, new LayerSnowmanHead(regularmodel.head));
     
-    addLayer(new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, new LayerMobCape(this));
   }
   
   protected void applyRotations(EntitySnowman entityLiving, float p_77043_2_, float p_77043_3_, float partialTicks) {
@@ -64,7 +66,7 @@ public class RenderSnowMan extends RenderLiving<EntitySnowman> {
   }
   
   protected void preRenderCallback(EntitySnowman entitylivingbaseIn, float partialTickTime) {
-    this.mainModel = EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel;
+    RenderLayerCompat.setMainModel(this, EngenderConfig.mobs.useMobTalkerModels ? cmmmodel : regularmodel);
     if (!EngenderConfig.mobs.useMobTalkerModels && !entitylivingbaseIn.getCurrentBook().isEmpty()) {
       regularmodel.rightHand.rotateAngleY = entitylivingbaseIn.bookSpread - 1.0F;
       regularmodel.leftHand.rotateAngleY = -entitylivingbaseIn.bookSpread + 1.0F;

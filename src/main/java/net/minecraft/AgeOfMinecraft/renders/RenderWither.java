@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityWither;
 import net.minecraft.AgeOfMinecraft.models.ModelWither;
 import net.minecraft.client.model.ModelBase;
@@ -22,11 +24,11 @@ public class RenderWither extends RenderLiving<EntityWither> {
   
   public RenderWither(RenderManager renderManagerIn) {
     super(renderManagerIn, regularmodel, 1.0F);
-    addLayer(new LayerWitherAura(this));
-    addLayer(new LayerArrowCustomSized(this, 0.5F));
-    addLayer(new LayerCustomHeadEngender(regularmodel.heads[0], regularmodel.heads[0]));
+    RenderLayerCompat.addLayer(this, new LayerWitherAura(this));
+    RenderLayerCompat.addLayer(this, new LayerArrowCustomSized(this, 0.5F));
+    RenderLayerCompat.addLayer(this, new LayerCustomHeadEngender(regularmodel.heads[0], regularmodel.heads[0]));
     
-    addLayer(new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityWither entity) {

@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 public class ItemHeroMaker extends ItemBEItem {
   public ItemHeroMaker() {
     super("heromaker");
-    setMaxStackSize(1);
+    ItemCompat.setMaxStackSize(this, 1);
   }
   
   public EnumRarity getRarity(ItemStack stack) {

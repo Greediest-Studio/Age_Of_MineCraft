@@ -26,7 +26,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 public class ItemMoralHorn extends ItemBEItem {
   public ItemMoralHorn() {
     super("moralhorn");
-    setMaxStackSize(1);
+    ItemCompat.setMaxStackSize(this, 1);
   }
   
   public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {

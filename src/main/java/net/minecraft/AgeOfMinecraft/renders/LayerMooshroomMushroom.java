@@ -41,7 +41,7 @@ public class LayerMooshroomMushroom implements LayerRenderer<EntityLivingBase> {
       GlStateManager.popMatrix();
       GlStateManager.popMatrix();
       GlStateManager.pushMatrix();
-      ((ModelQuadruped)this.mooshroomRenderer.getMainModel()).head.postRender(0.0625F);
+      ((ModelQuadruped)RenderLayerCompat.getMainModel(this.mooshroomRenderer)).head.postRender(0.0625F);
       GlStateManager.scale(1.0F, -1.0F, 1.0F);
       GlStateManager.translate(0.0F, 0.7F, -0.2F);
       GlStateManager.rotate(12.0F, 0.0F, 1.0F, 0.0F);

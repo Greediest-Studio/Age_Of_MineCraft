@@ -50,10 +50,10 @@ public class LayerCreeperCharge implements LayerRenderer<EntityCreeper> {
       GlStateManager.color(0.75F + ran, 0.75F + ran, 0.75F + ran, 1.0F);
       GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
       if (EngenderConfig.mobs.useMobTalkerModels) {
-        this.cuteCreeperModel.setModelAttributes(this.creeperRenderer.getMainModel());
+        this.cuteCreeperModel.setModelAttributes(RenderLayerCompat.getMainModel(this.creeperRenderer));
         this.cuteCreeperModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
       } else {
-        this.creeperModel.setModelAttributes(this.creeperRenderer.getMainModel());
+        this.creeperModel.setModelAttributes(RenderLayerCompat.getMainModel(this.creeperRenderer));
         this.creeperModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
       } 
       GlStateManager.matrixMode(5890);

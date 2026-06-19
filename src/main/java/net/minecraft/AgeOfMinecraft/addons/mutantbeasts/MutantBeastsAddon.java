@@ -1,5 +1,6 @@
 package net.minecraft.AgeOfMinecraft.addons.mutantbeasts;
 
+import net.minecraft.AgeOfMinecraft.items.ItemCompat;
 import net.minecraft.AgeOfMinecraft.registry.EItem;
 import net.minecraft.AgeOfMinecraft.registry.ETab;
 import net.minecraftforge.fml.common.Loader;
@@ -60,18 +61,18 @@ public class MutantBeastsAddon {
     if (Loader.isModLoaded("mutantbeasts")) {
       proxy.postInit(e);
       logger.debug("Post Initialization started!");
-      EItem.fusionPigSpider.setCreativeTab(ETab.mutant);
-      EItem.fusionMutantSnowGolem.setCreativeTab(ETab.mutant);
-      EItem.fusionMutantCreeper.setCreativeTab(ETab.mutant);
-      EItem.fusionMutantEnderman.setCreativeTab(ETab.mutant);
-      EItem.fusionMutantSkeleton.setCreativeTab(ETab.mutant);
-      EItem.fusionMutantZombie.setCreativeTab(ETab.mutant);
-      EItem.pigSpiderItem.setCreativeTab(ETab.mutant);
-      EItem.mutantSnowGolemItem.setCreativeTab(ETab.mutant);
-      EItem.mutantCreeperItem.setCreativeTab(ETab.mutant);
-      EItem.mutantEndermanItem.setCreativeTab(ETab.mutant);
-      EItem.mutantSkeletonItem.setCreativeTab(ETab.mutant);
-      EItem.mutantZombieItem.setCreativeTab(ETab.mutant);
+      ItemCompat.setCreativeTab(EItem.fusionPigSpider, ETab.mutant);
+      ItemCompat.setCreativeTab(EItem.fusionMutantSnowGolem, ETab.mutant);
+      ItemCompat.setCreativeTab(EItem.fusionMutantCreeper, ETab.mutant);
+      ItemCompat.setCreativeTab(EItem.fusionMutantEnderman, ETab.mutant);
+      ItemCompat.setCreativeTab(EItem.fusionMutantSkeleton, ETab.mutant);
+      ItemCompat.setCreativeTab(EItem.fusionMutantZombie, ETab.mutant);
+      ItemCompat.setCreativeTab(EItem.pigSpiderItem, ETab.mutant);
+      ItemCompat.setCreativeTab(EItem.mutantSnowGolemItem, ETab.mutant);
+      ItemCompat.setCreativeTab(EItem.mutantCreeperItem, ETab.mutant);
+      ItemCompat.setCreativeTab(EItem.mutantEndermanItem, ETab.mutant);
+      ItemCompat.setCreativeTab(EItem.mutantSkeletonItem, ETab.mutant);
+      ItemCompat.setCreativeTab(EItem.mutantZombieItem, ETab.mutant);
       logger.debug("Finished post-init for Mutant Beasts Addon!");
       logger.info("Finished Mutant Beasts Addon!");
     } 

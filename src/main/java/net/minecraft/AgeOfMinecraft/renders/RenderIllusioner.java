@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.renders;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityIllusioner;
 import net.minecraft.AgeOfMinecraft.models.ModelIllager;
 import net.minecraft.client.model.ModelBase;
@@ -29,17 +31,17 @@ public class RenderIllusioner extends RenderLiving<EntityIllusioner> {
   
   public RenderIllusioner(RenderManager p_i47477_1_) {
     super(p_i47477_1_, new ModelIllager(0.0F, 0.0F, 64, 64), 0.5F);
-    addLayer((LayerRenderer)new LayerHeldItem(this) {
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerHeldItem(this) {
           public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
             if (((EntityIllusioner)entitylivingbaseIn).isSpellcasting() || ((EntityIllusioner)entitylivingbaseIn).isArmsRaised())
               super.doRenderLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale); 
           }
           
           protected void translateToHand(EnumHandSide p_191361_1_) {
-            ((ModelIllager)this.livingEntityRenderer.getMainModel()).getArm(p_191361_1_).postRender(0.0625F);
+            ((ModelIllager)RenderLayerCompat.getMainModel(this.livingEntityRenderer)).getArm(p_191361_1_).postRender(0.0625F);
           }
         });
-    ((ModelIllager)getMainModel()).hat.showModel = true;
+    ((ModelIllager)RenderLayerCompat.getMainModel(this)).hat.showModel = true;
   }
   
   protected ResourceLocation getEntityTexture(EntityIllusioner entity) {
@@ -82,14 +84,14 @@ public class RenderIllusioner extends RenderLiving<EntityIllusioner> {
       float f = handleRotationFloat(entity, partialTicks);
       for (int i = 0; i < avec3d.length; i++)
         super.doRender(entity, x + (avec3d[i]).x + MathHelper.cos(i + f * 0.5F) * 0.025D, y + (avec3d[i]).y + MathHelper.cos(i + f * 0.75F) * 0.0125D, z + (avec3d[i]).z + MathHelper.cos(i + f * 0.7F) * 0.025D, entityYaw, partialTicks); 
-      this.shadowOpaque = 0.0F;
+      RenderLayerCompat.setShadowOpaque(this, 0.0F);
     } else {
-      this.shadowOpaque = 1.0F;
+      RenderLayerCompat.setShadowOpaque(this, 1.0F);
       super.doRender(entity, x, y, z, entityYaw, partialTicks);
     } 
   }
   
   protected boolean isVisible(EntityIllusioner entity) {
-    return (!entity.isInvisible() || this.renderOutlines || entity.getGhostTime() > 0);
+    return (!entity.isInvisible() || RenderLayerCompat.isRenderOutlines(this) || entity.getGhostTime() > 0);
   }
 }

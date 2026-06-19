@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.draconicevolution;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import java.util.Random;
 import net.minecraft.AgeOfMinecraft.models.ModelPortal;
 import net.minecraft.client.model.ModelBase;
@@ -19,8 +21,8 @@ public class RenderDraconicPortal extends RenderLiving<EntityDraconicPortal> {
   
   public RenderDraconicPortal(RenderManager renderManagerIn) {
     super(renderManagerIn, new ModelPortal(), 4.0F);
-    addLayer(new LayerDraconicPortalGlow(this));
-    addLayer(new LayerDraconicPortalOverlay(this));
+    RenderLayerCompat.addLayer(this, new LayerDraconicPortalGlow(this));
+    RenderLayerCompat.addLayer(this, new LayerDraconicPortalOverlay(this));
   }
   
   protected void preRenderCallback(EntityDraconicPortal entitylivingbaseIn, float partialTickTime) {

@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityJzahar;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.model.ModelJzahar;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity.layer.LayerJzaharDeath;
@@ -19,7 +21,7 @@ public class RenderJzahar extends RenderLiving<EntityJzahar> {
   
   public RenderJzahar(RenderManager manager) {
     super(manager, new ModelJzahar(true), 1.0F);
-    addLayer((LayerRenderer)new LayerJzaharDeath());
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerJzaharDeath());
     
   }
   

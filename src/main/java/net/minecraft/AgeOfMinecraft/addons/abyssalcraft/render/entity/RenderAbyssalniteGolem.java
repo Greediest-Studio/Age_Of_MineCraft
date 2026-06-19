@@ -1,5 +1,7 @@
 package net.minecraft.AgeOfMinecraft.addons.abyssalcraft.render.entity;
 
+import net.minecraft.AgeOfMinecraft.renders.RenderLayerCompat;
+
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityAbygolem;
 import net.minecraft.AgeOfMinecraft.models.ModelZombie;
 import net.minecraft.AgeOfMinecraft.renders.LayerArrowCustomSized;
@@ -21,8 +23,8 @@ public class RenderAbyssalniteGolem extends RenderBiped<EntityAbygolem> {
   
   public RenderAbyssalniteGolem(RenderManager manager) {
     super(manager, new ModelZombie(0.0F, true), 0.5F);
-    addLayer((LayerRenderer)new LayerArrowCustomSized(this, 1.0F));
-    addLayer((LayerRenderer)new LayerMobCape(this));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerArrowCustomSized(this, 1.0F));
+    RenderLayerCompat.addLayer(this, (LayerRenderer)new LayerMobCape(this));
   }
   
   protected ResourceLocation getEntityTexture(EntityAbygolem entity) {

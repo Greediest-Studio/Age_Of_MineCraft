@@ -20,12 +20,12 @@ public class RenderManaOrb extends Render<EntityManaOrb> {
   
   public RenderManaOrb(RenderManager renderManagerIn) {
     super(renderManagerIn);
-    this.shadowSize = 0.15F;
-    this.shadowOpaque = 0.75F;
+    RenderLayerCompat.setShadowSize(this, 0.15F);
+    RenderLayerCompat.setShadowOpaque(this, 0.75F);
   }
   
   public void doRender(EntityManaOrb entity, double x, double y, double z, float entityYaw, float partialTicks) {
-    if (!this.renderOutlines) {
+    if (!RenderLayerCompat.isRenderOutlines(this)) {
       GlStateManager.pushMatrix();
       GlStateManager.translate((float)x, (float)y, (float)z);
       bindEntityTexture(entity);
@@ -43,8 +43,8 @@ public class RenderManaOrb extends Render<EntityManaOrb> {
       GlStateManager.color(1.0F, 1.0F, 1.0F);
       float f9 = (entity.xpColor + partialTicks) / 2.0F;
       l = (int)((MathHelper.sin(f9 + 0.0F) + 1.0F) * 0.5F * 255.0F);
-      GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 5.0F, 0.0F);
-      GlStateManager.rotate(((this.renderManager.options.thirdPersonView == 2) ? -1.0F : 1.0F) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+      GlStateManager.rotate(180.0F - RenderLayerCompat.getRenderManager(this).playerViewY, 0.0F, 5.0F, 0.0F);
+      GlStateManager.rotate(((RenderLayerCompat.getRenderManager(this).options.thirdPersonView == 2) ? -1.0F : 1.0F) * -RenderLayerCompat.getRenderManager(this).playerViewX, 1.0F, 0.0F, 0.0F);
       GlStateManager.scale(0.5F, 0.5F, 0.5F);
       Tessellator tessellator = Tessellator.getInstance();
       BufferBuilder bufferbuilder = tessellator.getBuffer();
