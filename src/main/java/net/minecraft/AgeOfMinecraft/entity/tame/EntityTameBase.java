@@ -1216,7 +1216,20 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       setFittness(tagCompund.getFloat("FIT")); 
     setMarried(tagCompund.getBoolean("IsMarried"));
     setChild(tagCompund.getBoolean("IsBaby"));
-    setOwnerId(null);
+    if (tagCompund.hasKey("OwnerUUID", 8)) {
+      s = tagCompund.getString("OwnerUUID");
+      if (!s.isEmpty()) {
+        try {
+          setOwnerId(UUID.fromString(s));
+        } catch (Throwable throwable) {
+          setOwnerId(null);
+        }
+      } else {
+        setOwnerId(null);
+      }
+    } else {
+      setOwnerId(null);
+    }
     this.dataManager.set(REBIRTH, tagCompund.getBoolean("LastChance"));
     this.dataManager.set(HERO, tagCompund.getBoolean("Hero"));
     this.dataManager.set(ANTIMOB, tagCompund.getBoolean("Anti"));
@@ -1268,7 +1281,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     tagCompound.setFloat("DEX", getDexterity());
     tagCompound.setFloat("AGI", getAgility());
     tagCompound.setFloat("FIT", getFittness());
-    tagCompound.setString("OwnerUUID", "");
+    if (getOwnerId() == null) {
+      tagCompound.setString("OwnerUUID", "");
+    } else {
+      tagCompound.setString("OwnerUUID", getOwnerId().toString());
+    }
     tagCompound.setBoolean("IsMarried", isMarried());
     tagCompound.setBoolean("IsBaby", isChild());
     tagCompound.setBoolean("Hero", isHero());
@@ -1372,28 +1389,34 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   
   @Nullable
   public UUID getOwnerId() {
-    return null;
+    return (UUID)((Optional<?>)this.dataManager.get(OWNER_UNIQUE_ID)).orNull();
   }
   
   public void setOwnerId(@Nullable UUID p_184754_1_) {
-    this.dataManager.set(OWNER_UNIQUE_ID, Optional.absent());
+    this.dataManager.set(OWNER_UNIQUE_ID, Optional.fromNullable(p_184754_1_));
   }
   
   @Nullable
   public EntityLivingBase getOwner() {
-    return null;
+    try {
+      UUID uuid = getOwnerId();
+      EntityPlayer player = (uuid == null) ? null : this.world.getPlayerEntityByUUID(uuid);
+      return player;
+    } catch (IllegalArgumentException var2) {
+      return null;
+    }
   }
   
   public boolean isOwner(EntityLivingBase entityIn) {
-    return false;
+    return (entityIn == getOwner());
   }
   
   public boolean isWild() {
-    return true;
+    return (getOwner() == null);
   }
   
   public boolean hasOwner(EntityPlayer player) {
-    return false;
+    return (!isWild() && getOwner() == player);
   }
   
   protected void dropEquipmentUndamaged() {

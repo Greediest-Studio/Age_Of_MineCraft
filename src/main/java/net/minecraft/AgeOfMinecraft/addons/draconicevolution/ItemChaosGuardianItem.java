@@ -43,6 +43,14 @@ public class ItemChaosGuardianItem extends ItemTierItem {
     EntityChaosGuardian entityliving = new EntityChaosGuardian(worldIn);
     pos = pos.offset(facing);
     entityliving.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 60.0D, pos.getZ() + 0.5D, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
+    entityliving.setOwnerId(playerIn.getUniqueID());
+    entityliving.homeX = pos.getX();
+    entityliving.homeY = pos.getY() + 60;
+    entityliving.homeZ = pos.getZ();
+    entityliving.targetX = entityliving.homeX;
+    entityliving.targetY = entityliving.homeY;
+    entityliving.targetZ = entityliving.homeZ;
+    entityliving.homeSet = true;
     entityliving.rotationYawHead = entityliving.rotationYaw;
     entityliving.renderYawOffset = entityliving.rotationYaw;
     entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos((Entity)entityliving)), null);
@@ -57,7 +65,6 @@ public class ItemChaosGuardianItem extends ItemTierItem {
       } 
     } 
     if (entityliving != null) {
-      entityliving.setOwnerId(playerIn.getUniqueID());
       entityliving.playLivingSound();
       entityliving.playSound(ESound.createMob, 10.0F, 0.5F);
       entityliving.playSound(ESound.createBossMob, Float.MAX_VALUE, 0.75F);

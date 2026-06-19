@@ -262,15 +262,6 @@ public class EntityChaosGuardian extends EntityEnderDragon {
         } 
       } 
     } 
-    if (!isWild()) {
-      this.homeX = (int)(getOwner()).posX;
-      this.homeY = (int)(getOwner()).posY + 5;
-      this.homeZ = (int)(getOwner()).posZ;
-    } else {
-      this.homeX = (int)this.posX;
-      this.homeY = (int)this.posY;
-      this.homeZ = (int)this.posZ;
-    } 
     if (!this.homeSet) {
       this.homeX = (int)this.posX;
       this.homeY = (int)this.posY;
@@ -279,6 +270,11 @@ public class EntityChaosGuardian extends EntityEnderDragon {
       this.targetY = this.homeY;
       this.targetZ = this.homeZ;
       this.homeSet = true;
+    }
+    if (!isWild()) {
+      this.homeX = (int)(getOwner()).posX;
+      this.homeY = (int)(getOwner()).posY + 5;
+      this.homeZ = (int)(getOwner()).posZ;
     } 
     float moveSpeedMultiplier = this.behaviour.dragonSpeed;
     if (this.world.isRemote) {
@@ -498,7 +494,10 @@ public class EntityChaosGuardian extends EntityEnderDragon {
       heal((getAttackTarget() != null || isPotionActive(MobEffects.HUNGER)) ? 0.02F : 0.1F); 
     if (!isWild() && getDistanceSq((Entity)getOwner()) >= 48400.0D) {
       this.behaviour = EnumBehaviour.GUARDING;
-      setLocationAndAngles((getOwner()).posX, (getOwner()).posY, (getOwner()).posZ, this.rotationYaw, this.rotationPitch);
+      setPositionAndUpdate((getOwner()).posX + 60.0D, (getOwner()).posY + 40.0D, (getOwner()).posZ + 60.0D);
+      this.targetX = this.posX;
+      this.targetY = this.posY;
+      this.targetZ = this.posZ;
     } 
     if (!this.world.isRemote && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen((Entity)this) && this.rand.nextInt(40) == 0) {
       List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getAttackTarget().getEntityBoundingBox().grow(3.0D));
