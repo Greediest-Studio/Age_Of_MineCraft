@@ -9,6 +9,7 @@ import net.minecraft.AgeOfMinecraft.entity.tame.ExtendMultiPartEntityPart;
 import net.minecraft.AgeOfMinecraft.entity.tame.Flying;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEnderDragon;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.dragonphases.EntityDragonFireballOther;
+import net.minecraft.AgeOfMinecraft.entity.tame.tier5.dragonphases.PhaseList;
 import net.minecraft.AgeOfMinecraft.events.ChunkLoadingEvent;
 import net.minecraft.AgeOfMinecraft.registry.ESound;
 import net.minecraft.block.Block;
@@ -109,10 +110,9 @@ public class EntityChaosGuardian extends EntityEnderDragon {
     this.bossInfo.setDarkenSky(true);
     this.bossInfo.setOverlay(BossInfo.Overlay.NOTCHED_20);
     setLevel(300);
-    this.homeX = (par1World.getClosestPlayerToEntity((Entity)this, -1.0D) != null) ? (int)(par1World.getClosestPlayerToEntity((Entity)this, -1.0D)).posX : (int)this.posX;
-    this.homeY = (par1World.getClosestPlayerToEntity((Entity)this, -1.0D) != null) ? ((int)(par1World.getClosestPlayerToEntity((Entity)this, -1.0D)).posY + 40) : (int)this.posY;
-    this.homeZ = (par1World.getClosestPlayerToEntity((Entity)this, -1.0D) != null) ? (int)(par1World.getClosestPlayerToEntity((Entity)this, -1.0D)).posZ : (int)this.posZ;
-    setPosition((this.homeX + 200), (this.homeY + 100), (this.homeZ + 200));
+    this.homeX = (int)this.posX;
+    this.homeY = (int)this.posY;
+    this.homeZ = (int)this.posZ;
     this.targetX = this.homeX;
     this.targetY = this.homeY;
     this.targetZ = this.homeZ;
@@ -936,6 +936,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
   public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource damageSource, float dmg) {
     if (this.behaviour == EnumBehaviour.DEAD)
       return false; 
+    boolean wildGuardian = isWild();
     if (damageSource.getDamageType() == "chaosImplosion" || damageSource.getDamageType() == "de.GuardianFireball" || damageSource.getDamageType() == "de.GuardianEnergyBall" || damageSource.getDamageType() == "de.GuardianChaosBall")
       dmg *= 0.15F; 
     switch (this.behaviour) {
@@ -976,7 +977,19 @@ public class EntityChaosGuardian extends EntityEnderDragon {
           setAttackTarget((EntityLivingBase)damageSource.getTrueSource()); 
         break;
     } 
-    return super.attackEntityFromPart(part, damageSource, dmg);
+    boolean attacked = super.attackEntityFromPart(part, damageSource, dmg);
+    if (wildGuardian) {
+      setAttackTarget(null);
+      getPhaseManager().setPhase(PhaseList.HOLDING_PATTERN);
+      this.behaviour = EnumBehaviour.GO_HOME;
+      this.targetX = this.homeX;
+      this.targetY = Flying.clampFlightY(this.homeY + 30);
+      this.targetZ = this.homeZ;
+      this.forceNewTarget = false;
+      this.attackInProgress = -1;
+      this.nextAttackTimer = 100;
+    }
+    return attacked;
   }
   
   public void setToGuard() {
