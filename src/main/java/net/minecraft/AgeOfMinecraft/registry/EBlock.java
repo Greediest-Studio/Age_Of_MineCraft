@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.registry;
 
-import net.minecraft.AgeOfMinecraft.blocks.BlockBeaconSPC;
 import net.minecraft.AgeOfMinecraft.blocks.BlockGuardBlock;
 import net.minecraft.AgeOfMinecraft.blocks.BlockMonsterSpawnerSPC;
 import net.minecraft.block.Block;
@@ -18,8 +17,6 @@ public class EBlock {
   public static BlockMonsterSpawnerSPC mob_spawner_spc;
   
   public static BlockGuardBlock guard_block;
-  
-  public static BlockBeaconSPC beacon_spc;
   
   public static void init() {
     Blocks.COMMAND_BLOCK.setCreativeTab(CreativeTabs.REDSTONE);

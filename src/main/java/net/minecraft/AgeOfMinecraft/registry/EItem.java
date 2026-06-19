@@ -40,7 +40,6 @@ import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.items.ItemMutantSnowGole
 import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.items.ItemMutantZombieItem;
 import net.minecraft.AgeOfMinecraft.addons.mutantbeasts.items.ItemSpiderPigItem;
 import net.minecraft.AgeOfMinecraft.items.ItemAbomniableSnowmanItem;
-import net.minecraft.AgeOfMinecraft.items.ItemBandage;
 import net.minecraft.AgeOfMinecraft.items.ItemBatItem;
 import net.minecraft.AgeOfMinecraft.items.ItemBlazeItem;
 import net.minecraft.AgeOfMinecraft.items.ItemCarrier;
@@ -142,14 +141,6 @@ public class EItem {
   public static ItemManaCollector entropyContainer;
   
   public static ItemManaCollector artifact1;
-  
-  public static ItemBandage bandage;
-  
-  public static ItemBandage bandageMedical;
-  
-  public static ItemBandage firstAid;
-  
-  public static ItemBandage artifact2;
   
   public static Item witheredNetherStar;
   
@@ -730,10 +721,6 @@ public class EItem {
     manaContainer = new ItemManaCollector("mana_collector", 0);
     entropyContainer = new ItemManaCollector("entropy_collector", 1);
     artifact1 = new ItemManaCollector("infinite_well_spring", 2);
-    bandage = new ItemBandage("poor", 5);
-    bandageMedical = new ItemBandage("good", 30);
-    firstAid = new ItemBandage("box", 0);
-    artifact2 = new ItemBandage("artifact", 0);
     witheredNetherStar = (Item)(new ItemSimpleFoiled()).setCreativeTab(ETab.engender).setTranslationKey("withered_nether_star").setRegistryName("withered_nether_star");
     woodencleaver = (Item)new ItemCleaver(Item.ToolMaterial.WOOD, "wooden_cleaver", ETab.engender);
     stonecleaver = (Item)new ItemCleaver(Item.ToolMaterial.STONE, "stone_cleaver", ETab.engender);
@@ -1027,10 +1014,6 @@ public class EItem {
     GameData.register_impl((IForgeRegistryEntry)manaContainer);
     GameData.register_impl((IForgeRegistryEntry)entropyContainer);
     GameData.register_impl((IForgeRegistryEntry)artifact1);
-    GameData.register_impl((IForgeRegistryEntry)bandage);
-    GameData.register_impl((IForgeRegistryEntry)bandageMedical);
-    GameData.register_impl((IForgeRegistryEntry)firstAid);
-    GameData.register_impl((IForgeRegistryEntry)artifact2);
     GameData.register_impl((IForgeRegistryEntry)witheredNetherStar);
     GameData.register_impl((IForgeRegistryEntry)woodencleaver);
     GameData.register_impl((IForgeRegistryEntry)stonecleaver);
@@ -1329,10 +1312,6 @@ public class EItem {
       registerItemSubbed(renderItem, (Item)entropyContainer, i); 
     registerItem(renderItem, (Item)artifact1);
     registerItem(renderItem, witheredNetherStar);
-    registerItem(renderItem, (Item)bandage);
-    registerItem(renderItem, (Item)bandageMedical);
-    registerItem(renderItem, (Item)firstAid);
-    registerItem(renderItem, (Item)artifact2);
     registerItem(renderItem, woodencleaver);
     registerItem(renderItem, stonecleaver);
     registerItem(renderItem, ironcleaver);

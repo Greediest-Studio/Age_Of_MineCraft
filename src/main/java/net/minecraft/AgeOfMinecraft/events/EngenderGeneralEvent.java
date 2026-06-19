@@ -153,9 +153,7 @@ public class EngenderGeneralEvent {
       EntityLivingBase mob = (EntityLivingBase)event.getEntity();
       NBTTagCompound karma = mob.getEntityData();
       if (mob.attackable() && karma.getInteger("KR") > 0)
-        mob.setHealth(mob.getHealth() - event.getAmount()); 
-      if (mob.isPotionActive(EEffect.BLEEDING))
-        event.setAmount(event.getAmount() / (mob.getActivePotionEffect(EEffect.BLEEDING).getAmplifier() + 2)); 
+        mob.setHealth(mob.getHealth() - event.getAmount());
     } 
   }
   
@@ -232,16 +230,6 @@ public class EngenderGeneralEvent {
   }
   
   @SubscribeEvent
-  public void onPotionAdded(PotionEvent.PotionAddedEvent event) {
-    if (event.getEntity() instanceof EntityLivingBase) {
-      EntityLivingBase mob = (EntityLivingBase)event.getEntity();
-      if (EngenderMod.doesntHaveTimeToBleed((Entity)mob))
-        if (event.getPotionEffect().getPotion() == EEffect.BLEEDING)
-          mob.removeActivePotionEffect(event.getPotionEffect().getPotion());  
-    } 
-  }
-  
-  @SubscribeEvent
   public void onLivingEvent(LivingEvent.LivingUpdateEvent event) {
     if (event.getEntity() instanceof EntityDragon) {
       EntityDragon mob = (EntityDragon)event.getEntity();
@@ -249,7 +237,7 @@ public class EngenderGeneralEvent {
         ReflectionHelper.setPrivateValue(DragonFightManager.class, mob.getFightManager(), Boolean.FALSE, new String[] { "previouslyKilled", "previouslyKilled" });
         for (EntityPlayer entityplayer : mob.world.playerEntities) {
           if (EngenderConfig.general.useMessage)
-            entityplayer.sendStatusMessage((ITextComponent)new TextComponentTranslation(TextFormatting.BOLD + "The respawned dragon will drop another egg now.", new Object[0]), true); 
+            entityplayer.sendStatusMessage(new TextComponentTranslation(TextFormatting.BOLD + "The respawned dragon will drop another egg now.", new Object[0]), true);
         } 
       } 
     } 
@@ -265,9 +253,7 @@ public class EngenderGeneralEvent {
           mob.setHealth(mob.getHealth() - 1.0F);
           karma.setInteger("KR", karma.getInteger("KR") - 1);
         } 
-      } 
-      if (mob.isBurning() || mob.isInLava() || mob.isEntityInsideOpaqueBlock())
-        mob.removeActivePotionEffect(EEffect.BLEEDING); 
+      }
     } 
     if (event.getEntity() instanceof net.minecraft.entity.monster.EntityMagmaCube && 
       event.getEntity().isWet())
@@ -341,10 +327,10 @@ public class EngenderGeneralEvent {
       musicTicker = null;
     } 
     if (event.getEntity() instanceof EntityPlayer && event.getSource().getTrueSource() instanceof EntityLivingBase)
-      ((EntityLivingBase)event.getSource().getTrueSource()).onKillEntity((EntityLivingBase)event.getEntity()); 
+      event.getSource().getTrueSource().onKillEntity((EntityLivingBase)event.getEntity());
     if (event.getSource().getTrueSource() instanceof EntityTameBase && !((EntityTameBase)event.getSource().getTrueSource()).isWild())
       if (((EntityTameBase)event.getSource().getTrueSource()).getOwner() instanceof EntityPlayerMP)
-        ((EntityPlayerMP)((EntityTameBase)event.getSource().getTrueSource()).getOwner()).awardKillScore(event.getEntity(), (int)((EntityLivingBase)event.getEntity()).getMaxHealth(), event.getSource());  
+        ((EntityTameBase)event.getSource().getTrueSource()).getOwner().awardKillScore(event.getEntity(), (int)((EntityLivingBase)event.getEntity()).getMaxHealth(), event.getSource());
     if ((event.getSource().getTrueSource() instanceof net.minecraft.entity.monster.EntityCreeper && ((net.minecraft.entity.monster.EntityCreeper)event.getSource().getTrueSource()).getPowered()) || (event.getSource().getTrueSource() instanceof EntityCreeder && ((EntityCreeder)event.getSource().getTrueSource()).getPowered())) {
       if (event.getEntity() instanceof net.minecraft.entity.monster.EntitySkeleton)
         event.getEntity().entityDropItem(new ItemStack(Items.SKULL, 1, 0), 0.0F); 

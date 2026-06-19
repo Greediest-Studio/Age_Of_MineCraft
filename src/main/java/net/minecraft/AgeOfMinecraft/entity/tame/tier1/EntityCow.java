@@ -37,11 +37,11 @@ public class EntityCow extends EntityTameBase implements IJumpingMount, Light, A
   
   public EntityCow(World worldIn) {
     super(worldIn);
-    this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
-    this.tasks.addTask(1, (EntityAIBase)new EntityAIFollowLeader(this, 1.0D, 15.0F, 4.0F));
-    this.tasks.addTask(2, (EntityAIBase)new EntityAIFriendlyAttackMelee(this, 1.0D, true));
-    this.tasks.addTask(5, (EntityAIBase)new EntityAIWander((EntityCreature)this, 0.5D, 80));
-    this.tasks.addTask(7, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+    this.tasks.addTask(0, new EntityAISwimming(this));
+    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.0D, 15.0F, 4.0F));
+    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    this.tasks.addTask(5, new EntityAIWander(this, 0.5D, 80));
+    this.tasks.addTask(7, new EntityAILookIdle(this));
     this.experienceValue = 3;
     setSize(0.9F, 1.4F);
   }

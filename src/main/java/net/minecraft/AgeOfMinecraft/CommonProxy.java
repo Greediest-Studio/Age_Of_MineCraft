@@ -8,7 +8,6 @@ import net.minecraft.AgeOfMinecraft.gui.GuiEngenderMobInventory;
 import net.minecraft.AgeOfMinecraft.items.ItemEngenderStatChecker;
 import net.minecraft.AgeOfMinecraft.registry.EBlock;
 import net.minecraft.AgeOfMinecraft.registry.EEffect;
-import net.minecraft.AgeOfMinecraft.registry.EEnchant;
 import net.minecraft.AgeOfMinecraft.registry.EEntity;
 import net.minecraft.AgeOfMinecraft.registry.EItem;
 import net.minecraft.AgeOfMinecraft.registry.ELoot;
@@ -34,12 +33,10 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class CommonProxy implements IGuiHandler {
   public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
     TileEntity entity = world.getTileEntity(new BlockPos(x, y, z));
-    switch (ID) {
-      case 101:
-        if (entity != null && entity instanceof TileEntityMonsterSpawnerSPC)
-          return new ContainerMobSpawner(player.inventory, (IInventory)entity); 
-        break;
-    } 
+      if (ID == 101) {
+          if (entity != null && entity instanceof TileEntityMonsterSpawnerSPC)
+              return new ContainerMobSpawner(player.inventory, (IInventory) entity);
+      }
     return null;
   }
   
@@ -66,7 +63,6 @@ public class CommonProxy implements IGuiHandler {
     EBlock.init();
     EItem.ENMO();
     EEffect.registerPotions();
-    EEnchant.init();
     ELoot.registerAllModdedLootTables();
     ESound.registerSounds();
     GameRegistry.registerTileEntity(TileEntityMonsterSpawnerSPC.class, new ResourceLocation("ageofminecraft", "mob_spawner_spc"));
