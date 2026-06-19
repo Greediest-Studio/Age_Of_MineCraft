@@ -145,6 +145,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class ClientProxy extends CommonProxy {
+
   public void preInit(FMLPreInitializationEvent e) {
     renderEntities();
     EngenderGeneralEvent.musicTicker = new EngenderMusicEvent(Minecraft.getMinecraft());
