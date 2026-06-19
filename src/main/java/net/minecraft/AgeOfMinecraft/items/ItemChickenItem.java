@@ -31,13 +31,13 @@ public class ItemChickenItem extends ItemVanillaTier {
     entityliving.renderYawOffset = entityliving.rotationYaw;
     entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos((Entity)entityliving)), null);
     if (!worldIn.isRemote) {
-      worldIn.spawnEntity((Entity)entityliving);
+      worldIn.spawnEntity(entityliving);
       int i = 5;
       while (i > 0) {
         int j = EntityXPOrb.getXPSplit(i);
         i -= j;
         if (!worldIn.getGameRules().getBoolean("disableExpItemDrops"))
-          entityliving.world.spawnEntity((Entity)new EntityXPOrb(entityliving.world, entityliving.posX, entityliving.posY + entityliving.getEyeHeight(), entityliving.posZ, j)); 
+          entityliving.world.spawnEntity(new EntityXPOrb(entityliving.world, entityliving.posX, entityliving.posY + entityliving.getEyeHeight(), entityliving.posZ, j));
       } 
     } 
     if (entityliving != null) {

@@ -160,8 +160,8 @@ public class EngenderMusicEvent extends MusicTicker {
     } 
     for (int i = 1; i <= this.musicList.size(); i++) {
       if (this.musicList.get(i - 1) != null) {
-        ((EngenderMusic)this.musicList.get(i - 1)).onMusicUpdate(this.newMusicID);
-        if (((EngenderMusic)this.musicList.get(i - 1)).isDonePlaying() || this.mc.player.isDead) {
+        this.musicList.get(i - 1).onMusicUpdate(this.newMusicID);
+        if (this.musicList.get(i - 1).isDonePlaying() || this.mc.player.isDead) {
           EngenderMod.console("Music ID " + ((EngenderMusic)this.musicList.get(i - 1)).musicID + " was removed from musicList");
           this.musicList.remove(i - 1);
           i--;

@@ -34,7 +34,7 @@ import net.minecraftforge.fml.common.Loader;
 
 public class ItemCleaver extends ItemSword {
   public ItemCleaver(Item.ToolMaterial material, String name, CreativeTabs tab) {
-    this(material, name, tab, (TextFormatting)null);
+    this(material, name, tab, null);
   }
   
   public ItemCleaver(Item.ToolMaterial material, String name, CreativeTabs tab, TextFormatting format) {
@@ -60,7 +60,7 @@ public class ItemCleaver extends ItemSword {
         if (!mob.isChild() && !((EntityAnimal)mob).isInLove() && mob.createChild(mob) != null && mob.createChild(mob).getClass() == mob.getClass()) {
           player.swingArm(hand);
           mob.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
-          hitEntity(stack, (EntityLivingBase)mob, (EntityLivingBase)player);
+          hitEntity(stack, mob, player);
           mob.attackEntityFrom(DamageSource.causePlayerDamage(player), mob.getMaxHealth());
           mob.setNoAI(true);
           for (int ai = 0; ai <= (int)getAttackDamage() + ForgeHooks.getLootingLevel((Entity)target, (Entity)player, DamageSource.causePlayerDamage(player)) * 3 + 3; ai++) {
@@ -172,12 +172,12 @@ public class ItemCleaver extends ItemSword {
         entityitem1.setDefaultPickupDelay();
         entityitem1.setNoDespawn();
         entityitem1.motionY++;
-        target.world.spawnEntity((Entity)entityitem1);
+        target.world.spawnEntity(entityitem1);
         EntityItem entityitem11 = new EntityItem(target.world, target.posX + f1 * 1.3D, target.posY + 2.2D, target.posZ + f3 * 1.3D, new ItemStack(Items.SKULL, 1, 1));
         entityitem11.setDefaultPickupDelay();
         entityitem11.setNoDespawn();
         entityitem11.motionY++;
-        target.world.spawnEntity((Entity)entityitem11);
+        target.world.spawnEntity(entityitem11);
       } 
     } 
     return true;

@@ -55,10 +55,6 @@ public class EngenderConfig {
   }
   
   public static class Mobs {
-    @Name("Enable Natural Engender Mob Spawns")
-    @Comment({"If enabled, some mobs will be converted into wild engendered mobs."})
-    public boolean naturalSpawns = false;
-    
     @Name("Enable Mob Griefing")
     @Comment({"If enabled, engendered mobs can grief the world"})
     public boolean grief = true;
