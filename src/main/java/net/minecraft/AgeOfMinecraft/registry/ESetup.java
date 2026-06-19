@@ -1,11 +1,5 @@
 package net.minecraft.AgeOfMinecraft.registry;
 
-import net.minecraft.AgeOfMinecraft.triggers.BreedWithMobTrigger;
-import net.minecraft.AgeOfMinecraft.triggers.ConvertMobTrigger;
-import net.minecraft.AgeOfMinecraft.triggers.MarryMobTrigger;
-import net.minecraft.AgeOfMinecraft.triggers.SpawnMobTrigger;
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.util.text.TextFormatting;
@@ -21,12 +15,5 @@ public class ESetup {
   public static final EnumRarity SUPEREPIC = EnumHelper.addRarity("SUPEREPIC", TextFormatting.DARK_PURPLE, "SuperEpic");
   
   public static final EnumRarity UBEREPIC = EnumHelper.addRarity("UBEREPIC", TextFormatting.GOLD, "UberEpic");
-  
-  public static final ConvertMobTrigger CONVERT_MOB = (ConvertMobTrigger)CriteriaTriggers.register((ICriterionTrigger)new ConvertMobTrigger());
-  
-  public static final MarryMobTrigger MARRY_MOB = (MarryMobTrigger)CriteriaTriggers.register((ICriterionTrigger)new MarryMobTrigger());
-  
-  public static final SpawnMobTrigger SPAWN_MOB = (SpawnMobTrigger)CriteriaTriggers.register((ICriterionTrigger)new SpawnMobTrigger());
-  
-  public static final BreedWithMobTrigger BREED_WITH_MOB = (BreedWithMobTrigger)CriteriaTriggers.register((ICriterionTrigger)new BreedWithMobTrigger());
+
 }

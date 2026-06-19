@@ -1,6 +1,5 @@
 package net.minecraft.AgeOfMinecraft.registry;
 
-import com.shinoow.abyssalcraft.api.AbyssalCraftAPI;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.items.ItemAbygolemItem;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.items.ItemAbyssalPortalStaff;
 import net.minecraft.AgeOfMinecraft.addons.abyssalcraft.items.ItemAbyssalZombieItem;
@@ -46,7 +45,6 @@ import net.minecraft.AgeOfMinecraft.items.ItemCarrier;
 import net.minecraft.AgeOfMinecraft.items.ItemCaveSpiderItem;
 import net.minecraft.AgeOfMinecraft.items.ItemChickenItem;
 import net.minecraft.AgeOfMinecraft.items.ItemChickenJockeyItem;
-import net.minecraft.AgeOfMinecraft.items.ItemCleaver;
 import net.minecraft.AgeOfMinecraft.items.ItemCommandingStaff;
 import net.minecraft.AgeOfMinecraft.items.ItemConvertingStaff;
 import net.minecraft.AgeOfMinecraft.items.ItemCowItem;
@@ -130,7 +128,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSimpleFoiled;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.registries.GameData;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -143,16 +140,6 @@ public class EItem {
   public static ItemManaCollector artifact1;
   
   public static Item witheredNetherStar;
-  
-  public static Item woodencleaver;
-  
-  public static Item stonecleaver;
-  
-  public static Item ironcleaver;
-  
-  public static Item goldencleaver;
-  
-  public static Item diamondcleaver;
   
   public static Item statChecker;
   
@@ -534,16 +521,6 @@ public class EItem {
   
   public static ItemTierItem witherStormItem;
   
-  public static Item darkstonecleaver;
-  
-  public static Item abyssalnitecleaver;
-  
-  public static Item refinedcoraliumcleaver;
-  
-  public static Item dreadiumcleaver;
-  
-  public static Item ethaxiumcleaver;
-  
   public static Item peGunLevel1;
   
   public static Item peGunLevel2;
@@ -722,11 +699,6 @@ public class EItem {
     entropyContainer = new ItemManaCollector("entropy_collector", 1);
     artifact1 = new ItemManaCollector("infinite_well_spring", 2);
     witheredNetherStar = (Item)(new ItemSimpleFoiled()).setCreativeTab(ETab.engender).setTranslationKey("withered_nether_star").setRegistryName("withered_nether_star");
-    woodencleaver = (Item)new ItemCleaver(Item.ToolMaterial.WOOD, "wooden_cleaver", ETab.engender);
-    stonecleaver = (Item)new ItemCleaver(Item.ToolMaterial.STONE, "stone_cleaver", ETab.engender);
-    ironcleaver = (Item)new ItemCleaver(Item.ToolMaterial.IRON, "iron_cleaver", ETab.engender);
-    goldencleaver = (Item)new ItemCleaver(Item.ToolMaterial.GOLD, "golden_cleaver", ETab.engender);
-    diamondcleaver = (Item)new ItemCleaver(Item.ToolMaterial.DIAMOND, "diamond_cleaver", ETab.engender);
     statChecker = (Item)new ItemEngenderStatChecker();
     carrier = (Item)new ItemCarrier();
     weddingring = new ItemWeddingRing();
@@ -921,11 +893,6 @@ public class EItem {
   
   public static void initAby() {
     if (Loader.isModLoaded("abyssalcraft")) {
-      darkstonecleaver = (Item)new ItemCleaver(AbyssalCraftAPI.darkstoneTool, "darkstone_cleaver", ETab.abyssal);
-      abyssalnitecleaver = (Item)new ItemCleaver(AbyssalCraftAPI.abyssalniteTool, "abyssalnite_cleaver", ETab.abyssal, TextFormatting.DARK_AQUA);
-      refinedcoraliumcleaver = (Item)new ItemCleaver(AbyssalCraftAPI.refinedCoraliumTool, "refined_coralium_cleaver", ETab.abyssal, TextFormatting.AQUA);
-      dreadiumcleaver = (Item)new ItemCleaver(AbyssalCraftAPI.dreadiumTool, "dreadium_cleaver", ETab.abyssal, TextFormatting.DARK_RED);
-      ethaxiumcleaver = (Item)new ItemCleaver(AbyssalCraftAPI.ethaxiumTool, "ethaxium_cleaver", ETab.abyssal, TextFormatting.AQUA);
       peGunLevel1 = (Item)new ItemPEGun("pegun");
       peGunLevel2 = (Item)new ItemPEGun("pegun1");
       peGunLevel3 = (Item)new ItemPEGun("pegun2");
@@ -1015,11 +982,6 @@ public class EItem {
     GameData.register_impl((IForgeRegistryEntry)entropyContainer);
     GameData.register_impl((IForgeRegistryEntry)artifact1);
     GameData.register_impl((IForgeRegistryEntry)witheredNetherStar);
-    GameData.register_impl((IForgeRegistryEntry)woodencleaver);
-    GameData.register_impl((IForgeRegistryEntry)stonecleaver);
-    GameData.register_impl((IForgeRegistryEntry)ironcleaver);
-    GameData.register_impl((IForgeRegistryEntry)goldencleaver);
-    GameData.register_impl((IForgeRegistryEntry)diamondcleaver);
     GameData.register_impl((IForgeRegistryEntry)statChecker);
     GameData.register_impl((IForgeRegistryEntry)carrier);
     GameData.register_impl((IForgeRegistryEntry)weddingring);
@@ -1214,11 +1176,6 @@ public class EItem {
   
   public static void registerAby() {
     if (Loader.isModLoaded("abyssalcraft")) {
-      GameData.register_impl((IForgeRegistryEntry)darkstonecleaver);
-      GameData.register_impl((IForgeRegistryEntry)abyssalnitecleaver);
-      GameData.register_impl((IForgeRegistryEntry)refinedcoraliumcleaver);
-      GameData.register_impl((IForgeRegistryEntry)dreadiumcleaver);
-      GameData.register_impl((IForgeRegistryEntry)ethaxiumcleaver);
       GameData.register_impl((IForgeRegistryEntry)peGunLevel1);
       GameData.register_impl((IForgeRegistryEntry)peGunLevel2);
       GameData.register_impl((IForgeRegistryEntry)peGunLevel3);
@@ -1309,17 +1266,12 @@ public class EItem {
     for (i = 0; i <= 9; i++)
       registerItemSubbed(renderItem, (Item)manaContainer, i); 
     for (i = 0; i <= 9; i++)
-      registerItemSubbed(renderItem, (Item)entropyContainer, i); 
-    registerItem(renderItem, (Item)artifact1);
+      registerItemSubbed(renderItem, entropyContainer, i);
+    registerItem(renderItem, artifact1);
     registerItem(renderItem, witheredNetherStar);
-    registerItem(renderItem, woodencleaver);
-    registerItem(renderItem, stonecleaver);
-    registerItem(renderItem, ironcleaver);
-    registerItem(renderItem, goldencleaver);
-    registerItem(renderItem, diamondcleaver);
     registerItem(renderItem, statChecker);
     registerItem(renderItem, carrier);
-    registerItem(renderItem, (Item)weddingring);
+    registerItem(renderItem, weddingring);
     registerItem(renderItem, heromaker);
     registerItem(renderItem, lastchance);
     registerItem(renderItem, trainingstick);
@@ -1517,11 +1469,6 @@ public class EItem {
   public static void registerAbyRenders() {
     if (Loader.isModLoaded("abyssalcraft")) {
       ItemModelMesher renderItem = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-      registerItem(renderItem, darkstonecleaver);
-      registerItem(renderItem, abyssalnitecleaver);
-      registerItem(renderItem, refinedcoraliumcleaver);
-      registerItem(renderItem, dreadiumcleaver);
-      registerItem(renderItem, ethaxiumcleaver);
       registerItem(renderItem, peGunLevel1);
       registerItem(renderItem, peGunLevel2);
       registerItem(renderItem, peGunLevel3);
