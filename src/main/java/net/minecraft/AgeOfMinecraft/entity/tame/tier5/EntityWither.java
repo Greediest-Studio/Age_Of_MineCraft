@@ -335,16 +335,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
   
   public void travel(float strafe, float vertical, float forward) {
     if (isBeingRidden() && canBeSteered()) {
-      if (getInvulTime() > 0) {
-        int j = getInvulTime() - 1;
-        if (j <= 0) {
-          createEngenderModExplosionFireless((Entity)this, this.posX, this.posY + getEyeHeight(), this.posZ, isHero() ? 35.0F : 7.0F, EngenderConfig.mobs.grief);
-          this.world.playBroadcastSound(1023, new BlockPos((Entity)this), 0);
-        } 
-        setInvulTime(j);
-        if (this.ticksExisted % 1 == 0)
-          heal(1.0F); 
-      } 
+
       EntityLivingBase entitylivingbase = (EntityLivingBase)getControllingPassenger();
       entitylivingbase.fallDistance *= 0.0F;
       entitylivingbase.hurtResistantTime = 40;
@@ -503,12 +494,12 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
     } 
     if (!isAIDisabled() && !this.world.isRemote) {
       if (isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && this.isOffensive && !isChild() && !false)
-        if (getDistanceSq((Entity)getAttackTarget()) < (this.reachWidth * this.reachWidth + ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width) * ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width)) + 9.0D && (this.ticksExisted + getEntityId()) % 10 == 0)
-          attackEntityAsMob((Entity)getAttackTarget());  
+        if (getDistanceSq(getAttackTarget()) < (this.reachWidth * this.reachWidth + ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width) * ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width)) + 9.0D && (this.ticksExisted + getEntityId()) % 10 == 0)
+          attackEntityAsMob(getAttackTarget());
       if (isEntityAlive()) {
-        ChunkLoadingEvent.updateLoaded((Entity)this);
+        ChunkLoadingEvent.updateLoaded(this);
       } else {
-        ChunkLoadingEvent.stopLoading((Entity)this);
+        ChunkLoadingEvent.stopLoading(this);
       } 
     } 
     setRamTime(getRamTime() - 1);
@@ -546,7 +537,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
     if (!this.world.isRemote && getInvulTime() <= 1) {
       if (isArmored() && !hasSpawnedSkeletons() && getFakeHealth() <= 0.0F) {
         this.motionY = -(0.9D + this.motionY);
-      } else if (getWatchedTargetId(0) > 0 && getControllingPassenger() == null && !(getControllingPassenger() instanceof EntityPlayer)) {
+      } else if (getWatchedTargetId(0) > 0 && getControllingPassenger() == null) {
         Entity entity = this.world.getEntityByID(getWatchedTargetId(0));
         if (entity != null) {
           if (entity instanceof EntityWither || entity instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityCommandBlockWither) {
@@ -657,7 +648,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
                       EntityLivingBase entity = (EntityLivingBase) e;
                       if (!false) {
                           double d3 = entity.posX - d0;
-                          double d4 = entity.posZ - d1;
+                          double d4 = entity.posY - d1;
                           double d5 = entity.posZ - d2;
                           double d6 = d3 * d3 + d4 * d4 + d5 * d5;
                           inflictEngenderMobDamage(entity, " was rammed into by ", DamageSource.causeMobDamage((EntityLivingBase) this), (float) getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue() * 2.0F);

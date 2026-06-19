@@ -3,12 +3,15 @@ package net.minecraft.AgeOfMinecraft;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.shinoow.abyssalcraft.api.AbyssalCraftAPI;
 import java.util.List;
+
+import com.shinoow.abyssalcraft.common.entity.EntityAbygolem;
+import com.shinoow.abyssalcraft.common.entity.EntitySkeletonGoliath;
 import net.daveyx0.primitivemobs.entity.monster.EntityTrollager;
+import net.minecraft.AgeOfMinecraft.ageofminecraft.Tags;
 import net.minecraft.AgeOfMinecraft.commands.CommandKillEngenderMobs;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
 import net.minecraft.AgeOfMinecraft.events.EngenderGeneralEvent;
 import net.minecraft.AgeOfMinecraft.util.PrivateHelper;
-import net.minecraft.command.ICommand;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -32,30 +35,21 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = "ageofminecraft", name = "Engender - The Age of Minecraft", version = "0.7 Pre Release 2", acceptedMinecraftVersions = "[1.12.2]")
+@Mod(modid = Tags.MOD_ID, name = Tags.MOD_NAME, version = Tags.VERSION)
 public class EngenderMod {
-  public static final String MODNAME = "Engender - The Age of Minecraft";
-  
-  public static final String MODID = "ageofminecraft";
-  
-  public static final String VERSION = "0.7 Pre Release 2";
-  
+
   public static final String CLIENT = "net.minecraft.AgeOfMinecraft.ClientProxy";
   
-  public static final String SERVER = "net.minecraft.AgeOfMinecraft.CommonProxy";
-  
-  @SidedProxy(clientSide = "net.minecraft.AgeOfMinecraft.ClientProxy", serverSide = "net.minecraft.AgeOfMinecraft.CommonProxy")
+  @SidedProxy(clientSide = "net.minecraft.AgeOfMinecraft.ClientProxy",
+              serverSide = "net.minecraft.AgeOfMinecraft.CommonProxy")
+
   public static CommonProxy proxy;
   
   @Instance
   public static EngenderMod instance;
   
   public static Logger logger;
-  
-  public static final int statCheckerGUIID = 100;
-  
-  public static final int engenderfuserGUIID = 101;
-  
+
   @EventHandler
   public void preInit(FMLPreInitializationEvent e) {
     logger = e.getModLog();
@@ -97,7 +91,7 @@ public class EngenderMod {
   
   @EventHandler
   public void onServerStart(FMLServerStartingEvent e) {
-    e.registerServerCommand((ICommand)new CommandKillEngenderMobs());
+    e.registerServerCommand(new CommandKillEngenderMobs());
   }
   
   public static boolean sensorsShowJzahars(World world) {
@@ -115,17 +109,6 @@ public class EngenderMod {
     return false;
   }
   
-  public static boolean sensorsShowWithers(World world) {
-    List<?> list = world.loadedEntityList;
-    if (!list.isEmpty())
-        for (Object o : list) {
-            Entity entity = (Entity) o;
-            if (entity instanceof net.minecraft.entity.boss.EntityWither)
-                return true;
-        }
-    return false;
-  }
-  
   public static boolean isWoodLikeMob(Entity entity) {
     return (entity instanceof net.minecraft.entity.boss.EntityWither || entity instanceof net.minecraft.entity.monster.AbstractSkeleton || entity instanceof net.minecraft.entity.monster.EntityShulker || entity instanceof net.minecraft.entity.passive.EntityMooshroom || (entity instanceof EntityTameBase && ((EntityTameBase)entity)
       
@@ -133,7 +116,7 @@ public class EngenderMod {
       Loader.isModLoaded("primitivemobs") && (entity instanceof net.daveyx0.primitivemobs.entity.monster.EntityHauntedTool || entity instanceof net.daveyx0.primitivemobs.entity.monster.EntityMimic || entity instanceof net.daveyx0.primitivemobs.entity.monster.EntityEnchantedBook || entity instanceof net.daveyx0.primitivemobs.entity.monster.EntityBlazingJuggernaut || (entity instanceof EntityTrollager && ((EntityTrollager)entity)
       
       .isStone()))) || (
-      Loader.isModLoaded("abyssalcraft") && (entity instanceof com.shinoow.abyssalcraft.common.entity.EntitySkeletonGoliath || entity instanceof com.shinoow.abyssalcraft.common.entity.EntityAbygolem || entity instanceof com.shinoow.abyssalcraft.common.entity.EntityDragonBoss || entity instanceof com.shinoow.abyssalcraft.common.entity.EntityDragonMinion || entity instanceof com.shinoow.abyssalcraft.common.entity.EntityDreadgolem || entity instanceof com.shinoow.abyssalcraft.common.entity.anti.EntityAntiSkeleton || entity instanceof com.shinoow.abyssalcraft.common.entity.EntityCoraliumSquid)) || (
+      Loader.isModLoaded("abyssalcraft") && (entity instanceof EntitySkeletonGoliath || entity instanceof EntityAbygolem || entity instanceof com.shinoow.abyssalcraft.common.entity.EntityDragonBoss || entity instanceof com.shinoow.abyssalcraft.common.entity.EntityDragonMinion || entity instanceof com.shinoow.abyssalcraft.common.entity.EntityDreadgolem || entity instanceof com.shinoow.abyssalcraft.common.entity.anti.EntityAntiSkeleton || entity instanceof com.shinoow.abyssalcraft.common.entity.EntityCoraliumSquid)) || (
       
       Loader.isModLoaded("twilightforest") && (entity instanceof twilightforest.entity.boss.EntityTFLich || entity instanceof twilightforest.entity.boss.EntityTFMinoshroom || entity instanceof twilightforest.entity.boss.EntityTFSnowQueen || entity instanceof twilightforest.entity.boss.EntityTFIceCrystal || entity instanceof twilightforest.entity.EntityTFSkeletonDruid || entity instanceof twilightforest.entity.EntityTFSnowGuardian || entity instanceof twilightforest.entity.EntityTFIceExploder || entity instanceof twilightforest.entity.EntityTFIceShooter || entity instanceof twilightforest.entity.EntityTFTowerGolem || entity instanceof twilightforest.entity.EntityTFMazeSlime)) || (
       
@@ -173,32 +156,6 @@ public class EngenderMod {
         logger.info(string);
       } else {
         logger.info(string);
-      }  
-  }
-  
-  public static void debug(String string) {
-    debug(string, true);
-  }
-  
-  public static void debug(String string, boolean onlyDebug) {
-    if (onlyDebug)
-      if (EngenderConfig.debugMode) {
-        logger.debug(string);
-      } else {
-        logger.debug(string);
-      }  
-  }
-  
-  public static void warn(String string) {
-    warn(string, true);
-  }
-  
-  public static void warn(String string, boolean onlyDebug) {
-    if (onlyDebug)
-      if (EngenderConfig.debugMode) {
-        logger.warn(string);
-      } else {
-        logger.warn(string);
       }  
   }
 }

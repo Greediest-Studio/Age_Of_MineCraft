@@ -96,7 +96,7 @@ public class MarryMobTrigger implements ICriterionTrigger<MarryMobTrigger.Instan
     public void trigger(EntityPlayerMP player, EntityTameBase entity) {
       List<ICriterionTrigger.Listener<MarryMobTrigger.Instance>> list = null;
       for (ICriterionTrigger.Listener<MarryMobTrigger.Instance> listener : this.listeners) {
-        if (((MarryMobTrigger.Instance)listener.getCriterionInstance()).test(player, entity)) {
+        if (listener.getCriterionInstance().test(player, entity)) {
           if (list == null)
             list = Lists.newArrayList(); 
           list.add(listener);
