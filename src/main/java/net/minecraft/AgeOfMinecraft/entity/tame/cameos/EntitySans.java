@@ -485,11 +485,11 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
   }
   
   public int getAttackType() {
-    return this.dataManager.get(ATTACKID);
+    return this.getDataManager().get(ATTACKID);
   }
   
   public void setAttackType(int id) {
-    this.dataManager.set(ATTACKID, id);
+    this.getDataManager().set(ATTACKID, id);
     setHandDirection(EnumFacing.SOUTH);
     setEyeType(0);
     switch (id) {
@@ -522,19 +522,19 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
   }
   
   public int getEyeType() {
-    return this.dataManager.get(EYEID);
+    return this.getDataManager().get(EYEID);
   }
   
   public void setEyeType(int age) {
-    this.dataManager.set(EYEID, age);
+    this.getDataManager().set(EYEID, age);
   }
   
   public EnumFacing getHandDirection() {
-    return this.dataManager.get(DIRECTION);
+    return this.getDataManager().get(DIRECTION);
   }
   
   public void setHandDirection(EnumFacing direction) {
-    this.dataManager.set(DIRECTION, direction);
+    this.getDataManager().set(DIRECTION, direction);
   }
   
   protected void applyEntityAttributes() {
@@ -562,14 +562,14 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
     super.readEntityFromNBT(tagCompund);
     setAttackType(tagCompund.getInteger("Attack"));
     setEyeType(tagCompund.getInteger("Eye"));
-    this.dataManager.set(DIRECTION, EnumFacing.byIndex(tagCompund.getByte("Direction")));
+    this.getDataManager().set(DIRECTION, EnumFacing.byIndex(tagCompund.getByte("Direction")));
   }
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
     super.writeEntityToNBT(tagCompound);
     tagCompound.setInteger("Attack", getAttackType());
     tagCompound.setInteger("Eye", getEyeType());
-    tagCompound.setByte("Direction", (byte) this.dataManager.get(DIRECTION).getIndex());
+    tagCompound.setByte("Direction", (byte) this.getDataManager().get(DIRECTION).getIndex());
   }
   
   public EnumTier getTier() {
@@ -679,13 +679,13 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
       setEnergy(getEnergy() + 1.0F); 
     if (getAttackType() == -1)
       setEnergy(getEnergy() + 0.05F); 
-    if (!this.world.isRemote && getAttackTarget() != null && !(getAttackTarget() instanceof EntityPlayer) && this.tookTurn) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getAttackTarget() != null && !(getAttackTarget() instanceof EntityPlayer) && this.tookTurn) {
       this.tookTurn = false;
       setAttackType(this.rand.nextInt(8));
     } 
-    if (!this.world.isRemote && getAttackTarget() != null && getAttackTarget() instanceof EntityTameBase && ((EntityTameBase)getAttackTarget()).getFakeHealth() > 0.0F)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getAttackTarget() != null && getAttackTarget() instanceof EntityTameBase && ((EntityTameBase)getAttackTarget()).getFakeHealth() > 0.0F)
       setAttackType(11); 
-    if (!this.world.isRemote && getAttackTarget() == null)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getAttackTarget() == null)
       setAttackType(-1); 
     if (getAttackType() != 10 && getEnergy() <= 1.0F)
       setAttackType(10); 
@@ -709,7 +709,7 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
     if (source.getDamageType() == "sans")
       return true; 
     if (isEntityInvulnerable(source) || source.getTrueSource() == null) {
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         teleportRandomly(); 
       return false;
     } 
@@ -721,11 +721,11 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
           this.talker = new SansSpeech(this, "firstattacked", 44, ESound.sanstalk, 2); 
         setEnergy(getEnergy() - 3.0F);
       } 
-      if (!this.world.isRemote && source.getTrueSource() != null && this.tookTurn) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && source.getTrueSource() != null && this.tookTurn) {
         this.tookTurn = false;
         setAttackType(this.rand.nextInt(8));
       } 
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         if (teleportRandomly() && this.rand.nextInt(5) == 0) {
           setEnergy(getEnergy() - cantkeepdodgingforever);
         } else {
@@ -774,8 +774,8 @@ public class EntitySans extends EntityTameBase implements IRangedAttackMob, Ligh
     
     public void updateSpeech() {
       this.timer++;
-      if (!this.sans.world.isRemote && this.timer >= this.delay && !this.ended) {
-        for (EntityPlayer player : this.sans.world.playerEntities) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.sans.world) && this.timer >= this.delay && !this.ended) {
+        for (EntityPlayer player : net.minecraft.AgeOfMinecraft.util.EntityCompat.playerEntities(this.sans.world)) {
           player.sendStatusMessage(new TextComponentTranslation("speech.sans." + this.name + "." + this.id, new Object[0]), true);
           if (this.soundbite != null)
             this.sans.world.playSound(null, player.getPosition(), this.soundbite, this.sans.getSoundCategory(), 1.0F, 1.0F); 

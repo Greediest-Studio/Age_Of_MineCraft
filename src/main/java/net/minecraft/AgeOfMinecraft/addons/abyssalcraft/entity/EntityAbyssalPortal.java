@@ -128,11 +128,11 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
   }
   
   public int getMetaData() {
-    return this.dataManager.get(METADATA);
+    return this.getDataManager().get(METADATA);
   }
   
   public void setMetaData(int p_82215_1_) {
-    this.dataManager.set(METADATA, p_82215_1_);
+    this.getDataManager().set(METADATA, p_82215_1_);
   }
   
   public EnumCreatureAttribute getCreatureAttribute() {
@@ -141,19 +141,19 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(METADATA, 0);
-    this.dataManager.register(TOWER1_TARGET, 0);
-    this.dataManager.register(TOWER2_TARGET, 0);
-    this.dataManager.register(TOWER3_TARGET, 0);
-    this.dataManager.register(TOWER4_TARGET, 0);
+    this.getDataManager().register(METADATA, 0);
+    this.getDataManager().register(TOWER1_TARGET, 0);
+    this.getDataManager().register(TOWER2_TARGET, 0);
+    this.getDataManager().register(TOWER3_TARGET, 0);
+    this.getDataManager().register(TOWER4_TARGET, 0);
   }
   
   public int getWatchedTargetId(int p_82203_1_) {
-    return this.dataManager.get(TARGETS[p_82203_1_]);
+    return this.getDataManager().get(TARGETS[p_82203_1_]);
   }
   
   public void updateWatchedTargetId(int targetOffset, int newId) {
-    this.dataManager.set(TARGETS[targetOffset], newId);
+    this.getDataManager().set(TARGETS[targetOffset], newId);
   }
   
   protected void applyEntityAttributes() {
@@ -240,7 +240,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
     entityLivingIn.motionY += 4.0D;
     if (entityLivingIn instanceof EntityCreeper || entityLivingIn instanceof net.minecraft.entity.monster.EntityZombie || entityLivingIn instanceof net.minecraft.entity.monster.AbstractSkeleton) {
       EntityCreeper creeper = new EntityCreeper(this.world);
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         this.world.spawnEntity(creeper);
       creeper.copyLocationAndAnglesFrom(entityLivingIn);
       creeper.onStruckByLightning(shot);
@@ -328,7 +328,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
   }
   
   public void onLivingUpdate() {
-    if (!this.world.isRemote && EngenderConfig.mobs.grief) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && EngenderConfig.mobs.grief) {
       int x = MathHelper.floor(this.posX);
       int y = MathHelper.floor(this.posY);
       int z = MathHelper.floor(this.posZ);
@@ -367,7 +367,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
     this.side4.onUpdate();
     this.side4.setLocationAndAngles(this.posX, this.posY + 0.5D, this.posZ - 2.5D, 0.0F, 0.0F);
     this.side4.setEntityBoundingBox(new AxisAlignedBB(this.side4.posX - 2.0D, this.side4.posY, this.side4.posZ - 0.5D, this.side4.posX + 2.0D, this.side4.posY + 1.0D, this.side4.posZ + 0.5D));
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 4; i++) {
         if (getRevengeTarget() != null)
           updateWatchedTargetId(i, getRevengeTarget().getEntityId()); 
@@ -442,7 +442,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
     this.isAirBorne = false;
     this.onGround = true;
     setSprinting(false);
-    if (this.world.isRemote)
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 3 && this.ticksExisted > 60; i++) {
         if (this.towerUpdate[i] > 20)
           this.world.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, getHeadX(i), getHeadY(i), getHeadY(i), ((float)getHeadX(i) + this.rand.nextFloat()) - 0.5D, ((float)getHeadY(i) - this.rand.nextFloat() - 1.0F), ((float)getHeadY(i) + this.rand.nextFloat()) - 0.5D);
@@ -520,7 +520,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   entityAbygolem.setOwnerId(getOwnerId()); 
                 entityAbygolem.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityAbygolem)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(entityAbygolem);
                 break;
               case 1:
@@ -529,7 +529,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   entityAbyssalZombie.setOwnerId(getOwnerId()); 
                 entityAbyssalZombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityAbyssalZombie)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(entityAbyssalZombie);
                 break;
               case 2:
@@ -538,7 +538,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   entityDepthsGhoul.setOwnerId(getOwnerId()); 
                 entityDepthsGhoul.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityDepthsGhoul)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(entityDepthsGhoul);
                 break;
               case 3:
@@ -547,7 +547,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   entityCoraliumSquid.setOwnerId(getOwnerId()); 
                 entityCoraliumSquid.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityCoraliumSquid)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(entityCoraliumSquid);
                 break;
               case 4:
@@ -556,7 +556,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   entityChagarothSpawn.setOwnerId(getOwnerId()); 
                 entityChagarothSpawn.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityChagarothSpawn)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(entityChagarothSpawn);
                 break;
               case 5:
@@ -565,7 +565,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   entityChagarothFist.setOwnerId(getOwnerId()); 
                 entityChagarothFist.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityChagarothFist)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(entityChagarothFist);
                 break;
               case 6:
@@ -574,7 +574,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   rabbit.setOwnerId(getOwnerId()); 
                 rabbit.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(rabbit)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(rabbit);
                 break;
               case 7:
@@ -583,7 +583,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   entityDreadling.setOwnerId(getOwnerId()); 
                 entityDreadling.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityDreadling)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(entityDreadling);
                 break;
               case 8:
@@ -592,7 +592,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   entityDreadSpawn.setOwnerId(getOwnerId()); 
                 entityDreadSpawn.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityDreadSpawn)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(entityDreadSpawn);
                 break;
               case 9:
@@ -601,7 +601,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   sheep.setOwnerId(getOwnerId()); 
                 sheep.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(sheep)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(sheep);
                 break;
             } 
@@ -614,7 +614,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   entityDragonMinion.setOwnerId(getOwnerId()); 
                 entityDragonMinion.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityDragonMinion)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(entityDragonMinion);
                 break;
               case 1:
@@ -623,7 +623,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   entityGreaterDreadSpawn.setOwnerId(getOwnerId()); 
                 entityGreaterDreadSpawn.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityGreaterDreadSpawn)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(entityGreaterDreadSpawn);
                 break;
               case 2:
@@ -632,7 +632,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   entityLesserShoggoth.setOwnerId(getOwnerId()); 
                 entityLesserShoggoth.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityLesserShoggoth)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(entityLesserShoggoth);
                 break;
               case 3:
@@ -641,7 +641,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   entityOmotholGhoul.setOwnerId(getOwnerId()); 
                 entityOmotholGhoul.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityOmotholGhoul)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(entityOmotholGhoul);
                 break;
               case 4:
@@ -650,7 +650,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   entityRemnant.setOwnerId(getOwnerId()); 
                 entityRemnant.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityRemnant)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(entityRemnant);
                 break;
               case 5:
@@ -659,7 +659,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   entityShadowMonster.setOwnerId(getOwnerId()); 
                 entityShadowMonster.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityShadowMonster)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(entityShadowMonster);
                 break;
             } 
@@ -672,7 +672,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   bat.setOwnerId(getOwnerId()); 
                 bat.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(bat)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(bat);
                 break;
               case 1:
@@ -681,7 +681,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   chicken.setOwnerId(getOwnerId()); 
                 chicken.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(chicken)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(chicken);
                 break;
               case 2:
@@ -690,7 +690,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   cow.setOwnerId(getOwnerId()); 
                 cow.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(cow)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(cow);
                 break;
               case 3:
@@ -699,7 +699,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   mooshroom.setOwnerId(getOwnerId()); 
                 mooshroom.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(mooshroom)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(mooshroom);
                 break;
               case 4:
@@ -708,7 +708,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   ocelot.setOwnerId(getOwnerId()); 
                 ocelot.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(ocelot)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(ocelot);
                 break;
               case 5:
@@ -717,7 +717,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   entityDragonBoss.setOwnerId(getOwnerId()); 
                 entityDragonBoss.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityDragonBoss)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(entityDragonBoss);
                 break;
               case 6:
@@ -726,7 +726,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
                 if (!isWild())
                   pig.setOwnerId(getOwnerId()); 
                 pig.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(pig)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(pig);
                 break;
             } 
@@ -757,7 +757,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
     this.deathTime++;
     if (this.deathTime == 1) {
       playSound(ESound.buildingDeath, 10.0F, 1.0F);
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         entityDropItem(new ItemStack(EItem.abyssalPortalStaff, 1, getMetaData()), 1.0F); 
       for (int k = 0; k < 2500; k++) {
         double d2 = this.rand.nextGaussian() * 0.05D;
@@ -768,7 +768,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
         this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height * 4.0F), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, 0.5D, d1);
       } 
     } 
-    if (!this.world.isRemote && (isPlayer() || (this.recentlyHit > 0 && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")))) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && (isPlayer() || (this.recentlyHit > 0 && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")))) {
       int i = getExperiencePoints(this.attackingPlayer) / 60;
       i = ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
       while (i > 0) {
@@ -836,7 +836,7 @@ public class EntityAbyssalPortal extends EntityTameBase implements IEntityMultiP
         player.changeDimension(ACLib.omothol_id);
         return true;
       } 
-      player.world.playSound(player, new BlockPos(player), SoundEvents.BLOCK_ANVIL_USE, SoundCategory.PLAYERS, 100.0F, 0.5F);
+      net.minecraft.AgeOfMinecraft.util.EntityCompat.world(player).playSound(player, new BlockPos(player), SoundEvents.BLOCK_ANVIL_USE, SoundCategory.PLAYERS, 100.0F, 0.5F);
       setHealth(0.0F);
       return true;
     } 

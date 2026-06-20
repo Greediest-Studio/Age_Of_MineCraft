@@ -172,7 +172,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
       return true;
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !player.isSneaking() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -311,29 +311,29 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
   }
   
   public int getLives() {
-    return this.dataManager.get(LIVES);
+    return this.getDataManager().get(LIVES);
   }
   
   private void setLives(int lives) {
-    this.dataManager.set(LIVES, lives);
+    this.getDataManager().set(LIVES, lives);
   }
   
   public boolean hasThrowAttackHit() {
-    return (this.dataManager.get(THROW_ATTACK_STATE) != 0);
+    return (this.getDataManager().get(THROW_ATTACK_STATE) != 0);
   }
   
   public void setThrowAttackHit(boolean hit) {
-    byte b0 = this.dataManager.get(THROW_ATTACK_STATE);
-    this.dataManager.set(THROW_ATTACK_STATE, hit ? 1 : (byte) (b0 & 0xFFFFFFFE));
+    byte b0 = this.getDataManager().get(THROW_ATTACK_STATE);
+    this.getDataManager().set(THROW_ATTACK_STATE, hit ? 1 : (byte) (b0 & 0xFFFFFFFE));
   }
   
   public boolean isThrowAttackFinished() {
-    return ((this.dataManager.get(THROW_ATTACK_STATE) & 0x2) != 0);
+    return ((this.getDataManager().get(THROW_ATTACK_STATE) & 0x2) != 0);
   }
   
   public void setThrowAttackFinished(boolean finished) {
-    byte b0 = this.dataManager.get(THROW_ATTACK_STATE);
-    this.dataManager.set(THROW_ATTACK_STATE, finished ? (byte) (b0 | 0x2) : (byte) (b0 & 0xFFFFFFFD));
+    byte b0 = this.getDataManager().get(THROW_ATTACK_STATE);
+    this.getDataManager().set(THROW_ATTACK_STATE, finished ? (byte) (b0 | 0x2) : (byte) (b0 & 0xFFFFFFFD));
   }
   
   public int getAttackID() {
@@ -370,7 +370,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
   }
   
   public boolean attackEntityAsMob(Entity entityIn) {
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (this.attackID == 0 && !(entityIn instanceof net.minecraft.entity.monster.EntityGolem) && !(entityIn instanceof net.minecraft.AgeOfMinecraft.entity.tame.Flying) && !(entityIn instanceof net.minecraft.entity.passive.EntityFlying) && !(entityIn instanceof net.minecraft.entity.EntityFlying) && (this.rand.nextInt(4) == 0 || (entityIn instanceof EntityLivingBase && ((EntityLivingBase)entityIn).getHealth() <= 4.0F)) && (this.onGround || isInWater() || isInLava()))
         setAttackID(7); 
       if (this.attackID == 0 && (this.rand.nextInt(2) == 0 || entityIn instanceof net.minecraft.entity.monster.EntityCreeper) && (this.onGround || isInWater() || isInLava()))
@@ -476,7 +476,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
     super.onLivingUpdate();
     if (this.attackID == 0 && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && !false && getDistanceSq(getAttackTarget()) < (this.width * this.width + (getAttackTarget()).width * (getAttackTarget()).width) + 36.0D)
       attackEntityAsMob(getAttackTarget());
-    if (!this.world.isRemote && getAttackTarget() != null && this.attackID == 0 && getSpecialAttackTimer() <= 0 && isHero())
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getAttackTarget() != null && this.attackID == 0 && getSpecialAttackTimer() <= 0 && isHero())
       performSpecialAttack(); 
     if (this.motionX * this.motionX + this.motionZ * this.motionZ != 0.0D && this.rand.nextInt(5) == 0) {
       int i = MathHelper.floor(this.posX);
@@ -554,7 +554,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
   }
   
   public void onDeath(DamageSource cause) {
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       this.deathCause = cause;
       if (getLastDamageSource() != null && getLastDamageSource().getTrueSource() instanceof EntityLivingBase) {
         this.lastAttacker = (EntityLivingBase)getLastDamageSource().getTrueSource();
@@ -591,7 +591,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
         this.renderYawOffset = this.rotationYaw = this.rotationYawHead = 0.0F;
         this.rotationPitch = 0.0F;
         int i = this.experienceValue;
-        while (i > 0 && !this.world.isRemote) {
+        while (i > 0 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
           int j = EntityXPOrb.getXPSplit(i);
           i -= j;
           this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
@@ -607,7 +607,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
           this.deathTime = 0;
           this.deathTicks = 0;
           this.vanishTime = 0;
-          if (!this.world.isRemote) {
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
             setLives(getLives() - 1);
             if (this.lastAttacker != null) {
               setRevengeTarget(this.lastAttacker);
@@ -623,7 +623,7 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
       this.deathTime = 0;
     } 
     if (this.vanishTime >= 100 && getLives() > 0) {
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         if (EngenderConfig.general.useMessage && !isWild() && getOwner() instanceof EntityPlayerMP) {
           getOwner().sendMessage(getCombatTracker().getDeathMessage());
           this.world.playSound((EntityPlayer)getOwner(), getOwner().getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), getSoundPitch());

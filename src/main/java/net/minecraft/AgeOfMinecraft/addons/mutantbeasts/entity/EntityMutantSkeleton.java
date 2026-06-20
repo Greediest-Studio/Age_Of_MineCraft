@@ -155,7 +155,7 @@ public class EntityMutantSkeleton extends EntityTameBase implements IRangedAttac
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !player.isSneaking() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -213,7 +213,7 @@ public class EntityMutantSkeleton extends EntityTameBase implements IRangedAttac
   }
   
   public boolean attackEntityAsMob(Entity entityIn) {
-    if (!this.world.isRemote && this.attackID == 0)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.attackID == 0)
       if (getHealth() <= getMaxHealth() * 0.375F && this.rand.nextInt(2) == 0) {
         setAttackID(6);
       } else if (this.rand.nextInt(4) != 0) {
@@ -251,7 +251,7 @@ public class EntityMutantSkeleton extends EntityTameBase implements IRangedAttac
   protected void onDeathUpdate() {
     super.onDeathUpdate();
     if (this.deathTime > 2) {
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         for (Entity entity : this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(3.0D, 2.0D, 3.0D))) {
           if (entity instanceof EntityLivingBase)
             inflictEngenderMobDamage((EntityLivingBase)entity, "'s body was mutilated by a flying body part from ", DamageSource.causeMobDamage(this).setDamageBypassesArmor(), 7.0F);
@@ -662,7 +662,7 @@ public class EntityMutantSkeleton extends EntityTameBase implements IRangedAttac
   }
   
   public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
-    if (!this.world.isRemote && this.attackID == 0)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.attackID == 0)
       if (getDistance(target.posX, this.posY, target.posZ) <= 12.0D) {
         setAttackID(6);
       } else if (this.onGround || isInWater() || isInLava()) {

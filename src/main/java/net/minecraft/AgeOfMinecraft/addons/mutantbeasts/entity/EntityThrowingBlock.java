@@ -86,17 +86,17 @@ public class EntityThrowingBlock extends EntityThrowable {
   }
   
   protected void entityInit() {
-    this.dataManager.register(BLOCK_STATE, Optional.of(Blocks.GRASS.getDefaultState()));
-    this.dataManager.register(THROWER_ENTITY_ID, -1);
-    this.dataManager.register(HELD, Boolean.FALSE);
+    this.getDataManager().register(BLOCK_STATE, Optional.of(Blocks.GRASS.getDefaultState()));
+    this.getDataManager().register(THROWER_ENTITY_ID, -1);
+    this.getDataManager().register(HELD, Boolean.FALSE);
   }
   
   public IBlockState getBlockState() {
-    return (IBlockState)((Optional)this.dataManager.get(BLOCK_STATE)).or(Blocks.GRASS.getDefaultState());
+    return (IBlockState)((Optional)this.getDataManager().get(BLOCK_STATE)).or(Blocks.GRASS.getDefaultState());
   }
   
   public void setBlockState(IBlockState state) {
-    this.dataManager.set(BLOCK_STATE, Optional.of(state));
+    this.getDataManager().set(BLOCK_STATE, Optional.of(state));
   }
   
   @Nullable
@@ -114,11 +114,11 @@ public class EntityThrowingBlock extends EntityThrowable {
   
   private void setThrower(EntityLivingBase thrower) {
     this.thrower = thrower;
-    this.dataManager.set(THROWER_ENTITY_ID, thrower.getEntityId());
+    this.getDataManager().set(THROWER_ENTITY_ID, thrower.getEntityId());
   }
   
   public EntityLivingBase getThrowerByID() {
-    int throwerId = this.dataManager.get(THROWER_ENTITY_ID);
+    int throwerId = this.getDataManager().get(THROWER_ENTITY_ID);
     if (throwerId >= 0) {
       Entity entity = this.world.getEntityByID(throwerId);
       if (entity instanceof EntityLivingBase)
@@ -128,11 +128,11 @@ public class EntityThrowingBlock extends EntityThrowable {
   }
   
   public boolean isHeld() {
-    return this.dataManager.get(HELD);
+    return this.getDataManager().get(HELD);
   }
   
   private void setHeld(boolean held) {
-    this.dataManager.set(HELD, held);
+    this.getDataManager().set(HELD, held);
   }
   
   protected float getGravityVelocity() {
@@ -181,7 +181,7 @@ public class EntityThrowingBlock extends EntityThrowable {
     this.lastTickPosX = this.posX;
     this.lastTickPosY = this.posY;
     this.lastTickPosZ = this.posZ;
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       setFlag(6, isGlowing()); 
     onEntityUpdate();
     if (isHeld()) {
@@ -203,7 +203,7 @@ public class EntityThrowingBlock extends EntityThrowable {
         this.motionY = y * offset;
         this.motionZ = z * offset;
         move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-        if (!this.world.isRemote && thrower instanceof EntityPlayer) {
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && thrower instanceof EntityPlayer) {
           EntityPlayer player = (EntityPlayer)thrower;
           if (player == null || !player.isEntityAlive() || player.isSpectator() || !player.canEntityBeSeen(this) || (player.getHeldItemMainhand().getItem() != MBItems.ENDERSOUL_HAND && player.getHeldItemOffhand().getItem() != MBItems.ENDERSOUL_HAND))
             setHeld(false); 
@@ -241,7 +241,7 @@ public class EntityThrowingBlock extends EntityThrowable {
       return false; 
     if (isHeld()) {
       if (getThrower() == player) {
-        if (!this.world.isRemote) {
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
           setHeld(false);
           throwBlock(player);
         } 
@@ -286,7 +286,7 @@ public class EntityThrowingBlock extends EntityThrowable {
       } 
       if (result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit instanceof EntityLivingBase)
         ((EntityTameBase)thrower).inflictEngenderMobDamage((EntityLivingBase)result.entityHit, " was pummeled by ", new EntityDamageSource("thrown", thrower), damage);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         this.world.setEntityState(this, (byte)3);
         this.world.playEvent(2001, pos, Block.getStateId(blockState));
         if (blockState.getBlock() == Blocks.TNT && thrower instanceof EntityTameBase)
@@ -295,9 +295,9 @@ public class EntityThrowingBlock extends EntityThrowable {
       } 
     } else {
       if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           this.world.playEvent(2001, pos, Block.getStateId(blockState)); 
-      } else if (result.typeOfHit == RayTraceResult.Type.ENTITY && !this.world.isRemote && result.entityHit != thrower) {
+      } else if (result.typeOfHit == RayTraceResult.Type.ENTITY && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && result.entityHit != thrower) {
         this.world.playEvent(2001, pos, Block.getStateId(blockState));
         result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, thrower), 4.0F);
       } 
@@ -312,7 +312,7 @@ public class EntityThrowingBlock extends EntityThrowable {
           entity.attackEntityFrom(DamageSource.causeIndirectDamage(this, thrower), (6 + this.rand.nextInt(3)));
         } 
       } 
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         setDead(); 
     } 
   }

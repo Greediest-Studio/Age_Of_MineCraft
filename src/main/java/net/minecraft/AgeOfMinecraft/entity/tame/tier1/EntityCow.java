@@ -152,7 +152,7 @@ public class EntityCow extends EntityTameBase implements IJumpingMount, Light, A
       return true;
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 

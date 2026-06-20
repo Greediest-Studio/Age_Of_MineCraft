@@ -55,12 +55,12 @@ public class EntityMiniBlackHole extends EntityFireball {
   }
   
   protected void onImpact(RayTraceResult result) {
-    if (!this.world.isRemote && this.shootingEntity != null && result.entityHit != null && (result.entityHit instanceof EntityJzahar || result.entityHit instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStorm || result.entityHit instanceof net.minecraft.entity.IEntityMultiPart)) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.shootingEntity != null && result.entityHit != null && (result.entityHit instanceof EntityJzahar || result.entityHit instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStorm || result.entityHit instanceof net.minecraft.entity.IEntityMultiPart)) {
       this.shootingEntity.attackEntityAsMob(result.entityHit);
       EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 3.0F, false, false);
       setDead();
     } 
-    if (!this.world.isRemote && this.shootingEntity != null && result.entityHit == null) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.shootingEntity != null && result.entityHit == null) {
       EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 3.0F, false, false);
       setDead();
     } 
@@ -68,7 +68,7 @@ public class EntityMiniBlackHole extends EntityFireball {
   
   public void onUpdate() {
     super.onUpdate();
-    if (this.ticksExisted > 200 && !this.world.isRemote && this.shootingEntity != null) {
+    if (this.ticksExisted > 200 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.shootingEntity != null) {
       EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 3.0F, false, false);
       setDead();
     } 

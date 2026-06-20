@@ -36,7 +36,7 @@ public class EntityLargeFireballOther extends EntityLargeFireball {
   }
   
   protected void onImpact(RayTraceResult movingObject) {
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityLargeFireballOther)) {
         if (this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase && movingObject.entityHit instanceof EntityLivingBase) {
           if (!movingObject.entityHit.isImmuneToFire() && movingObject.entityHit instanceof net.minecraft.entity.passive.EntityAnimal)

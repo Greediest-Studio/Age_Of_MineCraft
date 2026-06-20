@@ -53,15 +53,15 @@ public class EntityEndersoulFragment extends Entity {
   }
   
   protected void entityInit() {
-    this.dataManager.register(TAMED, Boolean.FALSE);
+    this.getDataManager().register(TAMED, Boolean.FALSE);
   }
   
   public boolean isTamed() {
-    return this.dataManager.get(TAMED);
+    return this.getDataManager().get(TAMED);
   }
   
   public void setTamed(boolean tamed) {
-    this.dataManager.set(TAMED, tamed);
+    this.getDataManager().set(TAMED, tamed);
   }
   
   public EntityPlayer getCollector() {
@@ -125,7 +125,7 @@ public class EntityEndersoulFragment extends Entity {
     this.motionZ *= 0.9D;
     if (this.collector != null && !this.collector.isEntityAlive())
       this.collector = null; 
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (!isTamed() && --this.explodeTick == 0)
         explode(); 
       if (this.collector != null && getDistanceSq(this.collector) > 9.0D) {
@@ -149,7 +149,7 @@ public class EntityEndersoulFragment extends Entity {
       } 
       return false;
     } 
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       setTamed(true); 
     this.collector = player;
     playSound(SoundEvents.ENTITY_PLAYER_LEVELUP, 1.0F, 1.5F);
@@ -157,7 +157,7 @@ public class EntityEndersoulFragment extends Entity {
   }
   
   public boolean attackEntityFrom(DamageSource source, float amount) {
-    if (!this.world.isRemote && isEntityAlive())
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && isEntityAlive())
       explode(); 
     return true;
   }

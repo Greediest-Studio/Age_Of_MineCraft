@@ -16,6 +16,7 @@ import net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntitySkeleton;
 import net.minecraft.AgeOfMinecraft.events.ChunkLoadingEvent;
 import net.minecraft.AgeOfMinecraft.registry.ELoot;
 import net.minecraft.AgeOfMinecraft.registry.ESound;
+import net.minecraft.AgeOfMinecraft.util.AttributeCompat;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -259,12 +260,12 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(FIRST_HEAD_TARGET, 0);
-    this.dataManager.register(SECOND_HEAD_TARGET, 0);
-    this.dataManager.register(THIRD_HEAD_TARGET, 0);
-    this.dataManager.register(INVULNERABILITY_TIME, 0);
-    this.dataManager.register(HOVERTIMER, 0);
-    this.dataManager.register(RAMTIMER, 0);
+    this.getDataManager().register(FIRST_HEAD_TARGET, 0);
+    this.getDataManager().register(SECOND_HEAD_TARGET, 0);
+    this.getDataManager().register(THIRD_HEAD_TARGET, 0);
+    this.getDataManager().register(INVULNERABILITY_TIME, 0);
+    this.getDataManager().register(HOVERTIMER, 0);
+    this.getDataManager().register(RAMTIMER, 0);
     getDataManager().register(SPAWNEDSKELETONS, Boolean.FALSE);
   }
   
@@ -346,7 +347,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
       strafe = entitylivingbase.moveStrafing;
       forward = entitylivingbase.moveForward;
       this.jumpMovementFactor = 0.2F;
-      if (((EntityLivingBase)getControllingPassenger()).moveStrafing != 0.0F && this.ticksExisted % 10 == 0 && !this.world.isRemote) {
+      if (((EntityLivingBase)getControllingPassenger()).moveStrafing != 0.0F && this.ticksExisted % 10 == 0 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         Vec3d vec3 = entitylivingbase.getLook(1.0F);
         double d0 = entitylivingbase.posX + vec3.x * 50.0D;
         double d1 = entitylivingbase.posY + entitylivingbase.getEyeHeight() + vec3.y * 50.0D;
@@ -375,7 +376,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
         this.jumpPower = 0.0F;
       } 
       for (i = 1; i < 3; i++) {
-        if (!this.world.isRemote && this.ticksExisted >= this.nextHeadUpdate[i - 1]) {
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.ticksExisted >= this.nextHeadUpdate[i - 1]) {
           this.nextHeadUpdate[i - 1] = this.ticksExisted + 10 + this.rand.nextInt(10);
           if (this.world.getDifficulty() == EnumDifficulty.NORMAL || this.world.getDifficulty() == EnumDifficulty.HARD) {
             int k2 = i - 1;
@@ -491,7 +492,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
       this.idleHeadUpdates[0] = 0;
       this.idleHeadUpdates[1] = 0;
     } 
-    if (!isAIDisabled() && !this.world.isRemote) {
+    if (!isAIDisabled() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && this.isOffensive && !isChild() && !false)
         if (getDistanceSq(getAttackTarget()) < (this.reachWidth * this.reachWidth + ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width) * ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width)) + 9.0D && (this.ticksExisted + getEntityId()) % 10 == 0)
           attackEntityAsMob(getAttackTarget());
@@ -533,7 +534,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
     this.rightRibs.setLocationAndAngles(this.spine.posX + (f3 * 0.375F), this.posY + 0.95D + ex, this.spine.posZ + (f19 * 0.375F), 0.0F, 0.0F);
     this.leftRibs.onUpdate();
     this.leftRibs.setLocationAndAngles(this.spine.posX - (f3 * 0.375F), this.posY + 0.95D + ex, this.spine.posZ - (f19 * 0.375F), 0.0F, 0.0F);
-    if (!this.world.isRemote && getInvulTime() <= 1) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getInvulTime() <= 1) {
       if (isArmored() && !hasSpawnedSkeletons() && getFakeHealth() <= 0.0F) {
         this.motionY = -(0.9D + this.motionY);
       } else if (getWatchedTargetId(0) > 0 && getControllingPassenger() == null) {
@@ -650,7 +651,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
                           double d4 = entity.posY - d1;
                           double d5 = entity.posZ - d2;
                           double d6 = d3 * d3 + d4 * d4 + d5 * d5;
-                          inflictEngenderMobDamage(entity, " was rammed into by ", DamageSource.causeMobDamage(this), (float) getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue() * 2.0F);
+                          inflictEngenderMobDamage(entity, " was rammed into by ", DamageSource.causeMobDamage(this), (float)AttributeCompat.getBaseValue(this, SharedMonsterAttributes.ATTACK_DAMAGE, 0.0D) * 2.0F);
                           entity.renderYawOffset = entity.rotationYaw = entity.rotationYawHead = (float) MathHelper.atan2(entity.motionZ, entity.motionX) * 57.295776F - 90.0F;
                           entity.setRevengeTarget(null);
                           if (entity instanceof EntityLiving)
@@ -659,7 +660,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
                       }
                   }
               }
-          if (!this.world.isRemote && EngenderConfig.mobs.grief) {
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && EngenderConfig.mobs.grief) {
             int i11 = MathHelper.floor(this.posY);
             int l1 = MathHelper.floor(this.posX);
             int i2 = MathHelper.floor(this.posZ);
@@ -685,7 +686,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
           } 
         } 
       } else {
-        if (!this.world.isRemote && getAttackTarget() != null && getHoverTime() <= 120 && getHoverTime() >= 60 && this.ticksExisted % 20 == 0)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getAttackTarget() != null && getHoverTime() <= 120 && getHoverTime() >= 60 && this.ticksExisted % 20 == 0)
           attackEntityWithRangedAttack(getAttackTarget(), 1.0F); 
         if (getAttackTarget() != null && getHoverTime() <= 0) {
           setHoverTime(120);
@@ -779,7 +780,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
             }  
         }  
     } 
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       for (k = 0; k < 2; k++)
         this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
       if (isHero() && getSpecialAttackTimer() >= 1400)
@@ -940,7 +941,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -967,7 +968,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
   }
   
   private void launchWitherSkullToEntity(int p_82216_1_, EntityLivingBase p_82216_2_) {
-    if (!this.world.isRemote && getPolymorphTime() > 0 && this.rand.nextBoolean()) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getPolymorphTime() > 0 && this.rand.nextBoolean()) {
       float j = this.renderYawOffset * 0.017453292F;
       float f1 = MathHelper.cos(j);
       float f2 = MathHelper.sin(j);
@@ -997,7 +998,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
     entitywitherskull.posY = d4;
     entitywitherskull.posX = d3;
     entitywitherskull.posZ = d5;
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       this.world.spawnEntity(entitywitherskull);
   }
   
@@ -1055,35 +1056,35 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
   }
   
   public int getHoverTime() {
-    return this.dataManager.get(HOVERTIMER);
+    return this.getDataManager().get(HOVERTIMER);
   }
   
   public void setHoverTime(int p_82215_1_) {
-    this.dataManager.set(HOVERTIMER, p_82215_1_);
+    this.getDataManager().set(HOVERTIMER, p_82215_1_);
   }
   
   public int getRamTime() {
-    return this.dataManager.get(RAMTIMER);
+    return this.getDataManager().get(RAMTIMER);
   }
   
   public void setRamTime(int p_82215_1_) {
-    this.dataManager.set(RAMTIMER, p_82215_1_);
+    this.getDataManager().set(RAMTIMER, p_82215_1_);
   }
   
   public int getInvulTime() {
-    return this.dataManager.get(INVULNERABILITY_TIME);
+    return this.getDataManager().get(INVULNERABILITY_TIME);
   }
   
   public void setInvulTime(int p_82215_1_) {
-    this.dataManager.set(INVULNERABILITY_TIME, p_82215_1_);
+    this.getDataManager().set(INVULNERABILITY_TIME, p_82215_1_);
   }
   
   public int getWatchedTargetId(int p_82203_1_) {
-    return this.dataManager.get(HEAD_TARGETS[p_82203_1_]);
+    return this.getDataManager().get(HEAD_TARGETS[p_82203_1_]);
   }
   
   public void updateWatchedTargetId(int targetOffset, int newId) {
-    this.dataManager.set(HEAD_TARGETS[targetOffset], newId);
+    this.getDataManager().set(HEAD_TARGETS[targetOffset], newId);
   }
   
   public boolean isArmored() {
@@ -1111,7 +1112,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
     this.timeSinceIgnited = ++this.deathTicks;
     setRamTime(0);
     setHoverTime(0);
-    if (!this.world.isRemote && this.deathTicks == 120) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.deathTicks == 120) {
       playSound(ESound.blast, 10.0F, 1.0F);
       createEngenderModExplosionFireless(this, this.posX, this.posY + 1.0D, this.posZ, 14.0F, EngenderConfig.mobs.grief);
       List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(128.0D));
@@ -1133,7 +1134,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
                       entity.addVelocity(dir.x * 2.5D * scale, 1.5D + this.rand.nextDouble(), dir.z * 2.5D * scale);
                   }
           }
-      if (!this.world.isRemote && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")) {
         int i = getExperiencePoints(this.attackingPlayer);
         i = ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
         while (i > 0) {
@@ -1150,10 +1151,10 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
       } 
       setDead();
     } 
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (this.deathTicks == 1)
         if (getOwner() != null) {
-          for (EntityPlayer entityplayer : this.world.playerEntities) {
+          for (EntityPlayer entityplayer : net.minecraft.AgeOfMinecraft.util.EntityCompat.playerEntities(this.world)) {
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
             entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
           } 

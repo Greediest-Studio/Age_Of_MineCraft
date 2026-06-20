@@ -84,7 +84,7 @@ public class EntityPortalLightning extends EntityFireball {
   }
   
   public void onUpdate() {
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       setFlag(6, isGlowing());
       if (!this.isDead) {
         ChunkLoadingEvent.updateLoaded(this);
@@ -116,7 +116,7 @@ public class EntityPortalLightning extends EntityFireball {
         double d6 = this.posX + (this.posX - this.accelerationX) * -d9;
         double d7 = this.posY + (this.posY - this.accelerationY) * -d9;
         double d8 = this.posZ + (this.posZ - this.accelerationZ) * -d9;
-        if (this.world.isRemote)
+        if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           this.world.spawnParticle(EnumParticleTypes.END_ROD, true, d6, d7, d8, 0.0D, 0.01D, 0.0D);
       } 
     } 
@@ -146,7 +146,7 @@ public class EntityPortalLightning extends EntityFireball {
       } 
       setDead();
     } 
-    if (this.ticksExisted > 20 || (!this.world.isRemote && this.targetEntity == null))
+    if (this.ticksExisted > 20 || (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.targetEntity == null))
       setDead(); 
   }
 }

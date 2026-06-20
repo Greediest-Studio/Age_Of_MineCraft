@@ -107,7 +107,7 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
   
   @SideOnly(Side.CLIENT)
   public boolean isAttacking() {
-    return this.dataManager.get(ATTACKING);
+    return this.getDataManager().get(ATTACKING);
   }
   
   public EnumTier getTier() {
@@ -134,15 +134,15 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
   }
   
   public void setAttacking(boolean attacking) {
-    this.dataManager.set(ATTACKING, attacking);
+    this.getDataManager().set(ATTACKING, attacking);
   }
   
   public void setFlying(boolean attacking) {
-    this.dataManager.set(SHOULD_FLY, attacking);
+    this.getDataManager().set(SHOULD_FLY, attacking);
   }
   
   public boolean isFlying() {
-    return this.dataManager.get(SHOULD_FLY);
+    return this.getDataManager().get(SHOULD_FLY);
   }
   
   public void performSpecialAttack() {
@@ -156,7 +156,7 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
   
   public void createChild() {
     super.createChild();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 1; i++) {
         EntityGhast baby = new EntityGhast(this.world);
         baby.copyLocationAndAnglesFrom(this);
@@ -297,8 +297,8 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(ATTACKING, Boolean.FALSE);
-    this.dataManager.register(SHOULD_FLY, Boolean.FALSE);
+    this.getDataManager().register(ATTACKING, Boolean.FALSE);
+    this.getDataManager().register(SHOULD_FLY, Boolean.FALSE);
   }
   
   protected void applyEntityAttributes() {
@@ -372,7 +372,7 @@ public class EntityGhast extends EntityTameBase implements Massive, Flying, Ligh
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 

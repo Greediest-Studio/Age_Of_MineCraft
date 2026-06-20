@@ -180,8 +180,8 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(INVULNERABILITY_TIME, 0);
-    this.dataManager.register(SIZE, 0);
+    this.getDataManager().register(INVULNERABILITY_TIME, 0);
+    this.getDataManager().register(SIZE, 0);
   }
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
@@ -197,11 +197,11 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
   }
   
   public int getSize() {
-    return this.dataManager.get(SIZE);
+    return this.getDataManager().get(SIZE);
   }
   
   public void Grow(int p_82215_1_) {
-    this.dataManager.set(SIZE, p_82215_1_);
+    this.getDataManager().set(SIZE, p_82215_1_);
   }
   
   public boolean canUseGuardBlock() {
@@ -234,10 +234,10 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
   
   protected void onDeathUpdate() {
     super.onDeathUpdate();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (this.deathTime == 1)
         if (getOwner() != null) {
-          for (EntityPlayer entityplayer : this.world.playerEntities) {
+          for (EntityPlayer entityplayer : net.minecraft.AgeOfMinecraft.util.EntityCompat.playerEntities(this.world)) {
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.1F);
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 0.9F);
@@ -266,7 +266,7 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
       this.motionY = -1.0D; 
     if ((this.ticksExisted + getEntityId()) % 100 == 0)
       playSound(ESound.commandBlockWitherHum, (getSize() >= 5250) ? 0.25F : 5.0F, 1.0F); 
-    if (getSize() >= 12500 && !this.world.isRemote) {
+    if (getSize() >= 12500 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       EntityWitherStorm witherstorm = new EntityWitherStorm(this.world);
       witherstorm.copyLocationAndAnglesFrom(this);
       witherstorm.setNoAI(isAIDisabled());
@@ -292,7 +292,7 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
       BlockPos blockpos = new BlockPos(in, m, n);
       IBlockState iblockstate = this.world.getBlockState(blockpos);
       Block block = iblockstate.getBlock();
-      if (!this.world.isRemote && (block != Blocks.AIR || m < 0))
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && (block != Blocks.AIR || m < 0))
         this.motionY = 0.05000000074505806D; 
     } 
     for (int i1 = 0; i1 < 1 + getSize() && i1 <= 1500; i1++) {
@@ -303,7 +303,7 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
         BlockPos blockpos = new BlockPos(l1, i11, i2);
         IBlockState iblockstate = this.world.getBlockState(blockpos);
         Block block = iblockstate.getBlock();
-        if (this.world.canBlockSeeSky(blockpos) && !block.isAir(iblockstate, this.world, blockpos) && !this.world.isRemote && this.world.isAreaLoaded(blockpos, blockpos) && block.getBlockHardness(iblockstate, this.world, new BlockPos(l1, i11, i2)) != -1.0F)
+        if (this.world.canBlockSeeSky(blockpos) && !block.isAir(iblockstate, this.world, blockpos) && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.world.isAreaLoaded(blockpos, blockpos) && block.getBlockHardness(iblockstate, this.world, new BlockPos(l1, i11, i2)) != -1.0F)
           if (EngenderConfig.mobs.grief) {
             Grow(getSize() + 3);
             heal(3.0F);
@@ -368,7 +368,7 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
         }
     EntityLivingBase entity = getAttackTarget();
     if (entity != null && getSize() >= 6000 && !false && entity.getHealth() > 0.0F && !(entity instanceof EntityWitherStorm) && !(entity instanceof EntityWitherStormHead) && !(entity instanceof EntityWitherStormTentacle) && !(entity instanceof EntityWitherStormTentacleDevourer)) {
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         entity.addPotionEffect(new PotionEffect(MobEffects.WITHER, 2147483647, 1)); 
       double d01 = this.posX - entity.posX;
       double d11 = this.posY + getEyeHeight() - entity.posY;
@@ -411,7 +411,7 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
     } 
     if (this.motionY < 0.0D)
       this.motionY *= 0.6D; 
-    if (!this.world.isRemote && getAttackTarget() != null)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getAttackTarget() != null)
       if (entity != null) {
         if (this.posY < Flying.MAX_FLIGHT_TARGET_Y && (this.posY < Flying.clampFlightY(entity.posY) || (!isArmored() && this.posY < Flying.clampFlightY(entity.posY + 4.0D + entity.getEyeHeight())))) {
           if (this.motionY < 0.0D)
@@ -444,7 +444,7 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
       this.xRotationHeads[k] = rotlerp(this.xRotationHeads[k], this.rotationPitch, 40.0F);
       this.yRotationHeads[k] = rotlerp(this.yRotationHeads[k], this.renderYawOffset, 10.0F);
     } 
-    if (this.world.isRemote)
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (k = 0; k < 2; k++)
         this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
     int j;
@@ -465,7 +465,7 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
       if (i <= 0) {
         createEngenderModExplosionFireless(this, this.posX, this.posY + getEyeHeight(), this.posZ, 7.0F, false);
         playSound(ESound.commandBlockWitherSpawn, Float.MAX_VALUE, 1.0F);
-        for (EntityPlayer entityplayer : this.world.playerEntities) {
+        for (EntityPlayer entityplayer : net.minecraft.AgeOfMinecraft.util.EntityCompat.playerEntities(this.world)) {
           this.world.playSound(null, entityplayer.getPosition(), ESound.commandBlockWitherSpawn, getSoundCategory(), Float.MAX_VALUE, 1.0F);
           entityplayer.sendStatusMessage(new TextComponentTranslation("§5A Wither Storm has been summoned in " + this.world.provider.getDimensionType().getName() + "!", new Object[0]), true);
         } 
@@ -656,11 +656,11 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
   }
   
   public int getInvulTime() {
-    return this.dataManager.get(INVULNERABILITY_TIME);
+    return this.getDataManager().get(INVULNERABILITY_TIME);
   }
   
   public void setInvulTime(int p_82215_1_) {
-    this.dataManager.set(INVULNERABILITY_TIME, p_82215_1_);
+    this.getDataManager().set(INVULNERABILITY_TIME, p_82215_1_);
   }
   
   public boolean isArmored() {

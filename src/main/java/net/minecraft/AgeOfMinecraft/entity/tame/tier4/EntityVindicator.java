@@ -97,7 +97,7 @@ public class EntityVindicator extends EntityAbstractIllagers {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(DATA_FLAGS_ID, (byte) 0);
+    this.getDataManager().register(DATA_FLAGS_ID, (byte) 0);
   }
   
   protected float getSoundPitch() {
@@ -121,7 +121,7 @@ public class EntityVindicator extends EntityAbstractIllagers {
   
   public void createChild() {
     super.createChild();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 1; i++) {
         EntityVindicator baby = new EntityVindicator(this.world);
         baby.copyLocationAndAnglesFrom(this);
@@ -149,18 +149,18 @@ public class EntityVindicator extends EntityAbstractIllagers {
   
   @SideOnly(Side.CLIENT)
   private boolean getVindicatorFlag(int p_190637_1_) {
-    int i = this.dataManager.get(DATA_FLAGS_ID);
+    int i = this.getDataManager().get(DATA_FLAGS_ID);
     return ((i & p_190637_1_) != 0);
   }
   
   private void setVindicatorFlag(int p_190638_1_, boolean p_190638_2_) {
-    int i = this.dataManager.get(DATA_FLAGS_ID);
+    int i = this.getDataManager().get(DATA_FLAGS_ID);
     if (p_190638_2_) {
       i |= p_190638_1_;
     } else {
       i &= p_190638_1_ ^ 0xFFFFFFFF;
     } 
-    this.dataManager.set(DATA_FLAGS_ID, (byte) (i & 0xFF));
+    this.getDataManager().set(DATA_FLAGS_ID, (byte) (i & 0xFF));
   }
   
   public void setAggressive(boolean p_190636_1_) {
@@ -214,7 +214,7 @@ public class EntityVindicator extends EntityAbstractIllagers {
       playLivingSound();
       playSound(SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 1.0F);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         setItemStackToSlot(EntityEquipmentSlot.MAINHAND, heldItem);
         stack.shrink(1);

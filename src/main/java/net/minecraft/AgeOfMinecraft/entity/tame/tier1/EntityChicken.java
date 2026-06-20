@@ -114,7 +114,7 @@ public class EntityChicken extends EntityTameBase implements IJumpingMount, Ligh
     super.onLivingUpdate();
     if (isBeingRidden() && this.rand.nextInt(100) == 0 && (getControllingPassenger()).height > getFittness() + 0.5F)
       attackEntityFrom(DamageSource.IN_WALL, 1.0F); 
-    if (isHero() && !this.world.isRemote && getAttackTarget() != null) {
+    if (isHero() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getAttackTarget() != null) {
       (getAttackTarget()).hurtResistantTime = 0;
       getLookHelper().setLookPositionWithEntity(getAttackTarget(), 180.0F, 40.0F);
       EntityEgg entitysnowball = new EntityEgg(this.world, this);
@@ -149,7 +149,7 @@ public class EntityChicken extends EntityTameBase implements IJumpingMount, Ligh
     if (!this.onGround && this.motionY < 0.0D && isEntityAlive())
       this.motionY *= 0.6D; 
     this.wingRotation += this.wingRotDelta * 2.0F;
-    if (!this.world.isRemote && !isChild() && !isChickenJockey() && --this.timeUntilNextEgg <= 0) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !isChild() && !isChickenJockey() && --this.timeUntilNextEgg <= 0) {
       playSound(SoundEvents.ENTITY_CHICKEN_EGG, getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
       dropItem(Items.EGG, 1);
       this.timeUntilNextEgg = this.rand.nextInt(600) + 600;
@@ -221,7 +221,7 @@ public class EntityChicken extends EntityTameBase implements IJumpingMount, Ligh
         if (getRidingEntity() == null && list != null && !list.isEmpty() && !isBeingRidden() && hasOwner(player))
             for (EntityZombie entity : list) {
                 if (entity != null)
-                    if (entity.isChild() && false && !entity.isRiding() && !this.world.isRemote) {
+                    if (entity.isChild() && false && !entity.isRiding() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
                         player.swingArm(EnumHand.MAIN_HAND);
                         entity.startRiding(this);
                         playSound(SoundEvents.ENTITY_CHICKEN_AMBIENT, 1.0F, 1.5F);
@@ -230,7 +230,7 @@ public class EntityChicken extends EntityTameBase implements IJumpingMount, Ligh
             }
         return true;
       } 
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 

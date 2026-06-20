@@ -56,7 +56,7 @@ public class EntityAIFollowLeader extends EntityAIBase {
       return false; 
     if (!this.theCreature.canFollowOwner())
       return false; 
-    if (this.theCreature.world.provider != entitylivingbase.world.provider)
+    if (this.theCreature.world.provider != net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entitylivingbase).provider)
       return false; 
     this.theOwner = entitylivingbase;
     double d0 = this.theCreature.getDistance(entitylivingbase);

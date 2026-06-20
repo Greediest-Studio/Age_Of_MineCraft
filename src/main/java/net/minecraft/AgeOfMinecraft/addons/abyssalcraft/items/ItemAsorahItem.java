@@ -21,7 +21,7 @@ public class ItemAsorahItem extends ItemAbyTier {
   
   public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
     ItemStack stack = playerIn.getHeldItem(hand);
-    if (worldIn.isRemote)
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(worldIn))
       return EnumActionResult.SUCCESS; 
     if (!playerIn.canPlayerEdit(pos.offset(facing), facing, stack))
       return EnumActionResult.FAIL; 
@@ -31,7 +31,7 @@ public class ItemAsorahItem extends ItemAbyTier {
     entityliving.rotationYawHead = entityliving.rotationYaw;
     entityliving.renderYawOffset = entityliving.rotationYaw;
     entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), null);
-    if (!worldIn.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(worldIn)) {
       worldIn.spawnEntity(entityliving);
       int i = 360000;
       while (i > 0) {

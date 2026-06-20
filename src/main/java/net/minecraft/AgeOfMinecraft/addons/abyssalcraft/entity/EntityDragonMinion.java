@@ -186,7 +186,7 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
           attackEntityAsMob(getAttackTarget());
     } 
     setSilent(isAIDisabled());
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       float f = MathHelper.cos(this.animTime * 3.1415927F * 2.0F);
       float f1 = MathHelper.cos(this.prevAnimTime * 3.1415927F * 2.0F);
       if (f1 <= -0.3F && f >= -0.3F)
@@ -275,7 +275,7 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
         MultiPartEntityPart.onUpdate();
         MultiPartEntityPart.setLocationAndAngles(this.posX - ((f19 * f23 + f22 * f24) * f16), this.posY + adouble1[1] - adouble[1] - ((f24 + f23) * f18) + 0.75D, this.posZ + ((f31 * f23 + f7 * f24) * f16), 0.0F, 0.0F);
       } 
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         collideWithEntities(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartBody.getEntityBoundingBox().grow(1.0D)));
         collideWithEntities(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartWing1.getEntityBoundingBox().grow(1.0D).offset(0.0D, -1.0D, 0.0D)));
         collideWithEntities(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartWing2.getEntityBoundingBox().grow(1.0D).offset(0.0D, -1.0D, 0.0D)));
@@ -286,7 +286,7 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
         attackEntitiesInList(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartNeck.getEntityBoundingBox().grow(3.0D).offset(0.0D, -1.0D, 0.0D)));
       } 
     } 
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (this.newPosRotationIncrements > 0) {
         double d3 = this.posX + (this.interpTargetX - this.posX) / this.newPosRotationIncrements;
         double d0 = this.posY + (this.interpTargetY - this.posY) / this.newPosRotationIncrements;
@@ -386,7 +386,7 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -430,10 +430,10 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
   private void updateHealingCircle() {
     if (this.healingcircle != null)
       if (this.healingcircle.isDead) {
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           attackEntityFromPart(this.dragonPartHead, DamageSource.causeExplosionDamage((Explosion)null), 1000.0F);
         this.healingcircle = null;
-      } else if (!this.world.isRemote && this.ticksExisted % 10 == 0 && getHealth() <= getMaxHealth() && this.healingcircle.getHealth() < this.healingcircle.getMaxHealth()) {
+      } else if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.ticksExisted % 10 == 0 && getHealth() <= getMaxHealth() && this.healingcircle.getHealth() < this.healingcircle.getMaxHealth()) {
         attackEntityFromPart(this.dragonPartHead, (new DamageSource("starve")).setDamageBypassesArmor().setDamageIsAbsolute(), 2.0F);
         this.healingcircle.heal(4.0F);
       }  
@@ -474,7 +474,7 @@ public class EntityDragonMinion extends EntityTameBase implements IEntityMultiPa
   private void attackEntitiesInList(List<?> par1List) {
       for (Object o : par1List) {
           Entity entity = (Entity) o;
-          if (entity.ticksExisted + entity.getEntityId() % 10 == 0 && !this.world.isRemote && entity instanceof EntityLivingBase && !false) {
+          if (entity.ticksExisted + entity.getEntityId() % 10 == 0 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && entity instanceof EntityLivingBase && !false) {
               attackEntityAsMob(entity);
               playSound(SoundEvents.BLOCK_NOTE_HAT, 5.0F, 0.75F);
               if (entity instanceof EntityLivingBase && !EntityUtil.isEntityCoralium((EntityLivingBase) entity))

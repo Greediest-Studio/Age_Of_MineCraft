@@ -36,7 +36,7 @@ public class EntityPEGunPellet extends EntityFireball {
   }
   
   protected void onImpact(RayTraceResult result) {
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (this.shootingEntity != null && result.entityHit != null && result.entityHit instanceof net.minecraft.entity.monster.EntityEnderman)
         result.entityHit.attackEntityFrom((new EntityDamageSourceIndirect("blaster", this, this.shootingEntity)).setDamageBypassesArmor(), 0.0F);
       if (this.shootingEntity != null && result.entityHit != null && result.entityHit instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityEnderman)

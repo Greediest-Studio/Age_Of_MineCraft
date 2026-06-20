@@ -110,7 +110,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(SLIME_SIZE, 1);
+    this.getDataManager().register(SLIME_SIZE, 1);
   }
   
   public int timesToConvert() {
@@ -118,7 +118,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
   }
   
   public void setSlimeSize(int size) {
-    this.dataManager.set(SLIME_SIZE, size);
+    this.getDataManager().set(SLIME_SIZE, size);
     if (EngenderConfig.mobs.useMobTalkerModels) {
       setSize(size * 0.125F, size * 0.5F - 0.05F);
       if (size <= 1)
@@ -140,7 +140,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
   }
   
   public int getSlimeSize() {
-    return this.dataManager.get(SLIME_SIZE);
+    return this.getDataManager().get(SLIME_SIZE);
   }
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
@@ -172,7 +172,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
   
   public void createChild() {
     super.createChild();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 2 + this.rand.nextInt(3); i++) {
         EntitySlime baby = createInstance();
         baby.copyLocationAndAnglesFrom(this);
@@ -253,7 +253,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
   
   public void setDead() {
     int i = getSlimeSize();
-    if (!this.world.isRemote && i > 1 && getHealth() <= 0.0F) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && i > 1 && getHealth() <= 0.0F) {
       int j = 2 + this.rand.nextInt(3);
       for (int k = 0; k < j; k++) {
         float f = ((k % 2) - 0.5F) * i / 4.0F;
@@ -465,7 +465,7 @@ public class EntitySlime extends EntityTameBase implements IJumpingMount {
       return true;
     } 
     if (stack.isEmpty() && getRidingEntity() == null && !isSmallSlime()) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 

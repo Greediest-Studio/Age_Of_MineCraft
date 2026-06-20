@@ -60,8 +60,8 @@ public class ItemManaCollector extends ItemBEItem implements IBauble {
   }
   
   public void onWornTick(ItemStack stack, EntityLivingBase entityIn) {
-    World world = entityIn.world;
-    if (!world.isRemote && entityIn instanceof EntityPlayer) {
+    World world = net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entityIn);
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(world) && entityIn instanceof EntityPlayer) {
       EntityPlayer player = (EntityPlayer)entityIn;
       if (!player.isSpectator()) {
         List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().grow(24.0D));

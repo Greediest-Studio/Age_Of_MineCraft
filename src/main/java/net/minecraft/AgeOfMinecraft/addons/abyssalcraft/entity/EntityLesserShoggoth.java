@@ -147,9 +147,9 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(TYPE, 0);
-    this.dataManager.register(FOOD, 0);
-    this.dataManager.register(CLIMBING, (byte) 0);
+    this.getDataManager().register(TYPE, 0);
+    this.getDataManager().register(FOOD, 0);
+    this.getDataManager().register(CLIMBING, (byte) 0);
   }
   
   public boolean canBreatheUnderwater() {
@@ -158,29 +158,29 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
   
   public void onUpdate() {
     super.onUpdate();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       setBesideClimbableBlock(this.collidedHorizontally); 
   }
   
   public int getShoggothType() {
-    return this.dataManager.get(TYPE);
+    return this.getDataManager().get(TYPE);
   }
   
   public void setShoggothType(int par1) {
-    this.dataManager.set(TYPE, par1);
+    this.getDataManager().set(TYPE, par1);
   }
   
   public void setFoodLevel(int par1) {
-    this.dataManager.set(FOOD, par1);
+    this.getDataManager().set(FOOD, par1);
   }
   
   public int getFoodLevel() {
-    return this.dataManager.get(FOOD);
+    return this.getDataManager().get(FOOD);
   }
   
   public void feed() {
     int food = getFoodLevel() + 1;
-    this.dataManager.set(FOOD, food);
+    this.getDataManager().set(FOOD, food);
     setGrowingAge(getGrowingAge() + 4000);
     if (getFittness() < 1.5F && this.rand.nextInt(10) == 0)
       setFittness(getFittness() + 0.05F); 
@@ -209,7 +209,7 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
   public void onLivingUpdate() {
     super.onLivingUpdate();
     this.monolithTimer++;
-    if (getFoodLevel() == 3 && !this.world.isRemote) {
+    if (getFoodLevel() == 3 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       setFoodLevel(0);
       if (!isChild()) {
         EntityLesserShoggoth shoggoth = (EntityLesserShoggoth)spawnBaby(this);
@@ -222,7 +222,7 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
         playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
       } 
     } 
-    if (!this.world.isRemote && !isInvisible())
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !isInvisible())
       for (int l = 0; l < 1; l++) {
         int x = MathHelper.floor(this.posX + ((l % 2 * 2 - 1) * 0.25F));
         int y = MathHelper.floor(this.posY);
@@ -239,7 +239,7 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
       if (this.world.getEntitiesWithinAABB(getClass(), getEntityBoundingBox().grow(32.0D)).size() > 5 && !isChild()) {
         for (EntityLesserShoggoth shoggoth : this.world.getEntitiesWithinAABB(getClass(), getEntityBoundingBox().grow(16.0D)))
           shoggoth.reduceMonolithTimer(); 
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           (new WorldGenShoggothMonolith()).generate(this.world, this.rand, new BlockPos(MathHelper.floor(this.posX) + 3, MathHelper.floor(this.posY), MathHelper.floor(this.posZ) + 3)); 
       } 
     } 
@@ -261,17 +261,17 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
   }
   
   public boolean isBesideClimbableBlock() {
-    return ((this.dataManager.get(CLIMBING) & 0x1) != 0);
+    return ((this.getDataManager().get(CLIMBING) & 0x1) != 0);
   }
   
   public void setBesideClimbableBlock(boolean par1) {
-    byte b0 = this.dataManager.get(CLIMBING);
+    byte b0 = this.getDataManager().get(CLIMBING);
     if (par1) {
       b0 = (byte)(b0 | 0x1);
     } else {
       b0 = (byte)(b0 & 0xFFFFFFFE);
     } 
-    this.dataManager.set(CLIMBING, b0);
+    this.getDataManager().set(CLIMBING, b0);
   }
   
   public boolean attackEntityAsMob(Entity par1Entity) {
@@ -382,7 +382,7 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
       if (getShoggothType() != stack.getMetadata()) {
         playSound(getAmbientSound(), getSoundVolume(), getSoundPitch());
         player.swingArm(hand);
-        if (!this.world.isRemote) {
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
           entityDropItem(new ItemStack(ACItems.shoggoth_flesh, 1, getShoggothType()), 1.0F);
           setShoggothType(stack.getMetadata());
           stack.shrink(1);
@@ -391,7 +391,7 @@ public class EntityLesserShoggoth extends EntityTameBase implements Armored, Und
       return true;
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 

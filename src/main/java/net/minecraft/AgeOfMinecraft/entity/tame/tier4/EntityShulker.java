@@ -13,6 +13,7 @@ import net.minecraft.AgeOfMinecraft.entity.tame.Structure;
 import net.minecraft.AgeOfMinecraft.registry.ELoot;
 import net.minecraft.AgeOfMinecraft.registry.ESetup;
 import net.minecraft.AgeOfMinecraft.registry.ESound;
+import net.minecraft.AgeOfMinecraft.util.EntityCompat;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.BlockPistonExtension;
 import net.minecraft.block.material.Material;
@@ -187,10 +188,10 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(ATTACHED_FACE, EnumFacing.DOWN);
-    this.dataManager.register(ATTACHED_BLOCK_POS, Optional.absent());
-    this.dataManager.register(PEEK_TICK, (byte) 0);
-    this.dataManager.register(COLOR, (byte) DEFAULT_COLOR.getMetadata());
+    this.getDataManager().register(ATTACHED_FACE, EnumFacing.DOWN);
+    this.getDataManager().register(ATTACHED_BLOCK_POS, Optional.absent());
+    this.getDataManager().register(PEEK_TICK, (byte) 0);
+    this.getDataManager().register(COLOR, (byte) DEFAULT_COLOR.getMetadata());
   }
   
   protected void applyEntityAttributes() {
@@ -205,24 +206,24 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
   
   public void readEntityFromNBT(NBTTagCompound compound) {
     super.readEntityFromNBT(compound);
-    this.dataManager.set(ATTACHED_FACE, EnumFacing.byIndex(compound.getByte("AttachFace")));
-    this.dataManager.set(PEEK_TICK, compound.getByte("Peek"));
-    this.dataManager.set(COLOR, compound.getByte("Color"));
+    this.getDataManager().set(ATTACHED_FACE, EnumFacing.byIndex(compound.getByte("AttachFace")));
+    this.getDataManager().set(PEEK_TICK, compound.getByte("Peek"));
+    this.getDataManager().set(COLOR, compound.getByte("Color"));
     if (compound.hasKey("APX")) {
       int i = compound.getInteger("APX");
       int j = compound.getInteger("APY");
       int k = compound.getInteger("APZ");
-      this.dataManager.set(ATTACHED_BLOCK_POS, Optional.of(new BlockPos(i, j, k)));
+      this.getDataManager().set(ATTACHED_BLOCK_POS, Optional.of(new BlockPos(i, j, k)));
     } else {
-      this.dataManager.set(ATTACHED_BLOCK_POS, Optional.absent());
+      this.getDataManager().set(ATTACHED_BLOCK_POS, Optional.absent());
     } 
   }
   
   public void writeEntityToNBT(NBTTagCompound compound) {
     super.writeEntityToNBT(compound);
-    compound.setByte("AttachFace", (byte) this.dataManager.get(ATTACHED_FACE).getIndex());
-    compound.setByte("Peek", this.dataManager.get(PEEK_TICK));
-    compound.setByte("Color", this.dataManager.get(COLOR));
+    compound.setByte("AttachFace", (byte) this.getDataManager().get(ATTACHED_FACE).getIndex());
+    compound.setByte("Peek", this.getDataManager().get(PEEK_TICK));
+    compound.setByte("Color", this.getDataManager().get(COLOR));
     BlockPos blockpos = getAttachmentPos();
     if (blockpos != null) {
       compound.setInteger("APX", blockpos.getX());
@@ -232,12 +233,12 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
   }
   
   public EnumDyeColor getColor() {
-    return EnumDyeColor.byMetadata(this.dataManager.get(COLOR));
+    return EnumDyeColor.byMetadata(this.getDataManager().get(COLOR));
   }
   
   public void setColor(EnumDyeColor color) {
-    byte b0 = this.dataManager.get(COLOR);
-    this.dataManager.set(COLOR, (byte) (b0 & 0xF0 | color.getMetadata() & 0xF));
+    byte b0 = this.getDataManager().get(COLOR);
+    this.getDataManager().set(COLOR, (byte) (b0 & 0xF0 | color.getMetadata() & 0xF));
   }
   
   public boolean interact(EntityPlayer player, EnumHand hand) {
@@ -248,7 +249,7 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
       if (getColor() != enumdyecolor) {
         playSound(getAmbientSound(), getSoundVolume(), getSoundPitch());
         player.swingArm(hand);
-        if (!this.world.isRemote) {
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
           entityDropItem(new ItemStack(Items.DYE, 1, getColor().getDyeDamage()), 1.0F);
           setColor(enumdyecolor);
           stack.shrink(1);
@@ -259,7 +260,7 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
     if (stack != null && stack.getItem() == Items.FIREWORKS && hasOwner(player)) {
       playSound(SoundEvents.ITEM_FLINTANDSTEEL_USE, 1.0F, 1.0F);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         if (!getHeldItemMainhand().isEmpty())
           entityDropItem(getHeldItemMainhand(), 1.0F); 
         heldItem.setTagCompound(stack.getTagCompound());
@@ -290,10 +291,10 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
         this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height * 2.0F), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, 0.25D, d1);
       } 
     } 
-    BlockPos blockpos = (BlockPos)((Optional<?>)this.dataManager.get(ATTACHED_BLOCK_POS)).orNull();
-    if (blockpos == null && !this.world.isRemote) {
+    BlockPos blockpos = (BlockPos)((Optional<?>)this.getDataManager().get(ATTACHED_BLOCK_POS)).orNull();
+    if (blockpos == null && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       blockpos = new BlockPos(this);
-      this.dataManager.set(ATTACHED_BLOCK_POS, Optional.of(blockpos));
+      this.getDataManager().set(ATTACHED_BLOCK_POS, Optional.of(blockpos));
     } 
     if (!isWild() && getDistanceSq(getOwner()) >= 576.0D)
       teleportTo((getOwner()).posX, (getOwner()).posY, (getOwner()).posZ); 
@@ -304,14 +305,14 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
       this.renderYawOffset = f;
       this.prevRenderYawOffset = f;
       this.clientSideTeleportInterpolation = 0;
-    } else if (!this.world.isRemote) {
+    } else if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       IBlockState iblockstate = this.world.getBlockState(blockpos);
       if (iblockstate.getMaterial() != Material.AIR)
         if (iblockstate.getBlock() == Blocks.PISTON_EXTENSION) {
           EnumFacing enumfacing = (EnumFacing)iblockstate.getValue((IProperty)BlockPistonBase.FACING);
           if (this.world.isAirBlock(blockpos.offset(enumfacing))) {
             blockpos = blockpos.offset(enumfacing);
-            this.dataManager.set(ATTACHED_BLOCK_POS, Optional.of(blockpos));
+            this.getDataManager().set(ATTACHED_BLOCK_POS, Optional.of(blockpos));
           } else {
             teleportShulkerToBlock();
           } 
@@ -319,7 +320,7 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
           EnumFacing enumfacing3 = (EnumFacing)iblockstate.getValue((IProperty)BlockPistonExtension.FACING);
           if (this.world.isAirBlock(blockpos.offset(enumfacing3))) {
             blockpos = blockpos.offset(enumfacing3);
-            this.dataManager.set(ATTACHED_BLOCK_POS, Optional.of(blockpos));
+            this.getDataManager().set(ATTACHED_BLOCK_POS, Optional.of(blockpos));
           } else {
             teleportShulkerToBlock();
           } 
@@ -332,7 +333,7 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
         for (EnumFacing enumfacing1 : EnumFacing.values()) {
           blockpos1 = blockpos.offset(enumfacing1);
           if (this.world.isBlockNormalCube(blockpos1, false)) {
-            this.dataManager.set(ATTACHED_FACE, enumfacing1);
+            this.getDataManager().set(ATTACHED_FACE, enumfacing1);
             flag = true;
             break;
           } 
@@ -352,7 +353,7 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
       this.peekAmount = MathHelper.clamp(this.peekAmount + 0.05F, 0.0F, f1);
     } 
     if (blockpos != null && this.world.getBlockState(blockpos) != Blocks.AIR) {
-      if (this.world.isRemote)
+      if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         if (this.clientSideTeleportInterpolation > 0 && this.currentAttachmentPosition != null) {
           this.clientSideTeleportInterpolation--;
         } else {
@@ -448,14 +449,17 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
   
   public void setPosition(double x, double y, double z) {
     super.setPosition(x, y, z);
-    if (this.dataManager != null && isEntityAlive()) {
-      Optional<BlockPos> optional = this.dataManager.get(ATTACHED_BLOCK_POS);
-      Optional<BlockPos> optional1 = Optional.of(new BlockPos(x, y, z));
-      if (!optional1.equals(optional)) {
-        this.dataManager.set(ATTACHED_BLOCK_POS, optional1);
-        this.dataManager.set(PEEK_TICK, (byte) 0);
-        this.isAirBorne = true;
-      } 
+    if (this.getDataManager() != null && isEntityAlive()) {
+      try {
+        Optional<BlockPos> optional = this.getDataManager().get(ATTACHED_BLOCK_POS);
+        Optional<BlockPos> optional1 = Optional.of(new BlockPos(x, y, z));
+        if (!optional1.equals(optional)) {
+          this.getDataManager().set(ATTACHED_BLOCK_POS, optional1);
+          this.getDataManager().set(PEEK_TICK, (byte) 0);
+          this.isAirBorne = true;
+        } 
+      } catch (IllegalArgumentException ignored) {
+      }
     } 
   }
   
@@ -475,15 +479,15 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
           boolean flag = false;
           for (EnumFacing enumfacing : EnumFacing.values()) {
             if (this.world.isBlockNormalCube(blockpos1.offset(enumfacing), false)) {
-              this.dataManager.set(ATTACHED_FACE, enumfacing);
+              this.getDataManager().set(ATTACHED_FACE, enumfacing);
               flag = true;
               break;
             } 
           } 
           if (flag) {
             playSound(SoundEvents.ENTITY_SHULKER_TELEPORT, getSoundVolume(), 0.95F);
-            this.dataManager.set(ATTACHED_BLOCK_POS, Optional.of(blockpos1));
-            this.dataManager.set(PEEK_TICK, (byte) 0);
+            this.getDataManager().set(ATTACHED_BLOCK_POS, Optional.of(blockpos1));
+            this.getDataManager().set(PEEK_TICK, (byte) 0);
             setAttackTarget(null);
             return true;
           } 
@@ -541,7 +545,7 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
     List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(32.0D), Predicates.and(EntitySelectors.IS_ALIVE));
     if (list != null && !list.isEmpty() && this.ticksExisted % 60 == 0 && isPositiveShulker() && !isAIDisabled())
         for (EntityLivingBase entity : list) {
-            if (!this.world.isRemote && entity != null && false && this.rand.nextInt(60) == 0 && !(entity instanceof net.minecraft.entity.monster.IMob)) {
+            if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && entity != null && false && this.rand.nextInt(60) == 0 && !(entity instanceof net.minecraft.entity.monster.IMob)) {
                 EntityShulkerBulletFriendly entityshulkerbullet = new EntityShulkerBulletFriendly(this.world, this, entity, getAttachmentFacing().getAxis());
                 this.world.spawnEntity(entityshulkerbullet);
                 playSound(SoundEvents.ENTITY_SHULKER_SHOOT, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
@@ -551,7 +555,8 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
   }
   
   public void notifyDataManagerChange(DataParameter<?> key) {
-    if (ATTACHED_BLOCK_POS.equals(key) && this.world.isRemote && !isRiding()) {
+    World world = EntityCompat.world(this);
+    if (ATTACHED_BLOCK_POS.equals(key) && world != null && net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(world) && !isRiding()) {
       BlockPos blockpos = getAttachmentPos();
       if (blockpos != null) {
         if (this.currentAttachmentPosition == null) {
@@ -559,7 +564,7 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
         } else {
           this.clientSideTeleportInterpolation = 6;
         } 
-        if (isEntityAlive() && this.world.getBlockState(getAttachmentPos()) != Blocks.AIR) {
+        if (isEntityAlive() && world.getBlockState(getAttachmentPos()) != Blocks.AIR) {
           this.lastTickPosX = this.prevPosX = this.posX = blockpos.getX() + 0.5D;
           this.lastTickPosY = this.prevPosY = this.posY = blockpos.getY();
           this.lastTickPosZ = this.prevPosZ = this.posZ = blockpos.getZ() + 0.5D;
@@ -599,24 +604,24 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
   }
   
   public EnumFacing getAttachmentFacing() {
-    return this.dataManager.get(ATTACHED_FACE);
+    return this.getDataManager().get(ATTACHED_FACE);
   }
   
   @Nullable
   public BlockPos getAttachmentPos() {
-    return (BlockPos)((Optional<?>)this.dataManager.get(ATTACHED_BLOCK_POS)).orNull();
+    return (BlockPos)((Optional<?>)this.getDataManager().get(ATTACHED_BLOCK_POS)).orNull();
   }
   
   public void setAttachmentPos(@Nullable BlockPos pos) {
-    this.dataManager.set(ATTACHED_BLOCK_POS, Optional.fromNullable(pos));
+    this.getDataManager().set(ATTACHED_BLOCK_POS, Optional.fromNullable(pos));
   }
   
   public int getPeekTick() {
-    return this.dataManager.get(PEEK_TICK);
+    return this.getDataManager().get(PEEK_TICK);
   }
   
   public void updateArmorModifier(int p_184691_1_) {
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       getEntityAttribute(SharedMonsterAttributes.ARMOR).removeModifier(COVERED_ARMOR_BONUS_MODIFIER);
       if (p_184691_1_ == 0) {
         getEntityAttribute(SharedMonsterAttributes.ARMOR).applyModifier(COVERED_ARMOR_BONUS_MODIFIER);
@@ -626,7 +631,7 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
         playSound(SoundEvents.ENTITY_SHULKER_OPEN, 1.0F, 1.0F);
       } 
     } 
-    this.dataManager.set(PEEK_TICK, (byte) p_184691_1_);
+    this.getDataManager().set(PEEK_TICK, (byte) p_184691_1_);
   }
   
   @SideOnly(Side.CLIENT)
@@ -700,7 +705,7 @@ public class EntityShulker extends EntityTameBase implements Armored, Structure,
   }
   
   public void inflictShulkerEffects(EntityLivingBase entity) {
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       switch (getColor()) {
         case WHITE:
           inflictCustomStatusEffect((this.world.getDifficulty() == EnumDifficulty.PEACEFUL) ? EnumDifficulty.PEACEFUL : EnumDifficulty.EASY, entity, MobEffects.INVISIBILITY, 2400, 0);

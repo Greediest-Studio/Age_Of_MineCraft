@@ -80,7 +80,7 @@ public class ItemDraconicPortalStaff extends ItemBEItem {
     if (!playerIn.capabilities.isCreativeMode && !flag)
       return !flag ? new ActionResult(EnumActionResult.FAIL, itemStackIn) : new ActionResult(EnumActionResult.PASS, itemStackIn); 
     playerIn.setActiveHand(hand);
-    playerIn.world.playSound(playerIn, new BlockPos(playerIn), SoundEvents.BLOCK_ANVIL_DESTROY, SoundCategory.PLAYERS, 100.0F, 0.5F);
+    net.minecraft.AgeOfMinecraft.util.EntityCompat.world(playerIn).playSound(playerIn, new BlockPos(playerIn), SoundEvents.BLOCK_ANVIL_DESTROY, SoundCategory.PLAYERS, 100.0F, 0.5F);
     return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
   }
   
@@ -98,7 +98,7 @@ public class ItemDraconicPortalStaff extends ItemBEItem {
     EntityDraconicPortal portal = new EntityDraconicPortal(worldIn);
     portal.setLocationAndAngles((int)playerIn.posX, (int)playerIn.posY, (int)playerIn.posZ, 0.0F, 0.0F);
     portal.setOwnerId(playerIn.getUniqueID());
-    if (!worldIn.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(worldIn)) {
       worldIn.spawnEntity(portal);
       portal.setMetaData(stack.getMetadata());
       portal.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1000.0D + portal.getMetaData() * 1000.0D);

@@ -63,7 +63,7 @@ public class EntityDreadedChargeOther extends EntityFireball {
   
   protected void onImpact(RayTraceResult movingObject) {
     if (this.ticksExisted > 10) {
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         for (int x = getPosition().getX() - 4; x < getPosition().getX() + 4; x++) {
           for (int z = getPosition().getZ() - 4; z < getPosition().getZ() + 4; z++) {
             if (!(this.world.getBiome(new BlockPos(x, 0, z)) instanceof com.shinoow.abyssalcraft.api.biome.IDreadlandsBiome) && this.world
@@ -104,7 +104,7 @@ public class EntityDreadedChargeOther extends EntityFireball {
             entityareaeffectcloud.setPosition(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ); 
         }  
       this.world.playSound(null, getPosition(), SoundEvents.ENTITY_ENDERDRAGON_FIREBALL_EPLD, SoundCategory.MASTER, 1.0F, this.world.rand.nextFloat() * 0.1F + 0.9F);
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         this.world.spawnEntity(entityareaeffectcloud);
       if (this.shootingEntity != null)
         EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false);

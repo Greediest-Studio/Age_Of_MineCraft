@@ -49,15 +49,15 @@ public class EntityLlamaSpitOther extends EntityLlamaSpit {
   }
   
   public void onHit(RayTraceResult movingObject) {
-    if (!this.world.isRemote && movingObject.entityHit != null)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && movingObject.entityHit != null)
       if (movingObject.entityHit != this.owner && movingObject.entityHit instanceof EntityLivingBase && (!false || (movingObject.entityHit instanceof net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase && false && this.owner.getFakeHealth() > 0.0F)) && movingObject.entityHit != null && this.owner != null && movingObject.entityHit != this.owner) {
         this.owner.inflictEngenderMobDamage((EntityLivingBase)movingObject.entityHit, " was spat on by ", DamageSource.causeThrownDamage(this.owner, this), 1.0F);
         if (movingObject.entityHit.isNonBoss())
           ((EntityLivingBase)movingObject.entityHit).knockBack(this, 0.75F, MathHelper.sin(this.owner.rotationYawHead * 0.017453292F), -MathHelper.cos(this.owner.rotationYawHead * 0.017453292F));
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           setDead(); 
       }  
-    if (!this.world.isRemote && movingObject.entityHit == null)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && movingObject.entityHit == null)
       setDead(); 
   }
   

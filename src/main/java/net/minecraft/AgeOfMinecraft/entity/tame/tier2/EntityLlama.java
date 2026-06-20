@@ -1,6 +1,7 @@
 package net.minecraft.AgeOfMinecraft.entity.tame.tier2;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 import net.minecraft.AgeOfMinecraft.entity.tame.Animal;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
 import net.minecraft.AgeOfMinecraft.entity.tame.Light;
@@ -97,7 +98,8 @@ public class EntityLlama extends EntityTameBase implements IRangedAttackMob, Lig
   
   protected void applyEntityAttributes() {
     super.applyEntityAttributes();
-    getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue((15.0F + this.rand.nextInt(8) + this.rand.nextInt(9)));
+    Random random = compatRandom();
+    getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue((15.0F + random.nextInt(8) + random.nextInt(9)));
     getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(40.0D);
     getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
     getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
@@ -105,16 +107,16 @@ public class EntityLlama extends EntityTameBase implements IRangedAttackMob, Lig
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(DATA_COLOR_ID, -1);
-    this.dataManager.register(DATA_VARIANT_ID, 0);
+    this.getDataManager().register(DATA_COLOR_ID, -1);
+    this.getDataManager().register(DATA_VARIANT_ID, 0);
   }
   
   public int getVariant() {
-    return MathHelper.clamp(this.dataManager.get(DATA_VARIANT_ID), 0, 3);
+    return MathHelper.clamp(this.getDataManager().get(DATA_VARIANT_ID), 0, 3);
   }
   
   public void setVariant(int variantIn) {
-    this.dataManager.set(DATA_VARIANT_ID, variantIn);
+    this.getDataManager().set(DATA_VARIANT_ID, variantIn);
   }
   
   public void updatePassenger(Entity passenger) {
@@ -203,7 +205,7 @@ public class EntityLlama extends EntityTameBase implements IRangedAttackMob, Lig
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -260,12 +262,12 @@ public class EntityLlama extends EntityTameBase implements IRangedAttackMob, Lig
   }
   
   private void setColor(@Nullable EnumDyeColor color) {
-    this.dataManager.set(DATA_COLOR_ID, (color == null) ? -1 : color.getMetadata());
+    this.getDataManager().set(DATA_COLOR_ID, (color == null) ? -1 : color.getMetadata());
   }
   
   @Nullable
   public EnumDyeColor getColor() {
-    int i = this.dataManager.get(DATA_COLOR_ID);
+    int i = this.getDataManager().get(DATA_COLOR_ID);
     return (i == -1) ? null : EnumDyeColor.byMetadata(i);
   }
   

@@ -139,7 +139,7 @@ public class EntityWitch extends EntityTameBase implements IRangedAttackMob, Lig
   
   public void createChild() {
     super.createChild();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 1 + this.rand.nextInt(2); i++) {
         EntityWitch baby = new EntityWitch(this.world);
         baby.copyLocationAndAnglesFrom(this);
@@ -190,14 +190,14 @@ public class EntityWitch extends EntityTameBase implements IRangedAttackMob, Lig
                   this.world.removeEntity(entity);
                   entityzombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityzombie)), null);
                   entityzombie.spawnExplosionParticle();
-                  if (!this.world.isRemote)
+                  if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                       this.world.spawnEntity(entityzombie);
               }
           }
     } 
     if (getAttackTarget() != null && getDistanceSq(getAttackTarget()) < 256.0D && getSpecialAttackTimer() <= 0 && isHero())
       performSpecialAttack(); 
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (this.witchAttackTimer <= 28 && this.witchAttackTimer > 0 && this.ticksExisted % 4 == 0 && isEntityAlive())
         this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_DRINK, getSoundCategory(), getSoundVolume(), getSoundPitch() - 0.2F);
       if (isDrinkingPotion() && getHealth() > 0.0F && this.ticksExisted > 20) {
@@ -244,7 +244,7 @@ public class EntityWitch extends EntityTameBase implements IRangedAttackMob, Lig
           iattributeinstance.applyModifier(MODIFIER);
         } 
       } 
-      if (!this.world.isRemote && !isChild() && getOwner() != null && this.world.getClosestPlayerToEntity(this, 16.0D) != null && this.world.getClosestPlayerToEntity(this, 16.0D) == getOwner() && getDistance(getOwner()) < 16.0D && canEntityBeSeen(getOwner()) && this.rand.nextInt(200) == 0) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !isChild() && getOwner() != null && this.world.getClosestPlayerToEntity(this, 16.0D) != null && this.world.getClosestPlayerToEntity(this, 16.0D) == getOwner() && getDistance(getOwner()) < 16.0D && canEntityBeSeen(getOwner()) && this.rand.nextInt(200) == 0) {
         attackEntityWithRangedAttack(getOwner(), 0.0F);
         getLookHelper().setLookPositionWithEntity(getOwner(), 180.0F, 30.0F);
       } 

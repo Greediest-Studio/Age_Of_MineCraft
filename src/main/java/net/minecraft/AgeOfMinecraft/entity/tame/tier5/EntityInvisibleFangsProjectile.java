@@ -51,7 +51,7 @@ public class EntityInvisibleFangsProjectile extends EntitySmallFireball {
   }
   
   protected void onImpact(RayTraceResult result) {
-    if (this.ticksExisted > 40 && !this.world.isRemote && this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase && result.entityHit != null && result.entityHit instanceof EntityLivingBase)
+    if (this.ticksExisted > 40 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase && result.entityHit != null && result.entityHit instanceof EntityLivingBase)
       if (!false) {
         this.shootingEntity.attackEntityAsMob(this.targetEntity);
         setDead();
@@ -81,7 +81,7 @@ public class EntityInvisibleFangsProjectile extends EntitySmallFireball {
   public void onUpdate() {
     super.onUpdate();
     setInvisible(true);
-    if (!this.world.isRemote && this.shootingEntity != null && this.targetEntity != null && this.ticksExisted > 2) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.shootingEntity != null && this.targetEntity != null && this.ticksExisted > 2) {
       EntityEvokerFangOther entityevokerfangs = new EntityEvokerFangOther(this.world, this.posX, this.posY, this.posZ, (float)MathHelper.atan2(this.targetEntity.posZ - this.posZ, this.targetEntity.posX - this.posX), 5, (this.shootingEntity != null) ? this.shootingEntity : null);
       this.world.spawnEntity(entityevokerfangs);
     } 
@@ -116,7 +116,7 @@ public class EntityInvisibleFangsProjectile extends EntitySmallFireball {
       this.motionY = d1 / f2 * (getMotionFactor() * getMotionFactor()) * (getMotionFactor() * getMotionFactor()) + this.motionY * (getMotionFactor() * getMotionFactor());
       this.motionZ = d2 / f2 * (getMotionFactor() * getMotionFactor()) * (getMotionFactor() * getMotionFactor()) + this.motionZ * (getMotionFactor() * getMotionFactor());
     } 
-    if (!this.world.isRemote && this.targetEntity == null)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.targetEntity == null)
       setDead(); 
   }
 }

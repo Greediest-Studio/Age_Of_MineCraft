@@ -22,6 +22,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -121,7 +122,7 @@ public class EntityVex extends EntityTameBase implements Light, Flying, Elementa
       } else {
         setBoundOrigin((getJukeboxToDanceTo() != null) ? getJukeboxToDanceTo().up(2) : ((getGuardBlock() != null) ? new BlockPos(this.randPosX, this.randPosY, this.randPosZ) : getOwner().getPosition().up((int)getOwner().getEyeHeight())));
       }  
-    if (!this.world.isRemote && isEntityAlive() && getAttackTarget() == null && getSpecialAttackTimer() > 600) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && isEntityAlive() && getAttackTarget() == null && getSpecialAttackTimer() > 600) {
       List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(24.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       for (int j2 = 0; j2 < 10 && !list.isEmpty(); j2++) {
         EntityLivingBase entitylivingbase = list.get(this.rand.nextInt(list.size()));
@@ -137,14 +138,16 @@ public class EntityVex extends EntityTameBase implements Light, Flying, Elementa
   
   protected void initEntityAI() {
     super.initEntityAI();
-    this.tasks.addTask(0, new EntityAISwimming(this));
-    this.tasks.addTask(4, new AIChargeAttack());
-    this.tasks.addTask(8, new AIMoveRandom());
-    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.0D, 24.0F, 6.0F));
-    this.tasks.addTask(8, new EntityAILookIdle(this));
-    this.targetTasks.addTask(0, new EntityAIFriendlyHurtByTarget(this, true, new Class[0]));
-    this.targetTasks.addTask(1, new EntityAILeaderHurtByTarget(this));
-    this.targetTasks.addTask(2, new EntityAILeaderHurtTarget(this));
+    EntityAITasks tasks = compatTasks();
+    EntityAITasks targetTasks = compatTargetTasks();
+    tasks.addTask(0, new EntityAISwimming(this));
+    tasks.addTask(4, new AIChargeAttack());
+    tasks.addTask(8, new AIMoveRandom());
+    tasks.addTask(2, new EntityAIFollowLeader(this, 1.0D, 24.0F, 6.0F));
+    tasks.addTask(8, new EntityAILookIdle(this));
+    targetTasks.addTask(0, new EntityAIFriendlyHurtByTarget(this, true, new Class[0]));
+    targetTasks.addTask(1, new EntityAILeaderHurtByTarget(this));
+    targetTasks.addTask(2, new EntityAILeaderHurtTarget(this));
   }
   
   protected void applyEntityAttributes() {
@@ -156,7 +159,7 @@ public class EntityVex extends EntityTameBase implements Light, Flying, Elementa
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(VEX_FLAGS, (byte) 0);
+    this.getDataManager().register(VEX_FLAGS, (byte) 0);
   }
   
   public void readEntityFromNBT(NBTTagCompound compound) {
@@ -184,18 +187,18 @@ public class EntityVex extends EntityTameBase implements Light, Flying, Elementa
   }
   
   private boolean getVexFlag(int p_190656_1_) {
-    int i = this.dataManager.get(VEX_FLAGS);
+    int i = this.getDataManager().get(VEX_FLAGS);
     return ((i & p_190656_1_) != 0);
   }
   
   private void setVexFlag(int p_190660_1_, boolean p_190660_2_) {
-    int i = this.dataManager.get(VEX_FLAGS);
+    int i = this.getDataManager().get(VEX_FLAGS);
     if (p_190660_2_) {
       i |= p_190660_1_;
     } else {
       i &= ~p_190660_1_;
     } 
-    this.dataManager.set(VEX_FLAGS, (byte) (i & 0xFF));
+    this.getDataManager().set(VEX_FLAGS, (byte) (i & 0xFF));
   }
   
   public boolean isCharging() {

@@ -70,10 +70,10 @@ public class EntityEvokerFangOther extends EntityEvokerFangs {
   }
   
   public void onUpdate() {
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       setFlag(6, isGlowing()); 
     onEntityUpdate();
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (this.clientSideAttackStarted) {
         this.lifeTicks--;
         if (this.lifeTicks == 14)

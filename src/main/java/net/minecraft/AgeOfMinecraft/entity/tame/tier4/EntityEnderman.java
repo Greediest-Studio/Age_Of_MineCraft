@@ -21,6 +21,7 @@ import net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStorm;
 import net.minecraft.AgeOfMinecraft.registry.ELoot;
 import net.minecraft.AgeOfMinecraft.registry.ESetup;
 import net.minecraft.AgeOfMinecraft.registry.ESound;
+import net.minecraft.AgeOfMinecraft.util.EntityAICompat;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -172,8 +173,8 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(CARRIED_BLOCK, Optional.absent());
-    this.dataManager.register(OMNI_DODGE, Boolean.FALSE);
+    this.getDataManager().register(CARRIED_BLOCK, Optional.absent());
+    this.getDataManager().register(OMNI_DODGE, Boolean.FALSE);
   }
   
   public EnumTier getTier() {
@@ -192,7 +193,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
   
   public void createChild() {
     super.createChild();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 1 + this.rand.nextInt(10); i++) {
         EntityEnderman baby = new EntityEnderman(this.world);
         baby.copyLocationAndAnglesFrom(this);
@@ -218,7 +219,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
   }
   
   public void notifyDataManagerChange(DataParameter<?> key) {
-    if (isArmsRaised() && this.world.isRemote)
+    if (isArmsRaised() && net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       playEndermanSound(); 
     super.notifyDataManagerChange(key);
   }
@@ -250,11 +251,11 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
   }
   
   public boolean canDodgeAllAttacks() {
-    return this.dataManager.get(OMNI_DODGE);
+    return this.getDataManager().get(OMNI_DODGE);
   }
   
   public void setDodgeAllAttacks(boolean powered) {
-    this.dataManager.set(OMNI_DODGE, powered);
+    this.getDataManager().set(OMNI_DODGE, powered);
   }
   
   protected float getSoundPitch() {
@@ -293,7 +294,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
   public void onLivingUpdate() {
     ItemStack block = (getHeldBlockState() != null) ? new ItemStack(getHeldBlockState().getBlock()) : ItemStack.EMPTY;
     this.basicInventory.setInventorySlotContents(7, block);
-    if (!this.world.isRemote && getAttackTarget() != null && getAttackTarget() instanceof EntityWitherStorm && this.rand.nextInt(100) == 0) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getAttackTarget() != null && getAttackTarget() instanceof EntityWitherStorm && this.rand.nextInt(100) == 0) {
       teleportTo((getAttackTarget()).posX, (getAttackTarget()).posY, (getAttackTarget()).posZ);
       (getAttackTarget()).motionY = -0.1D;
       ((EntityWitherStorm)getAttackTarget()).Grow(((EntityWitherStorm)getAttackTarget()).getSize() - 2);
@@ -328,7 +329,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
         ((EntityLiving)getAttackTarget()).getLookHelper().setLookPosition((getAttackTarget()).posX + this.rand.nextDouble() * 60.0D - 30.0D, (getAttackTarget()).posY + this.rand.nextDouble() * 60.0D - 30.0D, (getAttackTarget()).posZ + this.rand.nextDouble() * 60.0D - 30.0D, 180.0F, 180.0F);
         ((EntityLiving)getAttackTarget()).setAttackTarget(null);
         (getAttackTarget()).renderYawOffset = (getAttackTarget()).rotationYaw = (getAttackTarget()).rotationYawHead;
-        ((EntityLiving)getAttackTarget()).targetTasks.taskEntries.clear();
+        EntityAICompat.clearTargetTasks((EntityLiving)getAttackTarget());
       } 
       if (canDodgeAllAttacks() && getEnergy() > 20.0F && this.rand.nextInt(80) == 0) {
         (getAttackTarget()).hurtResistantTime = 0;
@@ -338,7 +339,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
         attackEntityAsMob(getAttackTarget());
       } 
     } 
-    if (this.world.isRemote && isEntityAlive()) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && isEntityAlive()) {
       int i;
       for (i = 0; i < 2; i++) {
         this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
@@ -361,15 +362,15 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
         this.world.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
       } 
     } 
-    if (isEntityAlive() && !isBeingRidden() && getGuardBlock() == null && getOwner() != null && (getDistanceSq(getOwner()) > 4096.0D || !canEntityBeSeen(getOwner())) && !this.world.isRemote) {
+    if (isEntityAlive() && !isBeingRidden() && getGuardBlock() == null && getOwner() != null && (getDistanceSq(getOwner()) > 4096.0D || !canEntityBeSeen(getOwner())) && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       setAttackTarget(null);
       getNavigator().clearPath();
       teleportTo((getOwner()).posX, (getOwner()).posY, (getOwner()).posZ);
     } 
     if (isEntityAlive() && !isBeingRidden() && getRevengeTarget() != null && getRNG().nextInt(20) == 0) {
-      if (getRevengeTarget().getDistanceSq(this) < 2.0D && !this.world.isRemote)
+      if (getRevengeTarget().getDistanceSq(this) < 2.0D && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         teleportRandomly(); 
-      if (getRevengeTarget().getDistanceSq(this) > 128.0D && !this.world.isRemote)
+      if (getRevengeTarget().getDistanceSq(this) > 128.0D && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         teleportToEntity(getRevengeTarget());
     } 
     super.onLivingUpdate();
@@ -412,7 +413,7 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
     if (flag || canDodgeAllAttacks()) {
       this.world.playSound(null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
       playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
-      if (!this.world.isRemote && this.rand.nextFloat() < 0.01F) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.rand.nextFloat() < 0.01F) {
         EntityEndermite entityendermite = new EntityEndermite(this.world);
         entityendermite.setOwnerId(getOwnerId());
         entityendermite.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
@@ -499,10 +500,10 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
     if (stack.isEmpty() && getRidingEntity() == null) {
       IBlockState iblockstate = getHeldBlockState();
       if (hasOwner(player) && iblockstate != null) {
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           entityDropItem(new ItemStack(iblockstate.getBlock(), 1, iblockstate.getBlock().getMetaFromState(iblockstate)), 0.0F); 
         setHeldBlockState(null);
-      } else if (!isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote) {
+      } else if (!isWild() && false && !isChild() && !player.isSneaking() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         player.startRiding(this);
       } 
       return true;
@@ -622,11 +623,11 @@ public class EntityEnderman extends EntityTameBase implements IJumpingMount, Arm
   }
   
   public void setHeldBlockState(IBlockState state) {
-    this.dataManager.set(CARRIED_BLOCK, Optional.fromNullable(state));
+    this.getDataManager().set(CARRIED_BLOCK, Optional.fromNullable(state));
   }
   
   public IBlockState getHeldBlockState() {
-    return (IBlockState)((Optional<?>)this.dataManager.get(CARRIED_BLOCK)).orNull();
+    return (IBlockState)((Optional<?>)this.getDataManager().get(CARRIED_BLOCK)).orNull();
   }
   
   public boolean takesFallDamage() {

@@ -364,7 +364,7 @@ public class EntityWitherStormHead extends EntityTameBase implements IRangedAtta
   }
   
   public void onLivingUpdate() {
-    if (this.residentWitherStorm != null && !this.world.isRemote) {
+    if (this.residentWitherStorm != null && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (isEntityAlive()) {
         ChunkLoadingEvent.updateLoaded(this);
       } else {
@@ -432,7 +432,7 @@ public class EntityWitherStormHead extends EntityTameBase implements IRangedAtta
     if (!isInvisible() && entity != null)
       faceEntity(entity, 20.0F, 180.0F);
     if (entity != null && !false && entity.getHealth() > 0.0F && (!(entity instanceof EntityTameBase) || (entity instanceof EntityTameBase && !((EntityTameBase)entity).isABoss()))) {
-      if (!this.world.isRemote && entity.isNonBoss())
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && entity.isNonBoss())
         entity.addPotionEffect(new PotionEffect(MobEffects.WITHER, 2147483647, 1)); 
       double d01 = this.posX - entity.posX;
       double d11 = this.posY + getEyeHeight() - entity.posY;
@@ -475,7 +475,7 @@ public class EntityWitherStormHead extends EntityTameBase implements IRangedAtta
         BlockPos blockpos = new BlockPos(l1, i11, i2);
         IBlockState iblockstate = this.world.getBlockState(blockpos);
         Block block = iblockstate.getBlock();
-        if (this.residentWitherStorm != null && getHealth() <= 0.0F && this.world.canBlockSeeSky(blockpos) && !block.isAir(iblockstate, this.world, blockpos) && !this.world.isRemote && this.world.isAreaLoaded(blockpos, blockpos) && block.getBlockHardness(iblockstate, this.world, new BlockPos(l1, i11, i2)) != -1.0F)
+        if (this.residentWitherStorm != null && getHealth() <= 0.0F && this.world.canBlockSeeSky(blockpos) && !block.isAir(iblockstate, this.world, blockpos) && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.world.isAreaLoaded(blockpos, blockpos) && block.getBlockHardness(iblockstate, this.world, new BlockPos(l1, i11, i2)) != -1.0F)
           if (EngenderConfig.mobs.grief)
             if (block.getMaterial(iblockstate).isLiquid()) {
               this.world.setBlockToAir(new BlockPos(l1, i11, i2));
@@ -563,7 +563,7 @@ public class EntityWitherStormHead extends EntityTameBase implements IRangedAtta
   public boolean processInteract(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 

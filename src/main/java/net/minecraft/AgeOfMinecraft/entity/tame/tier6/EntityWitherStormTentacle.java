@@ -332,7 +332,7 @@ public class EntityWitherStormTentacle extends EntityTameBase implements Massive
   }
   
   public void onLivingUpdate() {
-    if (this.residentWitherStorm != null && !this.world.isRemote) {
+    if (this.residentWitherStorm != null && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (isEntityAlive()) {
         ChunkLoadingEvent.updateLoaded(this);
       } else {

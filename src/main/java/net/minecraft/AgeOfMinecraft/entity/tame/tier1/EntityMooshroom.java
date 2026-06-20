@@ -57,7 +57,7 @@ public class EntityMooshroom extends EntityCow implements IShearable {
     } 
     if (!stack.isEmpty() && stack.getItem() == Items.SHEARS) {
       this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY + this.height, this.posZ, 0.0D, 0.0D, 0.0D);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         for (int i = 0; i < 5; i++)
           this.world.spawnEntity(new EntityItem(this.world, this.posX, this.posY + this.height, this.posZ, new ItemStack(Blocks.RED_MUSHROOM)));
         stack.damageItem(16, player);

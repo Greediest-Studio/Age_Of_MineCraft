@@ -118,7 +118,7 @@ public class EntityPrisonGolem extends EntityTameBase implements Armored {
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
     super.writeEntityToNBT(tagCompound);
-    if (this.dataManager.get(ALTERNATE_SKIN))
+    if (this.getDataManager().get(ALTERNATE_SKIN))
       tagCompound.setBoolean("AltSkin", true); 
   }
   
@@ -160,7 +160,7 @@ public class EntityPrisonGolem extends EntityTameBase implements Armored {
   
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
-    if (stack.isEmpty() && !isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote) {
+    if (stack.isEmpty() && !isWild() && false && !isChild() && !player.isSneaking() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       player.startRiding(this);
       return true;
     } 
@@ -212,7 +212,7 @@ public class EntityPrisonGolem extends EntityTameBase implements Armored {
       } 
       List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(1.0D));
         for (Entity entity : list) {
-            if (entity instanceof EntityLivingBase && !false && !this.world.isRemote && this.ticksExisted % 10 == 0)
+            if (entity instanceof EntityLivingBase && !false && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.ticksExisted % 10 == 0)
                 attackEntityAsMob(entity);
         }
       this.prevLimbSwingAmount = this.limbSwingAmount;
@@ -364,7 +364,7 @@ public class EntityPrisonGolem extends EntityTameBase implements Armored {
   }
   
   public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-    if (!this.world.isRemote && this.world.rand.nextBoolean())
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.world.rand.nextBoolean())
       setAlternateSkin(true); 
     return super.onInitialSpawn(difficulty, livingdata);
   }

@@ -29,11 +29,11 @@ public class ItemSkeletonTrapItem extends ItemVanillaTier {
   
   public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
     ItemStack stack = playerIn.getHeldItem(hand);
-    if (worldIn.isRemote)
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(worldIn))
       return EnumActionResult.SUCCESS; 
     if (!playerIn.canPlayerEdit(pos.offset(facing), facing, stack))
       return EnumActionResult.FAIL; 
-    if (!worldIn.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(worldIn)) {
       pos = pos.offset(facing);
       DifficultyInstance difficultyinstance = worldIn.getDifficultyForLocation(pos);
       worldIn.addWeatherEffect(new EntityLightningBolt(worldIn, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, true));

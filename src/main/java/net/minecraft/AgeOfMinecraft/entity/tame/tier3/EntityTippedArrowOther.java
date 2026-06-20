@@ -39,7 +39,7 @@ public class EntityTippedArrowOther extends EntityTippedArrow {
   
   protected void onHit(RayTraceResult p_184549_1_) {
     Entity entity = p_184549_1_.entityHit;
-    if (!this.world.isRemote && this.shooter != null && entity != null && entity instanceof EntityLivingBase && entity != ((EntityTameBase)this.shooter).getOwner()) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.shooter != null && entity != null && entity instanceof EntityLivingBase && entity != ((EntityTameBase)this.shooter).getOwner()) {
       DamageSource damagesource;
       float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
       int i = MathHelper.ceil(f * getDamage());
@@ -65,7 +65,7 @@ public class EntityTippedArrowOther extends EntityTippedArrow {
           setDead();
         } 
       } 
-    } else if (!this.world.isRemote && entity == null && isEntityInsideOpaqueBlock()) {
+    } else if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && entity == null && isEntityInsideOpaqueBlock()) {
       playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
       setDead();
     } 

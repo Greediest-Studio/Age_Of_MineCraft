@@ -138,7 +138,7 @@ public class EntityWolf extends EntityTameBase implements IJumpingMount, Light, 
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(ANGRY, (byte) 0);
+    this.getDataManager().register(ANGRY, (byte) 0);
   }
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
@@ -170,13 +170,13 @@ public class EntityWolf extends EntityTameBase implements IJumpingMount, Light, 
   
   public void onLivingUpdate() {
     super.onLivingUpdate();
-    if (!this.world.isRemote && this.isWet && !this.isShaking && !hasPath() && this.onGround) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.isWet && !this.isShaking && !hasPath() && this.onGround) {
       this.isShaking = true;
       this.timeWolfIsShaking = 0.0F;
       this.prevTimeWolfIsShaking = 0.0F;
       this.world.setEntityState(this, (byte)8);
     } 
-    if (!this.world.isRemote && getAttackTarget() == null && isAngry())
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getAttackTarget() == null && isAngry())
       setAngry(false); 
   }
   
@@ -253,7 +253,7 @@ public class EntityWolf extends EntityTameBase implements IJumpingMount, Light, 
       return true;
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -277,15 +277,15 @@ public class EntityWolf extends EntityTameBase implements IJumpingMount, Light, 
   }
   
   public boolean isAngry() {
-    return ((this.dataManager.get(ANGRY) & 0x2) != 0);
+    return ((this.getDataManager().get(ANGRY) & 0x2) != 0);
   }
   
   public void setAngry(boolean angry) {
-    byte b0 = this.dataManager.get(ANGRY);
+    byte b0 = this.getDataManager().get(ANGRY);
     if (angry) {
-      this.dataManager.set(ANGRY, (byte) (b0 | 0x2));
+      this.getDataManager().set(ANGRY, (byte) (b0 | 0x2));
     } else {
-      this.dataManager.set(ANGRY, (byte) (b0 & 0xFFFFFFFD));
+      this.getDataManager().set(ANGRY, (byte) (b0 & 0xFFFFFFFD));
     } 
   }
   

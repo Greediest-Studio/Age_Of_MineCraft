@@ -3,6 +3,7 @@ package net.minecraft.AgeOfMinecraft.entity.tame.tier5.dragonphases;
 import com.google.common.base.Predicates;
 import java.util.List;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
+import net.minecraft.AgeOfMinecraft.util.AttributeCompat;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -37,10 +38,10 @@ public class EntityDragonFireballOther extends EntityDragonFireball {
   }
   
   protected void onImpact(RayTraceResult movingObject) {
-    if (!this.world.isRemote && movingObject.entityHit != null && this.shootingEntity != null && movingObject.entityHit != this.shootingEntity) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && movingObject.entityHit != null && this.shootingEntity != null && movingObject.entityHit != this.shootingEntity) {
       if (movingObject.entityHit instanceof EntityLivingBase && this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase && !false) {
         copyLocationAndAnglesFrom(movingObject.entityHit);
-        ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)movingObject.entityHit, " was destroyed by ", DamageSource.causeFireballDamage(this, this.shootingEntity), (float) this.shootingEntity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue());
+        ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)movingObject.entityHit, " was destroyed by ", DamageSource.causeFireballDamage(this, this.shootingEntity), (float)AttributeCompat.getBaseValue(this.shootingEntity, SharedMonsterAttributes.ATTACK_DAMAGE, 0.0D));
         EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false);
       } 
       if (this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase && movingObject.entityHit instanceof EntityLivingBase && false) {
@@ -83,7 +84,7 @@ public class EntityDragonFireballOther extends EntityDragonFireball {
         EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY + 1.0D, this.posZ, 7.0F, false, false);
       setDead();
     } 
-    if (!this.world.isRemote && movingObject.entityHit == null) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && movingObject.entityHit == null) {
       List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(8.0D));
       EntityAreaEffectCloudOther entityareaeffectcloud = new EntityAreaEffectCloudOther(this.world, this.posX, this.posY, this.posZ);
       entityareaeffectcloud.setOwner((EntityTameBase)this.shootingEntity);

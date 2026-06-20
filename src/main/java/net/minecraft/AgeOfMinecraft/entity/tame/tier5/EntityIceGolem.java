@@ -135,7 +135,7 @@ public class EntityIceGolem extends EntityTameBase implements IRangedAttackMob, 
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !player.isSneaking() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -180,7 +180,7 @@ public class EntityIceGolem extends EntityTameBase implements IRangedAttackMob, 
       } 
       List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(1.0D));
         for (Entity entity : list) {
-            if (entity instanceof EntityLivingBase && !false && !this.world.isRemote && this.ticksExisted % 10 == 0)
+            if (entity instanceof EntityLivingBase && !false && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.ticksExisted % 10 == 0)
                 attackEntityAsMob(entity);
         }
       this.prevLimbSwingAmount = this.limbSwingAmount;

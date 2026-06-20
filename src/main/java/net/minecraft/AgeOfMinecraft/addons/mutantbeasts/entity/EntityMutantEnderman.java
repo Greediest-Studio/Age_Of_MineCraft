@@ -207,7 +207,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !player.isSneaking() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -216,28 +216,28 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(ACTIVE_ARM, (byte) 0);
-    this.dataManager.register(CLONE_STATE, (byte) 0);
+    this.getDataManager().register(ACTIVE_ARM, (byte) 0);
+    this.getDataManager().register(CLONE_STATE, (byte) 0);
   }
   
   public int getActiveArm() {
-    return this.dataManager.get(ACTIVE_ARM);
+    return this.getDataManager().get(ACTIVE_ARM);
   }
   
   private void setActiveArm(int armID) {
-    this.dataManager.set(ACTIVE_ARM, (byte) armID);
+    this.getDataManager().set(ACTIVE_ARM, (byte) armID);
   }
   
   public boolean isClone() {
-    return (this.dataManager.get(CLONE_STATE) > 0);
+    return (this.getDataManager().get(CLONE_STATE) > 0);
   }
   
   private boolean isDecoyClone() {
-    return (this.dataManager.get(CLONE_STATE) > 1);
+    return (this.getDataManager().get(CLONE_STATE) > 1);
   }
   
   private void setCloneState(int newState) {
-    byte currentState = this.dataManager.get(CLONE_STATE);
+    byte currentState = this.getDataManager().get(CLONE_STATE);
     if (currentState == newState)
       return; 
     if (currentState == 1 && newState == 0) {
@@ -248,7 +248,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
       this.navigator.clearPath();
       this.stepHeight = 2.5F;
     } 
-    this.dataManager.set(CLONE_STATE, (byte) newState);
+    this.getDataManager().set(CLONE_STATE, (byte) newState);
     setAttackID((newState > 0) ? 9 : 0);
   }
   
@@ -323,7 +323,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
       this.world.playSound(null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
       playSound(MBSoundEvents.ENTITY_MUTANT_ENDERMAN_TELEPORT, 1.0F, 1.0F);
       teleportAttack(this);
-      if (!this.world.isRemote && this.rand.nextFloat() < 0.01F) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.rand.nextFloat() < 0.01F) {
         EntityEndermite entityendermite = new EntityEndermite(this.world);
         entityendermite.setOwnerId(getOwnerId());
         entityendermite.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
@@ -422,7 +422,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
       this.armScale = Math.min(10, this.armScale + 1);
     } else if (emptyHanded) {
       this.armScale = Math.max(0, this.armScale - 1);
-    } else if (!this.world.isRemote) {
+    } else if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       for (i = 1; i < this.heldBlock.length; i++) {
         if (this.heldBlock[i] != 0 && this.heldBlockTick[i] == 0) {
           BlockPos pos = new BlockPos(this.posX - 1.5D + this.rand.nextDouble() * 4.0D, this.posY - 0.5D + this.rand.nextDouble() * 2.5D, this.posZ - 1.5D + this.rand.nextDouble() * 4.0D);
@@ -603,7 +603,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
   }
   
   public boolean attackEntityAsMob(Entity entityIn) {
-    if (!this.world.isRemote && this.attackID == 0) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.attackID == 0) {
       int i = getAvailableHand();
       if (!teleportByChance(6, entityIn))
         if (i != -1) {
@@ -623,7 +623,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
     } 
     if (this.attackID == 9) {
       boolean flag = super.attackEntityAsMob(entityIn);
-      if (!this.world.isRemote ? (isDecoyClone() ? (this.rand.nextInt(3) != 0) : (this.rand.nextInt(2) == 0)) : (this.rand.nextInt(2) == 0)) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) ? (isDecoyClone() ? (this.rand.nextInt(3) != 0) : (this.rand.nextInt(2) == 0)) : (this.rand.nextInt(2) == 0)) {
         double x = entityIn.posX + ((this.rand.nextFloat() - 0.5F) * 24.0F);
         double z = entityIn.posZ + ((this.rand.nextFloat() - 0.5F) * 24.0F);
         double y = entityIn.posY + this.rand.nextInt(5) + 4.0D;
@@ -735,7 +735,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
   }
   
   public boolean attackEntityFrom(DamageSource source, float amount) {
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (isClone()) {
         if (isDecoyClone()) {
           amount = 1.0F;
@@ -777,7 +777,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
       if (this.deathTime == 80)
         playSound(getDeathSound(), getSoundVolume(), getSoundPitch()); 
       this.attackID = 11;
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         if (this.deathTime >= 60 && this.deathTime < 80 && this.deathEntities == null)
           this.deathEntities = this.world.getEntitiesInAABBexcluding(this, getEntityBoundingBox().grow(16.0D), EntityEndersoulFragment.IS_VALID_TARGET);
         if (this.deathTime >= 60 && this.rand.nextInt(3) != 0) {
@@ -830,7 +830,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
   
   public void writeEntityToNBT(NBTTagCompound compound) {
     super.writeEntityToNBT(compound);
-    compound.setByte("CloneState", this.dataManager.get(CLONE_STATE));
+    compound.setByte("CloneState", this.getDataManager().get(CLONE_STATE));
     compound.setShort("ScreamDelay", (short)this.screamDelayTick);
   }
   
@@ -1235,7 +1235,7 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
   }
   
   public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
-    if (!this.world.isRemote && this.attackID == 0)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.attackID == 0)
       if (this.rand.nextInt() == 0) {
         setAttackID(10);
       } else {

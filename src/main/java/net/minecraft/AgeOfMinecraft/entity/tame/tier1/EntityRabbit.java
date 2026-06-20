@@ -134,7 +134,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(RABBIT_TYPE, 0);
+    this.getDataManager().register(RABBIT_TYPE, 0);
   }
   
   public void updateAITasks() {
@@ -219,7 +219,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
     super.onLivingUpdate();
     this.isOffensive = (getRabbitType() == 99);
     if (this.jumpTicks != this.jumpDuration) {
-      if (this.jumpTicks == 0 && !this.world.isRemote)
+      if (this.jumpTicks == 0 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         this.world.setEntityState(this, (byte)1);
       this.jumpTicks++;
     } else if (this.jumpDuration != 0) {
@@ -282,7 +282,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
   }
   
   public int getRabbitType() {
-    return this.dataManager.get(RABBIT_TYPE);
+    return this.getDataManager().get(RABBIT_TYPE);
   }
   
   public void setRabbitType(int rabbitTypeId) {
@@ -302,7 +302,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
       getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
     } 
     this.experienceValue = 1;
-    this.dataManager.set(RABBIT_TYPE, rabbitTypeId);
+    this.getDataManager().set(RABBIT_TYPE, rabbitTypeId);
   }
   
   protected void jump() {
@@ -313,7 +313,7 @@ public class EntityRabbit extends EntityTameBase implements Light, Tiny, Animal 
       if (d1 < 0.010000000000000002D)
         moveRelative(0.0F, 0.0F, 1.0F, 0.1F); 
     } 
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       this.world.setEntityState(this, (byte)1);
   }
   

@@ -36,11 +36,11 @@ public class EntityPotionOther extends EntityPotion {
   }
   
   protected void onImpact(RayTraceResult result) {
-    if (!this.world.isRemote && getThrower() == null) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getThrower() == null) {
       setDead();
       return;
     } 
-    if (!this.world.isRemote && getThrower() != null && getThrower() instanceof EntityTameBase) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getThrower() != null && getThrower() instanceof EntityTameBase) {
       ItemStack itemstack = getPotion();
       PotionType potiontype = PotionUtils.getPotionFromItem(itemstack);
       List<PotionEffect> list = PotionUtils.getEffectsFromStack(itemstack);

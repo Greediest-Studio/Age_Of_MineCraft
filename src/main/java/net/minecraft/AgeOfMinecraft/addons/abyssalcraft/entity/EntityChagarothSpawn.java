@@ -110,12 +110,12 @@ public class EntityChagarothSpawn extends EntityTameBase implements Light {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(CLIMBING, (byte) 0);
+    this.getDataManager().register(CLIMBING, (byte) 0);
   }
   
   public void onUpdate() {
     super.onUpdate();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       setBesideClimbableBlock(this.collidedHorizontally); 
   }
   
@@ -144,17 +144,17 @@ public class EntityChagarothSpawn extends EntityTameBase implements Light {
   }
   
   public boolean isBesideClimbableBlock() {
-    return ((this.dataManager.get(CLIMBING) & 0x1) != 0);
+    return ((this.getDataManager().get(CLIMBING) & 0x1) != 0);
   }
   
   public void setBesideClimbableBlock(boolean par1) {
-    byte b0 = this.dataManager.get(CLIMBING);
+    byte b0 = this.getDataManager().get(CLIMBING);
     if (par1) {
       b0 = (byte)(b0 | 0x1);
     } else {
       b0 = (byte)(b0 & 0xFFFFFFFE);
     } 
-    this.dataManager.set(CLIMBING, b0);
+    this.getDataManager().set(CLIMBING, b0);
   }
   
   public EnumTier getTier() {

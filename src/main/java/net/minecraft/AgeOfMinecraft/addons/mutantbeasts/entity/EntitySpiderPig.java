@@ -107,15 +107,15 @@ public class EntitySpiderPig extends EntityTameBase implements IJumpingMount {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(CLIMBING, Boolean.FALSE);
+    this.getDataManager().register(CLIMBING, Boolean.FALSE);
   }
   
   public boolean isBesideClimbableBlock() {
-    return this.dataManager.get(CLIMBING);
+    return this.getDataManager().get(CLIMBING);
   }
   
   private void setBesideClimbableBlock(boolean climbing) {
-    this.dataManager.set(CLIMBING, climbing);
+    this.getDataManager().set(CLIMBING, climbing);
   }
   
   public EnumCreatureAttribute getCreatureAttribute() {
@@ -137,7 +137,7 @@ public class EntitySpiderPig extends EntityTameBase implements IJumpingMount {
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !player.isSneaking() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -156,7 +156,7 @@ public class EntitySpiderPig extends EntityTameBase implements IJumpingMount {
     if (this.chargeExhaustion <= 0)
       this.chargeExhausted = false; 
     this.chargeExhaustion = Math.max(0, this.chargeExhaustion - 1);
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       this.targetTasks.setControlFlag(1, !isChild());
       this.leapCooldown = Math.max(0, this.leapCooldown - 1);
       if (this.leapTick > 10 && this.onGround)
@@ -213,7 +213,7 @@ public class EntitySpiderPig extends EntityTameBase implements IJumpingMount {
     this.isLeaping = false;
     boolean spiderType = (entityIn instanceof EntitySpider || entityIn instanceof EntitySpiderPig);
     float damage = (float)getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
-    if (entityIn.world.getBlockState(entityIn.getPosition()).getMaterial() == Material.WEB && !spiderType)
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entityIn).getBlockState(entityIn.getPosition()).getMaterial() == Material.WEB && !spiderType)
       damage += 4.0F; 
     boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
     if ((!isBeingRidden() || flag) && this.rand.nextInt(2) == 0 && ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
@@ -301,7 +301,7 @@ public class EntitySpiderPig extends EntityTameBase implements IJumpingMount {
   }
   
   public void onKillEntity(EntityLivingBase entityLivingIn) {
-    if (!this.world.isRemote && 
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && 
       isPigOrSpider(entityLivingIn)) {
       EntitySpiderPig spiderPigEntity = new EntitySpiderPig(this.world);
       entityLivingIn.setDead();

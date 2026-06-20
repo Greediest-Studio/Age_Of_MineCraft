@@ -62,7 +62,7 @@ public class EntityGasterBlaster extends EntityLiving {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(STATUS, (byte) 0);
+    this.getDataManager().register(STATUS, (byte) 0);
   }
   
   protected void hitEntities() {
@@ -182,15 +182,15 @@ public class EntityGasterBlaster extends EntityLiving {
   }
   
   public void setSmall(boolean small) {
-    this.dataManager.set(STATUS, setBit(this.dataManager.get(STATUS), 1, small));
+    this.getDataManager().set(STATUS, setBit(this.getDataManager().get(STATUS), 1, small));
   }
   
   public boolean isSmall() {
-    return ((this.dataManager.get(STATUS) & 0x1) != 0);
+    return ((this.getDataManager().get(STATUS) & 0x1) != 0);
   }
   
   private void setMarker(boolean marker) {
-    this.dataManager.set(STATUS, setBit(this.dataManager.get(STATUS), 16, marker));
+    this.getDataManager().set(STATUS, setBit(this.getDataManager().get(STATUS), 16, marker));
     setSize(0.5F, 1.975F);
   }
   

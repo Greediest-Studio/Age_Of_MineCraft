@@ -176,7 +176,7 @@ public class EntitySilverfish extends EntityTameBase implements Light, Tiny {
   public void performSpecialAttack() {
     setSpecialAttackTimer(400);
     playSound(ESound.bugSpecial, 10.0F, 1.0F);
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 2; i++) {
         EntitySilverfish mob = new EntitySilverfish(this.world);
         mob.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);

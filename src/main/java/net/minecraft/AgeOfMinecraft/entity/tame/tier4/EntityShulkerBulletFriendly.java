@@ -3,6 +3,7 @@ package net.minecraft.AgeOfMinecraft.entity.tame.tier4;
 import com.google.common.base.Predicates;
 import java.util.List;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
+import net.minecraft.AgeOfMinecraft.util.AttributeCompat;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -49,7 +50,7 @@ public class EntityShulkerBulletFriendly extends EntityShulkerBullet {
       EntityFireworkRocket entityfireworkrocket = new EntityFireworkRocket(this.world, this.posX, this.posY, this.posZ, this.owner.getHeldItemMainhand());
       ((WorldServer)this.world).spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY, this.posZ, 2, 0.2D, 0.2D, 0.2D, 0.0D);
       playSound(SoundEvents.ENTITY_SHULKER_BULLET_HIT, 1.0F, 1.0F);
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         this.world.spawnEntity(entityfireworkrocket);
       if (this.target != null && this.target instanceof EntityLivingBase && ((EntityLivingBase)this.target).getHealth() <= 5.0F)
         this.target.startRiding(entityfireworkrocket);
@@ -71,7 +72,7 @@ public class EntityShulkerBulletFriendly extends EntityShulkerBullet {
     if (this.target == null) {
       ((WorldServer)this.world).spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY, this.posZ, 2, 0.2D, 0.2D, 0.2D, 0.0D);
       playSound(SoundEvents.ENTITY_SHULKER_BULLET_HIT, 1.0F, 1.0F);
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         setDead(); 
     } else {
       if (!this.target.isEntityAlive())
@@ -84,7 +85,7 @@ public class EntityShulkerBulletFriendly extends EntityShulkerBullet {
               this.owner.attackEntityAsMob(this.target);
               applyEnchantments(this.owner, this.target);
               playSound(SoundEvents.ENTITY_SHULKER_BULLET_HIT, 1.0F, 1.0F);
-              if (!this.world.isRemote)
+              if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                 setDead(); 
             } 
           }  
@@ -95,12 +96,12 @@ public class EntityShulkerBulletFriendly extends EntityShulkerBullet {
   protected void bulletHit(RayTraceResult result) {
     if (result.entityHit != null && this.target != null && result.entityHit == this.target && result.entityHit instanceof EntityLivingBase)
       if ((!false || (this.owner instanceof EntityShulker && ((EntityShulker)this.owner).isPositiveShulker() && false)) && this.owner != null) {
-        this.owner.inflictEngenderMobDamage((EntityLivingBase)result.entityHit, " was shot by ", DamageSource.causeThrownDamage(this, this.owner), (float)this.owner.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue());
+        this.owner.inflictEngenderMobDamage((EntityLivingBase)result.entityHit, " was shot by ", DamageSource.causeThrownDamage(this, this.owner), (float)AttributeCompat.getBaseValue(this.owner, SharedMonsterAttributes.ATTACK_DAMAGE, 0.0D));
         ((EntityShulker)this.owner).inflictShulkerEffects((EntityLivingBase)result.entityHit);
         applyEnchantments(this.owner, result.entityHit);
         ((WorldServer)this.world).spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY, this.posZ, 2, 0.2D, 0.2D, 0.2D, 0.0D);
         playSound(SoundEvents.ENTITY_SHULKER_BULLET_HIT, 1.0F, 1.0F);
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           setDead(); 
       }  
   }

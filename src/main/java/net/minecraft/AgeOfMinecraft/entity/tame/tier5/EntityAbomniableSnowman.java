@@ -150,7 +150,7 @@ public class EntityAbomniableSnowman extends EntityTameBase implements IRangedAt
   
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
-    if (!isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote) {
+    if (!isWild() && false && !isChild() && !player.isSneaking() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       player.startRiding(this);
       return true;
     } 
@@ -195,7 +195,7 @@ public class EntityAbomniableSnowman extends EntityTameBase implements IRangedAt
       } 
       List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(1.0D));
         for (Entity entity : list) {
-            if (entity instanceof EntityLivingBase && !false && !this.world.isRemote && this.ticksExisted % 10 == 0)
+            if (entity instanceof EntityLivingBase && !false && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.ticksExisted % 10 == 0)
                 attackEntityAsMob(entity);
         }
       this.prevLimbSwingAmount = this.limbSwingAmount;
@@ -336,7 +336,7 @@ public class EntityAbomniableSnowman extends EntityTameBase implements IRangedAt
     this.hurtTime = 10;
     this.deathTicks++;
     if (this.deathTicks == 100) {
-      if (!this.world.isRemote && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")) {
         int j = getExperiencePoints(this.attackingPlayer);
         j = ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, j);
         while (j > 0) {
@@ -360,11 +360,11 @@ public class EntityAbomniableSnowman extends EntityTameBase implements IRangedAt
       double d1 = this.rand.nextGaussian() * 0.02D;
       this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX + this.rand.nextGaussian() * this.width * 0.5D, this.posY + (this.rand.nextFloat() * this.height), this.posZ + this.rand.nextGaussian() * this.width * 0.5D, d2, d0, d1, Block.getStateId(Blocks.SNOW.getDefaultState()));
     } 
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (this.deathTicks == 1) {
         playSound(getDeathSound(), getSoundVolume(), getSoundPitch());
         if (getOwner() != null) {
-          for (EntityPlayer entityplayer : this.world.playerEntities) {
+          for (EntityPlayer entityplayer : net.minecraft.AgeOfMinecraft.util.EntityCompat.playerEntities(this.world)) {
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
             entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!"), true);
           } 

@@ -207,7 +207,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
     } else {
       if (getHealth() > getMaxHealth() / 5.0F)
         this.targetTasks.onUpdateTasks(); 
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         if (isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && this.isOffensive && !isChild() && !false)
           if (getDistanceSq(getAttackTarget()) < (this.reachWidth * this.reachWidth + ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width) * ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width)) + 9.0D && (this.ticksExisted + getEntityId()) % 10 == 0)
             attackEntityAsMob(getAttackTarget());
@@ -277,7 +277,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
       this.homeZ = (int)(getOwner()).posZ;
     } 
     float moveSpeedMultiplier = this.behaviour.dragonSpeed;
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       float f = MathHelper.cos(this.animTime * 3.1415927F * 2.0F);
       float f1 = MathHelper.cos(this.prevAnimTime * 3.1415927F * 2.0F);
       if (f1 <= -0.3F && f >= -0.3F)
@@ -289,7 +289,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
           }   
     } 
     this.prevAnimTime = this.animTime;
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       updateTarget();
       customAIUpdate();
       if (this.behaviour == EnumBehaviour.FIREBOMB && Utils.getDistanceAtoB(this.posX, this.posY, this.posZ, this.homeX, (this.homeY + 30), this.homeZ) <= 3.0D)
@@ -325,7 +325,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
       } else {
         this.animTime += f;
       } 
-      if (this.world.isRemote) {
+      if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         if (this.newPosRotationIncrements > 0) {
           double d10 = this.posX + (this.interpTargetX - this.posX) / this.newPosRotationIncrements;
           double d0 = this.posY + (this.interpTargetY - this.posY) / this.newPosRotationIncrements;
@@ -470,7 +470,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
       (this.dragonPartArray[l]).prevPosY = (avec3d[l]).y;
       (this.dragonPartArray[l]).prevPosZ = (avec3d[l]).z;
     } 
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       collideWithEntities(this.dragonPartHead, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartHead.getEntityBoundingBox().grow(1.0D)));
       collideWithEntities(this.dragonPartNeck, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartNeck.getEntityBoundingBox().grow(1.0D)));
       collideWithEntities(this.dragonPartBody, this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartBody.getEntityBoundingBox().grow(1.0D)));
@@ -490,7 +490,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
     destroyBlocksInAABB(this.dragonPartTail1.getEntityBoundingBox());
     destroyBlocksInAABB(this.dragonPartTail2.getEntityBoundingBox());
     destroyBlocksInAABB(this.dragonPartTail3.getEntityBoundingBox());
-    if (!this.world.isRemote && isEntityAlive() && getHealth() < getMaxHealth() && this.hurtTime <= 5)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && isEntityAlive() && getHealth() < getMaxHealth() && this.hurtTime <= 5)
       heal((getAttackTarget() != null || isPotionActive(MobEffects.HUNGER)) ? 0.02F : 0.1F); 
     if (!isWild() && getDistanceSq(getOwner()) >= 48400.0D) {
       this.behaviour = EnumBehaviour.GUARDING;
@@ -499,7 +499,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
       this.targetY = this.posY;
       this.targetZ = this.posZ;
     } 
-    if (!this.world.isRemote && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && this.rand.nextInt(40) == 0) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && this.rand.nextInt(40) == 0) {
       List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getAttackTarget().getEntityBoundingBox().grow(3.0D));
       for (EntityLivingBase entityLivingBase : entities) {
         if (!false)
@@ -539,7 +539,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
     } else {
       setSneaking(false);
     } 
-    if (!this.world.isRemote && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && this.rand.nextInt(120) == 0) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && this.rand.nextInt(120) == 0) {
       EntityGuardianProjectile projectile;
       double distance;
       switch (this.rand.nextInt(4)) {
@@ -575,7 +575,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
           break;
       } 
     } 
-    if (!this.world.isRemote && getAttackTarget() != null && getAttackTarget().isEntityAlive() && this.rand.nextInt(200) == 0 && getDistance(getAttackTarget()) >= 100.0D) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getAttackTarget() != null && getAttackTarget().isEntityAlive() && this.rand.nextInt(200) == 0 && getDistance(getAttackTarget()) >= 100.0D) {
       this.behaviour = EnumBehaviour.CHARGING;
       this.targetX = (getAttackTarget()).posX;
       this.targetY = Flying.clampFlightY((getAttackTarget()).posY);
@@ -635,14 +635,14 @@ public class EntityChaosGuardian extends EntityEnderDragon {
       selectNewBehaviour(); 
     if (this.ignitionChargeTimer > 1 || (this.ignitionChargeTimer == 1 && this.ticksExisted % 20 == 0))
       this.ignitionChargeTimer--; 
-    if (this.ignitionChargeTimer <= 0 && !this.world.isRemote)
+    if (this.ignitionChargeTimer <= 0 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if ((this.ticksExisted - 19) % 20 == 0)
         this.ignitionChargeTimer = ((this.behaviour == EnumBehaviour.LOW_HEALTH_STRATEGY) ? 1000 : 2000) + this.rand.nextInt(600);  
     updateAttack();
   }
   
   private void updateAttack() {
-    if (this.world.isRemote || this.behaviour == EnumBehaviour.DEAD)
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) || this.behaviour == EnumBehaviour.DEAD)
       return; 
     if (this.behaviour == EnumBehaviour.FIREBOMB && Utils.getDistanceAtoB(this.posX, this.posY, this.posZ, this.homeX, (this.homeY + 30), this.homeZ) <= 3.0D) {
       if (getAttackTarget() == null || this.ticksExisted % 100 == 0)
@@ -854,7 +854,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
   }
   
   private void selectNewBehaviour() {
-    if (this.world.isRemote || this.behaviour == EnumBehaviour.DEAD)
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) || this.behaviour == EnumBehaviour.DEAD)
       return; 
     EnumBehaviour newBehaviour = this.behaviour;
     for (; newBehaviour == this.behaviour; newBehaviour = WeightedRandom.getRandomItem(this.rand, weightedBehaviours).randomBehaviour);
@@ -1060,7 +1060,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
       float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
       this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + f, this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
     } 
-    if (!this.world.isRemote && this.deathTicks == 1) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.deathTicks == 1) {
       if (Loader.isModLoaded("draconicevolution")) {
         Entity var8 = EntityList.createEntityByIDFromName(new ResourceLocation("draconicevolution:dragonheartitem"), this.world);
         this.world.spawnEntity(var8);
@@ -1071,7 +1071,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
       } 
       this.world.playBroadcastSound(1028, new BlockPos(this), 0);
       if (getOwner() != null) {
-        for (EntityPlayer entityplayer : this.world.playerEntities) {
+        for (EntityPlayer entityplayer : net.minecraft.AgeOfMinecraft.util.EntityCompat.playerEntities(this.world)) {
           this.world.playSound(null, entityplayer.getPosition(), SoundEvents.ENTITY_ENDERDRAGON_DEATH, getSoundCategory(), getSoundVolume(), 1.0F);
           entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
         } 
@@ -1083,7 +1083,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
       bolt.ignoreFrustumCheck = true;
       this.world.addWeatherEffect(bolt);
     } 
-    if (this.deathTicks == 200 && !this.world.isRemote) {
+    if (this.deathTicks == 200 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       int i = 200000;
       while (i > 0) {
         int j = EntityXPOrb.getXPSplit(i);

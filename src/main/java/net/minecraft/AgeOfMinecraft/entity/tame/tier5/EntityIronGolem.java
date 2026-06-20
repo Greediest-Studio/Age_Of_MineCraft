@@ -152,7 +152,7 @@ public class EntityIronGolem extends EntityTameBase implements Armored {
   
   public void createChild() {
     super.createChild();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 1; i++) {
         EntityIronGolem baby = new EntityIronGolem(this.world);
         baby.copyLocationAndAnglesFrom(this);
@@ -204,11 +204,11 @@ public class EntityIronGolem extends EntityTameBase implements Armored {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
       if (getHoldRoseTick() > 0) {
-        if (!this.world.isRemote) {
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
           dropItemWithOffset(Item.getItemFromBlock(Blocks.RED_FLOWER), 1, BlockFlower.EnumFlowerType.POPPY.getMeta());
           setHoldingRose(false);
         } 
-      } else if (!isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote) {
+      } else if (!isWild() && false && !isChild() && !player.isSneaking() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         player.startRiding(this);
       } 
       return true;
@@ -261,7 +261,7 @@ public class EntityIronGolem extends EntityTameBase implements Armored {
       } 
       List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(1.0D));
         for (Entity entity : list) {
-            if (entity instanceof EntityLivingBase && !false && !this.world.isRemote && this.ticksExisted % 10 == 0)
+            if (entity instanceof EntityLivingBase && !false && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.ticksExisted % 10 == 0)
                 attackEntityAsMob(entity);
         }
       this.prevLimbSwingAmount = this.limbSwingAmount;

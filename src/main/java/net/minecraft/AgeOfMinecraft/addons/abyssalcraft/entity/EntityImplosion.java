@@ -45,15 +45,15 @@ public class EntityImplosion extends Entity {
   }
   
   protected void entityInit() {
-    this.dataManager.register(IMPLOSIONTIMER, 0);
+    this.getDataManager().register(IMPLOSIONTIMER, 0);
   }
   
   public int getImplosionTime() {
-    return this.dataManager.get(IMPLOSIONTIMER);
+    return this.getDataManager().get(IMPLOSIONTIMER);
   }
   
   public void setImplosionTime(int time) {
-    this.dataManager.set(IMPLOSIONTIMER, time);
+    this.getDataManager().set(IMPLOSIONTIMER, time);
   }
   
   public void setDead() {

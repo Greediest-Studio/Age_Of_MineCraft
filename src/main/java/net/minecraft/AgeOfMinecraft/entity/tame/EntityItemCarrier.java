@@ -27,7 +27,7 @@ public class EntityItemCarrier extends EntityItem {
         Entity entity = EntityList.createEntityFromNBT(stack.getTagCompound().getCompoundTag("Entity"), this.world);
         if (entity instanceof EntityTameBase) {
           EntityTameBase entityliving = (EntityTameBase)entity;
-          if (!this.world.isRemote && entityliving instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityJzahar)
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && entityliving instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityJzahar)
             SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.scold"));
           entityliving.writeToNBT(stack.getTagCompound().getCompoundTag("Entity"));
           entityliving.playLivingSound();
@@ -44,7 +44,7 @@ public class EntityItemCarrier extends EntityItem {
           entity.world.setEntityState(entity, (byte)35);
           stack.getTagCompound().removeTag("Entity");
           stack.getTagCompound().removeTag("EntityName");
-          if (!this.world.isRemote)
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
             this.world.spawnEntity(entity); 
         } 
       }  

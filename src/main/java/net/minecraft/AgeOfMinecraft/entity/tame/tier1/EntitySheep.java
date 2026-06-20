@@ -130,7 +130,7 @@ public class EntitySheep extends EntityTameBase implements Light, Animal, IShear
   }
   
   public void onLivingUpdate() {
-    if (this.world.isRemote)
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       this.sheepTimer = Math.max(0, this.sheepTimer - 1); 
     if (getAttackTarget() != null) {
       this.shootTimer++;
@@ -167,7 +167,7 @@ public class EntitySheep extends EntityTameBase implements Light, Animal, IShear
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(DYE_COLOR, (byte) 0);
+    this.getDataManager().register(DYE_COLOR, (byte) 0);
   }
   
   @Nullable
@@ -233,7 +233,7 @@ public class EntitySheep extends EntityTameBase implements Light, Animal, IShear
       return true;
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       playSound(getAmbientSound(), getSoundVolume(), getSoundPitch());
       this.world.playEvent(2001, getPosition(), Block.getStateId(Blocks.CARPET.getDefaultState().withProperty((IProperty)BlockCarpet.COLOR, (Comparable)getFleeceColor())));
@@ -354,24 +354,24 @@ public class EntitySheep extends EntityTameBase implements Light, Animal, IShear
   }
   
   public EnumDyeColor getFleeceColor() {
-    return EnumDyeColor.byMetadata(this.dataManager.get(DYE_COLOR) & 0xF);
+    return EnumDyeColor.byMetadata(this.getDataManager().get(DYE_COLOR) & 0xF);
   }
   
   public void setFleeceColor(EnumDyeColor color) {
-    byte b0 = this.dataManager.get(DYE_COLOR);
-    this.dataManager.set(DYE_COLOR, (byte) (b0 & 0xF0 | color.getMetadata() & 0xF));
+    byte b0 = this.getDataManager().get(DYE_COLOR);
+    this.getDataManager().set(DYE_COLOR, (byte) (b0 & 0xF0 | color.getMetadata() & 0xF));
   }
   
   public boolean getSheared() {
-    return ((this.dataManager.get(DYE_COLOR) & 0x10) != 0);
+    return ((this.getDataManager().get(DYE_COLOR) & 0x10) != 0);
   }
   
   public void setSheared(boolean sheared) {
-    byte b0 = this.dataManager.get(DYE_COLOR);
+    byte b0 = this.getDataManager().get(DYE_COLOR);
     if (sheared) {
-      this.dataManager.set(DYE_COLOR, (byte) (b0 | 0x10));
+      this.getDataManager().set(DYE_COLOR, (byte) (b0 | 0x10));
     } else {
-      this.dataManager.set(DYE_COLOR, (byte) (b0 & 0xFFFFFFEF));
+      this.getDataManager().set(DYE_COLOR, (byte) (b0 & 0xFFFFFFEF));
     } 
   }
   

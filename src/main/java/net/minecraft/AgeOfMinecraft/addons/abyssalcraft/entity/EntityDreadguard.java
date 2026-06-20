@@ -284,7 +284,7 @@ public class EntityDreadguard extends EntityTameBase implements Armored {
   }
   
   protected void addMouthParticles() {
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       Vec3d vector = getLookVec();
       double px = this.posX;
       double py = this.posY + getEyeHeight();
@@ -345,7 +345,7 @@ public class EntityDreadguard extends EntityTameBase implements Armored {
       return true;
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 

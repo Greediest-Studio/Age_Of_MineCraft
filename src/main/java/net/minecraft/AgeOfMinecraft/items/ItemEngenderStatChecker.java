@@ -37,8 +37,8 @@ public class ItemEngenderStatChecker extends ItemBEItem {
       if (entitypig.isEntityAlive()) {
         playerIn.swingArm(hand);
         viewedEntity = entitypig;
-        if (playerIn.world.isRemote)
-          FMLNetworkHandler.openGui(playerIn, EngenderMod.instance, 100, playerIn.world, (int)target.posX, (int)target.posY, (int)target.posZ); 
+        if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(net.minecraft.AgeOfMinecraft.util.EntityCompat.world(playerIn)))
+          FMLNetworkHandler.openGui(playerIn, EngenderMod.instance, 100, net.minecraft.AgeOfMinecraft.util.EntityCompat.world(playerIn), (int)net.minecraft.AgeOfMinecraft.util.EntityCompat.posX(target), (int)net.minecraft.AgeOfMinecraft.util.EntityCompat.posY(target), (int)net.minecraft.AgeOfMinecraft.util.EntityCompat.posZ(target)); 
       } 
       return true;
     } 

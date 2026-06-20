@@ -22,28 +22,27 @@ public class ItemWitherSkeletonItem extends ItemVanillaTier {
   
   public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
     ItemStack stack = playerIn.getHeldItem(hand);
-    if (worldIn.isRemote)
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(worldIn))
       return EnumActionResult.SUCCESS; 
     if (!playerIn.canPlayerEdit(pos.offset(facing), facing, stack))
       return EnumActionResult.FAIL; 
     EntitySkeleton entityliving = new EntitySkeleton(worldIn);
     pos = pos.offset(facing);
     entityliving.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
-    entityliving.rotationYawHead = entityliving.rotationYaw;
-    entityliving.renderYawOffset = entityliving.rotationYaw;
+    net.minecraft.AgeOfMinecraft.util.EntityCompat.copyYawToHeadAndBody(entityliving);
     entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), null);
     entityliving.setSkeletonType(1);
     entityliving.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
     if (entityliving.getRNG().nextInt(2) > 0)
       entityliving.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Items.STONE_SWORD)); 
-    if (!worldIn.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(worldIn)) {
       worldIn.spawnEntity(entityliving);
       int i = 180;
       while (i > 0) {
         int j = EntityXPOrb.getXPSplit(i);
         i -= j;
         if (!worldIn.getGameRules().getBoolean("disableExpItemDrops"))
-          entityliving.world.spawnEntity(new EntityXPOrb(entityliving.world, entityliving.posX, entityliving.posY + entityliving.getEyeHeight(), entityliving.posZ, j));
+          net.minecraft.AgeOfMinecraft.util.EntityCompat.spawnXpOrbAt(entityliving, entityliving.getEyeHeight(), j);
       } 
     } 
     if (entityliving != null) {

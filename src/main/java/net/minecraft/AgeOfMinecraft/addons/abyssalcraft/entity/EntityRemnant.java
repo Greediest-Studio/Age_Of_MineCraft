@@ -160,7 +160,7 @@ public class EntityRemnant extends EntityTameBase implements IMerchant, Undead {
     if (isEntityAlive() && !player.isSneaking())
       if (EntityUtil.hasNecronomicon(player) && ownsTheirBook(player)) {
         if (!isTrading()) {
-          if (!this.world.isRemote) {
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
             setCustomer(player);
             player.displayVillagerTradeGui(this);
             player.sendMessage(new TextComponentString(getName() + ": " + I18n.translateToLocal("message.remnanthelpful.trade")));
@@ -186,13 +186,13 @@ public class EntityRemnant extends EntityTameBase implements IMerchant, Undead {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(PROFESSION, 0);
+    this.getDataManager().register(PROFESSION, 0);
   }
   
   private void advice(EntityPlayer player) {
     int insultNum = this.world.rand.nextInt(5);
     String translated = getName() + ": " + String.format(I18n.translateToLocal("message.remnanthelpful.advice." + insultNum), player.getName());
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       List<EntityPlayer> players = this.world.getEntitiesWithinAABB(EntityPlayer.class, player.getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D));
       if (players != null) {
           for (EntityPlayer player1 : players) {
@@ -311,11 +311,11 @@ public class EntityRemnant extends EntityTameBase implements IMerchant, Undead {
   }
   
   public void setProfession(int par1) {
-    this.dataManager.set(PROFESSION, par1);
+    this.getDataManager().set(PROFESSION, par1);
   }
   
   public int getProfession() {
-    return this.dataManager.get(PROFESSION);
+    return this.getDataManager().get(PROFESSION);
   }
   
   public void setCustomer(EntityPlayer var1) {
@@ -593,7 +593,7 @@ public class EntityRemnant extends EntityTameBase implements IMerchant, Undead {
   }
   
   public void verifySellingItem(ItemStack par1ItemStack) {
-    if (!this.world.isRemote && this.livingSoundTime > -getTalkInterval() + 20) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.livingSoundTime > -getTalkInterval() + 20) {
       this.livingSoundTime = -getTalkInterval();
       if (!par1ItemStack.isEmpty()) {
         playSound(ACSounds.remnant_yes, getSoundVolume(), getSoundPitch());

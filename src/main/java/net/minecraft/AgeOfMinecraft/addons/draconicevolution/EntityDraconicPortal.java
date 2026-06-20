@@ -148,11 +148,11 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
   }
   
   public int getMetaData() {
-    return this.dataManager.get(METADATA);
+    return this.getDataManager().get(METADATA);
   }
   
   public void setMetaData(int p_82215_1_) {
-    this.dataManager.set(METADATA, p_82215_1_);
+    this.getDataManager().set(METADATA, p_82215_1_);
   }
   
   public TextFormatting getTextFormat() {
@@ -177,19 +177,19 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(METADATA, 0);
-    this.dataManager.register(TOWER1_TARGET, 0);
-    this.dataManager.register(TOWER2_TARGET, 0);
-    this.dataManager.register(TOWER3_TARGET, 0);
-    this.dataManager.register(TOWER4_TARGET, 0);
+    this.getDataManager().register(METADATA, 0);
+    this.getDataManager().register(TOWER1_TARGET, 0);
+    this.getDataManager().register(TOWER2_TARGET, 0);
+    this.getDataManager().register(TOWER3_TARGET, 0);
+    this.getDataManager().register(TOWER4_TARGET, 0);
   }
   
   public int getWatchedTargetId(int p_82203_1_) {
-    return this.dataManager.get(TARGETS[p_82203_1_]);
+    return this.getDataManager().get(TARGETS[p_82203_1_]);
   }
   
   public void updateWatchedTargetId(int targetOffset, int newId) {
-    this.dataManager.set(TARGETS[targetOffset], newId);
+    this.getDataManager().set(TARGETS[targetOffset], newId);
   }
   
   protected void applyEntityAttributes() {
@@ -276,7 +276,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
     entityLivingIn.motionY += 4.0D;
     if (entityLivingIn instanceof net.minecraft.entity.monster.EntityCreeper || entityLivingIn instanceof net.minecraft.entity.monster.EntityZombie || entityLivingIn instanceof net.minecraft.entity.monster.AbstractSkeleton) {
       EntityCreeper creeper = new EntityCreeper(this.world);
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         this.world.spawnEntity(creeper);
       creeper.copyLocationAndAnglesFrom(entityLivingIn);
       creeper.onStruckByLightning(shot);
@@ -383,7 +383,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
   }
   
   public void onLivingUpdate() {
-    if (!this.world.isRemote && EngenderConfig.mobs.grief) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && EngenderConfig.mobs.grief) {
       int x = MathHelper.floor(this.posX);
       int y = MathHelper.floor(this.posY);
       int z = MathHelper.floor(this.posZ);
@@ -422,7 +422,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
     this.side4.onUpdate();
     this.side4.setLocationAndAngles(this.posX, this.posY + 0.5D, this.posZ - 2.5D, 0.0F, 0.0F);
     this.side4.setEntityBoundingBox(new AxisAlignedBB(this.side4.posX - 2.0D, this.side4.posY, this.side4.posZ - 0.5D, this.side4.posX + 2.0D, this.side4.posY + 1.0D, this.side4.posZ + 0.5D));
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 4; i++) {
         if (getRevengeTarget() != null)
           updateWatchedTargetId(i, getRevengeTarget().getEntityId()); 
@@ -497,7 +497,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
     this.isAirBorne = false;
     this.onGround = true;
     setSprinting(false);
-    if (this.world.isRemote)
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 3 && this.ticksExisted > 60; i++) {
         if (this.towerUpdate[i] > 20)
           this.world.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, getHeadX(i), getHeadY(i), getHeadY(i), ((float)getHeadX(i) + this.rand.nextFloat()) - 0.5D, ((float)getHeadY(i) - this.rand.nextFloat() - 1.0F), ((float)getHeadY(i) + this.rand.nextFloat()) - 0.5D);
@@ -598,7 +598,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   bat.setOwnerId(getOwnerId()); 
                 bat.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(bat)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(bat);
                 break;
               case 1:
@@ -607,7 +607,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   chicken.setOwnerId(getOwnerId()); 
                 chicken.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(chicken)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(chicken);
                 break;
               case 2:
@@ -616,7 +616,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   cow.setOwnerId(getOwnerId()); 
                 cow.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(cow)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(cow);
                 break;
               case 3:
@@ -625,7 +625,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   mooshroom.setOwnerId(getOwnerId()); 
                 mooshroom.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(mooshroom)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(mooshroom);
                 break;
               case 4:
@@ -634,7 +634,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   ocelot.setOwnerId(getOwnerId()); 
                 ocelot.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(ocelot)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(ocelot);
                 break;
               case 5:
@@ -643,7 +643,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   pig.setOwnerId(getOwnerId()); 
                 pig.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(pig)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(pig);
                 break;
               case 6:
@@ -652,7 +652,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   rabbit.setOwnerId(getOwnerId()); 
                 rabbit.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(rabbit)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(rabbit);
                 break;
               case 7:
@@ -661,7 +661,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   sheep.setOwnerId(getOwnerId()); 
                 sheep.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(sheep)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(sheep);
                 break;
               case 8:
@@ -670,7 +670,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   parrot.setOwnerId(getOwnerId()); 
                 parrot.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(parrot)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(parrot);
                 break;
             } 
@@ -683,7 +683,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   endermite.setOwnerId(getOwnerId()); 
                 endermite.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(endermite)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(endermite);
                 break;
               case 1:
@@ -692,7 +692,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   silverfish.setOwnerId(getOwnerId()); 
                 silverfish.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(silverfish)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(silverfish);
                 break;
               case 2:
@@ -701,7 +701,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   snowgolem.setOwnerId(getOwnerId()); 
                 snowgolem.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(snowgolem)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(snowgolem);
                 break;
               case 3:
@@ -710,7 +710,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   squid.setOwnerId(getOwnerId()); 
                 squid.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(squid)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(squid);
                 break;
               case 4:
@@ -719,7 +719,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   villager.setOwnerId(getOwnerId()); 
                 villager.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(villager)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(villager);
                 break;
               case 5:
@@ -728,7 +728,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   wolf.setOwnerId(getOwnerId()); 
                 wolf.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(wolf)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(wolf);
                 break;
               case 6:
@@ -737,7 +737,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   llama.setOwnerId(getOwnerId()); 
                 llama.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(llama)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(llama);
                 break;
             } 
@@ -750,7 +750,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   creeper.setOwnerId(getOwnerId()); 
                 creeper.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(creeper)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(creeper);
                 break;
               case 1:
@@ -759,7 +759,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   magmacube.setOwnerId(getOwnerId()); 
                 magmacube.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(magmacube)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(magmacube);
                 break;
               case 2:
@@ -768,7 +768,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   skeleton.setOwnerId(getOwnerId()); 
                 skeleton.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(skeleton)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(skeleton);
                 break;
               case 3:
@@ -777,7 +777,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   slime.setOwnerId(getOwnerId()); 
                 slime.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(slime)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(slime);
                 break;
               case 4:
@@ -786,7 +786,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   spider.setOwnerId(getOwnerId()); 
                 spider.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(spider)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(spider);
                 break;
               case 5:
@@ -795,7 +795,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   zombie.setOwnerId(getOwnerId()); 
                 zombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(zombie)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(zombie);
                 break;
               case 6:
@@ -804,7 +804,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   vex.setOwnerId(getOwnerId()); 
                 vex.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(vex)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(vex);
                 break;
             } 
@@ -817,7 +817,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   blaze.setOwnerId(getOwnerId()); 
                 blaze.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(blaze)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(blaze);
                 break;
               case 1:
@@ -826,7 +826,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   cavespider.setOwnerId(getOwnerId()); 
                 cavespider.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(cavespider)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(cavespider);
                 break;
               case 2:
@@ -835,7 +835,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   enderman.setOwnerId(getOwnerId()); 
                 enderman.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(enderman)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(enderman);
                 break;
               case 3:
@@ -844,7 +844,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   ghast.setOwnerId(getOwnerId()); 
                 ghast.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(ghast)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(ghast);
                 break;
               case 4:
@@ -853,7 +853,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   guardian.setOwnerId(getOwnerId()); 
                 guardian.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(guardian)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(guardian);
                 break;
               case 5:
@@ -862,7 +862,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   pigzombie.setOwnerId(getOwnerId()); 
                 pigzombie.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(pigzombie)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(pigzombie);
                 break;
               case 6:
@@ -872,7 +872,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                   killerrabbit.setOwnerId(getOwnerId()); 
                 killerrabbit.setRabbitType(99);
                 killerrabbit.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(killerrabbit)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(killerrabbit);
                 break;
               case 7:
@@ -885,7 +885,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (getRNG().nextInt(2) > 0)
                   witherskeleton.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Items.STONE_SWORD)); 
                 witherskeleton.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(witherskeleton)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(witherskeleton);
                 break;
               case 8:
@@ -895,7 +895,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                   shulker.setOwnerId(getOwnerId()); 
                 shulker.applyEntityCollision(this);
                 shulker.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(shulker)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(shulker);
                 break;
               case 9:
@@ -904,7 +904,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   witch.setOwnerId(getOwnerId()); 
                 witch.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(witch)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(witch);
                 break;
               case 10:
@@ -914,7 +914,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                   entityZombie1.setOwnerId(getOwnerId()); 
                 entityZombie1.setZombieType(1);
                 entityZombie1.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityZombie1)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(entityZombie1);
                 break;
               case 11:
@@ -924,7 +924,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                   stray.setOwnerId(getOwnerId()); 
                 stray.setSkeletonType(2);
                 stray.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(stray)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(stray);
                 break;
               case 12:
@@ -933,7 +933,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   vindicator.setOwnerId(getOwnerId()); 
                 vindicator.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(vindicator)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(vindicator);
                 break;
             } 
@@ -946,7 +946,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   elderguardian.setOwnerId(getOwnerId()); 
                 elderguardian.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(elderguardian)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(elderguardian);
                 break;
               case 1:
@@ -955,7 +955,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   giant.setOwnerId(getOwnerId()); 
                 giant.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(giant)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(giant);
                 break;
               case 2:
@@ -964,7 +964,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   irongolem.setOwnerId(getOwnerId()); 
                 irongolem.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(irongolem)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(irongolem);
                 break;
               case 3:
@@ -973,7 +973,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   wither.setOwnerId(getOwnerId()); 
                 wither.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(wither)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(wither);
                 break;
               case 4:
@@ -982,7 +982,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   evoker.setOwnerId(getOwnerId()); 
                 evoker.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(evoker)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(evoker);
                 break;
               case 5:
@@ -991,7 +991,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   enderdragon.setOwnerId(getOwnerId()); 
                 enderdragon.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(enderdragon)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(enderdragon);
                 break;
               case 6:
@@ -1000,7 +1000,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
                 if (!isWild())
                   illusioner.setOwnerId(getOwnerId()); 
                 illusioner.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(illusioner)), null);
-                if (!this.world.isRemote)
+                if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
                   this.world.spawnEntity(illusioner);
                 break;
             } 
@@ -1115,7 +1115,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
     this.deathTime++;
     if (this.deathTime == 1) {
       playSound(ESound.buildingDeath, 10.0F, 1.0F);
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         entityDropItem(new ItemStack(EItem.draconicPortalStaff, 1, getMetaData()), 1.0F); 
       for (int k = 0; k < 2500; k++) {
         double d2 = this.rand.nextGaussian() * 0.05D;
@@ -1125,7 +1125,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
         this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height * 4.0F), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, d2, 0.5D, d1);
       } 
     } 
-    if (!this.world.isRemote && (isPlayer() || (this.recentlyHit > 0 && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")))) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && (isPlayer() || (this.recentlyHit > 0 && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")))) {
       int i = getExperiencePoints(this.attackingPlayer) / 60;
       i = ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
       while (i > 0) {
@@ -1193,7 +1193,7 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
         player.changeDimension(1);
         return true;
       } 
-      player.world.playSound(player, new BlockPos(player), SoundEvents.BLOCK_ANVIL_USE, SoundCategory.PLAYERS, 100.0F, 0.5F);
+      net.minecraft.AgeOfMinecraft.util.EntityCompat.world(player).playSound(player, new BlockPos(player), SoundEvents.BLOCK_ANVIL_USE, SoundCategory.PLAYERS, 100.0F, 0.5F);
       setHealth(0.0F);
       return true;
     } 

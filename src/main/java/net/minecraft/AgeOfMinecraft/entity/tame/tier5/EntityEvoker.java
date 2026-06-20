@@ -130,7 +130,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
   
   public void createChild() {
     super.createChild();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 1; i++) {
         EntityEvoker baby = new EntityEvoker(this.world);
         baby.copyLocationAndAnglesFrom(this);
@@ -445,8 +445,8 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
             float f2 = f + k * 3.1415927F * 0.1F;
             spawnFangs(EntityEvoker.this.posX + MathHelper.cos(f2) * 8.0D, EntityEvoker.this.posZ + MathHelper.sin(f2) * 8.0D, d0, d1, f2, 70);
           }  
-      } else if (!entitylivingbase.world.isRemote && entitylivingbase != null && entitylivingbase.isEntityAlive()) {
-        if (!EntityEvoker.this.world.isRemote) {
+      } else if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entitylivingbase)) && entitylivingbase != null && entitylivingbase.isEntityAlive()) {
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(EntityEvoker.this.world)) {
           float j = EntityEvoker.this.renderYawOffset * 0.017453292F;
           float f1 = MathHelper.cos(j);
           float f2 = MathHelper.sin(j);
@@ -460,7 +460,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
       BlockPos blockpos = new BlockPos(p_190876_1_, p_190876_7_, p_190876_3_);
       boolean flag = true;
       double d0 = 0.0D;
-      if (flag && !EntityEvoker.this.world.isRemote) {
+      if (flag && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(EntityEvoker.this.world)) {
         EntityEvokerFangOther entityevokerfangs = new EntityEvokerFangOther(EntityEvoker.this.world, p_190876_1_, blockpos.getY() + d0, p_190876_3_, p_190876_9_, p_190876_10_, EntityEvoker.this);
         EntityEvoker.this.world.spawnEntity(entityevokerfangs);
       } 
@@ -502,7 +502,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     
     protected void castSpell() {
       EntityLivingBase entitylivingbase = EntityEvoker.this.getAttackTarget();
-      if (!entitylivingbase.world.isRemote && entitylivingbase != null && entitylivingbase.isEntityAlive())
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entitylivingbase)) && entitylivingbase != null && entitylivingbase.isEntityAlive())
         EntityEvoker.this.attackEntityWithRangedAttack(entitylivingbase, 1.0F); 
     }
     
@@ -542,7 +542,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     
     protected void castSpell() {
       EntityLivingBase entitylivingbase = EntityEvoker.this.getAttackTarget();
-      if (!entitylivingbase.world.isRemote && entitylivingbase != null && entitylivingbase.isEntityAlive())
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entitylivingbase)) && entitylivingbase != null && entitylivingbase.isEntityAlive())
         EntityEvoker.this.attackEntityWithRangedAttack2(entitylivingbase, 1.0F); 
     }
     
@@ -582,7 +582,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     
     protected void castSpell() {
       EntityLivingBase entitylivingbase = EntityEvoker.this.getAttackTarget();
-      if (!entitylivingbase.world.isRemote && entitylivingbase != null && entitylivingbase.isEntityAlive())
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entitylivingbase)) && entitylivingbase != null && entitylivingbase.isEntityAlive())
         EntityEvoker.this.attackEntityWithSpray(entitylivingbase, 1.0F); 
     }
     
@@ -622,9 +622,9 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     
     protected void castSpell() {
       EntityLivingBase entitylivingbase = EntityEvoker.this.getAttackTarget();
-      if (!entitylivingbase.world.isRemote && entitylivingbase != null && entitylivingbase.isEntityAlive())
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entitylivingbase)) && entitylivingbase != null && entitylivingbase.isEntityAlive())
         for (int i = 0; i < (EntityEvoker.this.isHero() ? 18 : 9); i++) {
-          if (!EntityEvoker.this.world.isRemote) {
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(EntityEvoker.this.world)) {
             EntityMagicMissile entitymagicmissiles = new EntityMagicMissile(EntityEvoker.this.world, entitylivingbase, EntityEvoker.this, EntityEvoker.this.posX, EntityEvoker.this.posY + 2.0D, EntityEvoker.this.posZ);
             entitymagicmissiles.posY = EntityEvoker.this.posY + 2.0D;
             Random random = new Random();
@@ -672,7 +672,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     
     protected void castSpell() {
       EntityLivingBase entitylivingbase = EntityEvoker.this.getAttackTarget();
-      if (!entitylivingbase.world.isRemote && entitylivingbase != null && entitylivingbase.isEntityAlive()) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entitylivingbase)) && entitylivingbase != null && entitylivingbase.isEntityAlive()) {
         try {
           ReflectionHelper.findField(entitylivingbase.getClass(), new String[] { "shieldTime" }).setInt(entitylivingbase, 0);
         } catch (Exception exception) {}
@@ -722,7 +722,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     
     protected void castSpell() {
       EntityLivingBase entitylivingbase = EntityEvoker.this.getAttackTarget();
-      if (!entitylivingbase.world.isRemote && entitylivingbase != null && entitylivingbase.isEntityAlive()) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entitylivingbase)) && entitylivingbase != null && entitylivingbase.isEntityAlive()) {
         try {
           ReflectionHelper.findField(entitylivingbase.getClass(), new String[] { "shieldTime" }).setInt(entitylivingbase, 0);
         } catch (Exception exception) {}
@@ -772,7 +772,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
     
     protected void castSpell() {
       EntityLivingBase entitylivingbase = EntityEvoker.this.getAttackTarget();
-      if (!entitylivingbase.world.isRemote && entitylivingbase != null && entitylivingbase.isEntityAlive()) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entitylivingbase)) && entitylivingbase != null && entitylivingbase.isEntityAlive()) {
         try {
           ReflectionHelper.findField(entitylivingbase.getClass(), new String[] { "shieldTime" }).setInt(entitylivingbase, 0);
         } catch (Exception exception) {}
@@ -1012,7 +1012,7 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
                   entitylargefireball.posX = d1;
                   entitylargefireball.posY = d2;
                   entitylargefireball.posZ = d3;
-                  if (!EntityEvoker.this.world.isRemote)
+                  if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(EntityEvoker.this.world))
                       EntityEvoker.this.world.spawnEntity(entitylargefireball);
               }
           }
@@ -1226,18 +1226,18 @@ public class EntityEvoker extends EntitySpellcasterIllager implements IRangedAtt
           EntityEvoker.this.getOwner().addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 1000 * EntityEvoker.this.getLevel()));
           if ((entitysheep instanceof EntityPig && !((EntityPig)entitysheep).getSaddled()) || (entitysheep instanceof EntityCreeper && !((EntityCreeper)entitysheep).getPowered())) {
             entitysheep.onStruckByLightning(null);
-            entitysheep.world.addWeatherEffect(new EntityLightningBolt(entitysheep.world, entitysheep.posX - 0.5D, entitysheep.posY, entitysheep.posZ - 0.5D, true));
+            net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entitysheep).addWeatherEffect(new EntityLightningBolt(net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entitysheep), entitysheep.posX - 0.5D, entitysheep.posY, entitysheep.posZ - 0.5D, true));
           } 
           if (entitysheep instanceof EntityRabbit && ((EntityRabbit)entitysheep).getRabbitType() != 99) {
             ((EntityRabbit)entitysheep).setRabbitType(99);
             entitysheep.ticksExisted = 1;
-            entitysheep.world.addWeatherEffect(new EntityLightningBolt(entitysheep.world, entitysheep.posX - 0.5D, entitysheep.posY, entitysheep.posZ - 0.5D, true));
+            net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entitysheep).addWeatherEffect(new EntityLightningBolt(net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entitysheep), entitysheep.posX - 0.5D, entitysheep.posY, entitysheep.posZ - 0.5D, true));
           } 
           if (entitysheep instanceof EntitySlime && ((EntitySlime)entitysheep).getSlimeSize() <= 1) {
             ((EntitySlime)entitysheep).setSlimeSize((EntityEvoker.this.rand.nextInt(4) == 0) ? 4 : 2);
             entitysheep.ticksExisted = 1;
             entitysheep.playSound(SoundEvents.ENTITY_GENERIC_SMALL_FALL, 2.0F, 1.0F);
-            entitysheep.world.addWeatherEffect(new EntityLightningBolt(entitysheep.world, entitysheep.posX - 0.5D, entitysheep.posY, entitysheep.posZ - 0.5D, true));
+            net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entitysheep).addWeatherEffect(new EntityLightningBolt(net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entitysheep), entitysheep.posX - 0.5D, entitysheep.posY, entitysheep.posZ - 0.5D, true));
           } 
           resetTask();
         }  

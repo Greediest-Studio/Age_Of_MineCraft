@@ -21,6 +21,7 @@ import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -61,11 +62,12 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
   
   protected void initEntityAI() {
     super.initEntityAI();
-    this.tasks.addTask(0, new EntityAISwimming(this));
-    this.tasks.addTask(1, new AIMeleeAttack());
-    this.tasks.addTask(2, new EntityAIFollowLeader(this, 1.2D, 32.0F, 9.0F));
-    this.tasks.addTask(5, new EntityAIWander(this, 1.0D, 80));
-    this.tasks.addTask(8, new EntityAILookIdle(this));
+    EntityAITasks tasks = compatTasks();
+    tasks.addTask(0, new EntityAISwimming(this));
+    tasks.addTask(1, new AIMeleeAttack());
+    tasks.addTask(2, new EntityAIFollowLeader(this, 1.2D, 32.0F, 9.0F));
+    tasks.addTask(5, new EntityAIWander(this, 1.0D, 80));
+    tasks.addTask(8, new EntityAILookIdle(this));
   }
   
   public int getNextLevelRequirement() {
@@ -123,7 +125,7 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(IS_STANDING, Boolean.FALSE);
+    this.getDataManager().register(IS_STANDING, Boolean.FALSE);
   }
   
   public void onUpdate() {
@@ -134,7 +136,7 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
       } else {
         setStanding(true);
       }  
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       this.clientSideStandAnimation0 = this.clientSideStandAnimation;
       if (isStanding()) {
         this.clientSideStandAnimation = MathHelper.clamp(this.clientSideStandAnimation + 1.0F, 0.0F, 6.0F);
@@ -165,7 +167,7 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -227,11 +229,11 @@ public class EntityPolarBear extends EntityTameBase implements Light, Animal {
   }
   
   public boolean isStanding() {
-    return (this.dataManager.get(IS_STANDING) || !isEntityAlive());
+    return (this.getDataManager().get(IS_STANDING) || !isEntityAlive());
   }
   
   public void setStanding(boolean standing) {
-    this.dataManager.set(IS_STANDING, standing);
+    this.getDataManager().set(IS_STANDING, standing);
   }
   
   @SideOnly(Side.CLIENT)

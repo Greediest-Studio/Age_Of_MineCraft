@@ -55,7 +55,7 @@ public class EntityOmotholChargeOther extends EntityFireball {
     } else if (this.world.getDifficulty() == EnumDifficulty.HARD) {
       b0 = 20;
     } 
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (this.shootingEntity != null) {
         List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
         if (list != null && !list.isEmpty())

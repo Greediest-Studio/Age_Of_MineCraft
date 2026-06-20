@@ -82,7 +82,7 @@ public class EntityGuardianProjectile extends Entity {
     this.isChaser = (type == 3 || type == 4 || type == 5 || type == 6);
     setSize(1.0F, 1.0F);
     if (shooter != null) {
-      if (!world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(world))
         DESoundHandler.playSoundFromServer(world, shooter.posX + 0.5D, shooter.posY + 0.5D, shooter.posZ + 0.5D, SoundEvents.ENTITY_ENDERDRAGON_SHOOT, SoundCategory.HOSTILE, 10.0F, this.rand.nextFloat() * 0.3F + 0.85F, false, 256.0D); 
       this.rotationYaw = (shooter instanceof EntityChaosGuardian) ? (shooter.rotationYaw + 180.0F) : shooter.rotationYaw;
       this.rotationPitch = shooter.rotationPitch;
@@ -120,9 +120,9 @@ public class EntityGuardianProjectile extends Entity {
   }
   
   protected void entityInit() {
-    if (this.type == 4 || this.type == 5 || this.type == 6 || this.world.isRemote)
+    if (this.type == 4 || this.type == 5 || this.type == 6 || net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       this.noClip = true; 
-    this.dataManager.register(TYPE, (byte) this.type);
+    this.getDataManager().register(TYPE, (byte) this.type);
   }
   
   public void onUpdate() {
@@ -133,11 +133,11 @@ public class EntityGuardianProjectile extends Entity {
       this.target = ((EntityWitherStormTentacle)this.target).residentWitherStorm;
     if (this.target instanceof EntityWitherStormTentacleDevourer && ((EntityWitherStormTentacleDevourer)this.target).residentWitherStorm != null)
       this.target = ((EntityWitherStormTentacleDevourer)this.target).residentWitherStorm;
-    if (!this.world.isRemote && this.ticksExisted == 1)
-      this.dataManager.set(TYPE, (byte) this.type);
-    if (this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.ticksExisted == 1)
+      this.getDataManager().set(TYPE, (byte) this.type);
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (this.type == 0)
-        this.type = this.dataManager.get(TYPE);
+        this.type = this.getDataManager().get(TYPE);
       spawnParticle();
     } 
     if (this.shooter != null && this.shooter instanceof EntityTameBase && !((EntityTameBase)this.shooter).isWild() && ((EntityTameBase)this.shooter).getOwner().getHealth() <= ((EntityTameBase)this.shooter).getOwner().getMaxHealth() / 2.0F)
@@ -159,7 +159,7 @@ public class EntityGuardianProjectile extends Entity {
     if (this.target != null && !this.target.isEntityAlive())
       this.target = (this.shooter != null) ? (EntityLivingBase)this.shooter : null; 
     this.noClip = true;
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (this.target != null) {
         double tDist = Utils.getDistanceAtoB(this.target.posX, this.target.posY, this.target.posZ, this.posX, this.posY, this.posZ);
         double x = (this.target.posX - this.posX) / tDist;
@@ -178,7 +178,7 @@ public class EntityGuardianProjectile extends Entity {
   }
   
   private boolean checkTargetCondition() {
-    if (this.world.isRemote)
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       return false; 
     double targetDistance = Utils.getDistanceAtoB(this.posX, this.posY, this.posZ, this.target.posX, this.target.posY, this.target.posZ);
     EntityLivingBase entityLivingBase = this.target;
@@ -283,7 +283,7 @@ public class EntityGuardianProjectile extends Entity {
   }
   
   private void damageEntitiesInRadius(DamageSource source, double radius, float damage) {
-    if (this.world.isRemote)
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       return; 
     List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(radius));
     for (EntityLivingBase entityLivingBase : entities) {
@@ -388,8 +388,8 @@ public class EntityGuardianProjectile extends Entity {
   
   protected void readEntityFromNBT(NBTTagCompound compound) {
     this.type = compound.getInteger("Type");
-    if (!this.world.isRemote)
-      this.dataManager.set(TYPE, (byte) this.type);
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
+      this.getDataManager().set(TYPE, (byte) this.type);
     this.noClip = (this.type == 4 || this.type == 5 || this.type == 6);
     this.isChaser = (this.type == 3 || this.type == 4 || this.type == 5 || this.type == 6);
   }

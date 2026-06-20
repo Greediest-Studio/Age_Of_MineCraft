@@ -51,7 +51,7 @@ public class FriendlyZombieSummon {
       return false; 
     if (mutantZombie.getRNG().nextInt(15) == 0)
       this.world.playEvent(2001, pos, Block.getStateId(this.world.getBlockState(new BlockPos(this.posX, this.posY, this.posZ)))); 
-    if (!this.world.isRemote && --this.tick <= 0) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && --this.tick <= 0) {
       if (Loader.isModLoaded("abyssalcraft") && mutantZombie.getZombieType() == 3) {
         EntityAbyssalZombie zombie = new EntityAbyssalZombie(this.world);
         zombie.onInitialSpawn(this.world.getDifficultyForLocation(pos), null);

@@ -35,7 +35,7 @@ public abstract class EntitySpellcasterIllager extends EntityAbstractIllagers im
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(SPELL, (byte) 0);
+    this.getDataManager().register(SPELL, (byte) 0);
   }
   
   protected void setWololoTarget(@Nullable EntitySheep p_190748_1_) {
@@ -81,18 +81,18 @@ public abstract class EntitySpellcasterIllager extends EntityAbstractIllagers im
   }
   
   public boolean isSpellcasting() {
-    if (this.world.isRemote)
-      return (this.dataManager.get(SPELL) > 0);
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
+      return (this.getDataManager().get(SPELL) > 0);
     return (this.spellTicks > 0);
   }
   
   public void setSpellType(SpellType spellType) {
     this.activeSpell = spellType;
-    this.dataManager.set(SPELL, (byte) spellType.id);
+    this.getDataManager().set(SPELL, (byte) spellType.id);
   }
   
   protected SpellType getSpellType() {
-    return !this.world.isRemote ? this.activeSpell : SpellType.getFromId(this.dataManager.get(SPELL));
+    return !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) ? this.activeSpell : SpellType.getFromId(this.getDataManager().get(SPELL));
   }
   
   protected void updateAITasks() {
@@ -106,7 +106,7 @@ public abstract class EntitySpellcasterIllager extends EntityAbstractIllagers im
   
   public void onUpdate() {
     super.onUpdate();
-    if (this.world.isRemote && isSpellcasting()) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && isSpellcasting()) {
       SpellType entityspellcasterillager$spelltype = getSpellType();
       double d0 = entityspellcasterillager$spelltype.particleSpeed[0];
       double d1 = entityspellcasterillager$spelltype.particleSpeed[1];

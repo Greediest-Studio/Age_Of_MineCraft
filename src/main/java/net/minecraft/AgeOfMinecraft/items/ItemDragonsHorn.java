@@ -86,9 +86,9 @@ public class ItemDragonsHorn extends ItemBEItem {
   }
   
   public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityPlayer playerIn) {
-    playerIn.rotationPitch = -75.0F;
-    playerIn.world.playSound(playerIn.posX, playerIn.posY + playerIn.getDefaultEyeHeight(), playerIn.posZ, getHornSound(), SoundCategory.PLAYERS, 1.0E9F, 1.0F, false);
-    List<EntityLivingBase> list = playerIn.world.getEntitiesWithinAABB(EntityLivingBase.class, playerIn.getEntityBoundingBox().grow(512.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
+    net.minecraft.AgeOfMinecraft.util.EntityCompat.setFloat(playerIn, -75.0F, "entity.rotationPitch", "rotationPitch", "field_70125_A", "z");
+    net.minecraft.AgeOfMinecraft.util.EntityCompat.world(playerIn).playSound(net.minecraft.AgeOfMinecraft.util.EntityCompat.posX(playerIn), net.minecraft.AgeOfMinecraft.util.EntityCompat.posY(playerIn) + playerIn.getDefaultEyeHeight(), net.minecraft.AgeOfMinecraft.util.EntityCompat.posZ(playerIn), getHornSound(), SoundCategory.PLAYERS, 1.0E9F, 1.0F, false);
+    List<EntityLivingBase> list = net.minecraft.AgeOfMinecraft.util.EntityCompat.world(playerIn).getEntitiesWithinAABB(EntityLivingBase.class, playerIn.getEntityBoundingBox().grow(512.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
     if (list != null && !list.isEmpty())
         for (EntityLivingBase entity : list) {
             if (entity instanceof EntityEnderDragon && entity != null && entity.isEntityAlive() && ((EntityEnderDragon) entity).getOwnerId() == playerIn.getUniqueID()) {
@@ -110,12 +110,12 @@ public class ItemDragonsHorn extends ItemBEItem {
             if (entity instanceof EntityMob) {
                 ((EntityMob) entity).setAttackTarget(playerIn);
                 entity.setRevengeTarget(playerIn);
-                ((EntityMob) entity).getMoveHelper().setMoveTo(playerIn.posX, playerIn.posY, playerIn.posY, 1.2D);
+                ((EntityMob) entity).getMoveHelper().setMoveTo(net.minecraft.AgeOfMinecraft.util.EntityCompat.posX(playerIn), net.minecraft.AgeOfMinecraft.util.EntityCompat.posY(playerIn), net.minecraft.AgeOfMinecraft.util.EntityCompat.posZ(playerIn), 1.2D);
                 if (playerIn.getDistanceSq(entity) <= 64.0D)
                     entity.attackEntityFrom(DamageSource.GENERIC, 50.0F);
             }
         }
-    List<EntityLivingBase> list1 = playerIn.world.getEntitiesWithinAABB(EntityLivingBase.class, playerIn.getEntityBoundingBox().grow(256.0D, 256.0D, 256.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
+    List<EntityLivingBase> list1 = net.minecraft.AgeOfMinecraft.util.EntityCompat.world(playerIn).getEntitiesWithinAABB(EntityLivingBase.class, playerIn.getEntityBoundingBox().grow(256.0D, 256.0D, 256.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
     if (list1 != null && !list1.isEmpty())
         for (EntityLivingBase entity : list1) {
             if (entity instanceof EntityTameBase && entity != null && entity.isEntityAlive() && ((EntityTameBase) entity).getOwner() == playerIn)

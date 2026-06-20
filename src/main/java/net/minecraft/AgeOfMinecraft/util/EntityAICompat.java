@@ -17,15 +17,49 @@ public final class EntityAICompat {
   }
 
   public static void addTask(EntityLiving living, int priority, EntityAIBase task) {
-    tasks(living).addTask(priority, task);
+    EntityAITasks tasks = getAITasks(living, false);
+    if (tasks != null)
+      tasks.addTask(priority, task);
+  }
+
+  public static void removeTask(EntityLiving living, EntityAIBase task) {
+    EntityAITasks tasks = getAITasks(living, false);
+    if (tasks != null)
+      tasks.removeTask(task);
   }
 
   public static void addTargetTask(EntityLiving living, int priority, EntityAIBase task) {
-    targetTasks(living).addTask(priority, task);
+    EntityAITasks tasks = getAITasks(living, true);
+    if (tasks != null)
+      tasks.addTask(priority, task);
+  }
+
+  public static boolean hasTasks(EntityLiving living) {
+    EntityAITasks tasks = getAITasks(living, false);
+    return tasks != null && !tasks.taskEntries.isEmpty();
+  }
+
+  public static boolean containsTask(EntityLiving living, EntityAIBase task) {
+    EntityAITasks tasks = getAITasks(living, false);
+    return tasks != null && tasks.taskEntries.contains(task);
+  }
+
+  public static void clearTasks(EntityLiving living) {
+    EntityAITasks tasks = getAITasks(living, false);
+    if (tasks != null)
+      tasks.taskEntries.clear();
+  }
+
+  public static void clearTargetTasks(EntityLiving living) {
+    EntityAITasks tasks = getAITasks(living, true);
+    if (tasks != null)
+      tasks.taskEntries.clear();
   }
 
   private static EntityAITasks getAITasks(EntityLiving living, boolean target) {
     Field field = findAITaskField(target);
+    if (field == null)
+      return null;
     try {
       field.setAccessible(true);
       return (EntityAITasks)field.get(living);
@@ -45,25 +79,33 @@ public final class EntityAICompat {
 
     int index = 0;
     int targetIndex = target ? 1 : 0;
-    for (Field candidate : EntityLiving.class.getDeclaredFields()) {
-      if (EntityAITasks.class.isAssignableFrom(candidate.getType())) {
-        if (index == targetIndex)
-          return candidate;
-        index++;
+    Class<?> type = EntityLiving.class;
+    while (type != null) {
+      for (Field candidate : type.getDeclaredFields()) {
+        if (EntityAITasks.class.isAssignableFrom(candidate.getType())) {
+          if (index == targetIndex)
+            return candidate;
+          index++;
+        }
       }
+      type = type.getSuperclass();
     }
 
-    throw new RuntimeException("Unable to locate EntityLiving " + (target ? "targetTasks" : "tasks") + " field");
+    return null;
   }
 
   private static Field findField(Class<?> owner, String... names) {
-    for (String name : names) {
-      try {
-        Field field = owner.getDeclaredField(name);
-        if (EntityAITasks.class.isAssignableFrom(field.getType()))
-          return field;
-      } catch (NoSuchFieldException e) {
+    Class<?> type = owner;
+    while (type != null) {
+      for (String name : names) {
+        try {
+          Field field = type.getDeclaredField(name);
+          if (EntityAITasks.class.isAssignableFrom(field.getType()))
+            return field;
+        } catch (NoSuchFieldException e) {
+        }
       }
+      type = type.getSuperclass();
     }
     return null;
   }

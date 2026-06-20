@@ -116,7 +116,7 @@ public class EntityPigZombie extends EntityZombie implements IJumpingMount {
     int i;
     for (i = 0; i < 10; i++)
       spawnHeartParticle(); 
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (i = 0; i < 1 + this.rand.nextInt(2); i++) {
         EntityPigZombie baby = new EntityPigZombie(this.world);
         baby.copyLocationAndAnglesFrom(this);
@@ -339,7 +339,7 @@ public class EntityPigZombie extends EntityZombie implements IJumpingMount {
   public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
     super.onInitialSpawn(difficulty, livingdata);
     setToNotVillager();
-    if (!this.world.isRemote && this.world.rand.nextInt(4) == 0)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.world.rand.nextInt(4) == 0)
       setOldPEPigman(true); 
     return livingdata;
   }

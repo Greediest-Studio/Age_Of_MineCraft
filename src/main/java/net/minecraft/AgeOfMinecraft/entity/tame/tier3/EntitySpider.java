@@ -118,7 +118,7 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
   protected void entityInit() {
     super.entityInit();
     getDataManager().register(SURVIVAL_TEST_SKIN, Boolean.FALSE);
-    this.dataManager.register(CLIMBING, (byte) 0);
+    this.getDataManager().register(CLIMBING, (byte) 0);
   }
   
   public boolean isSurvivalTestSkin() {
@@ -136,7 +136,7 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
     super.writeEntityToNBT(tagCompound);
-    if (this.dataManager.get(SURVIVAL_TEST_SKIN))
+    if (this.getDataManager().get(SURVIVAL_TEST_SKIN))
       tagCompound.setBoolean("EasterEgg", true); 
   }
   
@@ -161,7 +161,7 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
   
   public void onUpdate() {
     super.onUpdate();
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       setBesideClimbableBlock(this.collidedHorizontally);
       if (isBeingRidden() && !this.onGround && this.ticksExisted % 10 == 0) {
         playSound(SoundEvents.ENTITY_SPIDER_AMBIENT, 1.0F, 1.5F);
@@ -214,7 +214,7 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
   
   public void createChild() {
     super.createChild();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 2 + this.rand.nextInt(3); i++) {
         if (this instanceof EntityCaveSpider) {
           EntityCaveSpider baby = new EntityCaveSpider(this.world);
@@ -255,23 +255,23 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
   }
   
   public boolean isBesideClimbableBlock() {
-    return ((this.dataManager.get(CLIMBING) & 0x1) != 0);
+    return ((this.getDataManager().get(CLIMBING) & 0x1) != 0);
   }
   
   public void setBesideClimbableBlock(boolean climbing) {
-    byte b0 = this.dataManager.get(CLIMBING);
+    byte b0 = this.getDataManager().get(CLIMBING);
     if (climbing) {
       b0 = (byte)(b0 | 0x1);
     } else {
       b0 = (byte)(b0 & 0xFFFFFFFE);
     } 
-    this.dataManager.set(CLIMBING, b0);
+    this.getDataManager().set(CLIMBING, b0);
   }
   
   @Nullable
   public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
     livingdata = super.onInitialSpawn(difficulty, livingdata);
-    if (!this.world.isRemote && this.world.rand.nextInt(4) == 0)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.world.rand.nextInt(4) == 0)
       setSurvivalTestSkin(true); 
     if (this.world.rand.nextInt(100) == 0 && getGrowingAge() >= 0) {
       EntitySkeleton entityskeleton = new EntitySkeleton(this.world);
@@ -306,7 +306,7 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
       if (getRidingEntity() == null && list != null && !list.isEmpty() && !isBeingRidden() && hasOwner(player))
           for (EntitySkeleton entity : list) {
               if (entity != null)
-                  if (false && !entity.isRiding() && !this.world.isRemote) {
+                  if (false && !entity.isRiding() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
                       player.swingArm(EnumHand.MAIN_HAND);
                       entity.startRiding(this);
                       playSound(SoundEvents.ENTITY_SPIDER_AMBIENT, 1.0F, 1.5F);
@@ -316,7 +316,7 @@ public class EntitySpider extends EntityTameBase implements IJumpingMount, Light
       return true;
     } 
     if (!player.isSneaking() && stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 

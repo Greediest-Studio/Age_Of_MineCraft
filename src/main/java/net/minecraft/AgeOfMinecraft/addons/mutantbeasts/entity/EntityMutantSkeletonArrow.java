@@ -47,7 +47,7 @@ public class EntityMutantSkeletonArrow extends Entity {
   public EntityMutantSkeletonArrow(World world, EntityTameBase shooter, EntityLivingBase target) {
     this(world);
     this.shooter = shooter;
-    if (!world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(world)) {
       setTargetX(target.posX);
       setTargetY(target.posY);
       setTargetZ(target.posZ);
@@ -66,51 +66,51 @@ public class EntityMutantSkeletonArrow extends Entity {
   }
   
   protected void entityInit() {
-    this.dataManager.register(TARGET_X, 0);
-    this.dataManager.register(TARGET_Y, 0);
-    this.dataManager.register(TARGET_Z, 0);
-    this.dataManager.register(SPEED, 12.0F);
-    this.dataManager.register(CLONES, 10);
+    this.getDataManager().register(TARGET_X, 0);
+    this.getDataManager().register(TARGET_Y, 0);
+    this.getDataManager().register(TARGET_Z, 0);
+    this.getDataManager().register(SPEED, 12.0F);
+    this.getDataManager().register(CLONES, 10);
   }
   
   public double getTargetX() {
-    return this.dataManager.get(TARGET_X) / 10000.0D;
+    return this.getDataManager().get(TARGET_X) / 10000.0D;
   }
   
   public void setTargetX(double x) {
-    this.dataManager.set(TARGET_X, (int) (x * 10000.0D));
+    this.getDataManager().set(TARGET_X, (int) (x * 10000.0D));
   }
   
   public double getTargetY() {
-    return this.dataManager.get(TARGET_Y) / 10000.0D;
+    return this.getDataManager().get(TARGET_Y) / 10000.0D;
   }
   
   public void setTargetY(double y) {
-    this.dataManager.set(TARGET_Y, (int) (y * 10000.0D));
+    this.getDataManager().set(TARGET_Y, (int) (y * 10000.0D));
   }
   
   public double getTargetZ() {
-    return this.dataManager.get(TARGET_Z) / 10000.0D;
+    return this.getDataManager().get(TARGET_Z) / 10000.0D;
   }
   
   public void setTargetZ(double z) {
-    this.dataManager.set(TARGET_Z, (int) (z * 10000.0D));
+    this.getDataManager().set(TARGET_Z, (int) (z * 10000.0D));
   }
   
   public float getSpeed() {
-    return this.dataManager.get(SPEED) / 10.0F;
+    return this.getDataManager().get(SPEED) / 10.0F;
   }
   
   public void setSpeed(float speed) {
-    this.dataManager.set(SPEED, speed * 10.0F);
+    this.getDataManager().set(SPEED, speed * 10.0F);
   }
   
   public int getClones() {
-    return this.dataManager.get(CLONES);
+    return this.getDataManager().get(CLONES);
   }
   
   public void setClones(int clones) {
-    this.dataManager.set(CLONES, clones);
+    this.getDataManager().set(CLONES, clones);
   }
   
   public void randomize(float scale) {
@@ -137,7 +137,7 @@ public class EntityMutantSkeletonArrow extends Entity {
     if (this.rotationYaw > 360.0F)
       this.rotationYaw -= 360.0F; 
     this.rotationPitch = (float)Math.toDegrees(Math.atan2(y, d));
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (this.ticksExisted == 2)
         hitEntities(0); 
       if (this.ticksExisted == 3)

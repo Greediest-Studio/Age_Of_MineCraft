@@ -123,7 +123,7 @@ public class EntityPig extends EntityTameBase implements IJumpingMount, Light, A
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(SADDLED, Boolean.FALSE);
+    this.getDataManager().register(SADDLED, Boolean.FALSE);
   }
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
@@ -161,7 +161,7 @@ public class EntityPig extends EntityTameBase implements IJumpingMount, Light, A
       return true;
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -170,7 +170,7 @@ public class EntityPig extends EntityTameBase implements IJumpingMount, Light, A
   
   public void onDeath(DamageSource cause) {
     super.onDeath(cause);
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (getSaddled()) {
         dropItem(Items.SADDLE, 1);
         setSaddled(false);
@@ -183,19 +183,19 @@ public class EntityPig extends EntityTameBase implements IJumpingMount, Light, A
   }
   
   public boolean getSaddled() {
-    return this.dataManager.get(SADDLED);
+    return this.getDataManager().get(SADDLED);
   }
   
   public void setSaddled(boolean saddled) {
     if (saddled) {
-      this.dataManager.set(SADDLED, Boolean.TRUE);
+      this.getDataManager().set(SADDLED, Boolean.TRUE);
     } else {
-      this.dataManager.set(SADDLED, Boolean.FALSE);
+      this.getDataManager().set(SADDLED, Boolean.FALSE);
     } 
   }
   
   public void onStruckByLightning(EntityLightningBolt lightningBolt) {
-    if (!this.world.isRemote && !this.isDead) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !this.isDead) {
       EntityPigZombie entitypigzombie = new EntityPigZombie(this.world);
       entitypigzombie.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
       entitypigzombie.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);

@@ -146,7 +146,7 @@ public class EntitySquid extends EntityTameBase implements Light, Animal {
     this.lastTentacleAngle = this.tentacleAngle;
     this.squidRotation += this.rotationVelocity;
     if (this.squidRotation > 6.283185307179586D)
-      if (this.world.isRemote) {
+      if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         this.squidRotation = 6.2831855F;
       } else {
         this.squidRotation = (float)(this.squidRotation - 6.283185307179586D);
@@ -173,7 +173,7 @@ public class EntitySquid extends EntityTameBase implements Light, Animal {
         this.randomMotionSpeed *= 0.9F;
         this.rotateSpeed *= 0.99F;
       } 
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         this.motionX = (this.randomMotionVecX * this.randomMotionSpeed);
         this.motionY = (this.randomMotionVecY * this.randomMotionSpeed);
         this.motionZ = (this.randomMotionVecZ * this.randomMotionSpeed);
@@ -185,7 +185,7 @@ public class EntitySquid extends EntityTameBase implements Light, Animal {
       this.squidPitch += (-((float)MathHelper.atan2(f1, this.motionY)) * 57.295776F - this.squidPitch) * 0.1F;
     } else {
       this.tentacleAngle = MathHelper.abs(MathHelper.sin(this.squidRotation)) * 3.1415927F * 0.25F;
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         this.motionX = 0.0D;
         this.motionZ = 0.0D;
         if (isPotionActive(MobEffects.LEVITATION)) {
@@ -220,7 +220,7 @@ public class EntitySquid extends EntityTameBase implements Light, Animal {
           this.motionY += (0.05D * (getActivePotionEffect(MobEffects.LEVITATION).getAmplifier() + 1) - this.motionY) * 0.2D;
         } else {
           blockpos$pooledmutableblockpos.setPos(this.posX, 0.0D, this.posZ);
-          if (!this.world.isRemote || (this.world.isBlockLoaded(blockpos$pooledmutableblockpos) && this.world.getChunk(blockpos$pooledmutableblockpos).isLoaded())) {
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) || (this.world.isBlockLoaded(blockpos$pooledmutableblockpos) && this.world.getChunk(blockpos$pooledmutableblockpos).isLoaded())) {
             if (!hasNoGravity())
               this.motionY -= 0.08D; 
           } else if (this.posY > 0.0D) {
@@ -276,7 +276,7 @@ public class EntitySquid extends EntityTameBase implements Light, Animal {
       if (getAir() == -10) {
         setAir(0);
         attackEntityFrom(DamageSource.WITHER, 3.0F);
-        if (!this.world.isRemote && this.rand.nextInt(10) == 0 && this.onGround) {
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.rand.nextInt(10) == 0 && this.onGround) {
           this.motionX += ((this.rand.nextFloat() * 2.0F - 1.0F) * 0.4F);
           this.motionZ += ((this.rand.nextFloat() * 2.0F - 1.0F) * 0.4F);
           this.rotationYaw = this.rand.nextFloat() * 360.0F;
@@ -295,7 +295,7 @@ public class EntitySquid extends EntityTameBase implements Light, Animal {
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 

@@ -134,7 +134,7 @@ public class EntityBlackHole extends Entity {
           BlockPos pos = new BlockPos(j2, k, l);
           IBlockState state = this.world.getBlockState(pos);
           Block block = state.getBlock();
-          if (!isRiding() && !block.isAir(state, this.world, pos) && this.rand.nextInt(10) == 0 && !this.world.isRemote && this.world.isAreaLoaded(getPosition().add(-32, -32, -32), getPosition().add(32, 32, 32)) && block.getBlockHardness(state, this.world, new BlockPos(j2, k, l)) != -1.0F)
+          if (!isRiding() && !block.isAir(state, this.world, pos) && this.rand.nextInt(10) == 0 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.world.isAreaLoaded(getPosition().add(-32, -32, -32), getPosition().add(32, 32, 32)) && block.getBlockHardness(state, this.world, new BlockPos(j2, k, l)) != -1.0F)
             if (block.getMaterial(state).isLiquid()) {
               this.world.setBlockToAir(new BlockPos(j2, k, l));
             } else {

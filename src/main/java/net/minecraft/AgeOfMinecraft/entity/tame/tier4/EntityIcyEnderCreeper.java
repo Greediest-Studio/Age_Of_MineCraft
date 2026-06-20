@@ -162,7 +162,7 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
   
   public void createChild() {
     super.createChild();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 1 + this.rand.nextInt(10); i++) {
         EntityIcyEnderCreeper baby = new EntityIcyEnderCreeper(this.world);
         baby.copyLocationAndAnglesFrom(this);
@@ -188,7 +188,7 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
   }
   
   public void notifyDataManagerChange(DataParameter<?> key) {
-    if (isArmsRaised() && this.world.isRemote)
+    if (isArmsRaised() && net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       playEndermanSound(); 
     super.notifyDataManagerChange(key);
   }
@@ -238,7 +238,7 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
         (getAttackTarget()).renderYawOffset = (getAttackTarget()).rotationYaw = (getAttackTarget()).rotationYawHead;
       } 
     } 
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       this.world.spawnParticle(EnumParticleTypes.END_ROD, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
       this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
       for (int i = 0; i < 2; i++) {
@@ -252,15 +252,15 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
         this.world.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
       } 
     } 
-    if (!isBeingRidden() && getGuardBlock() == null && getOwner() != null && (getDistanceSq(getOwner()) > 4096.0D || !canEntityBeSeen(getOwner())) && !this.world.isRemote) {
+    if (!isBeingRidden() && getGuardBlock() == null && getOwner() != null && (getDistanceSq(getOwner()) > 4096.0D || !canEntityBeSeen(getOwner())) && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       setAttackTarget(null);
       getNavigator().clearPath();
       teleportTo((getOwner()).posX, (getOwner()).posY, (getOwner()).posZ);
     } 
     if (!isBeingRidden() && getRevengeTarget() != null && getRNG().nextInt(20) == 0) {
-      if (getRevengeTarget().getDistanceSq(this) < 2.0D && !this.world.isRemote)
+      if (getRevengeTarget().getDistanceSq(this) < 2.0D && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         teleportRandomly(); 
-      if (getRevengeTarget().getDistanceSq(this) > 128.0D && !this.world.isRemote)
+      if (getRevengeTarget().getDistanceSq(this) > 128.0D && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         teleportToEntity(getRevengeTarget());
     } 
     super.onLivingUpdate();
@@ -301,7 +301,7 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
     if (flag) {
       this.world.playSound(null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, getSoundCategory(), 1.0F, 1.0F);
       playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
-      if (!this.world.isRemote && this.rand.nextFloat() < 0.01F) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.rand.nextFloat() < 0.01F) {
         EntityEndermite entityendermite = new EntityEndermite(this.world);
         entityendermite.setOwnerId(getOwnerId());
         entityendermite.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
@@ -384,7 +384,7 @@ public class EntityIcyEnderCreeper extends EntityTameBase implements IJumpingMou
   
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
-    if (stack.isEmpty() && getRidingEntity() == null && !isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote) {
+    if (stack.isEmpty() && getRidingEntity() == null && !isWild() && false && !isChild() && !player.isSneaking() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       player.startRiding(this);
       return true;
     } 

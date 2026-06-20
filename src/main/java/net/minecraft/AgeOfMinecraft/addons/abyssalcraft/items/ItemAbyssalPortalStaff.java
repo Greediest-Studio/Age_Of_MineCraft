@@ -83,7 +83,7 @@ public class ItemAbyssalPortalStaff extends ItemBEItem {
     if (!playerIn.capabilities.isCreativeMode && !flag)
       return !flag ? new ActionResult(EnumActionResult.FAIL, itemStackIn) : new ActionResult(EnumActionResult.PASS, itemStackIn); 
     playerIn.setActiveHand(hand);
-    playerIn.world.playSound(playerIn, new BlockPos(playerIn), SoundEvents.BLOCK_ANVIL_DESTROY, SoundCategory.PLAYERS, 100.0F, 0.5F);
+    net.minecraft.AgeOfMinecraft.util.EntityCompat.world(playerIn).playSound(playerIn, new BlockPos(playerIn), SoundEvents.BLOCK_ANVIL_DESTROY, SoundCategory.PLAYERS, 100.0F, 0.5F);
     return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
   }
   
@@ -103,7 +103,7 @@ public class ItemAbyssalPortalStaff extends ItemBEItem {
     portal.setOwnerId(playerIn.getUniqueID());
     portal.playSound(ESound.portalMake, 100.0F, 1.0F);
     portal.playSound(ESound.portalAmbient, 5.0F, 1.0F);
-    if (!worldIn.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(worldIn)) {
       worldIn.spawnEntity(portal);
       portal.setMetaData(stack.getMetadata());
       portal.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1000.0D + portal.getMetaData() * 750.0D);

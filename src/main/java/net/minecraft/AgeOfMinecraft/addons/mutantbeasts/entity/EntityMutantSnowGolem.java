@@ -117,14 +117,14 @@ public class EntityMutantSnowGolem extends EntityTameBase implements IRangedAtta
     ItemStack stack = player.getHeldItem(hand);
     ItemStack heldItem = new ItemStack(stack.getItem());
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !player.isSneaking() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
     if (false && !stack.isEmpty() && getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty() && stack.getItem() instanceof net.minecraft.item.ItemBlock) {
       playSound(SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, 1.0F, 2.0F);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.MAINHAND, heldItem);
@@ -137,15 +137,15 @@ public class EntityMutantSnowGolem extends EntityTameBase implements IRangedAtta
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(PUMPKIN_EQUIPPED, Boolean.TRUE);
+    this.getDataManager().register(PUMPKIN_EQUIPPED, Boolean.TRUE);
   }
   
   public boolean isPumpkinEquipped() {
-    return this.dataManager.get(PUMPKIN_EQUIPPED);
+    return this.getDataManager().get(PUMPKIN_EQUIPPED);
   }
   
   private void setPumpkinEquipped(boolean pumpkinEquipped) {
-    this.dataManager.set(PUMPKIN_EQUIPPED, pumpkinEquipped);
+    this.getDataManager().set(PUMPKIN_EQUIPPED, pumpkinEquipped);
   }
   
   protected SoundEvent getRegularHurtSound() {
@@ -249,7 +249,7 @@ public class EntityMutantSnowGolem extends EntityTameBase implements IRangedAtta
     } 
     if (getHealth() > 0.0F && biomeTemp < 0.5F && this.ticksExisted % 200 == 0)
       heal(1.0F); 
-    if (!this.world.isRemote && ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
       int x = MathHelper.floor(this.posX);
       int y = MathHelper.floor((getEntityBoundingBox()).minY);
       int z = MathHelper.floor(this.posZ);

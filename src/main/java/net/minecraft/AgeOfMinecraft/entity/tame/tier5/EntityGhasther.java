@@ -132,7 +132,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
   
   @SideOnly(Side.CLIENT)
   public boolean isAttacking() {
-    return this.dataManager.get(ATTACKING);
+    return this.getDataManager().get(ATTACKING);
   }
   
   public EnumTier getTier() {
@@ -144,7 +144,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
   }
   
   public void setAttacking(boolean attacking) {
-    this.dataManager.set(ATTACKING, attacking);
+    this.getDataManager().set(ATTACKING, attacking);
   }
   
   public void performSpecialAttack() {
@@ -164,8 +164,8 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
   
   public void onLivingUpdate() {
     super.onLivingUpdate();
-    if (!this.world.isRemote)
-      if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         if (isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && this.isOffensive && !isChild() && !false)
           if (getDistanceSq(getAttackTarget()) < (this.reachWidth * this.reachWidth + ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width) * ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width)) + 9.0D && (this.ticksExisted + getEntityId()) % 10 == 0)
             attackEntityAsMob(getAttackTarget());
@@ -291,7 +291,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(ATTACKING, Boolean.FALSE);
+    this.getDataManager().register(ATTACKING, Boolean.FALSE);
   }
   
   protected void applyEntityAttributes() {
@@ -362,7 +362,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -427,9 +427,9 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
       this.deathTime++;
       this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + (this.rand.nextFloat() * 9.0F - 4.5F), this.posY + (this.rand.nextFloat() * 9.0F - 4.5F), this.posZ + (this.rand.nextFloat() * 9.0F - 4.5F), 0.0D, 0.0D, 0.0D);
     } 
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (this.deathTicks == 340) {
-        if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot")) {
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.world.getGameRules().getBoolean("doMobLoot")) {
           int i = getExperiencePoints(this.attackingPlayer);
           i = ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
           while (i > 0) {
@@ -452,7 +452,7 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
         this.motionY++;
         this.motionY++;
         if (getOwner() != null) {
-          for (EntityPlayer entityplayer : this.world.playerEntities) {
+          for (EntityPlayer entityplayer : net.minecraft.AgeOfMinecraft.util.EntityCompat.playerEntities(this.world)) {
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
             entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
           } 

@@ -98,7 +98,7 @@ public class EntityEndermite extends EntityTameBase implements Light, Tiny, Ende
   public void performSpecialAttack() {
     setSpecialAttackTimer(400);
     playSound(ESound.bugSpecial, 10.0F, 1.0F);
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 2; i++) {
         EntityEndermite mob = new EntityEndermite(this.world);
         mob.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
@@ -150,7 +150,7 @@ public class EntityEndermite extends EntityTameBase implements Light, Tiny, Ende
         this.world.spawnParticle(EnumParticleTypes.END_ROD, true, this.posX, this.posY + this.rand.nextDouble() * this.height * 2.0D, this.posZ, (f3 * -0.15F), 0.01D, (f19 * -0.15F));
       } 
     } 
-    if (this.world.isRemote)
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
   }
   

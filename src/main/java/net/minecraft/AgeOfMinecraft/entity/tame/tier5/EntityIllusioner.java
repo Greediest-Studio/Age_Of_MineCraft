@@ -15,6 +15,7 @@ import net.minecraft.AgeOfMinecraft.entity.tame.ai.EntityAIFollowLeader;
 import net.minecraft.AgeOfMinecraft.entity.tame.ai.EntityAIFriendlyAttackMelee;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier3.EntityTippedArrowOther;
 import net.minecraft.AgeOfMinecraft.registry.ESound;
+import net.minecraft.AgeOfMinecraft.util.EntityAICompat;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -85,7 +86,7 @@ public class EntityIllusioner extends EntitySpellcasterIllager implements IRange
   }
   
   public void setCombatTask() {
-    if (this.world != null && !this.world.isRemote) {
+    if (this.world != null && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       this.tasks.removeTask(this.aiAttackOnCollide);
       this.tasks.removeTask(this.aiArrowAttack);
       ItemStack itemstack = getHeldItemMainhand();
@@ -116,19 +117,19 @@ public class EntityIllusioner extends EntitySpellcasterIllager implements IRange
   }
   
   public int getDisguiseTime() {
-    return this.dataManager.get(DISGUSE_TIMER);
+    return this.getDataManager().get(DISGUSE_TIMER);
   }
   
   public void setDisguiseTime(int age) {
-    this.dataManager.set(DISGUSE_TIMER, age);
+    this.getDataManager().set(DISGUSE_TIMER, age);
   }
   
   public int getDisguiseID() {
-    return this.dataManager.get(DISGUISE_ID);
+    return this.getDataManager().get(DISGUISE_ID);
   }
   
   public void setDisguiseID(int age) {
-    this.dataManager.set(DISGUISE_ID, age);
+    this.getDataManager().set(DISGUISE_ID, age);
   }
   
   public EnumTier getTier() {
@@ -209,7 +210,7 @@ public class EntityIllusioner extends EntitySpellcasterIllager implements IRange
         entitywitherskull.posY = this.posY + getEyeHeight() - 0.10000000149011612D + vec3.y;
         entitywitherskull.posZ = this.posZ + f1 * 0.35D + vec3.z;
         entitywitherskull.damage = ((ItemPEGun)getHeldItemMainhand().getItem()).getProjectileDamage(getHeldItemMainhand());
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           this.world.spawnEntity(entitywitherskull);
         playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 0.5F, 0.5F + getRNG().nextFloat() * 0.25F);
         playSound(ESound.pegunfire, 0.5F, 0.6F + getRNG().nextFloat() * 0.2F + entitywitherskull.damage / 100.0F);
@@ -378,8 +379,8 @@ public class EntityIllusioner extends EntitySpellcasterIllager implements IRange
       EntityIllusioner.this.getAttackTarget().playSound(SoundEvents.ENTITY_WITHER_AMBIENT, 2.0F, 1.0F);
       for (EntityCreature entity : list) {
         this.fear = new EntityIllusioner.EntityAIPanicFear(entity, 1.5D);
-        if (!entity.tasks.taskEntries.contains(this.fear) && !false)
-          entity.tasks.addTask(0, this.fear); 
+        if (!EntityAICompat.containsTask(entity, this.fear) && !false)
+          EntityAICompat.addTask(entity, 0, this.fear); 
       } 
     }
     

@@ -78,7 +78,7 @@ public class EntityDisintigrationRay extends EntityFireball {
   }
   
   public void onUpdate() {
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       setFlag(6, isGlowing()); 
     setSize(0.25F, 0.25F);
     this.noClip = true;
@@ -95,7 +95,7 @@ public class EntityDisintigrationRay extends EntityFireball {
       setLocationAndAngles(this.targetEntity.posX, this.targetEntity.posY + this.targetEntity.getEyeHeight() * 0.2D, this.targetEntity.posZ, this.targetEntity.rotationYaw, this.targetEntity.rotationPitch); 
     if (this.ticksExisted > 4 && this.shootingEntity != null && this.targetEntity != null) {
       this.targetEntity.hurtResistantTime = 0;
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         if (this.targetEntity instanceof EntityLiving && !(this.targetEntity instanceof EntityTameBase)) {
           ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)this.targetEntity, " was vaporized by ", (new EntityDamageSource("indirectMagic", this.shootingEntity)).setMagicDamage().setDamageBypassesArmor().setDamageIsAbsolute(), 20.0F);
           if (((EntityLiving)this.targetEntity).getHealth() <= 80.0F && this.targetEntity.isNonBoss())
@@ -116,7 +116,7 @@ public class EntityDisintigrationRay extends EntityFireball {
         double d6 = this.posX + (this.posX - this.accelerationX) * -d9;
         double d7 = this.posY + (this.posY - this.accelerationY) * -d9;
         double d8 = this.posZ + (this.posZ - this.accelerationZ) * -d9;
-        if (this.world.isRemote)
+        if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           this.world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, true, d6, d7, d8, 0.0D, 0.01D, 0.0D);
       } 
       setPosition(this.posX, this.posY, this.posZ);
@@ -126,7 +126,7 @@ public class EntityDisintigrationRay extends EntityFireball {
       this.motionZ *= 0.0D;
     } 
     this.world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
-    if (this.ticksExisted > 20 || (!this.world.isRemote && this.targetEntity == null))
+    if (this.ticksExisted > 20 || (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.targetEntity == null))
       setDead(); 
   }
 }

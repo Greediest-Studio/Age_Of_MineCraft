@@ -19,7 +19,7 @@ public class PhaseManagerAsorah {
       if (this.phase != null)
         this.phase.removeAreaEffect(); 
       this.phase = getPhase(phaseIn);
-      if (!this.dragon.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.dragon.world))
         this.dragon.getDataManager().set(EntityDragonBoss.PHASE, phaseIn.getId());
       this.phase.initPhase();
     } 

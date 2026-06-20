@@ -51,7 +51,7 @@ public class EntityMagicMissile extends EntityFireball {
   }
   
   protected void onImpact(RayTraceResult result) {
-    if (this.ticksExisted > 40 && !this.world.isRemote && this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase && result.entityHit != null && result.entityHit.hurtResistantTime <= 0 && result.entityHit instanceof EntityLivingBase)
+    if (this.ticksExisted > 40 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase && result.entityHit != null && result.entityHit.hurtResistantTime <= 0 && result.entityHit instanceof EntityLivingBase)
       if (!false) {
         ((EntityTameBase)this.shootingEntity).inflictEngenderMobDamage((EntityLivingBase)this.targetEntity, " was shot by ", (new EntityDamageSourceIndirect("arrow", this, this.shootingEntity)).setMagicDamage().setProjectile(), 2.0F);
         this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
@@ -120,7 +120,7 @@ public class EntityMagicMissile extends EntityFireball {
       this.motionZ = d2 / f2 * (getMotionFactor() * getMotionFactor()) * (getMotionFactor() * getMotionFactor()) + this.motionZ * (getMotionFactor() * getMotionFactor());
     } 
     setPosition(this.posX, this.posY, this.posZ);
-    if (!this.world.isRemote && this.ticksExisted > 20 && this.targetEntity == null)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.ticksExisted > 20 && this.targetEntity == null)
       if ((this.targetEntity == null || (this.targetEntity != null && !this.targetEntity.isEntityAlive())) && this.shootingEntity != null && this.shootingEntity instanceof EntityTameBase) {
         List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(100.0D));
         if (entities != null && !entities.isEmpty()) {

@@ -29,14 +29,14 @@ public class EntityDreadSlugOther extends EntityThrowable {
   }
   
   protected void onImpact(RayTraceResult result) {
-    if (!this.world.isRemote && result.entityHit != null)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && result.entityHit != null)
       if (result.entityHit instanceof EntityLivingBase && getThrower() != null && getThrower() instanceof EntityTameBase && !false) {
         ((EntityTameBase)getThrower()).inflictEngenderMobDamage((EntityLivingBase)result.entityHit, " was pummeled by ", DamageSource.causeThrownDamage(this, getThrower()), 4.0F);
         if (!EntityUtil.isEntityDread((EntityLivingBase)result.entityHit))
           ((EntityLivingBase)result.entityHit).addPotionEffect(new PotionEffect(AbyssalCraftAPI.dread_plague, 200)); 
         setDead();
       }  
-    if (!this.world.isRemote && result.entityHit == null) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && result.entityHit == null) {
       if (isBeingRidden())
         for (Entity entity : getPassengers()) {
           entity.playSound(ESound.amalgamate, 2.0F, 1.5F);

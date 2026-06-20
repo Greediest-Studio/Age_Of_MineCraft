@@ -98,7 +98,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
     } else {
       setSize(0.5F, 1.95F);
     } 
-    if (worldIn != null && !worldIn.isRemote)
+    if (worldIn != null && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(worldIn))
       setCombatTask(); 
     this.experienceValue = 4;
   }
@@ -176,13 +176,13 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(SKELETON_VARIANT, 0);
-    this.dataManager.register(ATTACKING, Boolean.FALSE);
+    this.getDataManager().register(SKELETON_VARIANT, 0);
+    this.getDataManager().register(ATTACKING, Boolean.FALSE);
   }
   
   public void createChild() {
     super.createChild();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 1 + this.rand.nextInt(2); i++) {
         EntitySkeleton baby = new EntitySkeleton(this.world);
         baby.copyLocationAndAnglesFrom(this);
@@ -380,25 +380,25 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
     } 
     if (getSkeletonType() == 1 && getRidingEntity() == null)
       getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(10.0D); 
-    if (this.world.isRemote && getSkeletonType() == 1)
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getSkeletonType() == 1)
       this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextDouble() - 0.5D) * this.width, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
     if (this.helmetCount < 0)
       this.helmetCount = 0; 
     if ((getSkeletonType() == 1 || isAntiMob() || isChild() || isHero()) && this.helmetCount != 0)
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         for (int i = 0; i < this.helmetCount; i++) {
           playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
           dropItem(Items.LEATHER_HELMET, 1);
           this.helmetCount--;
         }   
     ItemStack head = getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-    if (!head.isEmpty() && head.getItem() == Items.LEATHER_HELMET && isEntityAlive() && !this.world.isDaytime() && !this.world.isRemote) {
+    if (!head.isEmpty() && head.getItem() == Items.LEATHER_HELMET && isEntityAlive() && !this.world.isDaytime() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       swingArm(EnumHand.MAIN_HAND);
       this.helmetCount++;
       setItemStackToSlot(EntityEquipmentSlot.HEAD, ItemStack.EMPTY);
       playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
     } 
-    if (isEntityAlive() && this.world.isDaytime() && !this.world.isRemote && !isChild() && getSkeletonType() != 1 && !isAntiMob() && !isHero() && !isImmuneToFire()) {
+    if (isEntityAlive() && this.world.isDaytime() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !isChild() && getSkeletonType() != 1 && !isAntiMob() && !isHero() && !isImmuneToFire()) {
       float f = getBrightness();
       if (f > 0.5F && this.ticksExisted % (!getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty() ? 80 : 10) == 0 && this.world.canSeeSky(new BlockPos(this.posX, this.posY + getEyeHeight(), this.posZ))) {
         boolean flag = true;
@@ -450,7 +450,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
   
   public void onDeath(DamageSource cause) {
     super.onDeath(cause);
-    if (!this.world.isRemote && getLimitedLife() <= 0)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getLimitedLife() <= 0)
       for (int i = 0; i < this.helmetCount; i++) {
         dropItem(Items.LEATHER_HELMET, 1);
         this.helmetCount--;
@@ -545,7 +545,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
   }
   
   public void setCombatTask() {
-    if (this.world != null && !this.world.isRemote) {
+    if (this.world != null && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       this.tasks.removeTask(this.aiAttackOnCollide);
       this.tasks.removeTask(this.aiRangedAttack);
       this.tasks.removeTask(this.aiArrowAttack);
@@ -574,7 +574,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
         entitywitherskull.posY = this.posY + getEyeHeight() - 0.10000000149011612D + vec3.y;
         entitywitherskull.posZ = this.posZ + f1 * 0.35D + vec3.z;
         entitywitherskull.damage = ((ItemPEGun)getHeldItemMainhand().getItem()).getProjectileDamage(getHeldItemMainhand());
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           this.world.spawnEntity(entitywitherskull);
         playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 0.5F, 0.5F + getRNG().nextFloat() * 0.25F);
         playSound(ESound.pegunfire, 0.5F, 0.6F + getRNG().nextFloat() * 0.2F + entitywitherskull.damage / 100.0F);
@@ -665,11 +665,11 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
   }
   
   public int getSkeletonType() {
-    return this.dataManager.get(SKELETON_VARIANT);
+    return this.getDataManager().get(SKELETON_VARIANT);
   }
   
   public void setSkeletonType(int p_82201_1_) {
-    this.dataManager.set(SKELETON_VARIANT, p_82201_1_);
+    this.getDataManager().set(SKELETON_VARIANT, p_82201_1_);
     this.isImmuneToFire = (p_82201_1_ == 1);
     if (p_82201_1_ == 1)
       getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(10.0D); 
@@ -699,7 +699,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
   
   public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {
     super.setItemStackToSlot(slotIn, stack);
-    if (!this.world.isRemote && slotIn == EntityEquipmentSlot.MAINHAND)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && slotIn == EntityEquipmentSlot.MAINHAND)
       setCombatTask(); 
   }
   
@@ -718,7 +718,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
       List<EntitySkeletonHorse> list = this.world.getEntitiesWithinAABB(EntitySkeletonHorse.class, getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty() && !isBeingRidden())
           for (EntitySkeletonHorse entity : list) {
-              if (entity != null && !entity.isBeingRidden() && !this.world.isRemote) {
+              if (entity != null && !entity.isBeingRidden() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
                   entity.setHorseTamed(true);
                   entity.setRearing(true);
                   entity.ticksExisted = 0;
@@ -733,7 +733,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
       this.helmetCount++;
       playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
       player.swingArm(hand);
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         stack.shrink(1); 
       return true;
     } 
@@ -741,7 +741,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
       setItemStackToSlot(EntityEquipmentSlot.HEAD, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.HEAD, heldItem);
@@ -753,7 +753,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
       setItemStackToSlot(EntityEquipmentSlot.CHEST, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.CHEST, heldItem);
@@ -765,7 +765,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
       setItemStackToSlot(EntityEquipmentSlot.LEGS, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.LEGS, heldItem);
@@ -777,7 +777,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
       setItemStackToSlot(EntityEquipmentSlot.FEET, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.FEET, heldItem);
@@ -788,7 +788,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
     if (false && !stack.isEmpty() && getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty() && stack.getItem() != Items.NAME_TAG && (getSlotForItemStack(stack) == EntityEquipmentSlot.MAINHAND || stack.getItem() instanceof net.minecraft.item.ItemSword || stack.getItem() instanceof net.minecraft.item.ItemTool || stack.getItem() == Items.BOW)) {
       playSound(SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 2.0F);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.MAINHAND, heldItem);
@@ -799,7 +799,7 @@ public class EntitySkeleton extends EntityTameBase implements IRangedAttackMob, 
     if (false && !stack.isEmpty() && getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty() && (getSlotForItemStack(stack) == EntityEquipmentSlot.OFFHAND || stack.getItem() instanceof net.minecraft.item.ItemSword || stack.getItem() instanceof net.minecraft.item.ItemTool || (stack.getItem() instanceof net.minecraft.item.ItemFood && !(stack.getItem() instanceof net.minecraft.item.ItemAppleGold)) || stack.getItem() == Items.TIPPED_ARROW || stack.getItem().getItemUseAction(stack) == EnumAction.BLOCK || stack.getItem() == Items.TOTEM_OF_UNDYING)) {
       playSound(SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 2.0F);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.OFFHAND, heldItem);

@@ -19,23 +19,23 @@ public abstract class EntityAbstractIllagers extends EntityTameBase {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(AGGRESSIVE, (byte) 0);
+    this.getDataManager().register(AGGRESSIVE, (byte) 0);
   }
   
   @SideOnly(Side.CLIENT)
   protected boolean isAggressive(int mask) {
-    int i = this.dataManager.get(AGGRESSIVE);
+    int i = this.getDataManager().get(AGGRESSIVE);
     return ((i & mask) != 0);
   }
   
   protected void setAggressive(int mask, boolean value) {
-    int i = this.dataManager.get(AGGRESSIVE);
+    int i = this.getDataManager().get(AGGRESSIVE);
     if (value) {
       i |= mask;
     } else {
       i &= ~mask;
     } 
-    this.dataManager.set(AGGRESSIVE, (byte) (i & 0xFF));
+    this.getDataManager().set(AGGRESSIVE, (byte) (i & 0xFF));
   }
   
   public EnumCreatureAttribute getCreatureAttribute() {

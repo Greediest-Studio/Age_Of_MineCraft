@@ -50,8 +50,8 @@ public class EntitySquads extends EntityThrowable {
               }
           }
     } 
-    if (!this.world.isRemote && result.entityHit != null)
-      if (result.entityHit instanceof EntityLivingBase && !this.world.isRemote && getThrower() != null && getThrower() instanceof EntityTameBase && !false) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && result.entityHit != null)
+      if (result.entityHit instanceof EntityLivingBase && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getThrower() != null && getThrower() instanceof EntityTameBase && !false) {
         if (ACConfig.hardcoreMode && result.entityHit instanceof net.minecraft.entity.player.EntityPlayer)
           result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, getThrower()).setDamageBypassesArmor().setDamageIsAbsolute(), 2.0F);
         getThrower().attackEntityAsMob(result.entityHit);

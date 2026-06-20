@@ -37,8 +37,8 @@ public class ItemHeroMaker extends ItemBEItem {
   public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
     if (target instanceof EntityTameBase) {
       EntityTameBase entity = (EntityTameBase)target;
-      if (!entity.world.isRemote && entity instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityJzahar)
-        SpecialTextUtil.JzaharGroup(entity.world, I18n.translateToLocal("message.jzahar.denyheroism"));
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entity)) && entity instanceof net.minecraft.AgeOfMinecraft.addons.abyssalcraft.entity.EntityJzahar)
+        SpecialTextUtil.JzaharGroup(net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entity), I18n.translateToLocal("message.jzahar.denyheroism"));
       if (EngenderConfig.mobs.useHeros && !entity.isHero() && entity.getTier() != EnumTier.TIER6) {
         if (playerIn instanceof EntityPlayerMP)
           CriteriaTriggers.CONSUME_ITEM.trigger((EntityPlayerMP)playerIn, stack); 

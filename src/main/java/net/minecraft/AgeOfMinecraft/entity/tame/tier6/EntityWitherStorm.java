@@ -17,6 +17,7 @@ import net.minecraft.AgeOfMinecraft.registry.EItem;
 import net.minecraft.AgeOfMinecraft.registry.ELoot;
 import net.minecraft.AgeOfMinecraft.registry.ESetup;
 import net.minecraft.AgeOfMinecraft.registry.ESound;
+import net.minecraft.AgeOfMinecraft.util.EntityAICompat;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -69,25 +70,25 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
   
   private static final DataParameter<Integer> SIZE = EntityDataManager.createKey(EntityWitherStorm.class, DataSerializers.VARINT);
   
-  public EntityWitherStormHead centerHead = new EntityWitherStormHead(this.world);
+  public EntityWitherStormHead centerHead;
   
-  public EntityWitherStormHead rightHead = new EntityWitherStormHead(this.world);
+  public EntityWitherStormHead rightHead;
   
-  public EntityWitherStormHead leftHead = new EntityWitherStormHead(this.world);
+  public EntityWitherStormHead leftHead;
   
-  public EntityWitherStormTentacle tentacle1 = new EntityWitherStormTentacle(this.world);
+  public EntityWitherStormTentacle tentacle1;
   
-  public EntityWitherStormTentacle tentacle2 = new EntityWitherStormTentacle(this.world);
+  public EntityWitherStormTentacle tentacle2;
   
-  public EntityWitherStormTentacle tentacle3 = new EntityWitherStormTentacle(this.world);
+  public EntityWitherStormTentacle tentacle3;
   
-  public EntityWitherStormTentacle tentacle4 = new EntityWitherStormTentacle(this.world);
+  public EntityWitherStormTentacle tentacle4;
   
-  public EntityWitherStormTentacle tentacle5 = new EntityWitherStormTentacle(this.world);
+  public EntityWitherStormTentacle tentacle5;
   
-  public EntityWitherStormTentacleDevourer tentacledevourer1 = new EntityWitherStormTentacleDevourer(this.world);
+  public EntityWitherStormTentacleDevourer tentacledevourer1;
   
-  public EntityWitherStormTentacleDevourer tentacledevourer2 = new EntityWitherStormTentacleDevourer(this.world);
+  public EntityWitherStormTentacleDevourer tentacledevourer2;
   
   private boolean witherStormDeathFinished;
   
@@ -106,50 +107,8 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     this.ignoreFrustumCheck = true;
     Grow(12500);
     setHealth(getMaxHealth());
-    for (EntityPlayer entityplayer : worldIn.playerEntities)
+    for (EntityPlayer entityplayer : net.minecraft.AgeOfMinecraft.util.EntityCompat.playerEntities(worldIn))
       worldIn.playSound(null, entityplayer.getPosition(), ESound.witherStormFinish, getSoundCategory(), Float.MAX_VALUE, 1.0F); 
-    if (!worldIn.isRemote) {
-      this.centerHead = new EntityWitherStormHead(worldIn);
-      this.centerHead.residentWitherStorm = this;
-      this.centerHead.copyLocationAndAnglesFrom(this);
-      worldIn.spawnEntity(this.centerHead);
-      this.rightHead = new EntityWitherStormHead(worldIn);
-      this.rightHead.residentWitherStorm = this;
-      this.rightHead.copyLocationAndAnglesFrom(this);
-      worldIn.spawnEntity(this.rightHead);
-      this.leftHead = new EntityWitherStormHead(worldIn);
-      this.leftHead.residentWitherStorm = this;
-      this.leftHead.copyLocationAndAnglesFrom(this);
-      worldIn.spawnEntity(this.leftHead);
-      this.tentacle1 = new EntityWitherStormTentacle(worldIn);
-      this.tentacle1.residentWitherStorm = this;
-      this.tentacle1.copyLocationAndAnglesFrom(this);
-      this.world.spawnEntity(this.tentacle1);
-      this.tentacle2 = new EntityWitherStormTentacle(worldIn);
-      this.tentacle2.residentWitherStorm = this;
-      this.tentacle2.copyLocationAndAnglesFrom(this);
-      worldIn.spawnEntity(this.tentacle2);
-      this.tentacle3 = new EntityWitherStormTentacle(worldIn);
-      this.tentacle3.residentWitherStorm = this;
-      this.tentacle3.copyLocationAndAnglesFrom(this);
-      worldIn.spawnEntity(this.tentacle3);
-      this.tentacle4 = new EntityWitherStormTentacle(worldIn);
-      this.tentacle4.residentWitherStorm = this;
-      this.tentacle4.copyLocationAndAnglesFrom(this);
-      worldIn.spawnEntity(this.tentacle4);
-      this.tentacle5 = new EntityWitherStormTentacle(worldIn);
-      this.tentacle5.residentWitherStorm = this;
-      this.tentacle5.copyLocationAndAnglesFrom(this);
-      worldIn.spawnEntity(this.tentacle5);
-      this.tentacledevourer1 = new EntityWitherStormTentacleDevourer(worldIn);
-      this.tentacledevourer1.residentWitherStorm = this;
-      this.tentacledevourer1.copyLocationAndAnglesFrom(this);
-      worldIn.spawnEntity(this.tentacledevourer1);
-      this.tentacledevourer2 = new EntityWitherStormTentacleDevourer(worldIn);
-      this.tentacledevourer2.residentWitherStorm = this;
-      this.tentacledevourer2.copyLocationAndAnglesFrom(this);
-      worldIn.spawnEntity(this.tentacledevourer2);
-    } 
   }
   
   public TextFormatting getTextFormat() {
@@ -290,8 +249,8 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(SIZE, 0);
-    this.dataManager.register(DOESNT_HAVE_COMMAND_BLOCK, Boolean.FALSE);
+    this.getDataManager().register(SIZE, 0);
+    this.getDataManager().register(DOESNT_HAVE_COMMAND_BLOCK, Boolean.FALSE);
   }
   
   public void outOfWorld() {}
@@ -374,7 +333,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       this.fallDistance = 0.0F;
       getNavigator().clearPath();
     }
-    if (!doesntContainACommandBlock() && !this.world.isRemote)
+    if (!doesntContainACommandBlock() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (isEntityAlive()) {
         ChunkLoadingEvent.updateLoaded(this);
       } else {
@@ -385,7 +344,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(doesntContainACommandBlock() ? 1000.0D : getSize());
     getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(doesntContainACommandBlock() ? 20.0D : 24.0D);
     getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(doesntContainACommandBlock() ? 10.0D : 20.0D);
-    if (!doesntContainACommandBlock() && getSize() >= 300000 && !this.world.isRemote && this.ticksExisted % 1000 == 0) {
+    if (!doesntContainACommandBlock() && getSize() >= 300000 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.ticksExisted % 1000 == 0) {
       EntityWitherStorm entityzombie = new EntityWitherStorm(this.world);
       entityzombie.copyLocationAndAnglesFrom(this);
       entityzombie.setNoAI(isAIDisabled());
@@ -401,7 +360,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     if (owner != null)
       owner.removeActivePotionEffect(MobEffects.WITHER);
     if (this.deathTicks <= 0)
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         if (this.centerHead != null) {
           if (this.centerHead.isEntityAlive())
             if (doesntContainACommandBlock()) {
@@ -642,7 +601,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       float f17 = (this.rand.nextFloat() - 0.5F) * 12.0F;
       this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX + f13, this.posY - 4.0D + f15, this.posZ + f17, 0.0D, 0.0D, 0.0D);
     } 
-    if (!this.world.isRemote && getOwner() != null && this.posY <= (getOwner()).posY && this.posY >= (getOwner()).posY - 0.5D && !isSneaking())
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getOwner() != null && this.posY <= (getOwner()).posY && this.posY >= (getOwner()).posY - 0.5D && !isSneaking())
       createEngenderModExplosion(this, this.posX, this.posY, this.posZ, 8.0F, false, EngenderConfig.mobs.grief);
     this.onGround = false;
     this.isAirBorne = true;
@@ -660,7 +619,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     if (this.motionY > 1.0D)
       this.motionY = 0.0D; 
     this.renderYawOffset = this.rotationYaw = this.rotationYawHead;
-    if (!this.world.isRemote && !doesntContainACommandBlock() && getHealth() <= 0.0F) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !doesntContainACommandBlock() && getHealth() <= 0.0F) {
       finishWitherStormDeath();
       return;
     } 
@@ -679,7 +638,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
             blockpos = this.world.getTopSolidOrLiquidBlock(blockpos);
             IBlockState iblockstate = this.world.getBlockState(blockpos);
             Block block = iblockstate.getBlock();
-            if (this.world.getBlockState(blockpos.up()).getBlock().isAir(this.world.getBlockState(blockpos.up()), this.world, blockpos.up()) && !block.isAir(iblockstate, this.world, blockpos) && !this.world.isRemote && this.world.isAreaLoaded(blockpos, blockpos) && block.getBlockHardness(iblockstate, this.world, new BlockPos(l1, blockpos.getY(), i2)) != -1.0F)
+            if (this.world.getBlockState(blockpos.up()).getBlock().isAir(this.world.getBlockState(blockpos.up()), this.world, blockpos.up()) && !block.isAir(iblockstate, this.world, blockpos) && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.world.isAreaLoaded(blockpos, blockpos) && block.getBlockHardness(iblockstate, this.world, new BlockPos(l1, blockpos.getY(), i2)) != -1.0F)
               if (block.getMaterial(iblockstate).isLiquid()) {
                 this.world.setBlockState(new BlockPos(l1, blockpos.getY(), i2),Blocks.AIR.getDefaultState(),2);
               } else {
@@ -693,8 +652,8 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
           for (int i1 = 0; i1 < list2.size(); i1++) {
             EntityCreature entity = list2.get(i1);
             EntityAIAvoidEntitySPC ai = new EntityAIAvoidEntitySPC(entity, EntityWitherStorm.class, 128.0F, 1.5D, 1.5D);
-            if (entity != null && entity.isEntityAlive() && entity.isNonBoss() && !(entity instanceof net.minecraft.entity.monster.EntityEnderman) && !(entity instanceof EntityTameBase) && !entity.tasks.taskEntries.contains(ai)) {
-              entity.tasks.addTask(0, ai);
+            if (entity != null && entity.isEntityAlive() && entity.isNonBoss() && !(entity instanceof net.minecraft.entity.monster.EntityEnderman) && !(entity instanceof EntityTameBase) && !EntityAICompat.containsTask(entity, ai)) {
+              EntityAICompat.addTask(entity, 0, ai);
             } else {
               list2.remove(entity);
             } 
@@ -860,7 +819,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       amount *= 0.2F; 
     if (source.isExplosion())
       amount *= 5.0F; 
-    if (amount > 5000.0F && source.isExplosion() && !doesntContainACommandBlock() && getSize() >= 50000 && !this.world.isRemote) {
+    if (amount > 5000.0F && source.isExplosion() && !doesntContainACommandBlock() && getSize() >= 50000 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       EntityWitherStorm entityzombie = new EntityWitherStorm(this.world);
       entityzombie.copyLocationAndAnglesFrom(this);
       entityzombie.setNoAI(isAIDisabled());
@@ -946,29 +905,29 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
   }
   
   public int getSize() {
-    return this.dataManager.get(SIZE);
+    return this.getDataManager().get(SIZE);
   }
   
   public void Grow(int p_82215_1_) {
-    if (!this.world.isRemote) {
-      this.dataManager.set(SIZE, doesntContainACommandBlock() ? 12500 : p_82215_1_);
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
+      this.getDataManager().set(SIZE, doesntContainACommandBlock() ? 12500 : p_82215_1_);
       getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(doesntContainACommandBlock() ? 1000.0D : p_82215_1_);
       syncHealthAfterFormChange();
       if (p_82215_1_ == 12500 && !isWild())
-        for (EntityPlayer entityplayer : this.world.playerEntities)
+        for (EntityPlayer entityplayer : net.minecraft.AgeOfMinecraft.util.EntityCompat.playerEntities(this.world))
           entityplayer.sendStatusMessage(new TextComponentTranslation(doesntContainACommandBlock() ? "§5 A Wither Storm has fissioned!" : ("§5" + getOwner().getName() + "'s Wither Storm has grown to Destroyer form!!"), new Object[0]), true);
     } 
   }
   
   public boolean doesntContainACommandBlock() {
-    return this.dataManager.get(DOESNT_HAVE_COMMAND_BLOCK);
+    return this.getDataManager().get(DOESNT_HAVE_COMMAND_BLOCK);
   }
   
   public void setNotContainingCommandBlock(boolean p_82215_1_) {
     if (p_82215_1_)
       this.lastDamage = Float.MAX_VALUE; 
-    this.dataManager.set(DOESNT_HAVE_COMMAND_BLOCK, p_82215_1_);
-    if (!this.world.isRemote) {
+    this.getDataManager().set(DOESNT_HAVE_COMMAND_BLOCK, p_82215_1_);
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(p_82215_1_ ? 1000.0D : getSize());
       syncHealthAfterFormChange();
     }
@@ -1005,7 +964,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
   }
   
   private void finishWitherStormDeath() {
-    if (this.world.isRemote || this.witherStormDeathFinished)
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) || this.witherStormDeathFinished)
       return; 
     this.witherStormDeathFinished = true;
     if (this.centerHead != null && this.centerHead.residentWitherStorm != null) {
@@ -1023,14 +982,14 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       } 
     } 
     List<EntityFallingBlock> list = this.world.getEntitiesWithinAABB(EntityFallingBlock.class, getEntityBoundingBox().grow(128.0D, 128.0D, 128.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
-    if (list != null && !list.isEmpty() && this.world.isRemote)
+    if (list != null && !list.isEmpty() && net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         for (EntityFallingBlock entity : list) {
             if (entity != null) {
                 createEngenderModExplosionFireless(this, entity.posX, entity.posY, entity.posZ, 2.0F, false);
                 entity.setDead();
             }
         }
-    for (EntityPlayer entityplayer : this.world.playerEntities)
+    for (EntityPlayer entityplayer : net.minecraft.AgeOfMinecraft.util.EntityCompat.playerEntities(this.world))
       this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F); 
     int i = getSize();
     while (i > 0) {
@@ -1039,7 +998,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + 8.0D, this.posZ, j));
     } 
     dropWitherStormLootTable();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (EntityWitherStorm allmulegans : this.world.getEntitiesWithinAABB(EntityWitherStorm.class, getEntityBoundingBox().grow(256.0D))) {
         if (allmulegans.doesntContainACommandBlock())
           allmulegans.setHealth(0.0F); 
@@ -1062,11 +1021,11 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       super.onDeathUpdate();
     } else {
       this.deathTicks++;
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         finishWitherStormDeath();
         return;
       } 
-      if (getSize() > 12500 && !this.world.isRemote && this.world.isAreaLoaded(blockpos, blockpos))
+      if (getSize() > 12500 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.world.isAreaLoaded(blockpos, blockpos))
         for (int j = 0; j < ((getSize() > 50000) ? 20 : 10); j++) {
           this.world.setBlockState(getPosition().up(j), Blocks.OBSIDIAN.getDefaultState());
           EntityFallingBlock deathBlocks = new EntityFallingBlock(this.world, this.posX, this.posY + 0.5D + j, this.posZ, this.world.getBlockState(getPosition().up(j)));
@@ -1086,21 +1045,21 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         float f17 = (this.rand.nextFloat() - 0.5F) * 12.0F;
         this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX + f13, this.posY - 4.0D + f15, this.posZ + f17, 0.0D, 0.0D, 0.0D);
       } 
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         if (this.deathTicks == 1)
           if (getOwner() != null) {
-            for (EntityPlayer entityplayer : this.world.playerEntities) {
+            for (EntityPlayer entityplayer : net.minecraft.AgeOfMinecraft.util.EntityCompat.playerEntities(this.world)) {
               this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
               entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s Wither Storm has been killed!!!", new Object[0]), true);
             } 
             getOwner().sendMessage(new TextComponentTranslation("Your Wither Storm has been destroyed!", new Object[0]));
           }   
-      if (this.deathTicks == 1 && !this.world.isRemote)
+      if (this.deathTicks == 1 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         return; 
       if (this.deathTicks == 80)
         if (this.tentacle1 != null && this.tentacle1.residentWitherStorm != null) {
           playSound(getHurtSound(null), getSoundVolume(), 2.0F);
-          if (!this.world.isRemote)
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
             createEngenderModExplosionFireless(this, this.tentacle1.posX, this.tentacle1.posY, this.tentacle1.posZ, 6.0F, EngenderConfig.mobs.grief);
           this.tentacle1.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.tentacle1.motionY = 0.800000011920929D;
@@ -1109,7 +1068,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       if (this.deathTicks == 100)
         if (this.tentacle2 != null && this.tentacle2.residentWitherStorm != null) {
           playSound(getHurtSound(null), getSoundVolume(), 2.0F);
-          if (!this.world.isRemote)
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
             createEngenderModExplosionFireless(this, this.tentacle2.posX, this.tentacle2.posY, this.tentacle2.posZ, 6.0F, EngenderConfig.mobs.grief);
           this.tentacle2.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.tentacle2.motionY = 0.800000011920929D;
@@ -1118,7 +1077,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       if (this.deathTicks == 110)
         if (this.tentacledevourer1 != null && this.tentacledevourer1.residentWitherStorm != null) {
           playSound(getHurtSound(null), getSoundVolume(), 2.0F);
-          if (!this.world.isRemote)
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
             createEngenderModExplosionFireless(this, this.tentacledevourer1.posX, this.tentacledevourer1.posY, this.tentacledevourer1.posZ, 15.0F, EngenderConfig.mobs.grief);
           this.tentacledevourer1.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.tentacledevourer1.motionY = 0.800000011920929D;
@@ -1127,7 +1086,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       if (this.deathTicks == 150) {
         if (this.tentacle4 != null && this.tentacle4.residentWitherStorm != null) {
           playSound(getHurtSound(null), getSoundVolume(), 2.0F);
-          if (!this.world.isRemote)
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
             createEngenderModExplosionFireless(this, this.tentacle4.posX, this.tentacle4.posY, this.tentacle4.posZ, 6.0F, EngenderConfig.mobs.grief);
           this.tentacle4.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.tentacle4.motionY = 0.800000011920929D;
@@ -1135,7 +1094,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         } 
         if (this.tentacle3 != null && this.tentacle3.residentWitherStorm != null) {
           playSound(getHurtSound(null), getSoundVolume(), 2.0F);
-          if (!this.world.isRemote)
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
             createEngenderModExplosionFireless(this, this.tentacle3.posX, this.tentacle3.posY, this.tentacle3.posZ, 6.0F, EngenderConfig.mobs.grief);
           this.tentacle3.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.tentacle3.motionY = 0.800000011920929D;
@@ -1146,7 +1105,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         if (this.tentacle5 != null && this.tentacle5.residentWitherStorm != null) {
           playSound(getHurtSound(null), getSoundVolume(), 2.0F);
           playSound(getHurtSound(null), getSoundVolume(), 2.0F);
-          if (!this.world.isRemote)
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
             createEngenderModExplosionFireless(this, this.tentacle5.posX, this.tentacle5.posY, this.tentacle5.posZ, 6.0F, EngenderConfig.mobs.grief);
           this.tentacle5.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.tentacle5.motionY = 0.800000011920929D;
@@ -1155,7 +1114,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
         if (this.tentacledevourer2 != null && this.tentacledevourer2.residentWitherStorm != null) {
           playSound(getHurtSound(null), getSoundVolume(), 2.0F);
           playSound(getHurtSound(null), getSoundVolume(), 2.0F);
-          if (!this.world.isRemote)
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
             createEngenderModExplosionFireless(this, this.tentacledevourer2.posX, this.tentacledevourer2.posY, this.tentacledevourer2.posZ, 15.0F, EngenderConfig.mobs.grief);
           this.tentacledevourer2.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.tentacledevourer2.motionY = 0.800000011920929D;
@@ -1168,7 +1127,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
           playSound(getHurtSound(null), getSoundVolume(), 2.0F);
           playSound(getHurtSound(null), getSoundVolume(), 2.0F);
           playSound(getHurtSound(null), getSoundVolume(), 2.0F);
-          if (!this.world.isRemote)
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
             createEngenderModExplosionFireless(this, this.leftHead.posX, this.leftHead.posY, this.leftHead.posZ, 9.0F, EngenderConfig.mobs.grief);
           this.leftHead.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.leftHead.motionZ = ((this.rand.nextFloat() - 0.5F) * 3.0F);
@@ -1179,12 +1138,12 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
           playSound(getHurtSound(null), getSoundVolume(), 2.0F);
           playSound(getHurtSound(null), getSoundVolume(), 2.0F);
           playSound(getHurtSound(null), getSoundVolume(), 2.0F);
-          if (!this.world.isRemote)
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
             createEngenderModExplosionFireless(this, this.rightHead.posX, this.rightHead.posY, this.rightHead.posZ, 9.0F, EngenderConfig.mobs.grief);
           this.rightHead.motionX = ((this.rand.nextFloat() - 0.5F) * 3.0F);
           this.rightHead.motionZ = ((this.rand.nextFloat() - 0.5F) * 3.0F);
         }  
-      if (this.deathTicks >= 300 && !this.world.isRemote)
+      if (this.deathTicks >= 300 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         finishWitherStormDeath(); 
     } 
   }

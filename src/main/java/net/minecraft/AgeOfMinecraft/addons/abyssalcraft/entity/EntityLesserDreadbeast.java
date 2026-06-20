@@ -127,12 +127,12 @@ public class EntityLesserDreadbeast extends EntityTameBase implements IRangedAtt
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(CLIMBING, (byte) 0);
+    this.getDataManager().register(CLIMBING, (byte) 0);
   }
   
   public void onUpdate() {
     super.onUpdate();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       setBesideClimbableBlock(this.collidedHorizontally); 
   }
   
@@ -161,17 +161,17 @@ public class EntityLesserDreadbeast extends EntityTameBase implements IRangedAtt
   }
   
   public boolean isBesideClimbableBlock() {
-    return ((this.dataManager.get(CLIMBING) & 0x1) != 0);
+    return ((this.getDataManager().get(CLIMBING) & 0x1) != 0);
   }
   
   public void setBesideClimbableBlock(boolean par1) {
-    byte b0 = this.dataManager.get(CLIMBING);
+    byte b0 = this.getDataManager().get(CLIMBING);
     if (par1) {
       b0 = (byte)(b0 | 0x1);
     } else {
       b0 = (byte)(b0 & 0xFFFFFFFE);
     } 
-    this.dataManager.set(CLIMBING, b0);
+    this.getDataManager().set(CLIMBING, b0);
   }
   
   public boolean takesFallDamage() {
@@ -202,13 +202,13 @@ public class EntityLesserDreadbeast extends EntityTameBase implements IRangedAtt
         this.tasks.addTask(2, this.aiAttackOnCollide);
         this.tasks.removeTask(this.aiArrowAttack);
       }  
-    if (isEntityAlive() && !this.world.isRemote && this.world.rand.nextInt(200) == 0) {
+    if (isEntityAlive() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.world.rand.nextInt(200) == 0) {
       EntityDreadSpawn spawn = new EntityDreadSpawn(this.world);
       spawn.copyLocationAndAnglesFrom(this);
       spawn.setOwnerId(getOwnerId());
       this.world.spawnEntity(spawn);
     } 
-    if (isEntityAlive() && !this.world.isRemote && this.world.rand.nextInt(10000) == 0) {
+    if (isEntityAlive() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.world.rand.nextInt(10000) == 0) {
       EntityGreaterDreadSpawn spawn = new EntityGreaterDreadSpawn(this.world);
       spawn.copyLocationAndAnglesFrom(this);
       spawn.setOwnerId(getOwnerId());
@@ -217,7 +217,7 @@ public class EntityLesserDreadbeast extends EntityTameBase implements IRangedAtt
   }
   
   public void onDeath(DamageSource par1DamageSource) {
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       EntityGreaterDreadSpawn spawn1 = new EntityGreaterDreadSpawn(this.world);
       EntityGreaterDreadSpawn spawn2 = new EntityGreaterDreadSpawn(this.world);
       spawn1.copyLocationAndAnglesFrom(this);
@@ -256,7 +256,7 @@ public class EntityLesserDreadbeast extends EntityTameBase implements IRangedAtt
       return true;
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 

@@ -189,7 +189,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
   
   public void createChild() {
     super.createChild();
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       EntityVillager baby = new EntityVillager(this.world);
       baby.copyLocationAndAnglesFrom(this);
       baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
@@ -253,7 +253,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
           populateBuyingList(); 
         if (hand == EnumHand.MAIN_HAND)
           player.addStat(StatList.TALKED_TO_VILLAGER); 
-        if (!this.world.isRemote && !this.buyingList.isEmpty() && !isSneaking()) {
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !this.buyingList.isEmpty() && !isSneaking()) {
           setCustomer(player);
           player.displayVillagerTradeGui(this);
         } else if (this.buyingList.isEmpty()) {
@@ -268,8 +268,8 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(PROFESSION, 0);
-    this.dataManager.register(CAREER, 0);
+    this.getDataManager().register(PROFESSION, 0);
+    this.getDataManager().register(CAREER, 0);
   }
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
@@ -332,7 +332,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
   
   public void onDeath(DamageSource cause) {
     super.onDeath(cause);
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       for (int i = 0; i < this.villagerInventory.getSizeInventory(); i++) {
         if (this.villagerInventory != null) {
           ItemStack itemstack = this.villagerInventory.getStackInSlot(i);
@@ -353,19 +353,19 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
   }
   
   public void setProfession(int professionId) {
-    this.dataManager.set(PROFESSION, professionId);
+    this.getDataManager().set(PROFESSION, professionId);
   }
   
   public int getProfession() {
-    return Math.max(this.dataManager.get(PROFESSION) % 5, 0);
+    return Math.max(this.getDataManager().get(PROFESSION) % 5, 0);
   }
   
   public void setCareer(int professionId) {
-    this.dataManager.set(CAREER, professionId);
+    this.getDataManager().set(CAREER, professionId);
   }
   
   public int getCareer() {
-    return Math.max(this.dataManager.get(CAREER) % 5, 0);
+    return Math.max(this.getDataManager().get(CAREER) % 5, 0);
   }
   
   public boolean isMating() {
@@ -445,7 +445,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
   }
   
   public void verifySellingItem(ItemStack p_110297_1_) {
-    if (!this.world.isRemote && this.livingSoundTime > -getTalkInterval() + 20) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.livingSoundTime > -getTalkInterval() + 20) {
       this.livingSoundTime = -getTalkInterval();
       if (p_110297_1_ != null) {
         playSound(SoundEvents.ENTITY_VILLAGER_YES, getSoundVolume(), getSoundPitch());
@@ -613,7 +613,7 @@ public class EntityVillager extends EntityTameBase implements IMerchant, INpc, L
   }
   
   public void onStruckByLightning(EntityLightningBolt lightningBolt) {
-    if (!this.world.isRemote && !this.isDead) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !this.isDead) {
       EntityWitch entitywitch = new EntityWitch(this.world);
       entitywitch.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
       entitywitch.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entitywitch)), null);

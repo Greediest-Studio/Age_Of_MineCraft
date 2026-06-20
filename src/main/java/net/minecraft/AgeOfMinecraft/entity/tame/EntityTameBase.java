@@ -39,6 +39,8 @@ import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityEvoker;
 import net.minecraft.AgeOfMinecraft.registry.EItem;
 import net.minecraft.AgeOfMinecraft.registry.ESetup;
 import net.minecraft.AgeOfMinecraft.registry.ESound;
+import net.minecraft.AgeOfMinecraft.util.AttributeCompat;
+import net.minecraft.AgeOfMinecraft.util.EntityAICompat;
 import net.minecraft.AgeOfMinecraft.util.Maths;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
@@ -65,7 +67,6 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityBoat;
@@ -109,6 +110,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
@@ -155,17 +158,17 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   
   private static final DataParameter<Integer> HEROSPECIALATTACKTIMER = EntityDataManager.createKey(EntityTameBase.class, DataSerializers.VARINT);
   
-  public static final IAttribute STRENGTH = (new RangedAttribute(null, "engender.strength", 9.0D, 1.0D, 100.0D)).setDescription("Mob Strength").setShouldWatch(true);
+  public static final IAttribute STRENGTH = AttributeCompat.ranged("engender.strength", 9.0D, 1.0D, 100.0D, "Mob Strength", true);
   
-  public static final IAttribute STAMINA = (new RangedAttribute(null, "engender.stamina", 9.0D, 1.0D, 100.0D)).setDescription("Mob Stamina").setShouldWatch(true);
+  public static final IAttribute STAMINA = AttributeCompat.ranged("engender.stamina", 9.0D, 1.0D, 100.0D, "Mob Stamina", true);
   
-  public static final IAttribute INTELLIGENCE = (new RangedAttribute(null, "engender.intelligence", 9.0D, 1.0D, 100.0D)).setDescription("Mob Intelligence").setShouldWatch(true);
+  public static final IAttribute INTELLIGENCE = AttributeCompat.ranged("engender.intelligence", 9.0D, 1.0D, 100.0D, "Mob Intelligence", true);
   
-  public static final IAttribute DEXTERITY = (new RangedAttribute(null, "engender.dexterity", 9.0D, 1.0D, 100.0D)).setDescription("Mob Dexterity").setShouldWatch(true);
+  public static final IAttribute DEXTERITY = AttributeCompat.ranged("engender.dexterity", 9.0D, 1.0D, 100.0D, "Mob Dexterity", true);
   
-  public static final IAttribute AGILITY = (new RangedAttribute(null, "engender.agility", 9.0D, 1.0D, 100.0D)).setDescription("Mob Agility").setShouldWatch(true);
+  public static final IAttribute AGILITY = AttributeCompat.ranged("engender.agility", 9.0D, 1.0D, 100.0D, "Mob Agility", true);
   
-  public static final IAttribute FITTNESS = (new RangedAttribute(null, "engender.fittness", 1.0D, 0.75D, 1.5D)).setDescription("Mob Fittness").setShouldWatch(true);
+  public static final IAttribute FITTNESS = AttributeCompat.ranged("engender.fittness", 1.0D, 0.75D, 1.5D, "Mob Fittness", true);
   
   private static final DataParameter<Integer> AGE = EntityDataManager.createKey(EntityTameBase.class, DataSerializers.VARINT);
   
@@ -248,8 +251,12 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   public float prevRotationPitchFalling;
   
   public String fakeTeam;
+
+  private String compatCustomNameTag = "";
+
+  public int timeUntilPortal;
   
-  protected BossInfoServer bossInfo = new BossInfoServer(new TextComponentTranslation(getName(), new Object[0]), BossInfo.Color.WHITE, BossInfo.Overlay.PROGRESS);
+  protected BossInfoServer bossInfo = new BossInfoServer(new TextComponentString("Engender Mob"), BossInfo.Color.WHITE, BossInfo.Overlay.PROGRESS);
   
   private EnumStudy currentStudy = EnumStudy.Physical;
   
@@ -287,11 +294,10 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     this.timeUntilPortal = 100;
     this.basicInventory = new InventoryBasic("Basic inventory", false, 8);
     this.lastChanceInvul = getSpawnTimer();
-    updateBossBar();
     this.chasingPosX = this.posX;
-    this.chasingPosY = this.posY + getEyeHeight();
+    this.chasingPosY = this.posY + getBaseEyeHeight();
     this.chasingPosZ = this.posZ;
-    setDoorAItask((getIntelligence() < 12.0F));
+    setDoorAItask(true);
     this.renderYawOffset = this.rotationYaw = this.rotationYawHead = this.rand.nextFloat() * 360.0F;
     this.onGround = true;
     Arrays.fill(this.inventoryArmorDropChances, 0.0F);
@@ -324,11 +330,42 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   public String getDescName() {
     return "";
   }
+
+  public float getEyeHeight() {
+    return getBaseEyeHeight();
+  }
+
+  protected float getBaseEyeHeight() {
+    return this.height * 0.85F;
+  }
+
+  public String getName() {
+    if (hasCustomName())
+      return getCustomNameTag();
+    String name = EntityList.getEntityString(this);
+    return name == null ? "Engender Mob" : name;
+  }
+
+  public boolean hasCustomName() {
+    return this.compatCustomNameTag != null && !this.compatCustomNameTag.isEmpty();
+  }
+
+  public String getCustomNameTag() {
+    return this.compatCustomNameTag == null ? "" : this.compatCustomNameTag;
+  }
+
+  public void setCustomNameTag(String name) {
+    this.compatCustomNameTag = name == null ? "" : name;
+  }
+
+  public ITextComponent getDisplayName() {
+    return new TextComponentString(getName());
+  }
   
   public int playMusic() {
     if (isChild()) {
       boolean help = false;
-      for (EntityPlayer player : this.world.playerEntities) {
+      for (EntityPlayer player : net.minecraft.AgeOfMinecraft.util.EntityCompat.playerEntities(this.world)) {
         if (player.getName().equals("Mrbt0907"))
           help = true; 
       } 
@@ -338,7 +375,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public void heal(float healAmount) {
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (healAmount <= 0.0F)
         return; 
       float f = getHealth();
@@ -414,7 +451,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public static EngenderExplosion createEngenderModExplosion(@Nullable Entity entityIn, double x, double y, double z, float strength, boolean isFlaming, boolean isSmoking) {
-    EngenderExplosion explosion = new EngenderExplosion(entityIn.world, entityIn, x, y, z, strength, isFlaming, isSmoking);
+    EngenderExplosion explosion = new EngenderExplosion(net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entityIn), entityIn, x, y, z, strength, isFlaming, isSmoking);
     explosion.doExplosionA();
     explosion.doExplosionB(true);
     return explosion;
@@ -451,86 +488,86 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public final float getStrength() {
-    return (float)getEntityAttribute(STRENGTH).getBaseValue();
+    return (float)net.minecraft.AgeOfMinecraft.util.AttributeCompat.getBaseValue(this, STRENGTH, getDefaultStrengthStat());
   }
   
   public void setStrength(float health) {
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (health <= 1.0F)
         health = 1.0F; 
       if (health >= 100.0F)
         health = 100.0F; 
-      getEntityAttribute(STRENGTH).setBaseValue(health);
+      net.minecraft.AgeOfMinecraft.util.AttributeCompat.setBaseValue(this, STRENGTH, health);
     } 
   }
   
   public final float getStamina() {
-    return (float)getEntityAttribute(STAMINA).getBaseValue();
+    return (float)net.minecraft.AgeOfMinecraft.util.AttributeCompat.getBaseValue(this, STAMINA, getDefaultStaminaStat());
   }
   
   public void setStamina(float health) {
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (health <= 1.0F)
         health = 1.0F; 
       if (health >= 100.0F)
         health = 100.0F; 
-      getEntityAttribute(STAMINA).setBaseValue(health);
+      net.minecraft.AgeOfMinecraft.util.AttributeCompat.setBaseValue(this, STAMINA, health);
     } 
   }
   
   public final float getIntelligence() {
-    return (float)getEntityAttribute(INTELLIGENCE).getBaseValue();
+    return (float)net.minecraft.AgeOfMinecraft.util.AttributeCompat.getBaseValue(this, INTELLIGENCE, getDefaultIntelligenceStat());
   }
   
   public void setIntelligence(float health) {
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (health <= 0.0F)
         health = 0.0F; 
       if (health >= 100.0F)
         health = 100.0F; 
-      getEntityAttribute(INTELLIGENCE).setBaseValue(health);
+      net.minecraft.AgeOfMinecraft.util.AttributeCompat.setBaseValue(this, INTELLIGENCE, health);
     } 
   }
   
   public final float getDexterity() {
-    return (float)getEntityAttribute(DEXTERITY).getBaseValue();
+    return (float)net.minecraft.AgeOfMinecraft.util.AttributeCompat.getBaseValue(this, DEXTERITY, getDefaultDexterityStat());
   }
   
   public void setDexterity(float health) {
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (health <= 1.0F)
         health = 1.0F; 
       if (health >= 100.0F)
         health = 100.0F; 
-      getEntityAttribute(DEXTERITY).setBaseValue(health);
+      net.minecraft.AgeOfMinecraft.util.AttributeCompat.setBaseValue(this, DEXTERITY, health);
     } 
   }
   
   public final float getAgility() {
-    return (float)getEntityAttribute(AGILITY).getBaseValue();
+    return (float)net.minecraft.AgeOfMinecraft.util.AttributeCompat.getBaseValue(this, AGILITY, getDefaultAgilityStat());
   }
   
   public void setAgility(float health) {
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (health <= 1.0F)
         health = 1.0F; 
       if (health >= 100.0F)
         health = 100.0F; 
-      getEntityAttribute(AGILITY).setBaseValue(health);
+      net.minecraft.AgeOfMinecraft.util.AttributeCompat.setBaseValue(this, AGILITY, health);
     } 
   }
   
   public final float getFittness() {
-    return (float)getEntityAttribute(FITTNESS).getBaseValue();
+    return (float)net.minecraft.AgeOfMinecraft.util.AttributeCompat.getBaseValue(this, FITTNESS, getDefaultFittnessStat());
   }
   
   public void setFittness(float health) {
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (health <= 0.75F)
         health = 0.75F; 
       if (health >= 1.5F)
         health = 1.5F; 
-      getEntityAttribute(FITTNESS).setBaseValue(health);
+      net.minecraft.AgeOfMinecraft.util.AttributeCompat.setBaseValue(this, FITTNESS, health);
       setSize(this.width, this.height);
     } 
   }
@@ -540,11 +577,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public final float getEnergy() {
-    return this.dataManager.get(ENERGY);
+    return this.getDataManager().get(ENERGY);
   }
   
   public void setEnergy(float health) {
-    this.dataManager.set(ENERGY, health);
+    this.getDataManager().set(ENERGY, health);
   }
 
   @Deprecated
@@ -554,7 +591,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   
   @Deprecated
   public void setCurrentStudy(EnumStudy study, int exp) {
-    if (!this.world.isRemote && !hasLimitedLife()) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !hasLimitedLife()) {
       this.currentStudy = study;
       if (isHero())
         exp *= 2; 
@@ -569,11 +606,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public final float getFakeHealth() {
-    return this.dataManager.get(FAKE_HEALTH);
+    return this.getDataManager().get(FAKE_HEALTH);
   }
   
   public void setFakeHealth(float health) {
-    this.dataManager.set(FAKE_HEALTH, MathHelper.clamp(health, 0.0F, getMaxHealth() * 2.0F));
+    this.getDataManager().set(FAKE_HEALTH, MathHelper.clamp(health, 0.0F, getMaxHealth() * 2.0F));
   }
   
   protected void jump() {
@@ -610,18 +647,18 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (getLevel() >= 300) {
       setLevel(300);
       playSound(SoundEvents.ENTITY_ARROW_HIT_PLAYER, 0.5F, 1.0F);
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + getEyeHeight(), this.posZ, 10 + this.rand.nextInt(40)));
     } else {
       if (getLevel() > 0 && getLevel() < 300)
         if (getLevel() == 299) {
-          if (!this.world.isRemote && !isWild())
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !isWild())
             getOwner().sendMessage(new TextComponentTranslation(TextFormatting.AQUA + getName() + TextFormatting.RESET + " has reached " + TextFormatting.GOLD + "Max Level" + TextFormatting.RESET + "!", new Object[0]));
           playSound(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, 1.0F, 1.0F);
-          if (!this.world.isRemote)
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
             this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + getEyeHeight(), this.posZ, 10 + this.rand.nextInt(40)));
         } else {
-          if (!this.world.isRemote && !isWild())
+          if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !isWild())
             getOwner().sendMessage(new TextComponentTranslation(TextFormatting.AQUA + getName() + TextFormatting.RESET + " has reached " + TextFormatting.BLUE + "Level " + (getLevel() + 1) + TextFormatting.RESET + "!", new Object[0]));
           playSound(SoundEvents.ENTITY_PLAYER_LEVELUP, 0.5F, 1.0F);
         }  
@@ -663,7 +700,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     damage /= 4.0F;
     if (damage < 1.0F)
       damage = 1.0F; 
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (EntityEquipmentSlot entityequipmentslot : EntityEquipmentSlot.values()) {
         ItemStack itemstack = getItemStackFromSlot(entityequipmentslot);
         if (!itemstack.isEmpty() && entityequipmentslot != EntityEquipmentSlot.MAINHAND && entityequipmentslot != EntityEquipmentSlot.OFFHAND)
@@ -675,7 +712,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   protected void damageShield(float damage) {
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (damage >= 3.0F && this.activeItemStack.getItem() == Items.SHIELD) {
         setCurrentStudy(EnumStudy.Combative, (int)damage);
         this.blockTimer = 40;
@@ -730,51 +767,51 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public int getAttackState() {
-    return this.dataManager.get(ATTACKSTATE);
+    return this.getDataManager().get(ATTACKSTATE);
   }
   
   public void setAttackState(int age) {
-    this.dataManager.set(ATTACKSTATE, age);
+    this.getDataManager().set(ATTACKSTATE, age);
   }
   
   public int getPolymorphTime() {
-    return this.dataManager.get(POLYMORPH_TIME);
+    return this.getDataManager().get(POLYMORPH_TIME);
   }
   
   public void setPolymorphTime(int age) {
-    this.dataManager.set(POLYMORPH_TIME, age);
+    this.getDataManager().set(POLYMORPH_TIME, age);
   }
   
   public int getIllusionFormTime() {
-    return this.dataManager.get(ILLUSION_FORM_TIME);
+    return this.getDataManager().get(ILLUSION_FORM_TIME);
   }
   
   public void setIllusionFormTime(int age) {
-    this.dataManager.set(ILLUSION_FORM_TIME, age);
+    this.getDataManager().set(ILLUSION_FORM_TIME, age);
   }
   
   public int getGhostTime() {
-    return this.dataManager.get(GHOST_TIME);
+    return this.getDataManager().get(GHOST_TIME);
   }
   
   public void setGhostTime(int age) {
-    this.dataManager.set(GHOST_TIME, age);
+    this.getDataManager().set(GHOST_TIME, age);
   }
   
   public int getBookID() {
-    return this.dataManager.get(BOOK_ID);
+    return this.getDataManager().get(BOOK_ID);
   }
   
   public void setBookID(int age) {
-    this.dataManager.set(BOOK_ID, age);
+    this.getDataManager().set(BOOK_ID, age);
   }
   
   public int getBookDurability() {
-    return this.dataManager.get(BOOK_DURABILITY);
+    return this.getDataManager().get(BOOK_DURABILITY);
   }
   
   public void setBookDurability(int age) {
-    this.dataManager.set(BOOK_DURABILITY, age);
+    this.getDataManager().set(BOOK_DURABILITY, age);
   }
   
   public boolean canBeMarried() {
@@ -795,7 +832,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   
   public void setChild(boolean childZombie) {
     getDataManager().set(IS_CHILD, childZombie);
-    if (this.world != null && !this.world.isRemote) {
+    if (this.world != null && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       IAttributeInstance iattributeinstance = getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
       iattributeinstance.removeModifier(BABY_SPEED_BOOST);
       if (childZombie)
@@ -828,6 +865,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     setDexterity(getDefaultDexterityStat());
     setAgility(getDefaultAgilityStat());
     setFittness(getDefaultFittnessStat());
+    setDoorAItask((getIntelligence() < 12.0F));
     getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).applyModifier(new AttributeModifier("Random spawn bonus", this.rand.nextGaussian() * 0.05D, 1));
     return livingdata;
   }
@@ -1043,11 +1081,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public int getSpecialAttackTimer() {
-    return this.dataManager.get(HEROSPECIALATTACKTIMER);
+    return this.getDataManager().get(HEROSPECIALATTACKTIMER);
   }
   
   public void setSpecialAttackTimer(int p_82215_1_) {
-    this.dataManager.set(HEROSPECIALATTACKTIMER, p_82215_1_);
+    this.getDataManager().set(HEROSPECIALATTACKTIMER, p_82215_1_);
   }
   
   public void performSpecialAttack() {}
@@ -1056,11 +1094,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     ((PathNavigateGround)getNavigator()).setBreakDoors(enabled);
     ((PathNavigateGround)getNavigator()).setEnterDoors(true);
     if (enabled) {
-      this.tasks.removeTask(this.openDoor);
-      this.tasks.addTask(1, this.breakDoor);
+      EntityAICompat.removeTask(this, this.openDoor);
+      EntityAICompat.addTask(this, 1, this.breakDoor);
     } else {
-      this.tasks.removeTask(this.breakDoor);
-      this.tasks.addTask(1, this.openDoor);
+      EntityAICompat.removeTask(this, this.breakDoor);
+      EntityAICompat.addTask(this, 1, this.openDoor);
     } 
   }
   
@@ -1105,10 +1143,10 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     } else {
       setOwnerId(null);
     }
-    this.dataManager.set(REBIRTH, tagCompund.getBoolean("LastChance"));
-    this.dataManager.set(HERO, tagCompund.getBoolean("Hero"));
-    this.dataManager.set(ANTIMOB, tagCompund.getBoolean("Anti"));
-    this.dataManager.set(SITRESTING, tagCompund.getBoolean("SitResting"));
+    this.getDataManager().set(REBIRTH, tagCompund.getBoolean("LastChance"));
+    this.getDataManager().set(HERO, tagCompund.getBoolean("Hero"));
+    this.getDataManager().set(ANTIMOB, tagCompund.getBoolean("Anti"));
+    this.getDataManager().set(SITRESTING, tagCompund.getBoolean("SitResting"));
     setSpecialAttackTimer(tagCompund.getInteger("SAT"));
     this.inLove = tagCompund.getInteger("InLove");
     setGrowingAge(tagCompund.getInteger("Age"));
@@ -1128,12 +1166,12 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       int i = tagCompund.getInteger("GPX");
       int j = tagCompund.getInteger("GPY");
       int k = tagCompund.getInteger("GPZ");
-      this.dataManager.set(GUARD_BLOCK_POS, Optional.of(new BlockPos(i, j, k)));
+      this.getDataManager().set(GUARD_BLOCK_POS, Optional.of(new BlockPos(i, j, k)));
       this.randPosX = i;
       this.randPosY = j;
       this.randPosZ = k;
     } else {
-      this.dataManager.set(GUARD_BLOCK_POS, Optional.absent());
+      this.getDataManager().set(GUARD_BLOCK_POS, Optional.absent());
     } 
   }
   
@@ -1164,9 +1202,9 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     tagCompound.setBoolean("IsMarried", isMarried());
     tagCompound.setBoolean("IsBaby", isChild());
     tagCompound.setBoolean("Hero", isHero());
-    tagCompound.setBoolean("LastChance", this.dataManager.get(REBIRTH));
-    tagCompound.setBoolean("Anti", this.dataManager.get(ANTIMOB));
-    tagCompound.setBoolean("SitResting", this.dataManager.get(SITRESTING));
+    tagCompound.setBoolean("LastChance", this.getDataManager().get(REBIRTH));
+    tagCompound.setBoolean("Anti", this.getDataManager().get(ANTIMOB));
+    tagCompound.setBoolean("SitResting", this.getDataManager().get(SITRESTING));
     tagCompound.setInteger("SAT", getSpecialAttackTimer());
     tagCompound.setFloat("EXP", getEXP());
     tagCompound.setFloat("TotalEXP", getTotalEXP());
@@ -1204,27 +1242,27 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public boolean isSitResting() {
-    return this.dataManager.get(SITRESTING);
+    return this.getDataManager().get(SITRESTING);
   }
   
   public void setSitResting(boolean bool) {
-    this.dataManager.set(SITRESTING, bool);
+    this.getDataManager().set(SITRESTING, bool);
   }
   
   public boolean isAntiMob() {
-    return this.dataManager.get(ANTIMOB);
+    return this.getDataManager().get(ANTIMOB);
   }
   
   public void setIsAntiMob(boolean bool) {
-    this.dataManager.set(ANTIMOB, bool);
+    this.getDataManager().set(ANTIMOB, bool);
   }
   
   public boolean isHero() {
-    return this.dataManager.get(HERO);
+    return this.getDataManager().get(HERO);
   }
   
   public void setIsHero(boolean bool) {
-    this.dataManager.set(HERO, bool);
+    this.getDataManager().set(HERO, bool);
   }
   
   public void becomeAHero() {
@@ -1234,11 +1272,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public boolean hasLastChance() {
-    return this.dataManager.get(REBIRTH);
+    return this.getDataManager().get(REBIRTH);
   }
   
   public void setLastChance(boolean bool) {
-    this.dataManager.set(REBIRTH, bool);
+    this.getDataManager().set(REBIRTH, bool);
   }
   
   public SoundCategory getSoundCategory() {
@@ -1247,11 +1285,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   
   @Nullable
   public BlockPos getGuardBlock() {
-    return (BlockPos)((Optional<?>)this.dataManager.get(GUARD_BLOCK_POS)).orNull();
+    return (BlockPos)((Optional<?>)this.getDataManager().get(GUARD_BLOCK_POS)).orNull();
   }
   
   public void setGuardBlock(@Nullable BlockPos pos) {
-    this.dataManager.set(GUARD_BLOCK_POS, Optional.fromNullable(pos));
+    this.getDataManager().set(GUARD_BLOCK_POS, Optional.fromNullable(pos));
   }
   
   public BlockPos getJukeboxToDanceTo() {
@@ -1264,11 +1302,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   
   @Nullable
   public UUID getOwnerId() {
-    return (UUID)((Optional<?>)this.dataManager.get(OWNER_UNIQUE_ID)).orNull();
+    return (UUID)((Optional<?>)this.getDataManager().get(OWNER_UNIQUE_ID)).orNull();
   }
   
   public void setOwnerId(@Nullable UUID p_184754_1_) {
-    this.dataManager.set(OWNER_UNIQUE_ID, Optional.fromNullable(p_184754_1_));
+    this.getDataManager().set(OWNER_UNIQUE_ID, Optional.fromNullable(p_184754_1_));
   }
   
   @Nullable
@@ -1295,7 +1333,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   protected void dropEquipmentUndamaged() {
-    if (!this.world.isRemote && !hasLimitedLife())
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !hasLimitedLife())
       for (EntityEquipmentSlot entityequipmentslot : EntityEquipmentSlot.values()) {
         ItemStack itemstack = getItemStackFromSlot(entityequipmentslot);
         if (!itemstack.isEmpty()) {
@@ -1513,7 +1551,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public void cleave(int lootingModifier, DamageSource source) {
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       this.recentlyHit = 100;
       for (int ai = 0; ai <= lootingModifier; ai++) {
         EntityTameBase addon = spawnBaby(this);
@@ -1555,7 +1593,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (isASwarmingMob())
       if (entity != null) {
         List<EntityTameBase> allies = this.world.getEntitiesWithinAABB(getClass(), getEntityBoundingBox().grow(3.0D));
-        if (!this.world.isRemote && 
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && 
           !allies.isEmpty())
             for (EntityTameBase entities : allies) {
                 if (entities.isEntityAlive() && entities.isASwarmingMob() && entities.getClass() == getClass())
@@ -1616,7 +1654,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         entity.motionY = this.height * 0.25D;
         ((EntityLivingBase)entity).knockBack(this, i * 0.5F + 0.3F, MathHelper.sin(this.rotationYaw * 0.017453292F), -MathHelper.cos(this.rotationYaw * 0.017453292F));
       } 
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         createEngenderModExplosionFireless(this, entity.posX, entity.posY, entity.posZ, 7.0F + entity.height + entity.width, false);
     } 
     if (EngenderConfig.mobs.useMobTalkerModels && this instanceof EntityGhast && ((EntityGhast)this).eleanor) {
@@ -1627,7 +1665,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         entity.motionY = this.height * 0.25D;
         ((EntityLivingBase)entity).knockBack(this, i * 0.5F + 0.3F, MathHelper.sin(this.rotationYaw * 0.017453292F), -MathHelper.cos(this.rotationYaw * 0.017453292F));
       } 
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         createEngenderModExplosionFireless(this, entity.posX, entity.posY, entity.posZ, 7.0F + entity.height + entity.width, false);
     } 
     if (isSneaking() && entity instanceof EntityLiving && ((EntityLiving)entity).getAttackTarget() != this)
@@ -2027,11 +2065,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public int getGrowingAge() {
-    return this.dataManager.get(AGE);
+    return this.getDataManager().get(AGE);
   }
   
   public void setGrowingAge(int age) {
-    this.dataManager.set(AGE, age);
+    this.getDataManager().set(AGE, age);
     if (age == 0)
       resetInLove(); 
     if (age < 0 && !isChild())
@@ -2039,27 +2077,27 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public int getLevel() {
-    return this.dataManager.get(LEVEL);
+    return this.getDataManager().get(LEVEL);
   }
   
   public void setLevel(int age) {
-    this.dataManager.set(LEVEL, age);
+    this.getDataManager().set(LEVEL, age);
   }
   
   public float getEXP() {
-    return this.dataManager.get(EXP);
+    return this.getDataManager().get(EXP);
   }
   
   public void setEXP(float age) {
-    this.dataManager.set(EXP, age);
+    this.getDataManager().set(EXP, age);
   }
   
   public float getTotalEXP() {
-    return this.dataManager.get(TOTALEXP);
+    return this.getDataManager().get(TOTALEXP);
   }
   
   public void setTotalEXP(float age) {
-    this.dataManager.set(TOTALEXP, age);
+    this.getDataManager().set(TOTALEXP, age);
   }
   
   public int getNextLevelRequirement() {
@@ -2081,7 +2119,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   protected void updateAITasks() {
-    if (!this.world.isRemote && getAttackTarget() == null && this.rand.nextInt(20) == 0) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getAttackTarget() == null && this.rand.nextInt(20) == 0) {
       List<EntityTameBase> training = this.world.getEntitiesWithinAABB(EntityTameBase.class, getEntityBoundingBox().grow((getAttackState() > 1) ? 1.0D : getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue()), Predicates.and(EntitySelectors.IS_ALIVE, EntitySelectors.NOT_SPECTATING));
       for (int j2 = 0; j2 < 10 && !training.isEmpty(); j2++) {
         EntityTameBase entitylivingbase = training.get(this.rand.nextInt(training.size()));
@@ -2283,7 +2321,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (hasLimitedLife())
       return false;
     if (itemstack.getItem() == Items.SPAWN_EGG) {
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         Class<? extends Entity> oclass = EntityList.getClass(ItemMonsterPlacer.getNamedIdFrom(itemstack));
         if (oclass != null && getClass() == oclass) {
           EntityTameBase idleTimeable = spawnBaby(this);
@@ -2349,7 +2387,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       setItemStackToSlot(EntityEquipmentSlot.HEAD, itemstack);
       playEquipSound(itemstack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(itemstack.getTagCompound());
         heldItem.setItemDamage(itemstack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.HEAD, heldItem);
@@ -2365,7 +2403,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (!itemstack.isEmpty() && getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty() && itemstack.getItem() != Items.NAME_TAG && itemstack.getItem() instanceof ItemFood && getEnergy() <= 100.0F) {
       playSound(SoundEvents.ENTITY_PLAYER_BURP, 1.0F, 1.0F);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(itemstack.getTagCompound());
         heldItem.setItemDamage(itemstack.getItemDamage());
         heldItem.setCount(itemstack.getCount());
@@ -2414,18 +2452,18 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     } else {
       this.deathTime = 0;
     } 
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (this.deathTime == 2) {
-        this.tasks.taskEntries.clear();
-        this.targetTasks.taskEntries.clear();
+        EntityAICompat.clearTasks(this);
+        EntityAICompat.clearTargetTasks(this);
         this.renderYawOffset = this.rotationYaw = this.rotationYawHead;
         if (getOwner() != null)
           if (isHero()) {
-            for (EntityPlayer entityplayer : this.world.playerEntities)
+            for (EntityPlayer entityplayer : net.minecraft.AgeOfMinecraft.util.EntityCompat.playerEntities(this.world))
               entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
             getOwner().sendMessage(new TextComponentTranslation("A Hero mob has fallen!", new Object[0]));
           }  
-        if (!this.world.isRemote && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")) {
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")) {
           int i = getExperiencePoints(this.attackingPlayer);
           i = ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
           while (i > 0) {
@@ -2446,7 +2484,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       if (this.deathTime > 500 && !this.world.getBlockState(getPosition().up((int)this.height + 1)).getMaterial().isSolid())
         this.posY -= 0.025D; 
     } 
-    if (!this.world.isRemote && this.deathTime >= (leavesNoCorpse() ? 20 : 600)) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.deathTime >= (leavesNoCorpse() ? 20 : 600)) {
       spawnExplosionParticle();
       this.world.removeEntity(this);
     } 
@@ -2469,7 +2507,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Items.TOTEM_OF_UNDYING));
         setDropChance(EntityEquipmentSlot.OFFHAND, 0.0F);
       } 
-      while (i > 0 && !this.world.isRemote) {
+      while (i > 0 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         int j = EntityXPOrb.getXPSplit(i);
         i -= j;
         this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
@@ -2490,7 +2528,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       if (hasLimitedLife())
         onKillCommand(); 
       if (EngenderConfig.general.useMessage && !isWild() && getOwner() instanceof EntityPlayerMP && !(this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStormHead) && !(this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStormTentacle) && !(this instanceof net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStormTentacleDevourer)) {
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           getOwner().sendMessage(getCombatTracker().getDeathMessage());
         this.world.playSound((EntityPlayer)getOwner(), getOwner().getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), getSoundPitch());
         ForgeHooks.onLivingDeath(this, DamageSource.causeMobDamage(getOwner()));
@@ -2555,7 +2593,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     getNavigator().tryMoveToEntityLiving(this, 1.0D);
     if (getAttackTarget() != null && !getAttackTarget().isEntityAlive() && entityLivingIn == getAttackTarget())
       setAttackTarget(null);
-    if (Loader.isModLoaded("abyssalcraft") && !this.world.isRemote)
+    if (Loader.isModLoaded("abyssalcraft") && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (EngenderMod.canBeTurned(entityLivingIn)) {
         if (passesDreadPlague()) {
           EntityDreadling EntityDephsZombie = new EntityDreadling(this.world);
@@ -2617,7 +2655,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public void spawnHeartParticle() {
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (isEntityAlive())
         this.world.spawnParticle(EnumParticleTypes.HEART, this.posX + this.rand.nextGaussian(), this.posY + this.height, this.posZ + this.rand.nextGaussian(), 0.0D, 0.0D, 0.0D);
     } else {
@@ -2626,7 +2664,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public void spawnStressParticle() {
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       double d0 = this.rand.nextGaussian() * 0.02D;
       double d1 = this.rand.nextGaussian() * 0.02D;
       double d2 = this.rand.nextGaussian() * 0.02D;
@@ -2638,7 +2676,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public void spawnExplosionParticle() {
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       for (int i = 0; i < 2 * (int)(this.width + this.height) + 5; i++) {
         double d0 = this.rand.nextGaussian() * (this.width / 2.0F);
         double d1 = this.rand.nextDouble() * this.height;
@@ -2655,7 +2693,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
   
   public void spawnConversionParticle() {
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       for (int i1 = 0; i1 < this.convertionInt; i1++) {
         float f1 = i1 * 3.1415927F / timesToConvert() * 0.5F;
         if (isEntityAlive())
@@ -2727,7 +2765,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     super.onUpdate();
     if (getRevengeTarget() != null && !getRevengeTarget().isEntityAlive())
       setRevengeTarget(null); 
-    if (!this.world.isRemote && getRevengeTarget() == null && getAttackTarget() == null)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getRevengeTarget() == null && getAttackTarget() == null)
       if (Maths.chance(75)) {
         List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue()), Predicates.and((Predicate<Entity>) Entity::isEntityAlive,  EntitySelectors.CAN_AI_TARGET));
         for (int j2 = 0; j2 < 10 && !list1.isEmpty(); j2++) {
@@ -2742,12 +2780,12 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
           } 
         } 
       }  
-    if (!this.world.isRemote && Loader.isModLoaded("mutantbeasts"))
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && Loader.isModLoaded("mutantbeasts"))
       for (SkullSpiritEntity mutation : this.world.getEntitiesWithinAABB(SkullSpiritEntity.class, getEntityBoundingBox().grow(0.2D))) {
         mutation.setDead();
         this.mutationTimer = 1;
       }  
-    if (!isAMutant() && !this.world.isRemote && this.mutationTimer > 0 && !isABoss()) {
+    if (!isAMutant() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.mutationTimer > 0 && !isABoss()) {
       this.mutationTimer++;
       this.motionX = ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.1F);
       this.motionZ = ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.1F);
@@ -2759,7 +2797,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     } 
     if (!isWild() && this == getOwner().getLastAttackedEntity())
       getOwner().setLastAttackedEntity(null); 
-    if (!isABoss() && !isHero() && getOwnerId() == null && !this.world.isRemote && this.world.getDifficulty() == EnumDifficulty.PEACEFUL)
+    if (!isABoss() && !isHero() && getOwnerId() == null && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.world.getDifficulty() == EnumDifficulty.PEACEFUL)
       setDead();
     if (getAttackTarget() != null && !getAttackTarget().isEntityAlive())
       setAttackTarget(null);
@@ -2788,7 +2826,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (getLimitedLife() > 0) {
       this.limitedLifespan = true;
       for (int i = 0; i < this.width + this.height; i++) {
-        if (this.world.isRemote) {
+        if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
           double d4 = this.rand.nextGaussian() * 0.02D;
           double d5 = this.rand.nextGaussian() * 0.02D;
           double d6 = this.rand.nextGaussian() * 0.02D;
@@ -2800,8 +2838,8 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (hasLimitedLife()) {
       setLimitedLife(getLimitedLife() - 1);
       if (getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue() <= 4.0D) {
-        if (!this.tasks.taskEntries.isEmpty())
-          this.tasks.taskEntries.clear(); 
+        if (EntityAICompat.hasTasks(this))
+          EntityAICompat.clearTasks(this); 
         spawnExplosionParticle();
       } 
       if (getLimitedLife() <= 0) {
@@ -2916,7 +2954,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       getNavigator().clearPath(); 
     if (isRiding() || isBeingRidden() || getAttackTarget() != null || !getNavigator().noPath() || !this.onGround || this.motionX != 0.0D || this.motionY != 0.0D || this.motionZ != 0.0D)
       setSitResting(false);
-    if (!this.world.isRemote && !getHeldItemMainhand().isEmpty() && getHeldItemMainhand().getItem() == Items.BOWL) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !getHeldItemMainhand().isEmpty() && getHeldItemMainhand().getItem() == Items.BOWL) {
       entityDropItem(new ItemStack(Items.BOWL), getEyeHeight());
       setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
       playSound(SoundEvents.ENTITY_WITCH_THROW, 1.0F, 0.8F + this.rand.nextFloat() * 0.4F);
@@ -2935,7 +2973,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       if (isBeingRidden())
         dismountRidingEntity(); 
     } 
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (!(this instanceof EntityEnderman) && !(this instanceof EntitySans) && (isNotALivingThing() || isABoss() || getTier() == EnumTier.TIER6 || isAMutant())) {
         setEnergy(100.0F);
       } else {
@@ -2948,9 +2986,9 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         if (this.motionX == 0.0D && this.motionY == 0.0D && this.motionZ == 0.0D && getEnergy() < 100.0F && this.ticksExisted % 40 == 0)
           setEnergy(getEnergy() + 1.0F); 
       }  
-    if (isElytraFlying() && this.ticksExisted % 20 == 0 && !this.world.isRemote)
+    if (isElytraFlying() && this.ticksExisted % 20 == 0 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       setCurrentStudy(EnumStudy.Physical, 3); 
-    if (isBeingRidden() && this.ticksExisted % 60 == 0 && !this.world.isRemote)
+    if (isBeingRidden() && this.ticksExisted % 60 == 0 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       setCurrentStudy(EnumStudy.Physical, 1); 
     if (getAttackTarget() != null && (getAttackTarget() == this || !getAttackTarget().isEntityAlive()))
       setAttackTarget(null);
@@ -2994,7 +3032,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (getLevel() >= 299 && getTier() != EnumTier.TIER6 && this.rand.nextInt(5) == 0)
       this.world.spawnParticle(EnumParticleTypes.END_ROD, this.posX + (this.rand.nextFloat() * this.width * 2.0F - this.width) * 0.6D, this.posY + this.rand.nextDouble() * this.height, this.posZ + (this.rand.nextFloat() * this.width * 2.0F - this.width) * 0.6D, 0.0D, 0.01D, 0.0D);
     List<EntityTameBase> list = this.world.getEntitiesWithinAABB(EntityTameBase.class, getEntityBoundingBox().grow(0.1D), Predicates.and(EntitySelectors.IS_ALIVE));
-    if (!this.world.isRemote && list != null && !list.isEmpty() && isAntiMob())
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && list != null && !list.isEmpty() && isAntiMob())
       for (int i1 = 0; i1 < list.size(); i1++) {
         EntityTameBase entity = list.get(i1);
         if (entity != null && entity.getClass() == getClass() && !entity.isAntiMob()) {
@@ -3008,16 +3046,16 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         this.deathTime--; 
       this.dead = false;
     }
-    if (EngenderConfig.mobs.hunger && !this.world.isRemote && isEntityAlive() && getEnergy() <= 0.0F && this.ticksExisted % 100 == 0)
+    if (EngenderConfig.mobs.hunger && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && isEntityAlive() && getEnergy() <= 0.0F && this.ticksExisted % 100 == 0)
       attackEntityFrom(DamageSource.STARVE, 2.0F); 
     if (EngenderConfig.mobs.regeneration) {
-      if (!this.world.isRemote && isEntityAlive() && getEnergy() == 100.0F && this.ticksExisted % 60 == 0)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && isEntityAlive() && getEnergy() == 100.0F && this.ticksExisted % 60 == 0)
         heal(1.0F); 
-      if (!this.world.isRemote && isEntityAlive() && getEnergy() <= 90.0F && getEnergy() > 80.0F && getHealth() < getMaxHealth() && this.hurtResistantTime <= 10 && this.ticksExisted % 40 == 0) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && isEntityAlive() && getEnergy() <= 90.0F && getEnergy() > 80.0F && getHealth() < getMaxHealth() && this.hurtResistantTime <= 10 && this.ticksExisted % 40 == 0) {
         heal(1.0F);
         setEnergy(getEnergy() - (float)(0.5009999871253967D - getEntityAttribute(STAMINA).getBaseValue() / 50.0D));
       } 
-      if (!this.world.isRemote && !isABoss() && !isNotALivingThing() && isEntityAlive() && getEnergy() < 100.0F && getEnergy() > 90.0F && getHealth() < getMaxHealth() && this.hurtResistantTime <= 10 && this.ticksExisted % 10 == 0) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !isABoss() && !isNotALivingThing() && isEntityAlive() && getEnergy() < 100.0F && getEnergy() > 90.0F && getHealth() < getMaxHealth() && this.hurtResistantTime <= 10 && this.ticksExisted % 10 == 0) {
         heal(2.0F);
         setEnergy(getEnergy() - (float)(5.050000190734863D - getEntityAttribute(STAMINA).getBaseValue() / 20.0D));
       } 
@@ -3130,7 +3168,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (getAttackTarget() != null && getAttackTarget() instanceof EntityPlayer && ((EntityPlayer)getAttackTarget()).capabilities.disableDamage)
       setAttackTarget(null);
     if (Loader.isModLoaded("iceandfire")) {
-      List<?> list = this.world.loadedEntityList;
+      List<?> list = net.minecraft.AgeOfMinecraft.util.EntityCompat.loadedEntityList(this.world);
       if (!list.isEmpty())
           for (Object o : list) {
               Entity entity = (Entity) o;
@@ -3296,14 +3334,14 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
         this.fallDistance *= 0.0F; 
       if (getSpecialAttackTimer() > 0)
         setSpecialAttackTimer(getSpecialAttackTimer() - 1); 
-      if (isHero() && this.world.isRemote)
+      if (isHero() && net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         if (getParts() != null) {
           for (Entity part : getParts()) {
-            if (this.world.isRemote)
+            if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
               if (isEntityAlive() && this.rand.nextInt(2) == 0)
                 this.world.spawnParticle((getOwnerId() == null) ? EnumParticleTypes.REDSTONE : EnumParticleTypes.FIREWORKS_SPARK, part.posX + (this.rand.nextFloat() * part.width * 2.0F) - part.width, part.posY + (this.rand.nextFloat() * part.height), part.posZ + (this.rand.nextFloat() * part.width * 2.0F) - part.width, 0.0D, 0.0D, 0.0D);
           } 
-        } else if (this.world.isRemote) {
+        } else if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
           if (isEntityAlive() && this.rand.nextInt(2) == 0)
             this.world.spawnParticle((getOwnerId() == null) ? EnumParticleTypes.REDSTONE : EnumParticleTypes.FIREWORKS_SPARK, this.posX + (this.rand.nextFloat() * this.width * 2.0F) - this.width, this.posY + (this.rand.nextFloat() * this.height), this.posZ + (this.rand.nextFloat() * this.width * 2.0F) - this.width, 0.0D, 0.0D, 0.0D);
         }  

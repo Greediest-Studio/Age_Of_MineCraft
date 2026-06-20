@@ -25,12 +25,12 @@ public class EntityInkProjectileOther extends EntityInkProjectile {
   }
   
   protected void onImpact(RayTraceResult result) {
-    if (!this.world.isRemote && result.entityHit != null)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && result.entityHit != null)
       if ((result.entityHit instanceof EntityLivingBase && getThrower() instanceof EntityTameBase && !false) || (result.entityHit instanceof EntityTameBase && false && ((EntityTameBase)getThrower()).getFakeHealth() > 0.0F)) {
         ((EntityTameBase)getThrower()).inflictEngenderMobDamage((EntityLivingBase)result.entityHit, " was pummeled by ", DamageSource.causeThrownDamage(this, getThrower()), 1.0F);
         setDead();
       }  
-    if (!this.world.isRemote && result.entityHit == null)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && result.entityHit == null)
       setDead(); 
   }
   

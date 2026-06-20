@@ -106,7 +106,7 @@ public class EntityAreaEffectCloudOther extends Entity {
     double d2 = this.posZ;
     setSize(radiusIn * 2.0F, 0.5F);
     setPosition(d0, d1, d2);
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       getDataManager().set(RADIUS, radiusIn);
   }
   
@@ -185,13 +185,13 @@ public class EntityAreaEffectCloudOther extends Entity {
   
   public void onUpdate() {
     super.onUpdate();
-    if (!this.world.isRemote && !this.world.getBlockState(new BlockPos(this.posX, this.posY - 0.1D, this.posZ)).getBlock().isOpaqueCube(this.world.getBlockState(new BlockPos(this.posX, this.posY - 0.1D, this.posZ))))
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !this.world.getBlockState(new BlockPos(this.posX, this.posY - 0.1D, this.posZ)).getBlock().isOpaqueCube(this.world.getBlockState(new BlockPos(this.posX, this.posY - 0.1D, this.posZ))))
       this.posY -= 0.2D; 
     if (getRadius() <= 0.0F)
       setDead(); 
     boolean flag = shouldIgnoreRadius();
     float f = getRadius();
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       EnumParticleTypes enumparticletypes = getParticle();
       int[] aint = new int[enumparticletypes.getArgumentCount()];
       if (aint.length > 0)
@@ -344,7 +344,7 @@ public class EntityAreaEffectCloudOther extends Entity {
   
   public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
-    if (!this.world.isRemote && !stack.isEmpty() && stack.getItem() == Items.GLASS_BOTTLE) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !stack.isEmpty() && stack.getItem() == Items.GLASS_BOTTLE) {
       setRadius(getRadius() - 0.5F);
       this.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
       turnBottleIntoItem(stack, player, new ItemStack(Items.DRAGON_BREATH));

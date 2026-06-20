@@ -128,7 +128,7 @@ public class EntityGiant extends EntityTameBase implements Massive, Armored {
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -222,7 +222,7 @@ public class EntityGiant extends EntityTameBase implements Massive, Armored {
       } 
       List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(2.0D, 0.0D, 2.0D));
         for (Entity entity : list) {
-            if (entity instanceof EntityLivingBase && !false && !this.world.isRemote && this.ticksExisted % 10 == 0) {
+            if (entity instanceof EntityLivingBase && !false && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.ticksExisted % 10 == 0) {
                 attackEntityAsMob(entity);
                 double d01 = ((getEntityBoundingBox()).minX + (getEntityBoundingBox()).maxX) / 2.0D;
                 double d11 = ((getEntityBoundingBox()).minZ + (getEntityBoundingBox()).maxZ) / 2.0D;
@@ -250,7 +250,7 @@ public class EntityGiant extends EntityTameBase implements Massive, Armored {
   public void onLivingUpdate() {
     this.reachWidth = 6.0F;
     if (isHero() && !isWild())
-      if (this.world.isRemote) {
+      if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         double d0 = this.rand.nextGaussian() * 0.02D;
         double d1 = this.rand.nextGaussian() * 0.02D;
         double d2 = this.rand.nextGaussian() * 0.02D;

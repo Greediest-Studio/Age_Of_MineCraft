@@ -20,7 +20,7 @@ public class ItemMutantCreeperItem extends ItemMutantTier {
   
   public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
     ItemStack stack = playerIn.getHeldItem(hand);
-    if (worldIn.isRemote)
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(worldIn))
       return EnumActionResult.SUCCESS; 
     if (!playerIn.canPlayerEdit(pos.offset(facing), facing, stack))
       return EnumActionResult.FAIL; 
@@ -31,7 +31,7 @@ public class ItemMutantCreeperItem extends ItemMutantTier {
     entityliving.renderYawOffset = entityliving.rotationYaw;
     entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), null);
     entityliving.setCharging(true);
-    if (!worldIn.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(worldIn)) {
       worldIn.spawnEntity(entityliving);
       int i = 10000;
       while (i > 0) {

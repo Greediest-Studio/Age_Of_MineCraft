@@ -124,7 +124,7 @@ public class EntityElderGuardian extends EntityGuardian implements Massive {
   
   public void createChild() {
     super.createChild();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 1 + this.rand.nextInt(2); i++) {
         EntityGuardian baby = new EntityGuardian(this.world);
         baby.copyLocationAndAnglesFrom(this);

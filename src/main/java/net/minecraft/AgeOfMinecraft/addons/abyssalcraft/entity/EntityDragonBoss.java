@@ -325,7 +325,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
     } else {
       if (getHealth() > getMaxHealth() / 5.0F)
         this.targetTasks.onUpdateTasks(); 
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         if (isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && this.isOffensive && !isChild() && !false)
           if (getDistanceSq(getAttackTarget()) < (this.reachWidth * this.reachWidth + ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width) * ((getAttackTarget() instanceof EntityTameBase) ? ((EntityTameBase)getAttackTarget()).reachWidth : (getAttackTarget()).width)) + 9.0D && (this.ticksExisted + getEntityId()) % 10 == 0)
             attackEntityAsMob(getAttackTarget());
@@ -337,7 +337,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
       } 
     } 
     setSilent(isAIDisabled());
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       float f = MathHelper.cos(this.animTime * 3.1415927F * 2.0F);
       float f1 = MathHelper.cos(this.prevAnimTime * 3.1415927F * 2.0F);
       if (f1 <= -0.3F && f >= -0.3F)
@@ -436,7 +436,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
       (this.dragonPartArray[l]).prevPosZ = (avec3d[l]).z;
     } 
     if (isWild() && getOwnerId() == null) {
-      if (this.world.isRemote) {
+      if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         double d0 = this.rand.nextGaussian() * 0.02D;
         double d1 = this.rand.nextGaussian() * 0.02D;
         double d2 = this.rand.nextGaussian() * 0.02D;
@@ -452,7 +452,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
       } 
       this.convertionInt = 0;
       if (isHero())
-        if (this.world.isRemote) {
+        if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
           double d0 = this.rand.nextGaussian() * 0.02D;
           double d1 = this.rand.nextGaussian() * 0.02D;
           double d2 = this.rand.nextGaussian() * 0.02D;
@@ -547,7 +547,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
       } 
       if (!isWild() && getDistanceSq(getOwner()) >= 48400.0D)
         setLocationAndAngles((getOwner()).posX, (getOwner()).posY, (getOwner()).posZ, this.rotationYaw, this.rotationPitch); 
-      if (!this.world.isRemote && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && this.rand.nextInt(160) == 0) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && this.rand.nextInt(160) == 0) {
         double d1 = this.dragonPartHead.posX;
         double d2 = this.dragonPartHead.posY + 0.25D;
         double d3 = this.dragonPartHead.posZ;
@@ -566,7 +566,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
       } 
       if (getSpecialAttackTimer() > 1000)
         getPhaseManager().setPhase(PhaseListAsorah.HOLDING_PATTERN); 
-      if (!this.world.isRemote && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && ((this.ticksExisted % 6 == 0 && getSpecialAttackTimer() > 1000) || this.rand.nextInt(100) == 0)) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && ((this.ticksExisted % 6 == 0 && getSpecialAttackTimer() > 1000) || this.rand.nextInt(100) == 0)) {
         double d6 = this.dragonPartHead.posX;
         double d7 = this.dragonPartHead.posY + 2.0D;
         double d8 = this.dragonPartHead.posZ;
@@ -640,7 +640,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
           this.ringBufferIndex = 0; 
         this.ringBuffer[this.ringBufferIndex][0] = this.rotationYaw;
         this.ringBuffer[this.ringBufferIndex][1] = this.posY;
-        if (this.world.isRemote) {
+        if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
           if (this.newPosRotationIncrements > 0) {
             double d5 = this.posX + (this.interpTargetX - this.posX) / this.newPosRotationIncrements;
             double d0 = this.posY + (this.interpTargetY - this.posY) / this.newPosRotationIncrements;
@@ -716,7 +716,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
         } 
       } 
     } 
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       collideWithEntities(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartBody.getEntityBoundingBox().grow(2.0D, 2.0D, 2.0D)));
       collideWithEntities(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartWing1.getEntityBoundingBox().grow(6.0D, 4.0D, 6.0D).offset(0.0D, -2.0D, 0.0D)));
       collideWithEntities(this.world.getEntitiesWithinAABBExcludingEntity(this, this.dragonPartWing2.getEntityBoundingBox().grow(6.0D, 4.0D, 6.0D).offset(0.0D, -2.0D, 0.0D)));
@@ -789,7 +789,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
   private void attackEntitiesInList(List<?> par1List) {
       for (Object o : par1List) {
           Entity entity = (Entity) o;
-          if (entity.ticksExisted + entity.getEntityId() % 10 == 0 && !this.world.isRemote && entity instanceof EntityLivingBase && !false) {
+          if (entity.ticksExisted + entity.getEntityId() % 10 == 0 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && entity instanceof EntityLivingBase && !false) {
               attackEntityAsMob(entity);
               playSound(SoundEvents.BLOCK_NOTE_HAT, 5.0F, 0.5F);
               if (ACConfig.hardcoreMode && entity instanceof EntityPlayer)
@@ -911,7 +911,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
   }
   
   public void notifyDataManagerChange(DataParameter<?> key) {
-    if (PHASE.equals(key) && this.world.isRemote)
+    if (PHASE.equals(key) && net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       this.phaseManager.setPhase(PhaseListAsorah.getById(getDataManager().get(PHASE)));
     super.notifyDataManagerChange(key);
   }
@@ -1074,7 +1074,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -1124,7 +1124,7 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
       if (ACConfig.particleEntity)
         this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + f, this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
     } 
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (this.deathTicks > 150 && this.deathTicks % 5 == 0) {
         int i = 1500;
         while (i > 0) {
@@ -1141,14 +1141,14 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
     } 
     move(MoverType.SELF, 0.0D, 0.10000000149011612D, 0.0D);
     this.renderYawOffset = this.rotationYaw += 20.0F;
-    if (this.deathTicks == 20 && !this.world.isRemote)
+    if (this.deathTicks == 20 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       SpecialTextUtil.OblivionaireGroup(this.world, I18n.translateToLocal("message.asorah.death.1"));
-    if (this.deathTicks == 80 && !this.world.isRemote)
+    if (this.deathTicks == 80 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       SpecialTextUtil.OblivionaireGroup(this.world, I18n.translateToLocal("message.asorah.death.2"));
-    if (this.deathTicks == 140 && !this.world.isRemote)
+    if (this.deathTicks == 140 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       SpecialTextUtil.OblivionaireGroup(this.world, I18n.translateToLocal("message.asorah.death.3"));
-    if (this.deathTicks >= 200 && !this.world.isRemote) {
-      List<Entity> list = this.world.loadedEntityList;
+    if (this.deathTicks >= 200 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
+      List<Entity> list = net.minecraft.AgeOfMinecraft.util.EntityCompat.loadedEntityList(this.world);
       if (list != null)
           for (Entity entity : list) {
               if (entity instanceof EntityJzahar && entity.isEntityAlive())

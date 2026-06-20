@@ -124,7 +124,7 @@ public class EntityCreeper extends EntityTameBase implements Light {
   
   public void createChild() {
     super.createChild();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 1 + this.rand.nextInt(2); i++) {
         EntityCreeper baby = new EntityCreeper(this.world);
         baby.copyLocationAndAnglesFrom(this);
@@ -189,14 +189,14 @@ public class EntityCreeper extends EntityTameBase implements Light {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(STATE, -1);
-    this.dataManager.register(POWERED, Boolean.FALSE);
-    this.dataManager.register(IGNITED, Boolean.FALSE);
+    this.getDataManager().register(STATE, -1);
+    this.getDataManager().register(POWERED, Boolean.FALSE);
+    this.getDataManager().register(IGNITED, Boolean.FALSE);
   }
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
     super.writeEntityToNBT(tagCompound);
-    if (this.dataManager.get(POWERED))
+    if (this.getDataManager().get(POWERED))
       tagCompound.setBoolean("powered", true); 
     tagCompound.setShort("Fuse", (short)this.fuseTime);
     tagCompound.setByte("ExplosionRadius", (byte)this.explosionRadius);
@@ -205,7 +205,7 @@ public class EntityCreeper extends EntityTameBase implements Light {
   
   public void readEntityFromNBT(NBTTagCompound tagCompund) {
     super.readEntityFromNBT(tagCompund);
-    this.dataManager.set(POWERED, tagCompund.getBoolean("powered"));
+    this.getDataManager().set(POWERED, tagCompund.getBoolean("powered"));
     if (tagCompund.hasKey("Fuse", 99))
       this.fuseTime = tagCompund.getShort("Fuse"); 
     if (tagCompund.hasKey("ExplosionRadius", 99))
@@ -290,13 +290,13 @@ public class EntityCreeper extends EntityTameBase implements Light {
   }
   
   public boolean getPowered() {
-    return this.dataManager.get(POWERED);
+    return this.getDataManager().get(POWERED);
   }
   
   public void setPowered(boolean powered) {
     if (powered)
       getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(7.0D); 
-    this.dataManager.set(POWERED, powered);
+    this.getDataManager().set(POWERED, powered);
   }
   
   @SideOnly(Side.CLIENT)
@@ -310,11 +310,11 @@ public class EntityCreeper extends EntityTameBase implements Light {
   }
   
   public int getCreeperState() {
-    return this.dataManager.get(STATE);
+    return this.getDataManager().get(STATE);
   }
   
   public void setCreeperState(int state) {
-    this.dataManager.set(STATE, state);
+    this.getDataManager().set(STATE, state);
   }
   
   public void onStruckByLightning(EntityLightningBolt lightningBolt) {
@@ -327,7 +327,7 @@ public class EntityCreeper extends EntityTameBase implements Light {
     if (!stack.isEmpty() && stack.getItem() == Items.FLINT_AND_STEEL) {
       this.world.playSound(player, this.posX, this.posY, this.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, getSoundCategory(), 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         if (hasOwner(player)) {
           if (player.isSneaking())
             ignite(); 
@@ -356,7 +356,7 @@ public class EntityCreeper extends EntityTameBase implements Light {
   }
   
   private void explode() {
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       boolean flag = EngenderConfig.mobs.grief;
       float f = getPowered() ? 2.0F : 1.0F;
       if (getSpecialAttackTimer() <= 0 && isHero()) {
@@ -378,12 +378,12 @@ public class EntityCreeper extends EntityTameBase implements Light {
             entityareaeffectcloud.addEffect(new PotionEffect(potioneffect)); 
           this.world.spawnEntity(entityareaeffectcloud);
         } 
-        if (!this.world.isRemote && EngenderConfig.general.useMessage && !isWild() && getOwner() instanceof net.minecraft.entity.player.EntityPlayerMP)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && EngenderConfig.general.useMessage && !isWild() && getOwner() instanceof net.minecraft.entity.player.EntityPlayerMP)
           getOwner().sendMessage(new TextComponentTranslation("death.attack.self_destruct", new Object[] { getDisplayName() }));
       } 
       setCreeperState(-1);
       this.timeSinceIgnited = 0;
-      this.dataManager.set(IGNITED, Boolean.FALSE);
+      this.getDataManager().set(IGNITED, Boolean.FALSE);
     } 
   }
   
@@ -396,10 +396,10 @@ public class EntityCreeper extends EntityTameBase implements Light {
   }
   
   public boolean hasIgnited() {
-    return this.dataManager.get(IGNITED);
+    return this.getDataManager().get(IGNITED);
   }
   
   public void ignite() {
-    this.dataManager.set(IGNITED, Boolean.TRUE);
+    this.getDataManager().set(IGNITED, Boolean.TRUE);
   }
 }

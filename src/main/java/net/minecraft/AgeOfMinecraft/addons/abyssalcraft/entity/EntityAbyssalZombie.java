@@ -120,7 +120,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
   
   public void onDeath(DamageSource par1DamageSource) {
     super.onDeath(par1DamageSource);
-    if (!this.world.isRemote && getLimitedLife() <= 0)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getLimitedLife() <= 0)
       for (int i = 0; i < this.helmetCount; i++) {
         dropItem(Items.LEATHER_HELMET, 1);
         this.helmetCount--;
@@ -129,8 +129,8 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(CHILD, (byte) 0);
-    this.dataManager.register(TYPE, 0);
+    this.getDataManager().register(CHILD, (byte) 0);
+    this.getDataManager().register(TYPE, 0);
   }
   
   public boolean canBreatheUnderwater() {
@@ -138,11 +138,11 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
   }
   
   public int getZombieType() {
-    return this.dataManager.get(TYPE);
+    return this.getDataManager().get(TYPE);
   }
   
   public void setZombieType(int par1) {
-    this.dataManager.set(TYPE, par1);
+    this.getDataManager().set(TYPE, par1);
   }
   
   public void performSpecialAttack() {
@@ -193,11 +193,11 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
     if (this.helmetCount < 0)
       this.helmetCount = 0; 
     if ((isChild() || isHero()) && this.helmetCount != 0) {
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         dropItem(Items.LEATHER_HELMET, 1);
       this.helmetCount--;
     } 
-    if (this.world.isDaytime() && !this.world.isRemote && !isChild() && !isImmuneToFire() && !isHero()) {
+    if (this.world.isDaytime() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !isChild() && !isImmuneToFire() && !isHero()) {
       float f = getBrightness();
       if (f > 0.5F && this.ticksExisted % (!getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty() ? 80 : 10) == 0 && this.world.canSeeSky(new BlockPos(this.posX, this.posY + getEyeHeight(), this.posZ))) {
         boolean flag = true;
@@ -314,7 +314,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
       List<EntityChicken> list = this.world.getEntitiesWithinAABB(EntityChicken.class, getEntityBoundingBox().grow(16.0D), Predicates.and(EntitySelectors.IS_ALIVE));
       if (list != null && !list.isEmpty() && !isBeingRidden())
           for (EntityChicken entity : list) {
-              if (entity != null && !entity.isBeingRidden() && false && isChild() && !this.world.isRemote) {
+              if (entity != null && !entity.isBeingRidden() && false && isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
                   entity.ticksExisted = 0;
                   startRiding(entity);
                   playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
@@ -327,7 +327,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
       this.helmetCount++;
       playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
       player.swingArm(hand);
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         stack.shrink(1); 
       return true;
     } 
@@ -335,7 +335,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
       setItemStackToSlot(EntityEquipmentSlot.HEAD, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.HEAD, heldItem);
@@ -347,7 +347,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
       setItemStackToSlot(EntityEquipmentSlot.CHEST, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.CHEST, heldItem);
@@ -359,7 +359,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
       setItemStackToSlot(EntityEquipmentSlot.LEGS, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.LEGS, heldItem);
@@ -371,7 +371,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
       setItemStackToSlot(EntityEquipmentSlot.FEET, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.FEET, heldItem);
@@ -382,7 +382,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
     if (false && !stack.isEmpty() && getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty() && (getSlotForItemStack(stack) == EntityEquipmentSlot.MAINHAND || stack.getItem() instanceof net.minecraft.item.ItemSword || stack.getItem() instanceof net.minecraft.item.ItemTool || stack.getItem() == Items.BOW)) {
       playSound(SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 2.0F);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.MAINHAND, heldItem);
@@ -393,7 +393,7 @@ public class EntityAbyssalZombie extends EntityTameBase implements Undead {
     if (false && !stack.isEmpty() && getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty() && (getSlotForItemStack(stack) == EntityEquipmentSlot.OFFHAND || stack.getItem() instanceof net.minecraft.item.ItemSword || stack.getItem() instanceof net.minecraft.item.ItemTool || (stack.getItem() instanceof net.minecraft.item.ItemFood && !(stack.getItem() instanceof net.minecraft.item.ItemAppleGold)) || stack.getItem() == Items.TIPPED_ARROW || stack.getItem() == Items.SHIELD)) {
       playSound(SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 2.0F);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.OFFHAND, heldItem);

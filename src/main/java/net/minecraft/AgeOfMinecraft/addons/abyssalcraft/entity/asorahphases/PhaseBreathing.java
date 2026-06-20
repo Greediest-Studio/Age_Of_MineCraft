@@ -50,7 +50,7 @@ public class PhaseBreathing extends PhaseBaseFriendly {
     if (this.dragon.getOwner() != null)
       this.dragon.setPositionAndUpdate((this.dragon.getOwner()).posX, (this.dragon.getOwner()).posY + 4.0D, (this.dragon.getOwner()).posZ); 
     this.flameTicks++;
-    if (!this.dragon.world.isRemote && this.dragon.getAttackTarget() != null && this.dragon.getAttackTarget().isEntityAlive() && this.dragon.getAttackTarget().canEntityBeSeen(this.dragon) && this.dragon.getRNG().nextInt(100) == 0) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.dragon.world) && this.dragon.getAttackTarget() != null && this.dragon.getAttackTarget().isEntityAlive() && this.dragon.getAttackTarget().canEntityBeSeen(this.dragon) && this.dragon.getRNG().nextInt(100) == 0) {
       double d6 = this.dragon.dragonPartHead.posX;
       double d7 = this.dragon.dragonPartHead.posY + 2.0D;
       double d8 = this.dragon.dragonPartHead.posZ;

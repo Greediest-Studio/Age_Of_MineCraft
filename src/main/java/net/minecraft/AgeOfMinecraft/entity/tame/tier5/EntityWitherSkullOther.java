@@ -45,7 +45,7 @@ public class EntityWitherSkullOther extends EntityWitherSkull {
     } else if (this.world.getDifficulty() == EnumDifficulty.HARD) {
       b0 = 60;
     } 
-    if (!this.world.isRemote && movingObject.entityHit != this.shootingEntity && movingObject.entityHit != null)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && movingObject.entityHit != this.shootingEntity && movingObject.entityHit != null)
       if ((movingObject.entityHit instanceof EntityLivingBase && this.shootingEntity instanceof EntityTameBase && !false) || (movingObject.entityHit instanceof EntityTameBase && false && ((EntityTameBase)this.shootingEntity).getFakeHealth() > 0.0F)) {
         copyLocationAndAnglesFrom(movingObject.entityHit);
         List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
@@ -69,7 +69,7 @@ public class EntityWitherSkullOther extends EntityWitherSkull {
         EntityTameBase.createEngenderModExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, 2.0F, false, (EngenderConfig.mobs.grief && isInvulnerable()));
         setDead();
       }  
-    if (!this.world.isRemote && movingObject.entityHit == null) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && movingObject.entityHit == null) {
       List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(4.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
       if (!list1.isEmpty())
         for (EntityLivingBase entitylivingbase : list1) {

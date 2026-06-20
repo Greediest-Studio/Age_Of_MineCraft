@@ -152,7 +152,7 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(CLIMBING, (byte) 0);
+    this.getDataManager().register(CLIMBING, (byte) 0);
   }
   
   public String getName() {
@@ -161,7 +161,7 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
   
   public void onUpdate() {
     super.onUpdate();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       setBesideClimbableBlock(this.collidedHorizontally); 
   }
   
@@ -273,17 +273,17 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
   }
   
   public boolean isBesideClimbableBlock() {
-    return ((this.dataManager.get(CLIMBING) & 0x1) != 0);
+    return ((this.getDataManager().get(CLIMBING) & 0x1) != 0);
   }
   
   public void setBesideClimbableBlock(boolean par1) {
-    byte b0 = this.dataManager.get(CLIMBING);
+    byte b0 = this.getDataManager().get(CLIMBING);
     if (par1) {
       b0 = (byte)(b0 | 0x1);
     } else {
       b0 = (byte)(b0 & 0xFFFFFFFE);
     } 
-    this.dataManager.set(CLIMBING, b0);
+    this.getDataManager().set(CLIMBING, b0);
   }
   
   public int getDamageCap() {
@@ -296,12 +296,12 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
       return false;
     } 
     if (par1DamageSource.isExplosion()) {
-      if (this.world.isRemote && ACConfig.showBossDialogs)
+      if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && ACConfig.showBossDialogs)
         SpecialTextUtil.SacthothText(I18n.translateToLocal("message.sacthoth.damage.explosion"));
       return false;
     } 
     if (par1DamageSource.isProjectile()) {
-      if (this.world.isRemote && ACConfig.showBossDialogs)
+      if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && ACConfig.showBossDialogs)
         SpecialTextUtil.SacthothText(I18n.translateToLocal("message.sacthoth.damage.projectile"));
       return false;
     } 
@@ -368,10 +368,10 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
   
   protected void onDeathUpdate() {
     this.deathTicks++;
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (this.deathTicks == 1)
         if (getOwner() != null) {
-          for (EntityPlayer entityplayer : this.world.playerEntities) {
+          for (EntityPlayer entityplayer : net.minecraft.AgeOfMinecraft.util.EntityCompat.playerEntities(this.world)) {
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
             entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s Sacthoth has been killed!!!", new Object[0]), true);
           } 
@@ -389,7 +389,7 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
           this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + f, this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
       } 
     } 
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (this.deathTicks > 100 && this.deathTicks % 5 == 0) {
         int i = 500;
         while (i > 0) {
@@ -422,8 +422,8 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
           this.world.spawnEntity(shadowBeast);
         } 
       } 
-      if (this.deathTicks == 200 && !this.world.isRemote) {
-        List<Entity> list = this.world.loadedEntityList;
+      if (this.deathTicks == 200 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
+        List<Entity> list = net.minecraft.AgeOfMinecraft.util.EntityCompat.loadedEntityList(this.world);
         if (list != null)
             for (Entity entity : list) {
                 if (entity instanceof EntityJzahar && entity.isEntityAlive())
@@ -448,7 +448,7 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
     ItemStack stack = player.getHeldItem(hand);
     ItemStack heldItem = new ItemStack(stack.getItem());
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -665,7 +665,7 @@ public class EntitySacthoth extends EntityTameBase implements Armored, Undead {
   }
   
   protected void addMouthParticles() {
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       Vec3d vector = getLookVec();
       double px = this.posX;
       double py = this.posY + getEyeHeight();

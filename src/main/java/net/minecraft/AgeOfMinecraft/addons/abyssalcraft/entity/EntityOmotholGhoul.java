@@ -293,7 +293,7 @@ public class EntityOmotholGhoul extends EntityTameBase implements Armored, Undea
     if (!stack.isEmpty() && getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty() && (getSlotForItemStack(stack) == EntityEquipmentSlot.MAINHAND || stack.getItem() instanceof net.minecraft.item.ItemSword || stack.getItem() instanceof net.minecraft.item.ItemTool || stack.getItem() == Items.BOW)) {
       playSound(SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 2.0F);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.MAINHAND, heldItem);
@@ -304,7 +304,7 @@ public class EntityOmotholGhoul extends EntityTameBase implements Armored, Undea
     if (!stack.isEmpty() && getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty() && (getSlotForItemStack(stack) == EntityEquipmentSlot.OFFHAND || stack.getItem() instanceof net.minecraft.item.ItemSword || stack.getItem() instanceof net.minecraft.item.ItemTool || (stack.getItem() instanceof net.minecraft.item.ItemFood && !(stack.getItem() instanceof net.minecraft.item.ItemAppleGold)) || stack.getItem() == Items.TIPPED_ARROW || stack.getItem() == Items.SHIELD)) {
       playSound(SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 2.0F);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.OFFHAND, heldItem);
@@ -316,7 +316,7 @@ public class EntityOmotholGhoul extends EntityTameBase implements Armored, Undea
       setItemStackToSlot(EntityEquipmentSlot.HEAD, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.HEAD, heldItem);
@@ -328,7 +328,7 @@ public class EntityOmotholGhoul extends EntityTameBase implements Armored, Undea
       setItemStackToSlot(EntityEquipmentSlot.CHEST, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.CHEST, heldItem);
@@ -340,7 +340,7 @@ public class EntityOmotholGhoul extends EntityTameBase implements Armored, Undea
       setItemStackToSlot(EntityEquipmentSlot.LEGS, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.LEGS, heldItem);
@@ -352,7 +352,7 @@ public class EntityOmotholGhoul extends EntityTameBase implements Armored, Undea
       setItemStackToSlot(EntityEquipmentSlot.FEET, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.FEET, heldItem);

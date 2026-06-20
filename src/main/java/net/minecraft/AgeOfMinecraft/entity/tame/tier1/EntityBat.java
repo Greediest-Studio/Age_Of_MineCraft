@@ -49,7 +49,7 @@ public class EntityBat extends EntityTameBase implements EntityFlying, Light, Fl
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(HANGING, (byte) 0);
+    this.getDataManager().register(HANGING, (byte) 0);
   }
   
   public String getDescName() {
@@ -139,15 +139,15 @@ public class EntityBat extends EntityTameBase implements EntityFlying, Light, Fl
   }
   
   public boolean getIsBatHanging() {
-    return ((this.dataManager.get(HANGING) & 0x1) != 0);
+    return ((this.getDataManager().get(HANGING) & 0x1) != 0);
   }
   
   public void setIsBatHanging(boolean isHanging) {
-    byte b0 = this.dataManager.get(HANGING);
+    byte b0 = this.getDataManager().get(HANGING);
     if (isHanging) {
-      this.dataManager.set(HANGING, (byte) (b0 | 0x1));
+      this.getDataManager().set(HANGING, (byte) (b0 | 0x1));
     } else {
-      this.dataManager.set(HANGING, (byte) (b0 & 0xFFFFFFFE));
+      this.getDataManager().set(HANGING, (byte) (b0 & 0xFFFFFFFE));
     } 
   }
   
@@ -261,19 +261,19 @@ public class EntityBat extends EntityTameBase implements EntityFlying, Light, Fl
   public boolean attackEntityFrom(DamageSource source, float amount) {
     if (isEntityInvulnerable(source))
       return false; 
-    if (!this.world.isRemote && getIsBatHanging())
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getIsBatHanging())
       setIsBatHanging(false); 
     return super.attackEntityFrom(source, amount);
   }
   
   public void readEntityFromNBT(NBTTagCompound tagCompund) {
     super.readEntityFromNBT(tagCompund);
-    this.dataManager.set(HANGING, tagCompund.getByte("BatFlags"));
+    this.getDataManager().set(HANGING, tagCompund.getByte("BatFlags"));
   }
   
   public void writeEntityToNBT(NBTTagCompound tagCompound) {
     super.writeEntityToNBT(tagCompound);
-    tagCompound.setByte("BatFlags", this.dataManager.get(HANGING));
+    tagCompound.setByte("BatFlags", this.getDataManager().get(HANGING));
   }
   
   public float getEyeHeight() {

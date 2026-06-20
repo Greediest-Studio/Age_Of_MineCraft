@@ -55,7 +55,7 @@ public class ItemPEGun extends ItemBow implements IEnergyContainerItem {
   public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {
     ItemStack itemStackIn = player.getHeldItem(hand);
     if (itemStackIn.isEmpty() || (!itemStackIn.isEmpty() && getContainedEnergy(itemStackIn) <= 0.0F)) {
-      player.world.playSound(null, new BlockPos(player), ESound.pegunjam, SoundCategory.PLAYERS, 0.5F, 1.0F);
+      net.minecraft.AgeOfMinecraft.util.EntityCompat.world(player).playSound(null, new BlockPos(player), ESound.pegunjam, SoundCategory.PLAYERS, 0.5F, 1.0F);
       return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
     } 
     float f = MathHelper.cos((player.rotationYawHead + (180 * (((hand == EnumHand.OFF_HAND) ? 1 : 2) - 1))) * 0.017453292F);
@@ -72,10 +72,10 @@ public class ItemPEGun extends ItemBow implements IEnergyContainerItem {
     entitywitherskull.posY = player.posY + 1.25D + vec3.y;
     entitywitherskull.posZ = player.posZ + f1 * 0.35D + vec3.z;
     entitywitherskull.damage = getProjectileDamage(itemStackIn);
-    if (!worldIn.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(worldIn))
       worldIn.spawnEntity(entitywitherskull);
-    player.world.playSound(null, new BlockPos(player), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 0.5F, 0.5F + player.getRNG().nextFloat() * 0.25F);
-    player.world.playSound(null, new BlockPos(player), ESound.pegunfire, SoundCategory.PLAYERS, 0.5F, 0.6F + player.getRNG().nextFloat() * 0.2F + entitywitherskull.damage / 100.0F);
+    net.minecraft.AgeOfMinecraft.util.EntityCompat.world(player).playSound(null, new BlockPos(player), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 0.5F, 0.5F + player.getRNG().nextFloat() * 0.25F);
+    net.minecraft.AgeOfMinecraft.util.EntityCompat.world(player).playSound(null, new BlockPos(player), ESound.pegunfire, SoundCategory.PLAYERS, 0.5F, 0.6F + player.getRNG().nextFloat() * 0.2F + entitywitherskull.damage / 100.0F);
     return new ActionResult<>(EnumActionResult.PASS, itemStackIn);
   }
   

@@ -20,26 +20,25 @@ public class ItemWitherStormItem extends ItemMCSMTier {
   
   public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
     ItemStack stack = playerIn.getHeldItem(hand);
-    if (worldIn.isRemote)
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(worldIn))
       return EnumActionResult.SUCCESS; 
     if (!playerIn.canPlayerEdit(pos.offset(facing), facing, stack))
       return EnumActionResult.FAIL; 
     EntityCommandBlockWither entityliving = new EntityCommandBlockWither(worldIn);
     pos = pos.offset(facing);
     entityliving.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
-    entityliving.rotationYawHead = entityliving.rotationYaw;
-    entityliving.renderYawOffset = entityliving.rotationYaw;
+    net.minecraft.AgeOfMinecraft.util.EntityCompat.copyYawToHeadAndBody(entityliving);
     entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), null);
     entityliving.setOwnerId(playerIn.getUniqueID());
     entityliving.setInvulTime(1);
-    if (!worldIn.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(worldIn)) {
       worldIn.spawnEntity(entityliving);
       int i = 1600000;
       while (i > 0) {
         int j = EntityXPOrb.getXPSplit(i);
         i -= j;
         if (!worldIn.getGameRules().getBoolean("disableExpItemDrops"))
-          entityliving.world.spawnEntity(new EntityXPOrb(entityliving.world, entityliving.posX, entityliving.posY + entityliving.getEyeHeight() + 25.0D, entityliving.posZ, j));
+          net.minecraft.AgeOfMinecraft.util.EntityCompat.spawnXpOrbAt(entityliving, entityliving.getEyeHeight() + 25.0D, j);
       } 
     } 
     if (entityliving != null) {

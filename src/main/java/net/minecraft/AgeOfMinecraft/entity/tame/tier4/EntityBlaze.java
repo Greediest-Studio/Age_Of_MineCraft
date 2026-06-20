@@ -133,7 +133,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(ON_FIRE, (byte) 0);
+    this.getDataManager().register(ON_FIRE, (byte) 0);
   }
   
   protected SoundEvent getAmbientSound() {
@@ -178,7 +178,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
   
   public void createChild() {
     super.createChild();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 1 + this.rand.nextInt(2); i++) {
         EntityBlaze baby = new EntityBlaze(this.world);
         baby.copyLocationAndAnglesFrom(this);
@@ -223,7 +223,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
       performSpecialAttack(); 
     if (!this.onGround && this.motionY < 0.0D && isEntityAlive())
       this.motionY *= 0.6D; 
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (isHero() && getSpecialAttackTimer() > 790)
         for (int i = 0; i < 3000; i++) {
           this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY + 1.0D, this.posZ, this.rand.nextDouble() - 0.5D, this.rand.nextDouble() - 0.5D, this.rand.nextDouble() - 0.5D);
@@ -276,7 +276,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
   }
   
   public boolean isCharged() {
-    return ((this.dataManager.get(ON_FIRE) & 0x1) != 0);
+    return ((this.getDataManager().get(ON_FIRE) & 0x1) != 0);
   }
   
   public boolean interact(EntityPlayer player, EnumHand hand) {
@@ -285,7 +285,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
     if (!stack.isEmpty() && getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty() && stack.getItem() != Items.SPAWN_EGG && (getSlotForItemStack(stack) == EntityEquipmentSlot.MAINHAND || stack.getItem() instanceof net.minecraft.item.ItemSword || stack.getItem() instanceof net.minecraft.item.ItemTool || stack.getItem() == Items.BOW)) {
       playSound(SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 2.0F);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.MAINHAND, heldItem);
@@ -296,7 +296,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
     if (!stack.isEmpty() && getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty() && (getSlotForItemStack(stack) == EntityEquipmentSlot.OFFHAND || stack.getItem() instanceof net.minecraft.item.ItemSword || stack.getItem() instanceof net.minecraft.item.ItemTool || (stack.getItem() instanceof net.minecraft.item.ItemFood && !(stack.getItem() instanceof net.minecraft.item.ItemAppleGold)) || stack.getItem() == Items.TIPPED_ARROW || stack.getItem() == Items.SHIELD)) {
       playSound(SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 2.0F);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.OFFHAND, heldItem);
@@ -308,7 +308,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
       setItemStackToSlot(EntityEquipmentSlot.HEAD, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.HEAD, heldItem);
@@ -320,7 +320,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
       setItemStackToSlot(EntityEquipmentSlot.CHEST, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.CHEST, heldItem);
@@ -332,7 +332,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
       setItemStackToSlot(EntityEquipmentSlot.LEGS, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.LEGS, heldItem);
@@ -344,7 +344,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
       setItemStackToSlot(EntityEquipmentSlot.FEET, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.FEET, heldItem);
@@ -358,7 +358,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
       return true;
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -402,7 +402,7 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
         super.travel(strafe, vertical, forward);
       } 
       this.prevLimbSwingAmount = this.limbSwingAmount;
-      if (((EntityLivingBase)getControllingPassenger()).moveStrafing != 0.0F && this.ticksExisted % 40 == 0 && !this.world.isRemote) {
+      if (((EntityLivingBase)getControllingPassenger()).moveStrafing != 0.0F && this.ticksExisted % 40 == 0 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         this.world.playEvent(null, 1018, new BlockPos((int)this.posX, (int)this.posY, (int)this.posZ), 0);
         Vec3d vec3 = getLook(1.0F);
         EntitySmallFireballOther entitysmallfireball = new EntitySmallFireballOther(this.world, this, this.posX + vec3.x * 16.0D - this.posX + vec3.x, this.posY + getEyeHeight() + vec3.y * 16.0D - this.posY + getEyeHeight() + vec3.y, this.posZ + vec3.z * 16.0D - this.posZ + vec3.z);
@@ -443,13 +443,13 @@ public class EntityBlaze extends EntityTameBase implements IJumpingMount, Light,
   }
   
   public void setOnFire(boolean onFire) {
-    byte b0 = this.dataManager.get(ON_FIRE);
+    byte b0 = this.getDataManager().get(ON_FIRE);
     if (onFire && !isWet()) {
       b0 = (byte)(b0 | 0x1);
     } else {
       b0 = (byte)(b0 & 0xFFFFFFFE);
     } 
-    this.dataManager.set(ON_FIRE, b0);
+    this.getDataManager().set(ON_FIRE, b0);
   }
   
   public boolean attackEntityFrom(DamageSource source, float amount) {

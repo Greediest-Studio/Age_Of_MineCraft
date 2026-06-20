@@ -92,7 +92,7 @@ public class EntityAbygolem extends EntityTameBase implements Light {
   
   public void onLivingUpdate() {
     super.onLivingUpdate();
-    if (!this.world.isRemote && !isChild() && --this.timeUntilNextEgg <= 0) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !isChild() && --this.timeUntilNextEgg <= 0) {
       playSound(ESound.woodHit, getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
       entityDropItem(isHero() ? new ItemStack(ACItems.abyssalnite_ingot, 1) : new ItemStack(ACItems.crystal_fragment, 1, 12), this.rand.nextFloat() * this.height);
       this.timeUntilNextEgg = 400 + this.rand.nextInt(1200);

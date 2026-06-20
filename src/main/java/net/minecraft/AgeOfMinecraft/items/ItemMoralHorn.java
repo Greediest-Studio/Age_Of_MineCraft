@@ -71,9 +71,9 @@ public class ItemMoralHorn extends ItemBEItem {
   }
   
   public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityPlayer playerIn) {
-    playerIn.rotationPitch = -45.0F;
-    playerIn.world.playSound(playerIn.posX, playerIn.posY + playerIn.getDefaultEyeHeight(), playerIn.posZ, getHornSound(), SoundCategory.PLAYERS, 1.0E9F, 1.0F, false);
-    List<EntityLivingBase> list = playerIn.world.getEntitiesWithinAABB(EntityLivingBase.class, playerIn.getEntityBoundingBox().grow(256.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
+    net.minecraft.AgeOfMinecraft.util.EntityCompat.setFloat(playerIn, -45.0F, "entity.rotationPitch", "rotationPitch", "field_70125_A", "z");
+    net.minecraft.AgeOfMinecraft.util.EntityCompat.world(playerIn).playSound(net.minecraft.AgeOfMinecraft.util.EntityCompat.posX(playerIn), net.minecraft.AgeOfMinecraft.util.EntityCompat.posY(playerIn) + playerIn.getDefaultEyeHeight(), net.minecraft.AgeOfMinecraft.util.EntityCompat.posZ(playerIn), getHornSound(), SoundCategory.PLAYERS, 1.0E9F, 1.0F, false);
+    List<EntityLivingBase> list = net.minecraft.AgeOfMinecraft.util.EntityCompat.world(playerIn).getEntitiesWithinAABB(EntityLivingBase.class, playerIn.getEntityBoundingBox().grow(256.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
     if (list != null && !list.isEmpty())
         for (EntityLivingBase entity : list) {
             if (entity instanceof EntityTameBase && entity.isEntityAlive())

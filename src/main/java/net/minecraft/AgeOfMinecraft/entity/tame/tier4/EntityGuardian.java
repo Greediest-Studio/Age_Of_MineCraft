@@ -8,6 +8,7 @@ import net.minecraft.AgeOfMinecraft.entity.tame.ai.EntityAIFollowLeader;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier5.EntityElderGuardian;
 import net.minecraft.AgeOfMinecraft.registry.ELoot;
 import net.minecraft.AgeOfMinecraft.registry.ESound;
+import net.minecraft.AgeOfMinecraft.util.AttributeCompat;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -140,7 +141,7 @@ public class EntityGuardian extends EntityTameBase implements Armored {
   
   public void createChild() {
     super.createChild();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int i = 0; i < 1 + this.rand.nextInt(2); i++) {
         EntityGuardian baby = new EntityGuardian(this.world);
         EntityGuardian entityElderGuardian = baby;
@@ -198,20 +199,20 @@ public class EntityGuardian extends EntityTameBase implements Armored {
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(STATUS, (byte) 0);
-    this.dataManager.register(TARGET_ENTITY, 0);
+    this.getDataManager().register(STATUS, (byte) 0);
+    this.getDataManager().register(TARGET_ENTITY, 0);
   }
   
   private boolean isSyncedFlagSet(int flagId) {
-    return ((this.dataManager.get(STATUS) & flagId) != 0);
+    return ((this.getDataManager().get(STATUS) & flagId) != 0);
   }
   
   private void setSyncedFlag(int flagId, boolean state) {
-    byte b0 = this.dataManager.get(STATUS);
+    byte b0 = this.getDataManager().get(STATUS);
     if (state) {
-      this.dataManager.set(STATUS, (byte) (b0 | flagId));
+      this.getDataManager().set(STATUS, (byte) (b0 | flagId));
     } else {
-      this.dataManager.set(STATUS, (byte) (b0 & (~flagId)));
+      this.getDataManager().set(STATUS, (byte) (b0 & (~flagId)));
     } 
   }
   
@@ -242,20 +243,20 @@ public class EntityGuardian extends EntityTameBase implements Armored {
   }
   
   private void setTargetedEntity(int entityId) {
-    this.dataManager.set(TARGET_ENTITY, entityId);
+    this.getDataManager().set(TARGET_ENTITY, entityId);
   }
   
   public boolean hasTargetedEntity() {
-    return (this.dataManager.get(TARGET_ENTITY) != 0 && isEntityAlive());
+    return (this.getDataManager().get(TARGET_ENTITY) != 0 && isEntityAlive());
   }
   
   public EntityLivingBase getTargetedEntity() {
     if (!hasTargetedEntity())
       return null; 
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (this.targetedEntity != null)
         return this.targetedEntity; 
-      Entity entity = this.world.getEntityByID(this.dataManager.get(TARGET_ENTITY));
+      Entity entity = this.world.getEntityByID(this.getDataManager().get(TARGET_ENTITY));
       if (entity instanceof EntityLivingBase) {
         this.targetedEntity = (EntityLivingBase)entity;
         return this.targetedEntity;
@@ -320,7 +321,7 @@ public class EntityGuardian extends EntityTameBase implements Armored {
       return true;
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -334,7 +335,7 @@ public class EntityGuardian extends EntityTameBase implements Armored {
     if (this.deathTime > 0)
       this.motionY = -0.6D; 
     setSprinting(false);
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       this.clientSideTailAnimationO = this.clientSideTailAnimation;
       if (!isInWater() && !isElder() && !isPotionActive(MobEffects.LEVITATION)) {
         this.tailSwiping = 1.0F;
@@ -614,7 +615,7 @@ public class EntityGuardian extends EntityTameBase implements Armored {
             if (entitylivingbase instanceof EntityPlayerMP)
               ((EntityPlayerMP)entitylivingbase).connection.sendPacket(new SPacketEntityVelocity(entitylivingbase));
           } 
-          this.guardian.inflictEngenderMobDamage(entitylivingbase, " was laser beamed by ", DamageSource.causeMobDamage(this.guardian).setMagicDamage(), (float)this.guardian.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue() + f);
+          this.guardian.inflictEngenderMobDamage(entitylivingbase, " was laser beamed by ", DamageSource.causeMobDamage(this.guardian).setMagicDamage(), (float)AttributeCompat.getBaseValue(this.guardian, SharedMonsterAttributes.ATTACK_DAMAGE, 0.0D) + f);
           if (this.guardian.isHero() && this.guardian.getSpecialAttackTimer() <= 0) {
             this.guardian.playSound(SoundEvents.ENTITY_WITHER_SPAWN, 10.0F, 1.25F);
             entitylivingbase.hurtResistantTime = 0;

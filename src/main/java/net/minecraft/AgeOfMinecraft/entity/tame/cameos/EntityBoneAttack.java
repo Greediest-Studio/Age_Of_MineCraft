@@ -96,7 +96,7 @@ public class EntityBoneAttack extends Entity {
       ProjectileHelper.rotateTowardsMovement(this, 0.9F); 
     if (this.ticksExisted > 140)
       setDead(); 
-    if (this.world.isRemote || ((this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this)))) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) || ((this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this)))) {
       super.onUpdate();
       AxisAlignedBB hitbox = new AxisAlignedBB(-0.1625D, -0.1625D, -0.1625D, 0.1625D, 0.1625D, 0.1625D);
       switch (getBoneType()) {
@@ -148,7 +148,7 @@ public class EntityBoneAttack extends Entity {
   }
   
   protected void onImpact(RayTraceResult movingObject) {
-    if (!this.world.isRemote && getBoneType() != 4)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getBoneType() != 4)
       if (movingObject.entityHit != null && movingObject.entityHit instanceof EntityLivingBase && (!isBlue() || movingObject.entityHit.motionX != 0.0D || movingObject.entityHit.motionY != 0.0D || movingObject.entityHit.motionZ != 0.0D))
         if (this.shootingEntity != null && this.shootingEntity instanceof net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase)
           if (movingObject.entityHit.isEntityAlive() && !false) {
@@ -161,19 +161,19 @@ public class EntityBoneAttack extends Entity {
   }
   
   public boolean isBlue() {
-    return this.dataManager.get(ISBLUE);
+    return this.getDataManager().get(ISBLUE);
   }
   
   public void setBlue(boolean blue) {
-    this.dataManager.set(ISBLUE, blue);
+    this.getDataManager().set(ISBLUE, blue);
   }
   
   public int getBoneType() {
-    return this.dataManager.get(BONETYPE);
+    return this.getDataManager().get(BONETYPE);
   }
   
   public void setBoneType(int age) {
-    this.dataManager.set(BONETYPE, age);
+    this.getDataManager().set(BONETYPE, age);
   }
   
   public void writeEntityToNBT(NBTTagCompound compound) {

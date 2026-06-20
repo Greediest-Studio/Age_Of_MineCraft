@@ -68,7 +68,7 @@ public class EntityManaOrb extends Entity {
   }
   
   public boolean getEntropy() {
-    return this.dataManager.get(entropy);
+    return this.getDataManager().get(entropy);
   }
   
   public void setMana(int mana) {
@@ -76,7 +76,7 @@ public class EntityManaOrb extends Entity {
   }
   
   public int getMana() {
-    return this.dataManager.get(amount);
+    return this.getDataManager().get(amount);
   }
   
   @SideOnly(Side.CLIENT)
@@ -120,7 +120,7 @@ public class EntityManaOrb extends Entity {
     pushOutOfBlocks(this.posX, ((getEntityBoundingBox()).minY + (getEntityBoundingBox()).maxY) / 2.0D, this.posZ);
     if (this.xpTargetColor < this.xpColor - 20 + getEntityId() % 100)
       this.xpTargetColor = this.xpColor; 
-    if (!this.world.isRemote && this.ticksExisted > 20 && !this.magnet.isEmpty() && this.closestPlayer != null && getDistance(this.closestPlayer) <= 16.0D) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.ticksExisted > 20 && !this.magnet.isEmpty() && this.closestPlayer != null && getDistance(this.closestPlayer) <= 16.0D) {
       ItemStack stack = this.magnet;
       Item item = stack.getItem();
       if (item instanceof ItemManaCollector && ((!getEntropy() && ((ItemManaCollector)item).getMana(stack) < ((ItemManaCollector)item).getMaxMana(stack)) || (getEntropy() && ((ItemManaCollector)item).getEntropy(stack) < ((ItemManaCollector)item).getMaxEntropy(stack)))) {

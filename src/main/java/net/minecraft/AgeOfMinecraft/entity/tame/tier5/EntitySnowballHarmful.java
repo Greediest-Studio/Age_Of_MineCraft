@@ -37,18 +37,18 @@ public class EntitySnowballHarmful extends EntitySnowball {
   }
   
   protected void onImpact(RayTraceResult result) {
-    if (!this.world.isRemote && getThrower() == null) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getThrower() == null) {
       setDead();
       return;
     } 
-    if (!this.world.isRemote && result.entityHit != null)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && result.entityHit != null)
       if ((result.entityHit instanceof EntityLivingBase && getThrower() != null && getThrower() instanceof EntityTameBase && !false) || (result.entityHit instanceof EntityTameBase && false && ((EntityTameBase)getThrower()).getFakeHealth() > 0.0F)) {
         result.entityHit.hurtResistantTime = 0;
         ((EntityTameBase)getThrower()).inflictEngenderMobDamage((EntityLivingBase)result.entityHit, " was pummeled by ", DamageSource.causeThrownDamage(this, getThrower()), this.damage);
         this.world.setEntityState(this, (byte)3);
         setDead();
       }  
-    if (!this.world.isRemote && result.entityHit == null) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && result.entityHit == null) {
       this.world.setEntityState(this, (byte)3);
       setDead();
     } 

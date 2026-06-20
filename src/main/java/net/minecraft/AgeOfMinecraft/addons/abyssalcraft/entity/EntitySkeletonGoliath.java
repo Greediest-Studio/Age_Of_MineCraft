@@ -157,7 +157,7 @@ public class EntitySkeletonGoliath extends EntityTameBase implements Armored, Ma
   
   public void onLivingUpdate() {
     this.isOffensive = true;
-    if (this.world.isDaytime() && !this.world.isRemote && !isChild() && !isImmuneToFire() && !isHero()) {
+    if (this.world.isDaytime() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !isChild() && !isImmuneToFire() && !isHero()) {
       float f = getBrightness();
       if (f > 0.5F && this.ticksExisted % (!getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty() ? 80 : 10) == 0 && this.world.canSeeSky(new BlockPos(this.posX, this.posY + getEyeHeight(), this.posZ))) {
         boolean flag = true;
@@ -193,7 +193,7 @@ public class EntitySkeletonGoliath extends EntityTameBase implements Armored, Ma
       return true;
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -236,7 +236,7 @@ public class EntitySkeletonGoliath extends EntityTameBase implements Armored, Ma
       } 
       List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(1.0D));
         for (Entity entity : list) {
-            if (entity instanceof EntityLivingBase && !false && !this.world.isRemote && this.ticksExisted % 10 == 0)
+            if (entity instanceof EntityLivingBase && !false && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.ticksExisted % 10 == 0)
                 attackEntityAsMob(entity);
         }
       this.prevLimbSwingAmount = this.limbSwingAmount;

@@ -22,6 +22,7 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWaterFlying;
 import net.minecraft.entity.ai.EntityFlyHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
@@ -107,10 +108,11 @@ public class EntityParrot extends EntityTameBase implements EntityFlying, Light,
   }
   
   protected void initEntityAI() {
-    this.tasks.addTask(0, new EntityAISwimming(this));
-    this.tasks.addTask(1, new EntityAIFollowLeader(this, 1.33D, 15.0F, 4.0F));
-    this.tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
-    this.tasks.addTask(3, new EntityAIWanderAvoidWaterFlying(this, 1.0D));
+    EntityAITasks tasks = compatTasks();
+    tasks.addTask(0, new EntityAISwimming(this));
+    tasks.addTask(1, new EntityAIFollowLeader(this, 1.33D, 15.0F, 4.0F));
+    tasks.addTask(2, new EntityAIFriendlyAttackMelee(this, 1.0D, true));
+    tasks.addTask(3, new EntityAIWanderAvoidWaterFlying(this, 1.0D));
   }
   
   protected void applyEntityAttributes() {
@@ -246,16 +248,16 @@ public class EntityParrot extends EntityTameBase implements EntityFlying, Light,
   }
   
   public int getVariant() {
-    return MathHelper.clamp(this.dataManager.get(VARIANT), 0, 4);
+    return MathHelper.clamp(this.getDataManager().get(VARIANT), 0, 4);
   }
   
   public void setVariant(int p_191997_1_) {
-    this.dataManager.set(VARIANT, p_191997_1_);
+    this.getDataManager().set(VARIANT, p_191997_1_);
   }
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(VARIANT, 0);
+    this.getDataManager().register(VARIANT, 0);
   }
   
   public void writeEntityToNBT(NBTTagCompound compound) {

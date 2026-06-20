@@ -135,7 +135,7 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(STATUS, (byte) 0);
+    this.getDataManager().register(STATUS, (byte) 0);
   }
   
   public boolean takesFallDamage() {
@@ -143,30 +143,30 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
   }
   
   public boolean getPowered() {
-    return ((this.dataManager.get(STATUS) & 0x1) != 0);
+    return ((this.getDataManager().get(STATUS) & 0x1) != 0);
   }
   
   private void setPowered(boolean powered) {
-    byte b0 = this.dataManager.get(STATUS);
-    this.dataManager.set(STATUS, powered ? 1 : (byte) (b0 & 0xFFFFFFFE));
+    byte b0 = this.getDataManager().get(STATUS);
+    this.getDataManager().set(STATUS, powered ? 1 : (byte) (b0 & 0xFFFFFFFE));
   }
   
   public boolean isJumpAttacking() {
-    return ((this.dataManager.get(STATUS) & 0x2) != 0);
+    return ((this.getDataManager().get(STATUS) & 0x2) != 0);
   }
   
   private void setJumpAttacking(boolean jumping) {
-    byte b0 = this.dataManager.get(STATUS);
-    this.dataManager.set(STATUS, jumping ? (byte) (b0 | 0x2) : (byte) (b0 & 0xFFFFFFFD));
+    byte b0 = this.getDataManager().get(STATUS);
+    this.getDataManager().set(STATUS, jumping ? (byte) (b0 | 0x2) : (byte) (b0 & 0xFFFFFFFD));
   }
   
   public boolean isCharging() {
-    return ((this.dataManager.get(STATUS) & 0x4) != 0);
+    return ((this.getDataManager().get(STATUS) & 0x4) != 0);
   }
   
   public void setCharging(boolean flag) {
-    byte b0 = this.dataManager.get(STATUS);
-    this.dataManager.set(STATUS, flag ? (byte) (b0 | 0x4) : (byte) (b0 & 0xFFFFFFFB));
+    byte b0 = this.getDataManager().get(STATUS);
+    this.getDataManager().set(STATUS, flag ? (byte) (b0 | 0x4) : (byte) (b0 & 0xFFFFFFFB));
   }
   
   public float getEyeHeight() {
@@ -227,7 +227,7 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
     if (!stack.isEmpty() && stack.getItem() == Items.FLINT_AND_STEEL) {
       this.world.playSound(player, this.posX, this.posY, this.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, getSoundCategory(), 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         if (hasOwner(player))
           if (!getPowered()) {
             if (this.world.canBlockSeeSky(getPosition())) {
@@ -243,7 +243,7 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
       return true;
     } 
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !player.isSneaking() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !player.isSneaking() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -272,7 +272,7 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
     if (isCharging()) {
       if (!source.isMagicDamage() && source.getImmediateSource() instanceof EntityLivingBase)
         source.getImmediateSource().attackEntityFrom(DamageSource.causeThornsDamage(this), 2.0F);
-      if (!this.world.isRemote && amount > 0.0F && source.getImmediateSource() != null && super.attackEntityFrom(source, amount))
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && amount > 0.0F && source.getImmediateSource() != null && super.attackEntityFrom(source, amount))
         this.chargeHits--; 
     } 
     return super.attackEntityFrom(source, amount);
@@ -295,7 +295,7 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
     } 
     super.onUpdate();
     this.isImmuneToFire = getPowered();
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (isJumpAttacking()) {
         if (this.onGround) {
           setJumpAttacking(false);
@@ -321,7 +321,7 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
   public void onDeath(DamageSource cause) {
     setCharging(false);
     playSound(MBSoundEvents.ENTITY_MUTANT_CREEPER_DEATH, 0.9F, 1.0F);
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       this.deathCause = cause; 
   }
   
@@ -345,9 +345,9 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
       pushOutOfBlocks(this.posX, ((getEntityBoundingBox()).minY + (getEntityBoundingBox()).maxY) / 2.0D, this.posZ); 
     super.onDeathUpdate();
     if (this.deathTime >= 100) {
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         createEngenderModExplosion(this, this.posX, this.posY + 1.0D, this.posZ, explosionPower, isBurning(), EngenderConfig.mobs.grief);
-        if (!this.world.isRemote && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")) {
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")) {
           int i = getExperiencePoints(this.attackingPlayer);
           i = ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
           while (i > 0) {

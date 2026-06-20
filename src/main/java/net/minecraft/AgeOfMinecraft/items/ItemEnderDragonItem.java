@@ -21,28 +21,27 @@ public class ItemEnderDragonItem extends ItemVanillaTier {
   
   public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
     ItemStack stack = playerIn.getHeldItem(hand);
-    if (worldIn.isRemote)
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(worldIn))
       return EnumActionResult.SUCCESS; 
     if (!playerIn.canPlayerEdit(pos.offset(facing), facing, stack))
       return EnumActionResult.FAIL; 
     EntityEnderDragon entityliving = new EntityEnderDragon(worldIn);
     pos = pos.offset(facing);
     entityliving.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 60.0D, pos.getZ() + 0.5D, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
-    entityliving.rotationYawHead = entityliving.rotationYaw;
-    entityliving.renderYawOffset = entityliving.rotationYaw;
+    net.minecraft.AgeOfMinecraft.util.EntityCompat.copyYawToHeadAndBody(entityliving);
     entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), null);
-    if (!worldIn.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(worldIn)) {
       worldIn.spawnEntity(entityliving);
       int i = 360000;
       while (i > 0) {
         int j = EntityXPOrb.getXPSplit(i);
         i -= j;
         if (!worldIn.getGameRules().getBoolean("disableExpItemDrops"))
-          entityliving.world.spawnEntity(new EntityXPOrb(entityliving.world, entityliving.posX, entityliving.posY + entityliving.getEyeHeight(), entityliving.posZ, j));
+          net.minecraft.AgeOfMinecraft.util.EntityCompat.spawnXpOrbAt(entityliving, entityliving.getEyeHeight(), j);
       } 
     } 
     if (entityliving != null) {
-      entityliving.world.playEvent(3000, pos, 0);
+      net.minecraft.AgeOfMinecraft.util.EntityCompat.world(entityliving).playEvent(3000, pos, 0);
       entityliving.setOwnerId(playerIn.getUniqueID());
       triggerAction(playerIn, stack);
       entityliving.getPhaseManager().setPhase(PhaseList.LANDING_APPROACH);

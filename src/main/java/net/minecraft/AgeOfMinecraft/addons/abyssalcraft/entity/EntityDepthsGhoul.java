@@ -149,11 +149,11 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(TYPE, 0);
+    this.getDataManager().register(TYPE, 0);
   }
   
   public int getGhoulType() {
-    return this.dataManager.get(TYPE);
+    return this.getDataManager().get(TYPE);
   }
   
   public void setGhoulType(int par1) {
@@ -165,7 +165,7 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
       iattributeinstancepete.applyModifier(peteSpeedBoost); 
     if (par1 == 2)
       iattributeinstancewilson.applyModifier(wilsonDamageBoost); 
-    this.dataManager.set(TYPE, par1);
+    this.getDataManager().set(TYPE, par1);
   }
   
   public void onLivingUpdate() {
@@ -187,11 +187,11 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
     if (this.helmetCount < 0)
       this.helmetCount = 0; 
     if ((isChild() || isHero()) && this.helmetCount != 0) {
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         dropItem(Items.LEATHER_HELMET, 1);
       this.helmetCount--;
     } 
-    if (this.world.isDaytime() && !this.world.isRemote && !isChild() && !isImmuneToFire() && !isHero()) {
+    if (this.world.isDaytime() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !isChild() && !isImmuneToFire() && !isHero()) {
       float f = getBrightness();
       if (f > 0.5F && this.ticksExisted % (!getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty() ? 80 : 10) == 0 && this.world.canSeeSky(new BlockPos(this.posX, this.posY + getEyeHeight(), this.posZ))) {
         boolean flag = true;
@@ -223,7 +223,7 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
   
   public void onDeath(DamageSource par1DamageSource) {
     super.onDeath(par1DamageSource);
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (this.helmetCount > 0)
         dropItem(Items.LEATHER_HELMET, this.helmetCount);
   }
@@ -410,14 +410,14 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
       this.helmetCount++;
       playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
       player.swingArm(hand);
-      if (!this.world.isRemote)
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         stack.shrink(1); 
       return true;
     } 
     if (!stack.isEmpty() && getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty() && (getSlotForItemStack(stack) == EntityEquipmentSlot.MAINHAND || stack.getItem() instanceof net.minecraft.item.ItemSword || stack.getItem() instanceof net.minecraft.item.ItemTool || stack.getItem() == Items.BOW)) {
       playSound(SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 2.0F);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.MAINHAND, heldItem);
@@ -428,7 +428,7 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
     if (!stack.isEmpty() && getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty() && (getSlotForItemStack(stack) == EntityEquipmentSlot.OFFHAND || stack.getItem() instanceof net.minecraft.item.ItemSword || stack.getItem() instanceof net.minecraft.item.ItemTool || (stack.getItem() instanceof net.minecraft.item.ItemFood && !(stack.getItem() instanceof net.minecraft.item.ItemAppleGold)) || stack.getItem() == Items.TIPPED_ARROW || stack.getItem() == Items.SHIELD)) {
       playSound(SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 2.0F);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.OFFHAND, heldItem);
@@ -440,7 +440,7 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
       setItemStackToSlot(EntityEquipmentSlot.HEAD, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.HEAD, heldItem);
@@ -452,7 +452,7 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
       setItemStackToSlot(EntityEquipmentSlot.CHEST, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.CHEST, heldItem);
@@ -464,7 +464,7 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
       setItemStackToSlot(EntityEquipmentSlot.LEGS, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.LEGS, heldItem);
@@ -476,7 +476,7 @@ public class EntityDepthsGhoul extends EntityTameBase implements IRangedAttackMo
       setItemStackToSlot(EntityEquipmentSlot.FEET, stack);
       playEquipSound(stack);
       player.swingArm(hand);
-      if (!this.world.isRemote) {
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         heldItem.setTagCompound(stack.getTagCompound());
         heldItem.setItemDamage(stack.getItemDamage());
         setItemStackToSlot(EntityEquipmentSlot.FEET, heldItem);

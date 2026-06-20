@@ -182,18 +182,18 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(FIRST_HEAD_TARGET, 0);
-    this.dataManager.register(SECOND_HEAD_TARGET, 0);
-    this.dataManager.register(THIRD_HEAD_TARGET, 0);
-    this.dataManager.register(FLAMETIMER, 0);
+    this.getDataManager().register(FIRST_HEAD_TARGET, 0);
+    this.getDataManager().register(SECOND_HEAD_TARGET, 0);
+    this.getDataManager().register(THIRD_HEAD_TARGET, 0);
+    this.getDataManager().register(FLAMETIMER, 0);
   }
   
   public int getFlameTime() {
-    return this.dataManager.get(FLAMETIMER);
+    return this.getDataManager().get(FLAMETIMER);
   }
   
   public void setFlameTime(int time) {
-    this.dataManager.set(FLAMETIMER, time);
+    this.getDataManager().set(FLAMETIMER, time);
   }
   
   public AxisAlignedBB getCollisionBoundingBox() {
@@ -326,7 +326,7 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
     entitydreadslug.posZ = d2;
     entitydreadslug.shoot(d3, d4 + f1, d5, 1.75F, 1.0F);
     playSound(ESound.amalgamate, 2.0F, 1.25F);
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       this.world.spawnEntity(entitydreadslug);
     entitydreadslug.motionX = d3 / f2 * 0.8D * 0.8D + entitydreadslug.motionX;
     entitydreadslug.motionY = d4 / f2 * 0.8D * 0.8D + entitydreadslug.motionY;
@@ -339,7 +339,7 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
         entitydreadslug1.posZ = d2;
         entitydreadslug1.shoot(d3, d4 + f1, d5, 1.75F, 1.0F);
         playSound(ESound.amalgamate, 2.0F, 1.25F);
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           this.world.spawnEntity(entitydreadslug1);
         entitydreadslug1.motionX = d3 / f2 * 0.8D * 0.8D + entitydreadslug1.motionX;
         entitydreadslug1.motionY = d4 / f2 * 0.8D * 0.8D + entitydreadslug1.motionY;
@@ -355,10 +355,10 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
         mob.copyLocationAndAnglesFrom(entitydreadslug11);
         entitydreadslug11.shoot(d3, d4 + f1 + this.rand.nextDouble() * 150.0D, d5, 1.3F, 1.0F);
         playSound(ESound.amalgamate, 2.0F, 1.25F);
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           this.world.spawnEntity(entitydreadslug11);
         mob.setOwnerId(getOwnerId());
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           this.world.spawnEntity(mob);
         mob.attackEntityFrom(DamageSource.FLY_INTO_WALL, 2.0F);
         mob.startRiding(entitydreadslug11);
@@ -374,10 +374,10 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
         spawn.copyLocationAndAnglesFrom(entitydreadslug111);
         entitydreadslug111.shoot(d3, d4 + f1 + this.rand.nextDouble() * 150.0D, d5, 1.3F, 1.0F);
         playSound(ESound.amalgamate, 2.0F, 1.25F);
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           this.world.spawnEntity(entitydreadslug111);
         spawn.setOwnerId(getOwnerId());
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           this.world.spawnEntity(spawn);
         spawn.attackEntityFrom(DamageSource.FLY_INTO_WALL, 2.0F);
         spawn.startRiding(entitydreadslug111);
@@ -393,10 +393,10 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
         fist.copyLocationAndAnglesFrom(entitydreadslug1111);
         entitydreadslug1111.shoot(d3, d4 + f1 + this.rand.nextDouble() * 150.0D, d5, 1.3F, 1.0F);
         playSound(ESound.amalgamate, 2.0F, 1.25F);
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           this.world.spawnEntity(entitydreadslug1111);
         fist.setOwnerId(getOwnerId());
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           this.world.spawnEntity(fist);
         fist.attackEntityFrom(DamageSource.FLY_INTO_WALL, 2.0F);
         fist.startRiding(entitydreadslug1111);
@@ -410,7 +410,7 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
         entitydragonfireball.posX = d0;
         entitydragonfireball.posY = d1;
         entitydragonfireball.posZ = d2;
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           this.world.spawnEntity(entitydragonfireball);
         this.nextHeadUpdate[p_82209_1_ - 2] = this.ticksExisted + 100;
         break;
@@ -457,7 +457,7 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
   }
   
   public void onLivingUpdate() {
-    if (this.ticksExisted % 40 == 0 && !this.world.isRemote)
+    if (this.ticksExisted % 40 == 0 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       for (int x = getPosition().getX() - 3; x <= getPosition().getX() + 3; x++) {
         for (int z = getPosition().getZ() - 3; z <= getPosition().getZ() + 3; z++) {
           if (!(this.world.getBiome(new BlockPos(x, 0, z)) instanceof com.shinoow.abyssalcraft.api.biome.IDreadlandsBiome) && this.world
@@ -559,7 +559,7 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
     if (getAttackTarget() != null)
       faceEntity(getAttackTarget(), 10.0F, 180.0F);
     setFlameTime(getFlameTime() - 1);
-    if (!this.world.isRemote && isEntityAlive()) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && isEntityAlive()) {
       if (this.rand.nextInt(isHero() ? 200 : 400) == 0) {
         EntityDreadSpawn mob = new EntityDreadSpawn(this.world);
         mob.copyLocationAndAnglesFrom(this);
@@ -653,7 +653,7 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
   }
   
   protected void addMouthParticles() {
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       Vec3d vector = getLookVec();
       double px = this.posX + vector.x * 0.25D;
       double py = this.posY + (this.height * 0.75F);
@@ -701,11 +701,11 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
   }
   
   public int getWatchedTargetId(int head) {
-    return this.dataManager.get(HEAD_TARGETS[head]);
+    return this.getDataManager().get(HEAD_TARGETS[head]);
   }
   
   public void updateWatchedTargetId(int targetOffset, int newId) {
-    this.dataManager.set(HEAD_TARGETS[targetOffset], newId);
+    this.getDataManager().set(HEAD_TARGETS[targetOffset], newId);
   }
   
   public boolean isEntityImmuneToCoralium() {
@@ -764,10 +764,10 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
   
   protected void onDeathUpdate() {
     this.deathTicks++;
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (this.deathTicks == 1)
         if (getOwner() != null) {
-          for (EntityPlayer entityplayer : this.world.playerEntities) {
+          for (EntityPlayer entityplayer : net.minecraft.AgeOfMinecraft.util.EntityCompat.playerEntities(this.world)) {
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
             entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s Cha'garoth has been killed!!!", new Object[0]), true);
           } 
@@ -786,7 +786,7 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
           this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + f, this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
       } 
     } 
-    if (!this.world.isRemote && 
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && 
       this.deathTicks > 180 && this.deathTicks % 2 == 0) {
       int i = 1000;
       while (i > 0) {
@@ -799,10 +799,10 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
         this.world.spawnEntity(new EntityItem(this.world, this.posX + posneg(3), this.posY + this.rand.nextInt(3), this.posZ + posneg(3), new ItemStack(ACItems.dreadium_ingot)));
       } 
     } 
-    if (this.deathTicks == 100 && !this.world.isRemote)
+    if (this.deathTicks == 100 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       SpecialTextUtil.ChagarothGroup(this.world, I18n.translateToLocal("message.chagaroth.death.1"));
-    if (this.deathTicks == 200 && !this.world.isRemote) {
-      List<Entity> list = this.world.loadedEntityList;
+    if (this.deathTicks == 200 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
+      List<Entity> list = net.minecraft.AgeOfMinecraft.util.EntityCompat.loadedEntityList(this.world);
       if (list != null)
           for (Entity entity : list) {
               if (entity instanceof EntityJzahar && entity.isEntityAlive())

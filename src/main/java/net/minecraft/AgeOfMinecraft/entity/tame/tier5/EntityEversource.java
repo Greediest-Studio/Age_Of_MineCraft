@@ -115,7 +115,7 @@ public class EntityEversource extends EntityTameBase implements IJumpingMount, L
   
   public void onLivingUpdate() {
     super.onLivingUpdate();
-    if (!this.world.isRemote && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && !false && getDistanceSq(getAttackTarget()) < (this.width * this.width + (getAttackTarget()).width * (getAttackTarget()).width) + 9.0D)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && !false && getDistanceSq(getAttackTarget()) < (this.width * this.width + (getAttackTarget()).width * (getAttackTarget()).width) + 9.0D)
       attackEntityAsMob(getAttackTarget());
     if (getControllingPassenger() != null && getControllingPassenger() instanceof EntityZombie) {
       EntityZombie passenger = (EntityZombie)getControllingPassenger();
@@ -134,7 +134,7 @@ public class EntityEversource extends EntityTameBase implements IJumpingMount, L
     if (!this.onGround && this.motionY < 0.0D && isEntityAlive())
       this.motionY *= 0.6D; 
     this.wingRotation += this.wingRotDelta * 2.0F;
-    if (!this.world.isRemote && !isChild() && !isChickenJockey() && --this.timeUntilNextEgg <= 0) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && !isChild() && !isChickenJockey() && --this.timeUntilNextEgg <= 0) {
       playSound(ESound.createMob, getSoundVolume(), 1.0F);
       playSound(SoundEvents.ENTITY_CHICKEN_EGG, getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
       dropItem(randomSpawnItem(), 1);
@@ -292,7 +292,7 @@ public class EntityEversource extends EntityTameBase implements IJumpingMount, L
   public boolean interact(EntityPlayer player, EnumHand hand) {
     ItemStack stack = player.getHeldItem(hand);
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 

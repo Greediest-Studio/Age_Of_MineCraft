@@ -22,6 +22,7 @@ import net.minecraft.AgeOfMinecraft.entity.tame.ai.EntityAIFollowLeader;
 import net.minecraft.AgeOfMinecraft.entity.tame.ai.EntityAIFriendlyAttackMelee;
 import net.minecraft.AgeOfMinecraft.events.ChunkLoadingEvent;
 import net.minecraft.AgeOfMinecraft.registry.ESound;
+import net.minecraft.AgeOfMinecraft.util.AttributeCompat;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -187,25 +188,25 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(EARTHQUAKETIMER, 0);
-    this.dataManager.register(BLACKHOLETIMER, 0);
-    this.dataManager.register(IMPLOSIONTIMER, 0);
-    this.dataManager.register(SHOUTTIMER, 0);
-    this.dataManager.register(COOLDOWNTIMER, 0);
+    this.getDataManager().register(EARTHQUAKETIMER, 0);
+    this.getDataManager().register(BLACKHOLETIMER, 0);
+    this.getDataManager().register(IMPLOSIONTIMER, 0);
+    this.getDataManager().register(SHOUTTIMER, 0);
+    this.getDataManager().register(COOLDOWNTIMER, 0);
   }
   
   public int getTimer(int timer) {
     switch (timer) {
       case 0:
-        return this.dataManager.get(EARTHQUAKETIMER);
+        return this.getDataManager().get(EARTHQUAKETIMER);
       case 1:
-        return this.dataManager.get(BLACKHOLETIMER);
+        return this.getDataManager().get(BLACKHOLETIMER);
       case 2:
-        return this.dataManager.get(IMPLOSIONTIMER);
+        return this.getDataManager().get(IMPLOSIONTIMER);
       case 3:
-        return this.dataManager.get(SHOUTTIMER);
+        return this.getDataManager().get(SHOUTTIMER);
       case 4:
-        return this.dataManager.get(COOLDOWNTIMER);
+        return this.getDataManager().get(COOLDOWNTIMER);
     } 
     return 0;
   }
@@ -213,19 +214,19 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
   public void setTimer(int timer, int value) {
     switch (timer) {
       case 0:
-        this.dataManager.set(EARTHQUAKETIMER, value);
+        this.getDataManager().set(EARTHQUAKETIMER, value);
         break;
       case 1:
-        this.dataManager.set(BLACKHOLETIMER, value);
+        this.getDataManager().set(BLACKHOLETIMER, value);
         break;
       case 2:
-        this.dataManager.set(IMPLOSIONTIMER, value);
+        this.getDataManager().set(IMPLOSIONTIMER, value);
         break;
       case 3:
-        this.dataManager.set(SHOUTTIMER, value);
+        this.getDataManager().set(SHOUTTIMER, value);
         break;
       case 4:
-        this.dataManager.set(COOLDOWNTIMER, value);
+        this.getDataManager().set(COOLDOWNTIMER, value);
         break;
     } 
   }
@@ -302,7 +303,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
     ItemStack stack = player.getHeldItem(hand);
     ItemStack heldItem = new ItemStack(stack.getItem());
     if (stack.isEmpty() && getRidingEntity() == null) {
-      if (!isWild() && false && !isChild() && !this.world.isRemote)
+      if (!isWild() && false && !isChild() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         player.startRiding(this);
       return true;
     } 
@@ -440,7 +441,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
   }
   
   public void onLivingUpdate() {
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (isEntityAlive()) {
         ChunkLoadingEvent.updateLoaded(this);
       } else {
@@ -467,8 +468,8 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         Entity entity = list.get(k2);
         if (entity instanceof EntityLivingBase && entity.isEntityAlive())
           if (entity instanceof net.minecraft.entity.boss.EntityDragon || entity instanceof net.minecraft.entity.boss.EntityWither) {
-            if (!this.world.isRemote) {
-              ((EntityLivingBase)entity).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1.0D);
+            if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
+              AttributeCompat.setBaseValue((EntityLivingBase)entity, SharedMonsterAttributes.MAX_HEALTH, 1.0D);
               ((EntityLivingBase)entity).setHealth(1.0F);
               attackEntityAsMob(entity);
               entity.attackEntityFrom(DamageSource.OUT_OF_WORLD, 1.0F);
@@ -487,8 +488,8 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
               this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, entity.posX + f, entity.posY + 2.0D + f1, entity.posZ + f2, 0.0D, 0.0D, 0.0D);
             } 
           } else if (entity instanceof com.shinoow.abyssalcraft.common.entity.EntityDragonBoss || entity instanceof com.shinoow.abyssalcraft.common.entity.EntitySacthoth || entity instanceof com.shinoow.abyssalcraft.common.entity.EntityChagaroth) {
-            if (!this.world.isRemote) {
-              ((EntityLivingBase)entity).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1.0D);
+            if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
+              AttributeCompat.setBaseValue((EntityLivingBase)entity, SharedMonsterAttributes.MAX_HEALTH, 1.0D);
               ((EntityLivingBase)entity).setHealth(1.0F);
               attackEntityAsMob(entity);
               entity.attackEntityFrom(DamageSource.OUT_OF_WORLD, 1.0F);
@@ -506,8 +507,8 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
               this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, entity.posX + f, entity.posY + 2.0D + f1, entity.posZ + f2, 0.0D, 0.0D, 0.0D);
             } 
           } else if (entity instanceof com.shinoow.abyssalcraft.common.entity.EntityJzahar) {
-            if (!this.world.isRemote) {
-              ((EntityLivingBase)entity).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1.0D);
+            if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
+              AttributeCompat.setBaseValue((EntityLivingBase)entity, SharedMonsterAttributes.MAX_HEALTH, 1.0D);
               ((EntityLivingBase)entity).setHealth(1.0F);
               attackEntityAsMob(entity);
               entity.attackEntityFrom(DamageSource.OUT_OF_WORLD, 1.0F);
@@ -525,8 +526,8 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
               this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, entity.posX + f, entity.posY + 2.0D + f1, entity.posZ + f2, 0.0D, 0.0D, 0.0D);
             } 
           } else if (!entity.isNonBoss()) {
-            if (!this.world.isRemote) {
-              ((EntityLivingBase)entity).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1.0D);
+            if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
+              AttributeCompat.setBaseValue((EntityLivingBase)entity, SharedMonsterAttributes.MAX_HEALTH, 1.0D);
               ((EntityLivingBase)entity).setHealth(1.0F);
               attackEntityAsMob(entity);
               entity.attackEntityFrom(DamageSource.OUT_OF_WORLD, 1.0F);
@@ -547,7 +548,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
             } 
           } else if (entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode && this.talkTimer == 0 && getDistanceSq(entity) <= 8.0D) {
             this.talkTimer = 1200;
-            if (this.world.isRemote)
+            if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
               if (EntityUtil.isPlayerCoralium((EntityPlayer)entity)) {
                 SpecialTextUtil.JzaharText("Hello, old friend.");
               } else if (false) {
@@ -568,13 +569,13 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         this.tasks.removeTask(this.aiArrowAttack);
       }  
     super.onLivingUpdate();
-    if (!this.world.isRemote && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && this.rand.nextInt(100) == 0) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && this.rand.nextInt(100) == 0) {
       double d1 = getHeadX(1);
       double d2 = getHeadY(1);
       double d3 = getHeadZ(1);
       fireLightning(getAttackTarget(), d1, d2, d3);
     } 
-    if (!this.world.isRemote && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && this.rand.nextInt(100) == 0) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && isEntityAlive() && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && this.rand.nextInt(100) == 0) {
       double d1 = getHeadX(2);
       double d2 = getHeadY(2);
       double d3 = getHeadZ(2);
@@ -606,7 +607,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         }  
       if (getTimer(3) < 0 && this.rand.nextInt(20) == 0 && getAttackTarget() != null && getDistanceSq(getAttackTarget()) <= 9216.0D && !this.doShout && getTimer(4) < 0) {
         playSound(ACSounds.jzahar_shout, 5.0F, 1.0F);
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           SpecialTextUtil.JzaharGroup(this.world, "Uftoin...");
         this.shoutTicks = getTimer(3) - 30;
         this.doShout = true;
@@ -617,7 +618,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         this.world.setEntityState(this, (byte)23);
         setTimer(3, 400);
         playSound(ACSounds.jzahar_blast, 5.0F, 1.0F);
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           SpecialTextUtil.JzaharGroup(this.world, "...mglagln!");
         if (isEntityAlive()) {
           double size = 64.0D;
@@ -646,7 +647,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         swingArm(EnumHand.MAIN_HAND);
         setTimer(0, 1000);
         playSound(ACSounds.jzahar_earthquake, 5.0F, 1.0F);
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           SpecialTextUtil.JzaharGroup(this.world, "Shugnah throd!");
         setTimer(4, 100);
       } 
@@ -654,13 +655,13 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         swingArm(EnumHand.MAIN_HAND);
         setTimer(2, 1200);
         playSound(ACSounds.jzahar_implosion, 5.0F, 1.0F);
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           SpecialTextUtil.JzaharGroup(this.world, "Nilgh'ri mtli!");
         EntityImplosion entitywitherskull = new EntityImplosion(this.world, this);
         BlockPos targetpos = getAttackTarget().getPosition();
         entitywitherskull.setPosition((targetpos.getX() + this.rand.nextInt(10) * (this.rand.nextBoolean() ? 1 : -1)), (targetpos.getY() + 2), (targetpos.getZ() + this.rand.nextInt(10) * (this.rand.nextBoolean() ? 1 : -1)));
         this.world.playEvent(3000, entitywitherskull.getPosition(), 0);
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           this.world.spawnEntity(entitywitherskull); 
         setTimer(4, 100);
       } 
@@ -668,14 +669,14 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         swingArm(EnumHand.MAIN_HAND);
         setTimer(1, 1600);
         playSound(ACSounds.jzahar_black_hole, 5.0F, 1.0F);
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           SpecialTextUtil.JzaharGroup(this.world, "Ph'nilgh'ri n'ghft!");
         EntityBlackHole entitywitherskull = new EntityBlackHole(this.world, this);
         entitywitherskull.copyLocationAndAnglesFrom(getAttackTarget());
         BlockPos targetpos = getAttackTarget().getPosition();
         entitywitherskull.setPosition((targetpos.getX() + (5 + this.rand.nextInt(10)) * (this.rand.nextBoolean() ? 1 : -1)), (targetpos.getY() + 2), (targetpos.getZ() + (5 + this.rand.nextInt(10)) * (this.rand.nextBoolean() ? 1 : -1)));
         this.world.playEvent(3000, entitywitherskull.getPosition(), 0);
-        if (!this.world.isRemote)
+        if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
           this.world.spawnEntity(entitywitherskull); 
         setTimer(4, 100);
       } 
@@ -683,7 +684,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
   }
   
   protected void addShoutParticles() {
-    if (this.world.isRemote) {
+    if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       Vec3d vector = getLookVec();
       double px = this.posX + vector.x * 5.0D;
       double py = this.posY + getEyeHeight() + vector.y * 5.0D;
@@ -740,16 +741,16 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
   protected void onDeathUpdate() {
     this.motionX = this.motionY = this.motionZ = 0.0D;
     this.deathTicks++;
-    if (!this.world.isRemote)
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (this.deathTicks == 1) {
-        List<Entity> list = this.world.loadedEntityList;
+        List<Entity> list = net.minecraft.AgeOfMinecraft.util.EntityCompat.loadedEntityList(this.world);
         if (list != null)
             for (Entity entity : list) {
                 if (entity instanceof EntityJzahar && entity.isEntityAlive())
                     SpecialTextUtil.JzaharGroup(this.world, false ? I18n.translateToLocal("message.jzaharhelpful.snidecomment.jzahar") : I18n.translateToLocal("message.jzahar.snidecomment.jzahar"));
             }
         if (getOwner() != null) {
-          for (EntityPlayer entityplayer : this.world.playerEntities) {
+          for (EntityPlayer entityplayer : net.minecraft.AgeOfMinecraft.util.EntityCompat.playerEntities(this.world)) {
             this.world.playSound(null, entityplayer.getPosition(), getDeathSound(), getSoundCategory(), getSoundVolume(), 1.0F);
             entityplayer.sendStatusMessage(new TextComponentTranslation("§4" + getOwner().getName() + "'s Jz'ahar has been destroyed!!!", new Object[0]), true);
           } 
@@ -792,7 +793,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         this.speed += 0.002D;
       } 
     } 
-    if (!this.world.isRemote && 
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && 
       this.deathTicks > 750 && this.deathTicks % 5 == 0) {
       int i = 500;
       while (i > 0) {
@@ -801,7 +802,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
       } 
     } 
-    if (this.deathTicks == 790 && !this.world.isRemote) {
+    if (this.deathTicks == 790 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       List<BlockPos> blocks = new ArrayList<>();
       for (int x = 0; x < 10; x++) {
         for (int y = 0; y < 10; y++) {
@@ -844,7 +845,7 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
             player.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 2400, 5));
             player.addPotionEffect(new PotionEffect(MobEffects.POISON, 2400, 5));
             if (player instanceof EntityPlayerMP) {
-              WorldServer worldServer = (WorldServer)player.world;
+              WorldServer worldServer = (WorldServer)net.minecraft.AgeOfMinecraft.util.EntityCompat.world(player);
               EntityPlayerMP mp = (EntityPlayerMP)player;
               mp.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 80, 255));
               mp.server.getPlayerList().transferPlayerToDimension(mp, ACLib.dark_realm_id, new TeleporterDarkRealm(worldServer));
@@ -857,25 +858,25 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
       } 
     } 
     if (!isWild()) {
-      if (this.deathTicks == 20 && !this.world.isRemote)
+      if (this.deathTicks == 20 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.1"));
-      if (this.deathTicks == 100 && !this.world.isRemote)
+      if (this.deathTicks == 100 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.2"));
-      if (this.deathTicks == 180 && !this.world.isRemote)
+      if (this.deathTicks == 180 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.3"));
-      if (this.deathTicks == 260 && !this.world.isRemote)
+      if (this.deathTicks == 260 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.4"));
-      if (this.deathTicks == 340 && !this.world.isRemote)
+      if (this.deathTicks == 340 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.5"));
-      if (this.deathTicks == 420 && !this.world.isRemote)
+      if (this.deathTicks == 420 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.6"));
-      if (this.deathTicks == 500 && !this.world.isRemote)
+      if (this.deathTicks == 500 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.7"));
-      if (this.deathTicks == 580 && !this.world.isRemote)
+      if (this.deathTicks == 580 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.8"));
-      if (this.deathTicks == 660 && !this.world.isRemote)
+      if (this.deathTicks == 660 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.9"));
-      if (this.deathTicks == 800 && !this.world.isRemote) {
+      if (this.deathTicks == 800 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzaharhelpful.death.10"));
         int i = 60000;
         this.world.spawnEntity(new EntityGatekeeperEssence(this.world, this.posX, this.posY, this.posZ));
@@ -887,25 +888,25 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
         setDead();
       } 
     } else {
-      if (this.deathTicks == 20 && !this.world.isRemote)
+      if (this.deathTicks == 20 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.1"));
-      if (this.deathTicks == 100 && !this.world.isRemote)
+      if (this.deathTicks == 100 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.2"));
-      if (this.deathTicks == 180 && !this.world.isRemote)
+      if (this.deathTicks == 180 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.3"));
-      if (this.deathTicks == 260 && !this.world.isRemote)
+      if (this.deathTicks == 260 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.4"));
-      if (this.deathTicks == 340 && !this.world.isRemote)
+      if (this.deathTicks == 340 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.5"));
-      if (this.deathTicks == 420 && !this.world.isRemote)
+      if (this.deathTicks == 420 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.6"));
-      if (this.deathTicks == 500 && !this.world.isRemote)
+      if (this.deathTicks == 500 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.7"));
-      if (this.deathTicks == 580 && !this.world.isRemote)
+      if (this.deathTicks == 580 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.8"));
-      if (this.deathTicks == 660 && !this.world.isRemote)
+      if (this.deathTicks == 660 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.9"));
-      if (this.deathTicks == 800 && !this.world.isRemote) {
+      if (this.deathTicks == 800 && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         SpecialTextUtil.JzaharGroup(this.world, I18n.translateToLocal("message.jzahar.death.10"));
         int i = 60000;
         this.world.spawnEntity(new EntityGatekeeperEssence(this.world, this.posX, this.posY, this.posZ));

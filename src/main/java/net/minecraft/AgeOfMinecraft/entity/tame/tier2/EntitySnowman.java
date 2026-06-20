@@ -114,7 +114,7 @@ public class EntitySnowman extends EntityTameBase implements IRangedAttackMob, L
   
   protected void entityInit() {
     super.entityInit();
-    this.dataManager.register(PUMPKIN_EQUIPPED, (byte) 0);
+    this.getDataManager().register(PUMPKIN_EQUIPPED, (byte) 0);
   }
   
   public EnumTier getTier() {
@@ -144,7 +144,7 @@ public class EntitySnowman extends EntityTameBase implements IRangedAttackMob, L
   
   public void createChild() {
     super.createChild();
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       EntitySnowman baby = new EntitySnowman(this.world);
       baby.copyLocationAndAnglesFrom(this);
       baby.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
@@ -176,7 +176,7 @@ public class EntitySnowman extends EntityTameBase implements IRangedAttackMob, L
         if (!getHeldItemOffhand().isEmpty())
           swingArm(EnumHand.OFF_HAND); 
       }  
-    if (!this.world.isRemote) {
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       int i = MathHelper.floor(this.posX);
       int j = MathHelper.floor(this.posY);
       int k = MathHelper.floor(this.posZ);
@@ -214,7 +214,7 @@ public class EntitySnowman extends EntityTameBase implements IRangedAttackMob, L
       return true;
     } 
     if (!stack.isEmpty() && stack.getItem() == Items.SHEARS) {
-      if (hasOwner(player) && !isPumpkinEquipped() && !this.world.isRemote) {
+      if (hasOwner(player) && !isPumpkinEquipped() && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
         this.world.playEvent(2001, getPosition().up(), Block.getStateId(Blocks.PUMPKIN.getDefaultState()));
         setPumpkinEquipped(true);
         stack.damageItem(1, player);
@@ -225,15 +225,15 @@ public class EntitySnowman extends EntityTameBase implements IRangedAttackMob, L
   }
   
   public boolean isPumpkinEquipped() {
-    return ((this.dataManager.get(PUMPKIN_EQUIPPED) & 0x10) != 0);
+    return ((this.getDataManager().get(PUMPKIN_EQUIPPED) & 0x10) != 0);
   }
   
   public void setPumpkinEquipped(boolean p_184747_1_) {
-    byte b0 = this.dataManager.get(PUMPKIN_EQUIPPED);
+    byte b0 = this.getDataManager().get(PUMPKIN_EQUIPPED);
     if (p_184747_1_) {
-      this.dataManager.set(PUMPKIN_EQUIPPED, (byte) (b0 | 0x10));
+      this.getDataManager().set(PUMPKIN_EQUIPPED, (byte) (b0 | 0x10));
     } else {
-      this.dataManager.set(PUMPKIN_EQUIPPED, (byte) (b0 & 0xFFFFFFEF));
+      this.getDataManager().set(PUMPKIN_EQUIPPED, (byte) (b0 & 0xFFFFFFEF));
     } 
   }
   

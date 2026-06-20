@@ -210,50 +210,54 @@ public class EngenderGeneralEvent {
 
   @SubscribeEvent
   public void onMobSpawnEvent(EntityJoinWorldEvent event) {
-    if (event.getEntity() instanceof EntityPlayer)
-      musicTicker = new EngenderMusicEvent(Minecraft.getMinecraft());
-    World world = EntityCompat.world(event.getEntity());
-    if (!EntityCompat.isRemote(world) && !world.getGameRules().hasRule("disableExpItemDrops"))
-      world.getGameRules().addGameRule("disableExpItemDrops", "false", GameRules.ValueType.BOOLEAN_VALUE); 
-    if (!EntityCompat.isRemote(world) && !world.getGameRules().hasRule("disableCorpses"))
-      world.getGameRules().addGameRule("disableCorpses", "false", GameRules.ValueType.BOOLEAN_VALUE); 
-    if (event.getEntity() instanceof EntityLiving) {
-      final EntityLiving mob = (EntityLiving)event.getEntity();
-      if (mob instanceof EntityCreature) {
-        final EntityCreature cri = (EntityCreature)event.getEntity();
+    try {
+      if (event.getEntity() instanceof EntityPlayer)
+        musicTicker = new EngenderMusicEvent(Minecraft.getMinecraft());
+      World world = EntityCompat.world(event.getEntity());
+      if (!EntityCompat.isRemote(world) && !world.getGameRules().hasRule("disableExpItemDrops"))
+        world.getGameRules().addGameRule("disableExpItemDrops", "false", GameRules.ValueType.BOOLEAN_VALUE); 
+      if (!EntityCompat.isRemote(world) && !world.getGameRules().hasRule("disableCorpses"))
+        world.getGameRules().addGameRule("disableCorpses", "false", GameRules.ValueType.BOOLEAN_VALUE); 
+      if (event.getEntity() instanceof EntityLiving) {
+        final EntityLiving mob = (EntityLiving)event.getEntity();
+        if (mob instanceof EntityCreature) {
+          final EntityCreature cri = (EntityCreature)event.getEntity();
+        } 
       } 
-    } 
-    if (event.getEntity() instanceof EntityLiving && event.getEntity() instanceof IMob) {
-      final EntityLiving mob = (EntityLiving)event.getEntity();
-      if (mob instanceof EntityCreature) {
-        final EntityCreature cri = (EntityCreature)event.getEntity();
-        EntityAICompat.addTargetTask(cri, 3, new EntityAINearestAttackableTarget(cri, net.minecraft.entity.passive.EntityVillager.class, false));
-      } else {
-        EntityAICompat.addTargetTask(mob, 3, new EntityAIFindEntityNearest(mob, net.minecraft.entity.passive.EntityVillager.class));
+      if (event.getEntity() instanceof EntityLiving && event.getEntity() instanceof IMob) {
+        final EntityLiving mob = (EntityLiving)event.getEntity();
+        if (mob instanceof EntityCreature) {
+          final EntityCreature cri = (EntityCreature)event.getEntity();
+          EntityAICompat.addTargetTask(cri, 3, new EntityAINearestAttackableTarget(cri, net.minecraft.entity.passive.EntityVillager.class, false));
+        } else {
+          EntityAICompat.addTargetTask(mob, 3, new EntityAIFindEntityNearest(mob, net.minecraft.entity.passive.EntityVillager.class));
+        } 
       } 
-    } 
-    if (event.getEntity() instanceof EntityMob) {
-      final EntityMob mob = (EntityMob)event.getEntity();
-      EntityAICompat.addTargetTask(mob, 3, new EntityAINearestAttackableTarget(mob, EntityTameBase.class, 0, false, false, (Predicate<EntityTameBase>) engendermob -> (engendermob != null && engendermob.isEntityAlive() && !false)));
-      EntityAICompat.addTargetTask(mob, 3, new EntityAINearestAttackableTarget(mob, net.minecraft.entity.passive.EntityVillager.class, true));
-    } 
-    if (event.getEntity() instanceof net.minecraft.entity.monster.EntityIronGolem) {
-      net.minecraft.entity.monster.EntityIronGolem golems = (net.minecraft.entity.monster.EntityIronGolem)event.getEntity();
-      EntityAICompat.addTargetTask(golems, 3, new EntityAINearestAttackableTarget(golems, EntityLivingBase.class, 0, false, false, (Predicate<EntityLivingBase>) p_apply_1_ -> (p_apply_1_ != null && IMob.MOB_SELECTOR.apply(p_apply_1_))));
-    } 
-    if (event.getEntity() instanceof net.minecraft.entity.passive.EntityVillager) {
-      net.minecraft.entity.passive.EntityVillager testificate = (net.minecraft.entity.passive.EntityVillager)event.getEntity();
-      EntityAICompat.addTask(testificate, 1, new EntityAIAvoidEntity(testificate, EntityLivingBase.class, (Predicate<EntityLivingBase>) mob -> (mob.isEntityAlive() && mob instanceof IMob),  8.0F, 0.6D, 0.6D));
-    } 
-    if (event.getEntity() instanceof EntityItem) {
-      EntityItem item = (EntityItem)event.getEntity();
-      if (item.getItem().getItem() instanceof net.minecraft.AgeOfMinecraft.items.ItemTierItem || item.getItem().getItem() instanceof net.minecraft.AgeOfMinecraft.items.ItemFusion)
-        item.setNoDespawn(); 
-      if (item
-        .getItem().getItem() == EItem.witheredNetherStar || item
-        .getItem().getItem() == EItem.witherStormItem || item.getItem().getItem() == EItem.fusionItemWitherStorm || item
-        .getItem().getItem() == EItem.jzaharItem || item.getItem().getItem() == EItem.fusionItemJzahar || item.getItem().getItem() == EItem.chaosGuardianItem || item.getItem().getItem() == EItem.fusionItemChaosGuardian || item.getItem().getItem() == Item.getItemFromBlock(Blocks.COMMAND_BLOCK) || item.getItem().getItem() == Item.getItemFromBlock(Blocks.CHAIN_COMMAND_BLOCK) || item.getItem().getItem() == Item.getItemFromBlock(Blocks.REPEATING_COMMAND_BLOCK) || item.getItem().getItem() == Item.getItemFromBlock(Blocks.BARRIER) || item.getItem().getItem() == Item.getItemFromBlock(Blocks.BEDROCK) || item.getItem().getItem() == Item.getItemFromBlock(Blocks.STRUCTURE_BLOCK) || item.getItem().getItem() == Item.getItemFromBlock(Blocks.STRUCTURE_VOID) || item.getItem().getItem() == Item.getItemFromBlock(Blocks.DRAGON_EGG))
-        item.setEntityInvulnerable(true); 
+      if (event.getEntity() instanceof EntityMob) {
+        final EntityMob mob = (EntityMob)event.getEntity();
+        EntityAICompat.addTargetTask(mob, 3, new EntityAINearestAttackableTarget(mob, EntityTameBase.class, 0, false, false, (Predicate<EntityTameBase>) engendermob -> (engendermob != null && engendermob.isEntityAlive() && !false)));
+        EntityAICompat.addTargetTask(mob, 3, new EntityAINearestAttackableTarget(mob, net.minecraft.entity.passive.EntityVillager.class, true));
+      } 
+      if (event.getEntity() instanceof net.minecraft.entity.monster.EntityIronGolem) {
+        net.minecraft.entity.monster.EntityIronGolem golems = (net.minecraft.entity.monster.EntityIronGolem)event.getEntity();
+        EntityAICompat.addTargetTask(golems, 3, new EntityAINearestAttackableTarget(golems, EntityLivingBase.class, 0, false, false, (Predicate<EntityLivingBase>) p_apply_1_ -> (p_apply_1_ != null && IMob.MOB_SELECTOR.apply(p_apply_1_))));
+      } 
+      if (event.getEntity() instanceof net.minecraft.entity.passive.EntityVillager) {
+        net.minecraft.entity.passive.EntityVillager testificate = (net.minecraft.entity.passive.EntityVillager)event.getEntity();
+        EntityAICompat.addTask(testificate, 1, new EntityAIAvoidEntity(testificate, EntityLivingBase.class, (Predicate<EntityLivingBase>) mob -> (mob.isEntityAlive() && mob instanceof IMob),  8.0F, 0.6D, 0.6D));
+      } 
+      if (event.getEntity() instanceof EntityItem) {
+        EntityItem item = (EntityItem)event.getEntity();
+        if (item.getItem().getItem() instanceof net.minecraft.AgeOfMinecraft.items.ItemTierItem || item.getItem().getItem() instanceof net.minecraft.AgeOfMinecraft.items.ItemFusion)
+          item.setNoDespawn(); 
+        if (item
+          .getItem().getItem() == EItem.witheredNetherStar || item
+          .getItem().getItem() == EItem.witherStormItem || item.getItem().getItem() == EItem.fusionItemWitherStorm || item
+          .getItem().getItem() == EItem.jzaharItem || item.getItem().getItem() == EItem.fusionItemJzahar || item.getItem().getItem() == EItem.chaosGuardianItem || item.getItem().getItem() == EItem.fusionItemChaosGuardian || item.getItem().getItem() == Item.getItemFromBlock(Blocks.COMMAND_BLOCK) || item.getItem().getItem() == Item.getItemFromBlock(Blocks.CHAIN_COMMAND_BLOCK) || item.getItem().getItem() == Item.getItemFromBlock(Blocks.REPEATING_COMMAND_BLOCK) || item.getItem().getItem() == Item.getItemFromBlock(Blocks.BARRIER) || item.getItem().getItem() == Item.getItemFromBlock(Blocks.BEDROCK) || item.getItem().getItem() == Item.getItemFromBlock(Blocks.STRUCTURE_BLOCK) || item.getItem().getItem() == Item.getItemFromBlock(Blocks.STRUCTURE_VOID) || item.getItem().getItem() == Item.getItemFromBlock(Blocks.DRAGON_EGG))
+          item.setEntityInvulnerable(true); 
+      }
+    } catch (Throwable throwable) {
+      net.minecraft.AgeOfMinecraft.EngenderMod.console("Skipped join-world compatibility hooks for " + event.getEntity() + ": " + throwable, true);
     } 
   }
 }
