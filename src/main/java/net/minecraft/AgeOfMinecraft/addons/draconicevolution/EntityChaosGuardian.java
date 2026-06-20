@@ -3,6 +3,7 @@ package net.minecraft.AgeOfMinecraft.addons.draconicevolution;
 import com.brandon3055.brandonscore.utils.Utils;
 import com.google.common.collect.Lists;
 import java.util.List;
+import net.minecraft.AgeOfMinecraft.EngenderConfig;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
 import net.minecraft.AgeOfMinecraft.entity.tame.EnumTier;
 import net.minecraft.AgeOfMinecraft.entity.tame.ExtendMultiPartEntityPart;
@@ -40,6 +41,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.WeightedRandom;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -1045,6 +1047,41 @@ public class EntityChaosGuardian extends EntityEnderDragon {
     this.behaviour = EnumBehaviour.GUARDING;
     clearPerchState();
     setNewTarget();
+  }
+
+  protected boolean destroyBlocksInAABB(AxisAlignedBB bounds) {
+    if (!EngenderConfig.mobs.grief || net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
+      return false; 
+    int minX = MathHelper.floor(bounds.minX);
+    int minY = MathHelper.floor(bounds.minY);
+    int minZ = MathHelper.floor(bounds.minZ);
+    int maxX = MathHelper.floor(bounds.maxX);
+    int maxY = MathHelper.floor(bounds.maxY);
+    int maxZ = MathHelper.floor(bounds.maxZ);
+    boolean destroyedAny = false;
+    boolean hitProtected = false;
+    for (BlockPos blockpos : BlockPos.getAllInBox(new BlockPos(minX, minY, minZ), new BlockPos(maxX, maxY, maxZ))) {
+      IBlockState iblockstate = this.world.getBlockState(blockpos);
+      Block block = iblockstate.getBlock();
+      if (block.isAir(iblockstate, this.world, blockpos))
+        continue; 
+      if (!canChaosGuardianDestroy(block, iblockstate, blockpos)) {
+        hitProtected = true;
+        continue;
+      } 
+      if (this.world.destroyBlock(blockpos, true))
+        destroyedAny = true; 
+    } 
+    if (destroyedAny)
+      this.world.playEvent(null, 1022, new BlockPos(this), 0); 
+    return hitProtected;
+  }
+
+  private boolean canChaosGuardianDestroy(Block block, IBlockState state, BlockPos pos) {
+    if (block == Blocks.BEDROCK || block == Blocks.END_PORTAL || block == Blocks.END_PORTAL_FRAME || block == Blocks.COMMAND_BLOCK || block == Blocks.REPEATING_COMMAND_BLOCK || block == Blocks.CHAIN_COMMAND_BLOCK || block == Blocks.BARRIER)
+      return false; 
+    int harvestLevel = block.getHarvestLevel(state);
+    return (harvestLevel < 12);
   }
   
   private enum EnumBehaviour {

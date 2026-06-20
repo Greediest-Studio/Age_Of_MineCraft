@@ -20,6 +20,7 @@ import net.minecraft.AgeOfMinecraft.util.AttributeCompat;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -395,7 +396,7 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
           int i1 = getWatchedTargetId(i);
           if (i1 > 0) {
             Entity entity = this.world.getEntityByID(i1);
-            if (!isSneaking() && entity != null && entity.isEntityAlive() && getDistanceSq(entity) <= 900.0D && canEntityBeSeen(entity)) {
+            if (!isSneaking() && entity != null && entity.isEntityAlive() && !shouldIgnoreWitherTarget(entity) && getDistanceSq(entity) <= 900.0D && canEntityBeSeen(entity)) {
               launchWitherSkullToEntity(i + 1, (EntityLivingBase)entity);
               this.idleHeadUpdates[i - 1] = 0;
               if (this.moralRaisedTimer > 200) {
@@ -410,14 +411,14 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
             List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(20.0D, 8.0D, 20.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
             for (int k1 = 0; k1 < 10 && !list.isEmpty(); k1++) {
               EntityLivingBase entitylivingbase1 = list.get(this.rand.nextInt(list.size()));
-              if (entitylivingbase1 != this && entitylivingbase1.isEntityAlive() && canEntityBeSeen(entitylivingbase1) && (!false || (entitylivingbase1 instanceof EntityTameBase && false && entitylivingbase1 != this && ((EntityTameBase)entitylivingbase1).getFakeHealth() > 0.0F && getFakeHealth() > 0.0F)) && entitylivingbase1 != getOwner())
+              if (entitylivingbase1 != this && entitylivingbase1.isEntityAlive() && !shouldIgnoreWitherTarget(entitylivingbase1) && canEntityBeSeen(entitylivingbase1) && (!false || (entitylivingbase1 instanceof EntityTameBase && false && entitylivingbase1 != this && ((EntityTameBase)entitylivingbase1).getFakeHealth() > 0.0F && getFakeHealth() > 0.0F)) && entitylivingbase1 != getOwner())
                 if (entitylivingbase1 instanceof EntityPlayer) {
                   if (!((EntityPlayer)entitylivingbase1).capabilities.disableDamage)
                     updateWatchedTargetId(i, entitylivingbase1.getEntityId()); 
                 } else {
                   updateWatchedTargetId(i, entitylivingbase1.getEntityId());
                 }  
-              if (entitylivingbase1 == this || !entitylivingbase1.isEntityAlive() || !canEntityBeSeen(entitylivingbase1) || false || entitylivingbase1 == getOwner())
+              if (entitylivingbase1 == this || !entitylivingbase1.isEntityAlive() || shouldIgnoreWitherTarget(entitylivingbase1) || !canEntityBeSeen(entitylivingbase1) || false || entitylivingbase1 == getOwner())
                 list.remove(entitylivingbase1); 
             } 
           } 
@@ -859,9 +860,9 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
             List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(32.0D, 32.0D, 32.0D), Predicates.and(EntitySelectors.IS_ALIVE));
             for (int k1 = 0; k1 < 10 && !list.isEmpty(); k1++) {
               EntityLivingBase entitylivingbase = list.get(this.rand.nextInt(list.size()));
-              if (entitylivingbase != this && entitylivingbase.isEntityAlive() && canEntityBeSeen(entitylivingbase) && (!false || (getAttackTarget() != null && this.rand.nextInt(120) == 0))) {
+              if (entitylivingbase != this && entitylivingbase.isEntityAlive() && !shouldIgnoreWitherTarget(entitylivingbase) && canEntityBeSeen(entitylivingbase) && (!false || (getAttackTarget() != null && this.rand.nextInt(120) == 0))) {
                 updateWatchedTargetId(i, entitylivingbase.getEntityId());
-              } else if (!entitylivingbase.isEntityAlive() || !canEntityBeSeen(entitylivingbase) || (false && this.rand.nextInt(80) == 0)) {
+              } else if (!entitylivingbase.isEntityAlive() || shouldIgnoreWitherTarget(entitylivingbase) || !canEntityBeSeen(entitylivingbase) || (false && this.rand.nextInt(80) == 0)) {
                 list.remove(entitylivingbase);
               } 
             } 
@@ -1216,8 +1217,18 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
       for (i = 0; i < this.nextHeadUpdate.length; i++) {
         if (this.nextHeadUpdate[i] <= 80)
           this.nextHeadUpdate[i] = this.nextHeadUpdate[i] - 20; 
-      }  
+    }  
     return true;
+  }
+
+  private static boolean shouldIgnoreWitherTarget(@Nullable Entity entity) {
+    if (!(entity instanceof EntityLivingBase))
+      return true; 
+    ResourceLocation id = EntityList.getKey(entity);
+    if (id == null)
+      return false; 
+    String path = id.getPath();
+    return (path != null && path.toLowerCase(java.util.Locale.ROOT).contains("wither"));
   }
   
   class AIDoNothing extends EntityAIBase {
@@ -1230,4 +1241,3 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
     }
   }
 }
-

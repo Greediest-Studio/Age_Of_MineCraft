@@ -21,6 +21,7 @@ import net.minecraft.AgeOfMinecraft.util.EntityAICompat;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -348,7 +349,13 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
   }
 
   public static boolean shouldIgnoreStormTarget(Entity entity) {
-    return isWitherStormFamily(entity);
+    if (isWitherStormFamily(entity))
+      return true; 
+    ResourceLocation id = EntityList.getKey(entity);
+    if (id == null)
+      return false; 
+    String path = id.getPath();
+    return (path != null && path.toLowerCase(java.util.Locale.ROOT).contains("wither"));
   }
   
   public EnumWitherStormPhase getPhase() {
