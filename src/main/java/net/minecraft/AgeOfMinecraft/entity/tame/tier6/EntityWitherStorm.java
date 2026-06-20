@@ -714,7 +714,6 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
               if (block.getMaterial(iblockstate).isLiquid()) {
                 this.world.setBlockState(new BlockPos(l1, blockpos.getY(), i2),Blocks.AIR.getDefaultState(),2);
               } else if (canLiftStormBlock(this.world, blockpos, iblockstate)) {
-                this.world.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 2);
                 this.world.spawnEntity(new EntityFallingBlock(this.world, l1, blockpos.getY(), i2, iblockstate));
               }  
           } 
