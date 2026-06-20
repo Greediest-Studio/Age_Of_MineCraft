@@ -313,8 +313,9 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
             heal(3.0F);
             if (block.getMaterial(iblockstate).isLiquid()) {
               this.world.setBlockToAir(new BlockPos(l1, i11, i2));
-            } else {
-              this.world.spawnEntity(new EntityFallingBlock(this.world, l1, i11, i2, block.getActualState(iblockstate, this.world, blockpos)));
+            } else if (EntityWitherStorm.canLiftStormBlock(this.world, blockpos, iblockstate)) {
+              this.world.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 2);
+              this.world.spawnEntity(new EntityFallingBlock(this.world, l1, i11, i2, iblockstate));
             } 
           }  
       } 

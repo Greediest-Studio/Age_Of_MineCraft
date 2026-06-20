@@ -64,6 +64,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -348,7 +349,9 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     return source != null && (isWitherStormFamily(source.getTrueSource()) || isWitherStormFamily(source.getImmediateSource()));
   }
 
-  public static boolean shouldIgnoreStormTarget(Entity entity) {
+  public static boolean shouldIgnoreStormTarget(@Nullable Entity entity) {
+    if (!(entity instanceof EntityLivingBase))
+      return true; 
     if (isWitherStormFamily(entity))
       return true; 
     ResourceLocation id = EntityList.getKey(entity);
@@ -356,6 +359,33 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
       return false; 
     String path = id.getPath();
     return (path != null && path.toLowerCase(java.util.Locale.ROOT).contains("wither"));
+  }
+
+  public static boolean canLiftStormBlock(World world, BlockPos pos, IBlockState state) {
+    if (world == null || pos == null || state == null)
+      return false; 
+    Block block = state.getBlock();
+    if (block == null || block.isAir(state, world, pos))
+      return false; 
+    if (block.hasTileEntity(state))
+      return false; 
+    if (state.getRenderType() != net.minecraft.util.EnumBlockRenderType.MODEL)
+      return false; 
+    if (block instanceof net.minecraft.block.BlockContainer)
+      return false; 
+    if (block instanceof net.minecraft.block.BlockFalling)
+      return false; 
+    if (block instanceof net.minecraft.block.BlockLiquid || block instanceof net.minecraftforge.fluids.BlockFluidBase || block instanceof net.minecraftforge.fluids.BlockFluidClassic)
+      return false; 
+    if (block instanceof net.minecraft.block.BlockDoor || block instanceof net.minecraft.block.BlockTrapDoor || block instanceof net.minecraft.block.BlockFenceGate)
+      return false; 
+    if (block instanceof net.minecraft.block.BlockSlab || block instanceof net.minecraft.block.BlockStairs || block instanceof net.minecraft.block.BlockPane || block instanceof net.minecraft.block.BlockWall || block instanceof net.minecraft.block.BlockFence)
+      return false; 
+    if (block instanceof net.minecraft.block.BlockTorch || block instanceof net.minecraft.block.BlockRedstoneWire || block instanceof net.minecraft.block.BlockRailBase || block instanceof net.minecraft.block.BlockLever || block instanceof net.minecraft.block.BlockButton || block instanceof net.minecraft.block.BlockSign)
+      return false; 
+    if (block instanceof net.minecraft.block.BlockBush || block instanceof IPlantable)
+      return false; 
+    return !state.getMaterial().isLiquid();
   }
   
   public EnumWitherStormPhase getPhase() {
@@ -683,8 +713,9 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
             if (this.world.getBlockState(blockpos.up()).getBlock().isAir(this.world.getBlockState(blockpos.up()), this.world, blockpos.up()) && !block.isAir(iblockstate, this.world, blockpos) && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.world.isAreaLoaded(blockpos, blockpos) && block.getBlockHardness(iblockstate, this.world, new BlockPos(l1, blockpos.getY(), i2)) != -1.0F)
               if (block.getMaterial(iblockstate).isLiquid()) {
                 this.world.setBlockState(new BlockPos(l1, blockpos.getY(), i2),Blocks.AIR.getDefaultState(),2);
-              } else {
-                this.world.spawnEntity(new EntityFallingBlock(this.world, l1, blockpos.getY(), i2, block.getActualState(iblockstate, this.world, blockpos)));
+              } else if (canLiftStormBlock(this.world, blockpos, iblockstate)) {
+                this.world.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 2);
+                this.world.spawnEntity(new EntityFallingBlock(this.world, l1, blockpos.getY(), i2, iblockstate));
               }  
           } 
         }  

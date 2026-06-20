@@ -480,8 +480,9 @@ public class EntityWitherStormHead extends EntityTameBase implements IRangedAtta
           if (EngenderConfig.mobs.grief)
             if (block.getMaterial(iblockstate).isLiquid()) {
               this.world.setBlockToAir(new BlockPos(l1, i11, i2));
-            } else {
-              this.world.spawnEntity(new EntityFallingBlock(this.world, l1, i11, i2, block.getDefaultState()));
+            } else if (EntityWitherStorm.canLiftStormBlock(this.world, blockpos, iblockstate)) {
+              this.world.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 2);
+              this.world.spawnEntity(new EntityFallingBlock(this.world, l1, i11, i2, iblockstate));
             }   
       } 
       if (getDistanceSq(entity) < 512.0D) {
