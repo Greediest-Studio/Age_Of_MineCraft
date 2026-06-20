@@ -249,6 +249,10 @@ public class EntityMutantSkeleton extends EntityTameBase implements IRangedAttac
   }
   
   protected void onDeathUpdate() {
+    if (usesVanillaDeathUpdate()) {
+      super.onDeathUpdate();
+      return;
+    }
     super.onDeathUpdate();
     if (this.deathTime > 2) {
       if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {

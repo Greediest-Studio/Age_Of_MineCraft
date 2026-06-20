@@ -115,11 +115,13 @@ public class EntityWitherStormHead extends EntityTameBase implements IRangedAtta
   }
   
   public boolean attackEntityAsMob(Entity entityIn) {
+    if (EntityWitherStorm.shouldIgnoreStormTarget(entityIn))
+      return false;
     if (super.attackEntityAsMob(entityIn)) {
       List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, entityIn.getEntityBoundingBox().grow(3.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
       if (list1 != null && !list1.isEmpty())
           for (EntityLivingBase entity1 : list1) {
-              if (!false)
+              if (!EntityWitherStorm.shouldIgnoreStormTarget(entity1))
                   super.attackEntityAsMob(entity1);
           }
       return true;
@@ -287,7 +289,11 @@ public class EntityWitherStormHead extends EntityTameBase implements IRangedAtta
   }
   
   public boolean canBeCollidedWith() {
-    return (!this.isDead && isEntityAlive());
+    return (!this.isDead && isEntityAlive() && (this.residentWitherStorm == null || !this.residentWitherStorm.isDead));
+  }
+
+  public float getCollisionBorderSize() {
+    return 6.0F;
   }
   
   protected void despawnEntity() {
@@ -349,21 +355,19 @@ public class EntityWitherStormHead extends EntityTameBase implements IRangedAtta
   }
   
   public void onEntityUpdate() {
-    int i = getAir();
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.residentWitherStorm == null) {
+      setDead();
+      return;
+    }
     super.onEntityUpdate();
-    if (isEntityAlive() && this.residentWitherStorm == null) {
-      i--;
-      setAir(i);
-      if (getAir() == -10) {
-        setAir(0);
-        attackEntityFrom((new DamageSource("sever")).setDamageBypassesArmor().setDamageIsAbsolute(), 10.0F);
-      } 
-    } else {
-      setAir(100);
-    } 
+    setAir(100);
   }
   
   public void onLivingUpdate() {
+    if (getHealth() <= 0.0F || (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.residentWitherStorm == null)) {
+      setDead();
+      return;
+    }
     if (this.residentWitherStorm != null && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (isEntityAlive()) {
         ChunkLoadingEvent.updateLoaded(this);
@@ -414,13 +418,6 @@ public class EntityWitherStormHead extends EntityTameBase implements IRangedAtta
     this.prevPosX = this.posX;
     this.prevPosY = this.posY;
     this.prevPosZ = this.posZ;
-    if (getHealth() <= 0.0F) {
-      this.residentWitherStorm = null;
-      float f13 = (this.rand.nextFloat() - 0.5F) * 9.0F;
-      float f15 = (this.rand.nextFloat() - 0.5F) * 9.0F;
-      float f17 = (this.rand.nextFloat() - 0.5F) * 9.0F;
-      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + f13, this.posY + 2.0D + f15, this.posZ + f17, 0.0D, 0.0D, 0.0D);
-    } 
     if (this.residentWitherStorm != null && this.residentWitherStorm.hurtTime <= 0)
       this.residentWitherStorm.hurtTime = 10; 
     if (this.ticksExisted % 10 == 0 && this.residentWitherStorm != null)
@@ -431,6 +428,10 @@ public class EntityWitherStormHead extends EntityTameBase implements IRangedAtta
     EntityLivingBase entity = getAttackTarget();
     if (!isInvisible() && entity != null)
       faceEntity(entity, 20.0F, 180.0F);
+    if (EntityWitherStorm.shouldIgnoreStormTarget(entity)) {
+      setAttackTarget(null);
+      entity = null;
+    }
     if (entity != null && !false && entity.getHealth() > 0.0F && (!(entity instanceof EntityTameBase) || (entity instanceof EntityTameBase && !((EntityTameBase)entity).isABoss()))) {
       if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && entity.isNonBoss())
         entity.addPotionEffect(new PotionEffect(MobEffects.WITHER, 2147483647, 1)); 
@@ -575,6 +576,8 @@ public class EntityWitherStormHead extends EntityTameBase implements IRangedAtta
   }
   
   public boolean attackEntityFrom(DamageSource source, float amount) {
+    if (EntityWitherStorm.isWitherStormDamageSource(source))
+      return false;
     if (source.getDamageType() == "chaosImplosion" || source.getDamageType() == "de.GuardianFireball" || source.getDamageType() == "de.GuardianEnergyBall" || source.getDamageType() == "de.GuardianChaosBall")
       amount *= 0.2F; 
     if (isEntityInvulnerable(source))
@@ -582,12 +585,16 @@ public class EntityWitherStormHead extends EntityTameBase implements IRangedAtta
     if (source.getTrueSource() instanceof EntityWitherStormSkull)
       return false; 
     if (this.residentWitherStorm != null && this.residentWitherStorm.isEntityAlive())
-      this.residentWitherStorm.attackEntityFrom(source, amount * 0.3F); 
+      return this.residentWitherStorm.attackEntityFrom(source, amount); 
     return super.attackEntityFrom(source, amount);
   }
   
   public EnumPushReaction getPushReaction() {
     return EnumPushReaction.IGNORE;
+  }
+
+  public void setAttackTarget(EntityLivingBase entitylivingbaseIn) {
+    super.setAttackTarget(EntityWitherStorm.shouldIgnoreStormTarget(entitylivingbaseIn) ? null : entitylivingbaseIn);
   }
   
   protected SoundEvent getCrushHurtSound() {

@@ -420,6 +420,10 @@ public class EntityGhasther extends EntityTameBase implements Massive, Flying, A
   }
   
   protected void onDeathUpdate() {
+    if (usesVanillaDeathUpdate()) {
+      super.onDeathUpdate();
+      return;
+    }
     this.deathTicks++;
     this.world.spawnParticle((this.rand.nextFloat() <= 0.2F) ? EnumParticleTypes.EXPLOSION_HUGE : EnumParticleTypes.EXPLOSION_LARGE, this.posX + (this.rand.nextFloat() * 9.0F - 4.5F), this.posY + (this.rand.nextFloat() * 9.0F - 4.5F), this.posZ + (this.rand.nextFloat() * 9.0F - 4.5F), 0.0D, 0.0D, 0.0D);
     if (this.deathTicks >= 300) {

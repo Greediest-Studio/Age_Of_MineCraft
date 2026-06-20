@@ -763,6 +763,10 @@ public class EntityChagaroth extends EntityTameBase implements Armored, Massive,
   }
   
   protected void onDeathUpdate() {
+    if (usesVanillaDeathUpdate()) {
+      super.onDeathUpdate();
+      return;
+    }
     this.deathTicks++;
     if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (this.deathTicks == 1)

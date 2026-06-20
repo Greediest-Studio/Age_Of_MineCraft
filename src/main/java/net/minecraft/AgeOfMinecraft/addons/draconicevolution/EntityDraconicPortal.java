@@ -1112,6 +1112,10 @@ public class EntityDraconicPortal extends EntityTameBase implements IEntityMulti
   }
   
   protected void onDeathUpdate() {
+    if (usesVanillaDeathUpdate()) {
+      super.onDeathUpdate();
+      return;
+    }
     this.deathTime++;
     if (this.deathTime == 1) {
       playSound(ESound.buildingDeath, 10.0F, 1.0F);

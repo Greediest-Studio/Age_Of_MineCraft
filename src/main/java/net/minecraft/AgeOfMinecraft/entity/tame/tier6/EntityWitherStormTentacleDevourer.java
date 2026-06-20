@@ -113,12 +113,14 @@ public class EntityWitherStormTentacleDevourer extends EntityTameBase implements
   }
   
   public boolean attackEntityAsMob(Entity entityIn) {
+    if (EntityWitherStorm.shouldIgnoreStormTarget(entityIn))
+      return false;
     if (super.attackEntityAsMob(entityIn)) {
       entityIn.playSound(ESound.witherStormTentacleWhack, 10.0F, getSoundPitch() - 0.15F);
       List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, entityIn.getEntityBoundingBox().grow(6.0D), Predicates.and(EntitySelectors.NOT_SPECTATING));
       if (list1 != null && !list1.isEmpty())
           for (EntityLivingBase entity1 : list1) {
-              if (!false)
+              if (!EntityWitherStorm.shouldIgnoreStormTarget(entity1))
                   super.attackEntityAsMob(entity1);
           }
       this.world.playEvent(3000, entityIn.getPosition(), 0);
@@ -266,7 +268,11 @@ public class EntityWitherStormTentacleDevourer extends EntityTameBase implements
   }
   
   public boolean canBeCollidedWith() {
-    return (!this.isDead && isEntityAlive());
+    return (!this.isDead && isEntityAlive() && (this.residentWitherStorm == null || !this.residentWitherStorm.isDead));
+  }
+
+  public float getCollisionBorderSize() {
+    return 8.0F;
   }
   
   protected void despawnEntity() {
@@ -292,6 +298,8 @@ public class EntityWitherStormTentacleDevourer extends EntityTameBase implements
   }
   
   public void setAttackTarget(EntityLivingBase entitylivingbaseIn) {
+    if (EntityWitherStorm.shouldIgnoreStormTarget(entitylivingbaseIn))
+      entitylivingbaseIn = null;
     if (!isInvisible())
       super.setAttackTarget(entitylivingbaseIn); 
   }
@@ -316,21 +324,19 @@ public class EntityWitherStormTentacleDevourer extends EntityTameBase implements
   }
   
   public void onEntityUpdate() {
-    int i = getAir();
+    if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.residentWitherStorm == null) {
+      setDead();
+      return;
+    }
     super.onEntityUpdate();
-    if (isEntityAlive() && this.residentWitherStorm == null) {
-      i--;
-      setAir(i);
-      if (getAir() == -10) {
-        setAir(0);
-        attackEntityFrom((new DamageSource("sever")).setDamageBypassesArmor().setDamageIsAbsolute(), 10.0F);
-      } 
-    } else {
-      setAir(100);
-    } 
+    setAir(100);
   }
   
   public void onLivingUpdate() {
+    if (getHealth() <= 0.0F || (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.residentWitherStorm == null)) {
+      setDead();
+      return;
+    }
     if (this.residentWitherStorm != null && !net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world)) {
       if (isEntityAlive()) {
         ChunkLoadingEvent.updateLoaded(this);
@@ -364,13 +370,6 @@ public class EntityWitherStormTentacleDevourer extends EntityTameBase implements
     this.prevPosX = this.posX;
     this.prevPosY = this.posY;
     this.prevPosZ = this.posZ;
-    if (getHealth() <= 0.0F) {
-      this.residentWitherStorm = null;
-      float f13 = (this.rand.nextFloat() - 0.5F) * 12.0F;
-      float f15 = (this.rand.nextFloat() - 0.5F) * 12.0F;
-      float f17 = (this.rand.nextFloat() - 0.5F) * 12.0F;
-      this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + f13, this.posY + 2.0D + f15, this.posZ + f17, 0.0D, 0.0D, 0.0D);
-    } 
     if (this.residentWitherStorm != null) {
       this.onGround = false;
       this.isAirBorne = true;
@@ -383,6 +382,10 @@ public class EntityWitherStormTentacleDevourer extends EntityTameBase implements
       this.motionY += 0.25D; 
     this.renderYawOffset = this.rotationYaw = this.rotationYawHead;
     EntityLivingBase entity = getAttackTarget();
+    if (EntityWitherStorm.shouldIgnoreStormTarget(entity)) {
+      setAttackTarget(null);
+      entity = null;
+    }
     if (!isInvisible() && entity != null && entity instanceof EntityLivingBase && canEntityBeSeen(entity) && getDistanceSq(entity) < 2916.0D && (this.ticksExisted + getEntityId()) % (30 + this.rand.nextInt(10)) == 0)
       attackEntityAsMob(entity);
     super.onLivingUpdate();
@@ -393,6 +396,8 @@ public class EntityWitherStormTentacleDevourer extends EntityTameBase implements
   }
   
   public boolean attackEntityFrom(DamageSource source, float amount) {
+    if (EntityWitherStorm.isWitherStormDamageSource(source))
+      return false;
     if (source.getDamageType() == "chaosImplosion" || source.getDamageType() == "de.GuardianFireball" || source.getDamageType() == "de.GuardianEnergyBall" || source.getDamageType() == "de.GuardianChaosBall")
       amount *= 0.2F; 
     if (isEntityInvulnerable(source))
@@ -400,7 +405,7 @@ public class EntityWitherStormTentacleDevourer extends EntityTameBase implements
     if (source.getTrueSource() instanceof EntityWitherStormSkull)
       return false; 
     if (this.residentWitherStorm != null && this.residentWitherStorm.isEntityAlive())
-      this.residentWitherStorm.attackEntityFrom(source, amount * 0.3F); 
+      return this.residentWitherStorm.attackEntityFrom(source, amount); 
     return super.attackEntityFrom(source, amount);
   }
   

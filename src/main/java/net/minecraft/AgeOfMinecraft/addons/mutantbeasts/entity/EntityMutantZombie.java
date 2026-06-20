@@ -571,6 +571,10 @@ public class EntityMutantZombie extends EntityTameBase implements IJumpingMount,
   }
   
   protected void onDeathUpdate() {
+    if (usesVanillaDeathUpdate()) {
+      super.onDeathUpdate();
+      return;
+    }
     if (isBurning()) {
       this.vanishTime++;
     } else if (this.vanishTime > 0) {

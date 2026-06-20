@@ -193,8 +193,8 @@ public class EntityChaosGuardian extends EntityEnderDragon {
       faceEntity(getAttackTarget(), 10.0F, 90.0F);
     if (getAttackTarget() != null && (!getAttackTarget().isEntityAlive() || false))
       setAttackTarget(null); 
-    if (getAttackTarget() == null)
-      this.behaviour = EnumBehaviour.GO_HOME; 
+    if (!hasActiveCombatTarget() && this.behaviour != EnumBehaviour.DEAD && this.behaviour != EnumBehaviour.GUARDING && this.behaviour != EnumBehaviour.ROAMING && this.behaviour != EnumBehaviour.GO_HOME)
+      this.behaviour = (Utils.getDistanceAtoB(this.posX, this.posZ, this.homeX, this.homeZ) > 240.0D) ? EnumBehaviour.GO_HOME : EnumBehaviour.ROAMING; 
     if (this.moralRaisedTimer <= 0)
       this.moralRaisedTimer = 0; 
     if (this.moralRaisedTimer > 0)
@@ -220,8 +220,8 @@ public class EntityChaosGuardian extends EntityEnderDragon {
     } 
     setSilent(isAIDisabled());
     this.isJumping = false;
-    this.isAirBorne = false;
-    this.onGround = true;
+    this.isAirBorne = true;
+    this.onGround = false;
     if (getJukeboxToDanceTo() != null) {
       getNavigator().clearPath();
       IBlockState iblockstate = this.world.getBlockState(getJukeboxToDanceTo());
@@ -590,12 +590,26 @@ public class EntityChaosGuardian extends EntityEnderDragon {
       this.behaviour = EnumBehaviour.LOW_HEALTH_STRATEGY; 
     switch (this.behaviour) {
       case ROAMING:
+        if (!hasActiveCombatTarget()) {
+          if (Utils.getDistanceAtoB(this.posX, this.posZ, this.homeX, this.homeZ) > 240.0D) {
+            this.behaviour = EnumBehaviour.GO_HOME;
+          } else if (this.forceNewTarget || Utils.getDistanceAtoB(this.posX, this.posY, this.posZ, this.targetX, this.targetY, this.targetZ) < 25.0D) {
+            setNewTarget();
+          } 
+          break;
+        } 
         if (Utils.getDistanceAtoB(this.posX, this.posZ, this.homeX, this.homeZ) < 200.0D)
           selectNewBehaviour(); 
         break;
       case GO_HOME:
-        if (Utils.getDistanceAtoB(this.posX, this.posZ, this.homeX, this.homeZ) < 70.0D)
-          selectNewBehaviour(); 
+        if (Utils.getDistanceAtoB(this.posX, this.posZ, this.homeX, this.homeZ) < 70.0D) {
+          if (hasActiveCombatTarget()) {
+            selectNewBehaviour();
+          } else {
+            this.behaviour = EnumBehaviour.ROAMING;
+            setNewTarget();
+          } 
+        } 
         break;
       case GUARDING:
         break;
@@ -856,6 +870,12 @@ public class EntityChaosGuardian extends EntityEnderDragon {
   private void selectNewBehaviour() {
     if (net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) || this.behaviour == EnumBehaviour.DEAD)
       return; 
+    if (!hasActiveCombatTarget()) {
+      this.behaviour = (Utils.getDistanceAtoB(this.posX, this.posZ, this.homeX, this.homeZ) > 240.0D) ? EnumBehaviour.GO_HOME : EnumBehaviour.ROAMING;
+      this.previousBehaviour = this.behaviour;
+      setNewTarget();
+      return;
+    }
     EnumBehaviour newBehaviour = this.behaviour;
     for (; newBehaviour == this.behaviour; newBehaviour = WeightedRandom.getRandomItem(this.rand, weightedBehaviours).randomBehaviour);
     this.behaviour = newBehaviour;
@@ -894,6 +914,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
         this.targetX = this.homeX;
         this.targetY = Flying.clampFlightY((this.homeY + 30) + this.rand.nextDouble() * 30.0D);
         this.targetZ = this.homeZ;
+        break;
       case GUARDING:
         this.targetX = this.homeX;
         this.targetY = Flying.clampFlightY((this.homeY + 5) + this.rand.nextDouble() * 5.0D);
@@ -906,6 +927,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
           this.targetY = Flying.clampFlightY((getAttackTarget()).posY + 10.0D + this.rand.nextDouble() * 10.0D);
           this.targetZ = (getAttackTarget()).posZ + (this.rand.nextFloat() * 60.0F) - 30.0D;
         } 
+        break;
       case CIRCLE_PLAYER:
         if (getAttackTarget() != null) {
           this.targetX = (getAttackTarget()).posX + (this.rand.nextFloat() * 120.0F) - 60.0D;
@@ -931,6 +953,11 @@ public class EntityChaosGuardian extends EntityEnderDragon {
         this.targetZ = this.homeZ;
         break;
     } 
+  }
+
+  private boolean hasActiveCombatTarget() {
+    EntityLivingBase target = getAttackTarget();
+    return target != null && target.isEntityAlive();
   }
   
   public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource damageSource, float dmg) {
@@ -1032,6 +1059,10 @@ public class EntityChaosGuardian extends EntityEnderDragon {
   }
   
   protected void onDeathUpdate() {
+    if (usesVanillaDeathUpdate()) {
+      super.onDeathUpdate();
+      return;
+    }
     if (!isWild()) {
       this.homeX = (int)(getOwner()).posX;
       this.homeY = (int)(getOwner()).posY + 5;

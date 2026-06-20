@@ -233,6 +233,10 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
   }
   
   protected void onDeathUpdate() {
+    if (usesVanillaDeathUpdate()) {
+      super.onDeathUpdate();
+      return;
+    }
     super.onDeathUpdate();
     if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))
       if (this.deathTime == 1)
@@ -330,7 +334,7 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
                 List<EntityLivingBase> sublist = this.world.getEntitiesWithinAABB(EntityLivingBase.class, entityFallingBlock.getEntityBoundingBox(), Predicates.and(EntitySelectors.NOT_SPECTATING));
                 if (isEntityAlive() && sublist != null && !sublist.isEmpty())
                     for (EntityLivingBase subentity : sublist) {
-                        if (subentity != null && !false)
+                        if (subentity != null && !EntityWitherStorm.shouldIgnoreStormTarget(subentity))
                             subentity.attackEntityFrom(DamageSource.IN_WALL, 1.0F);
                     }
             }
@@ -578,6 +582,8 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
   }
   
   public boolean attackEntityFrom(DamageSource source, float amount) {
+    if (EntityWitherStorm.isWitherStormDamageSource(source))
+      return false;
     if (isEntityInvulnerable(source))
       return false; 
     if (!source.isExplosion() && source != DamageSource.DROWN) {
@@ -600,6 +606,10 @@ public class EntityCommandBlockWither extends EntityTameBase implements IRangedA
       return super.attackEntityFrom(source, amount);
     } 
     return false;
+  }
+
+  public void setAttackTarget(@Nullable EntityLivingBase entitylivingbaseIn) {
+    super.setAttackTarget(EntityWitherStorm.shouldIgnoreStormTarget(entitylivingbaseIn) ? null : entitylivingbaseIn);
   }
   
   protected void dropFewItems(boolean p_70628_1_, int p_70628_2_) {

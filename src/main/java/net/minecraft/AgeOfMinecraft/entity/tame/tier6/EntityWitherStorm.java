@@ -50,6 +50,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
@@ -295,6 +296,28 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     return false;
   }
 
+  public boolean canBeCollidedWith() {
+    return !this.isDead && isEntityAlive();
+  }
+
+  @Nullable
+  public AxisAlignedBB getCollisionBoundingBox() {
+    return canBeCollidedWith() ? getEntityBoundingBox() : null;
+  }
+
+  public float getCollisionBorderSize() {
+    if (doesntContainACommandBlock())
+      return 8.0F;
+    switch (getPhase()) {
+      case ThunderStorm:
+        return 24.0F;
+      case Devourer:
+        return 16.0F;
+      default:
+        return 10.0F;
+    }
+  }
+
   private void clampStormMotion() {
     if (this.motionX > 1.0D)
       this.motionX = 1.0D;
@@ -314,6 +337,18 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     float maxHealth = getMaxHealth();
     if (getHealth() <= 20.0F || getHealth() > maxHealth)
       setHealth(maxHealth);
+  }
+
+  public static boolean isWitherStormFamily(Entity entity) {
+    return entity instanceof EntityWitherStorm || entity instanceof EntityWitherStormHead || entity instanceof EntityWitherStormTentacle || entity instanceof EntityWitherStormTentacleDevourer || entity instanceof EntityCommandBlockWither;
+  }
+
+  public static boolean isWitherStormDamageSource(DamageSource source) {
+    return source != null && (isWitherStormFamily(source.getTrueSource()) || isWitherStormFamily(source.getImmediateSource()));
+  }
+
+  public static boolean shouldIgnoreStormTarget(Entity entity) {
+    return isWitherStormFamily(entity);
   }
   
   public EnumWitherStormPhase getPhase() {
@@ -689,7 +724,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
                   List<EntityLivingBase> sublist = this.world.getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox(), Predicates.and(EntitySelectors.NOT_SPECTATING));
                   if (isEntityAlive() && sublist != null && !sublist.isEmpty())
                       for (EntityLivingBase subentity : sublist) {
-                          if (subentity != null && !false)
+                          if (subentity != null && !shouldIgnoreStormTarget(subentity))
                               subentity.attackEntityFrom(DamageSource.IN_WALL, 5.0F);
                       }
               }
@@ -808,11 +843,19 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
   }
   
   public void setPartAttackTarget(@Nullable EntityTameBase part, @Nullable EntityLivingBase entitylivingbaseIn) {
+    if (shouldIgnoreStormTarget(entitylivingbaseIn))
+      entitylivingbaseIn = null;
     if (part != null)
       part.setAttackTarget(entitylivingbaseIn); 
   }
+
+  public void setAttackTarget(@Nullable EntityLivingBase entitylivingbaseIn) {
+    super.setAttackTarget(shouldIgnoreStormTarget(entitylivingbaseIn) ? null : entitylivingbaseIn);
+  }
   
   public boolean attackEntityFrom(DamageSource source, float amount) {
+    if (isWitherStormDamageSource(source))
+      return false;
     if (getSize() > 250000 && amount < 20.0F)
       return false; 
     if (source.getDamageType() == "chaosImplosion")
@@ -834,7 +877,7 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
     if (isEntityInvulnerable(source))
       return false; 
     if (!source.isProjectile() && !source.isMagicDamage() && source != DamageSource.LAVA && source != DamageSource.ON_FIRE && source != DamageSource.IN_FIRE && source != DamageSource.IN_WALL && source != DamageSource.FALL && source != DamageSource.DROWN) {
-      if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityLivingBase) {
+      if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityLivingBase && !shouldIgnoreStormTarget(source.getTrueSource())) {
         setAttackTarget((EntityLivingBase)source.getTrueSource());
         if (this.centerHead != null)
           this.centerHead.setAttackTarget((EntityLivingBase)source.getTrueSource()); 
@@ -1009,6 +1052,10 @@ public class EntityWitherStorm extends EntityTameBase implements Massive, Armore
   }
   
   protected void onDeathUpdate() {
+    if (usesVanillaDeathUpdate()) {
+      super.onDeathUpdate();
+      return;
+    }
     BlockPos blockpos = getPosition();
     if (getGrowingAge() < 50000) {
       if (this.tentacledevourer1 != null)

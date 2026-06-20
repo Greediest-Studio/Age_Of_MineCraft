@@ -1104,6 +1104,10 @@ public class EntityEnderDragon extends EntityTameBase implements IEntityMultiPar
   }
   
   protected void onDeathUpdate() {
+    if (usesVanillaDeathUpdate()) {
+      super.onDeathUpdate();
+      return;
+    }
     List<EntityLivingBase> list = Lists.newArrayList();
     List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, (new AxisAlignedBB(getPosition())).grow(256.0D));
     for (Entity entity : entities) {

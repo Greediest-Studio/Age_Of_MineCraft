@@ -1116,6 +1116,10 @@ public class EntityDragonBoss extends EntityTameBase implements IEntityMultiPart
   }
   
   protected void onDeathUpdate() {
+    if (usesVanillaDeathUpdate()) {
+      super.onDeathUpdate();
+      return;
+    }
     this.deathTicks++;
     if (this.deathTicks >= 180 && this.deathTicks <= 200) {
       float f = (this.rand.nextFloat() - 0.5F) * 8.0F;

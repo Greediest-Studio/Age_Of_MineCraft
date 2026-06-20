@@ -330,6 +330,10 @@ public class EntityMutantCreeper extends EntityTameBase implements IJumpingMount
   }
   
   protected void onDeathUpdate() {
+    if (usesVanillaDeathUpdate()) {
+      super.onDeathUpdate();
+      return;
+    }
     float explosionPower = getPowered() ? 12.0F : 8.0F;
     float f1 = explosionPower * 1.5F;
     for (Entity entity : this.world.getEntitiesInAABBexcluding(this, getEntityBoundingBox().grow(f1), EntitySelectors.CAN_AI_TARGET)) {

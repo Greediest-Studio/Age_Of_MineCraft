@@ -768,6 +768,10 @@ public class EntityMutantEnderman extends EntityTameBase implements IRangedAttac
   }
   
   protected void onDeathUpdate() {
+    if (usesVanillaDeathUpdate()) {
+      super.onDeathUpdate();
+      return;
+    }
     if (isDecoyClone()) {
       spawnTeleportParticles(true);
       this.isDead = true;

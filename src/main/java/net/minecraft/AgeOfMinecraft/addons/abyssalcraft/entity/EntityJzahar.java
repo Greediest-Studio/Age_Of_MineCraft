@@ -739,6 +739,10 @@ public class EntityJzahar extends EntityTameBase implements IRangedAttackMob, Ar
   }
   
   protected void onDeathUpdate() {
+    if (usesVanillaDeathUpdate()) {
+      super.onDeathUpdate();
+      return;
+    }
     this.motionX = this.motionY = this.motionZ = 0.0D;
     this.deathTicks++;
     if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world))

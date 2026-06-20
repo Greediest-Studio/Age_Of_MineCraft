@@ -1000,6 +1000,10 @@ public class EntityPortal extends EntityTameBase implements IEntityMultiPart, Ma
   }
   
   protected void onDeathUpdate() {
+    if (usesVanillaDeathUpdate()) {
+      super.onDeathUpdate();
+      return;
+    }
     this.deathTime++;
     if (this.deathTime == 1) {
       playSound(ESound.buildingDeath, 10.0F, 1.0F);

@@ -113,6 +113,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.DifficultyInstance;
@@ -343,7 +344,11 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (hasCustomName())
       return getCustomNameTag();
     String name = EntityList.getEntityString(this);
-    return name == null ? "Engender Mob" : name;
+    if (name == null)
+      return "Engender Mob";
+    String key = getNameTranslationKey();
+    String translated = I18n.translateToLocal(key);
+    return key.equals(translated) ? name : translated;
   }
 
   public boolean hasCustomName() {
@@ -359,7 +364,23 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   }
 
   public ITextComponent getDisplayName() {
-    return new TextComponentString(getName());
+    if (hasCustomName())
+      return new TextComponentString(getCustomNameTag());
+    return new TextComponentTranslation(getNameTranslationKey());
+  }
+
+  protected String getNameTranslationKey() {
+    String name = EntityList.getEntityString(this);
+    if (name != null && !name.isEmpty()) {
+      int namespaceSeparator = name.indexOf(':');
+      if (namespaceSeparator >= 0 && namespaceSeparator < name.length() - 1)
+        name = name.substring(namespaceSeparator + 1);
+      return "entity." + name + ".name";
+    }
+    String descName = getDescName();
+    if (descName != null && !descName.isEmpty())
+      return "entity." + descName + ".name";
+    return "entity.EngenderMob.name";
   }
   
   public int playMusic() {
@@ -2434,8 +2455,35 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
   public boolean leavesNoCorpse() {
     return (isMarried() || this.world.getGameRules().getBoolean("disableCorpses"));
   }
+
+  protected boolean usesVanillaDeathUpdate() {
+    return true;
+  }
   
   protected void onDeathUpdate() {
+    if (usesVanillaDeathUpdate()) {
+      this.renderYawOffset = this.rotationYaw = this.rotationYawHead;
+      getNavigator().clearPath();
+      extinguish();
+      clearActivePotions();
+      setAttackTarget(null);
+      setRevengeTarget(null);
+      this.limbSwingAmount = 0.0F;
+      this.limbSwing = 0.0F;
+      setArmsRaised(false);
+      this.prevRotationPitchFalling = this.rotationPitchFalling = 0.0F;
+      if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && this.deathTime == 0) {
+        EntityAICompat.clearTasks(this);
+        EntityAICompat.clearTargetTasks(this);
+        if (getOwner() != null && isHero()) {
+          for (EntityPlayer entityplayer : net.minecraft.AgeOfMinecraft.util.EntityCompat.playerEntities(this.world))
+            entityplayer.sendStatusMessage(new TextComponentTranslation("搂4" + getOwner().getName() + "'s " + getName() + " has been killed!!!", new Object[0]), true);
+          getOwner().sendMessage(new TextComponentTranslation("A Hero mob has fallen!", new Object[0]));
+        }
+      }
+      super.onDeathUpdate();
+      return;
+    }
     this.renderYawOffset = this.rotationYaw = this.rotationYawHead;
     getNavigator().clearPath();
     extinguish();

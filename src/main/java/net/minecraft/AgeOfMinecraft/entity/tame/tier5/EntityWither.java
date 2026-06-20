@@ -1108,6 +1108,10 @@ public class EntityWither extends EntityTameBase implements IEntityMultiPart, IR
   }
   
   protected void onDeathUpdate() {
+    if (usesVanillaDeathUpdate()) {
+      super.onDeathUpdate();
+      return;
+    }
     this.lastActiveTime = this.timeSinceIgnited;
     this.timeSinceIgnited = ++this.deathTicks;
     setRamTime(0);

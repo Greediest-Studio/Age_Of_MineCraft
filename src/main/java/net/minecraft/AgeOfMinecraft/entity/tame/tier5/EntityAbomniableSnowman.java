@@ -333,6 +333,10 @@ public class EntityAbomniableSnowman extends EntityTameBase implements IRangedAt
   }
   
   protected void onDeathUpdate() {
+    if (usesVanillaDeathUpdate()) {
+      super.onDeathUpdate();
+      return;
+    }
     this.hurtTime = 10;
     this.deathTicks++;
     if (this.deathTicks == 100) {
