@@ -27,12 +27,15 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -181,6 +184,8 @@ public class EntityChaosGuardian extends EntityEnderDragon {
   }
   
   public void onLivingUpdate() {
+    if (getJukeboxToDanceTo() == null)
+      clearPerchState();
     if (this.ticksExisted % 10 == 0)
       heal(1.0F); 
     if (this.motionY >= 2.0D || this.motionY <= -2.0D)
@@ -534,11 +539,7 @@ public class EntityChaosGuardian extends EntityEnderDragon {
     } else {
       setSprinting(false);
     } 
-    if (!isWild() && getOwner().isSneaking()) {
-      setSneaking(true);
-    } else {
-      setSneaking(false);
-    } 
+    setSneaking(false);
     if (!net.minecraft.AgeOfMinecraft.util.EntityCompat.isRemote(this.world) && getAttackTarget() != null && getAttackTarget().isEntityAlive() && getAttackTarget().canEntityBeSeen(this) && this.rand.nextInt(120) == 0) {
       EntityGuardianProjectile projectile;
       double distance;
@@ -612,6 +613,11 @@ public class EntityChaosGuardian extends EntityEnderDragon {
         } 
         break;
       case GUARDING:
+        if (Utils.getDistanceAtoB(this.posX, this.posZ, this.homeX, this.homeZ) > 120.0D) {
+          this.behaviour = EnumBehaviour.GO_HOME;
+        } else if (this.forceNewTarget || Utils.getDistanceAtoB(this.posX, this.posY, this.posZ, this.targetX, this.targetY, this.targetZ) < 25.0D) {
+          setNewTarget();
+        } 
         break;
       case CHARGING:
         if (Utils.getDistanceAtoB(this.posX, this.posZ, this.homeX, this.homeZ) > 300.0D)
@@ -916,9 +922,9 @@ public class EntityChaosGuardian extends EntityEnderDragon {
         this.targetZ = this.homeZ;
         break;
       case GUARDING:
-        this.targetX = this.homeX;
-        this.targetY = Flying.clampFlightY((this.homeY + 5) + this.rand.nextDouble() * 5.0D);
-        this.targetZ = this.homeZ;
+        this.targetX = (this.homeX + this.rand.nextFloat() * 80.0F - 40.0F);
+        this.targetY = Flying.clampFlightY((this.homeY + 25) + this.rand.nextDouble() * 25.0D);
+        this.targetZ = (this.homeZ + this.rand.nextFloat() * 80.0F - 40.0F);
         setAttackTarget(null);
         break;
       case CHARGING:
@@ -958,6 +964,22 @@ public class EntityChaosGuardian extends EntityEnderDragon {
   private boolean hasActiveCombatTarget() {
     EntityLivingBase target = getAttackTarget();
     return target != null && target.isEntityAlive();
+  }
+
+  private void clearPerchState() {
+    this.sitting = false;
+    if (getPhaseManager().getCurrentPhase() != PhaseList.HOLDING_PATTERN && getPhaseManager().getCurrentPhase() != PhaseList.DYING)
+      getPhaseManager().setPhase(PhaseList.HOLDING_PATTERN);
+  }
+
+  public boolean interact(EntityPlayer player, EnumHand hand) {
+    ItemStack stack = player.getHeldItem(hand);
+    if (!stack.isEmpty() && stack.getItem() == Items.ENDER_EYE && (hasOwner(player) || false)) {
+      clearPerchState();
+      setNewTarget();
+      return true;
+    }
+    return super.interact(player, hand);
   }
   
   public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource damageSource, float dmg) {
@@ -1021,6 +1043,8 @@ public class EntityChaosGuardian extends EntityEnderDragon {
   
   public void setToGuard() {
     this.behaviour = EnumBehaviour.GUARDING;
+    clearPerchState();
+    setNewTarget();
   }
   
   private enum EnumBehaviour {
