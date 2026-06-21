@@ -156,7 +156,7 @@ public class EngenderGeneralEvent {
       EntityDragon mob = (EntityDragon)event.getEntity();
       World world = EntityCompat.world(mob);
       if (!EntityCompat.isRemote(world) && mob.getFightManager() != null && mob.getFightManager().hasPreviouslyKilledDragon() && EngenderConfig.general.dragonEgg) {
-        ReflectionHelper.setPrivateValue(DragonFightManager.class, mob.getFightManager(), Boolean.FALSE, new String[] { "previouslyKilled", "previouslyKilled" });
+        ReflectionHelper.setPrivateValue(DragonFightManager.class, mob.getFightManager(), Boolean.FALSE, new String[] { "field_186118_l", "previouslyKilled" });
         for (EntityPlayer entityplayer : EntityCompat.playerEntities(world)) {
           if (EngenderConfig.general.useMessage)
             entityplayer.sendStatusMessage(new TextComponentTranslation(TextFormatting.BOLD + "The respawned dragon will drop another egg now."), true);

@@ -1609,7 +1609,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     } 
     setSitResting(false);
     try {
-      ReflectionHelper.findField(entity.getClass(), new String[] { "recentlyHit", "recentlyHit" }).setInt(entity, 100);
+      ReflectionHelper.findField(entity.getClass(), new String[] { "recentlyHit", "field_70718_bc" }).setInt(entity, 100);
     } catch (Exception exception) {}
     if (isASwarmingMob())
       if (entity != null) {
@@ -1849,7 +1849,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     if (EngenderConfig.general.useMessage && !entity.isEntityAlive() && !isWild()) {
       boolean flag1 = false;
       try {
-        flag1 = ReflectionHelper.findField(entity.getClass(), new String[] { "dead", "dead" }).getBoolean(entity);
+        flag1 = ReflectionHelper.findField(entity.getClass(), new String[] { "dead", "field_70729_aU" }).getBoolean(entity);
       } catch (Exception exception) {}
       if (!flag1) {
         if (entity instanceof EntityLivingBase)
@@ -1971,7 +1971,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
     entity.limbSwingAmount++;
     damage *= (((isSneaking() || isInvisible() || !canEntityBeSeen(entity)) && entity instanceof EntityLiving && ((EntityLiving)entity).getAttackTarget() != this) ? 3.0F : 1.0F) * (isHero() ? ((entity instanceof net.minecraft.entity.monster.IMob) ? 3.0F : 1.5F) : 1.0F);
     try {
-      ReflectionHelper.findField(entity.getClass(), new String[] { "recentlyHit", "recentlyHit" }).setInt(entity, 100);
+      ReflectionHelper.findField(entity.getClass(), new String[] { "recentlyHit", "field_70718_bc" }).setInt(entity, 100);
     } catch (Exception exception) {}
     if (Loader.isModLoaded("iceandfire") && entity instanceof EntityLivingBase && EntityGorgon.isStoneMob(entity))
       entity.hurtResistantTime = 0; 
@@ -2025,7 +2025,7 @@ public abstract class EntityTameBase extends EntityBase implements IEntityOwnabl
       if (!entity.isEntityAlive() && !isWild() && entity.getHealth() <= 0.0F) {
         boolean flag1 = false;
         try {
-          flag1 = ReflectionHelper.findField(entity.getClass(), new String[] { "dead", "dead" }).getBoolean(entity);
+          flag1 = ReflectionHelper.findField(entity.getClass(), new String[] { "dead", "field_70729_aU" }).getBoolean(entity);
         } catch (Exception exception) {}
         if (EngenderConfig.general.useMessage && !flag1)
           getOwner().sendMessage(new TextComponentTranslation(entity.getName() + killmessage + getName() + " (" + getOwner().getName() + ")", new Object[0]));
