@@ -5,10 +5,8 @@ import net.minecraft.AgeOfMinecraft.EngenderConfig;
 import net.minecraft.AgeOfMinecraft.entity.tame.EntityTameBase;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier4.EntityCreeder;
 import net.minecraft.AgeOfMinecraft.registry.EItem;
-import net.minecraft.AgeOfMinecraft.util.ClientCompat;
 import net.minecraft.AgeOfMinecraft.util.EntityAICompat;
 import net.minecraft.AgeOfMinecraft.util.EntityCompat;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -51,19 +49,6 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class EngenderGeneralEvent {
   public static final EngenderGeneralEvent INSTANCE = new EngenderGeneralEvent();
-  
-  public static EngenderMusicEvent musicTicker;
-  
-  @SubscribeEvent
-  public void onClientTick(TickEvent.ClientTickEvent event) {
-    Minecraft mc = Minecraft.getMinecraft();
-    if (musicTicker != null && ClientCompat.world(mc) != null)
-      if (EngenderConfig.general.useMusic) {
-        musicTicker.update();
-      } else {
-        musicTicker.setNoMusic();
-      }  
-  }
   
   @SubscribeEvent
   public static void renderTick(TickEvent.RenderTickEvent event) {}
@@ -185,10 +170,6 @@ public class EngenderGeneralEvent {
 
   @SubscribeEvent
   public void onMobDeathEvent(LivingDeathEvent event) {
-      if (event.getEntity() instanceof EntityPlayer) {
-        musicTicker.setNoMusic();
-        musicTicker = null;
-    } 
     if (event.getEntity() instanceof EntityPlayer && event.getSource().getTrueSource() instanceof EntityLivingBase)
       event.getSource().getTrueSource().onKillEntity((EntityLivingBase)event.getEntity());
     if (event.getSource().getTrueSource() instanceof EntityTameBase && !((EntityTameBase)event.getSource().getTrueSource()).isWild())
@@ -211,8 +192,6 @@ public class EngenderGeneralEvent {
   @SubscribeEvent
   public void onMobSpawnEvent(EntityJoinWorldEvent event) {
     try {
-      if (event.getEntity() instanceof EntityPlayer)
-        musicTicker = new EngenderMusicEvent(Minecraft.getMinecraft());
       World world = EntityCompat.world(event.getEntity());
       if (!EntityCompat.isRemote(world) && !world.getGameRules().hasRule("disableExpItemDrops"))
         world.getGameRules().addGameRule("disableExpItemDrops", "false", GameRules.ValueType.BOOLEAN_VALUE); 

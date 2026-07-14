@@ -71,6 +71,7 @@ import net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStormTentacle;
 import net.minecraft.AgeOfMinecraft.entity.tame.tier6.EntityWitherStormTentacleDevourer;
 import net.minecraft.AgeOfMinecraft.events.EngenderGeneralEvent;
 import net.minecraft.AgeOfMinecraft.events.EngenderMusicEvent;
+import net.minecraft.AgeOfMinecraft.events.EngenderMusicHandler;
 import net.minecraft.AgeOfMinecraft.registry.EItem;
 import net.minecraft.AgeOfMinecraft.renders.RenderAbomniableSnowman;
 import net.minecraft.AgeOfMinecraft.renders.RenderBat;
@@ -138,6 +139,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.client.renderer.entity.RenderTippedArrow;
 import net.minecraft.init.Items;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -148,7 +150,8 @@ public class ClientProxy extends CommonProxy {
 
   public void preInit(FMLPreInitializationEvent e) {
     renderEntities();
-    EngenderGeneralEvent.musicTicker = new EngenderMusicEvent(Minecraft.getMinecraft());
+    EngenderMusicHandler.musicTicker = new EngenderMusicEvent(Minecraft.getMinecraft());
+    MinecraftForge.EVENT_BUS.register(EngenderMusicHandler.INSTANCE);
     super.preInit(e);
   }
   

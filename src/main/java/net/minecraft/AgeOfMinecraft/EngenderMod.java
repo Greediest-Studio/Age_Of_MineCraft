@@ -81,8 +81,6 @@ public class EngenderMod {
     logger.debug("Initialization started");
     MinecraftForge.EVENT_BUS.register(this);
     MinecraftForge.EVENT_BUS.register(EngenderGeneralEvent.INSTANCE);
-    if (EngenderGeneralEvent.musicTicker != null)
-      MinecraftForge.EVENT_BUS.register(EngenderGeneralEvent.musicTicker);
     ConfigManager.sync("ageofminecraft", Config.Type.INSTANCE);
     proxy.init(e);
     logger.debug("Initialization finished");
